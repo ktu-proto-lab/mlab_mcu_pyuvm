@@ -1,0 +1,86 @@
+--- 24CS512.sv	2026-02-09 14:45:59.932679421 +0200
++++ 24CS512.sv.new	2026-02-09 14:43:57.689964325 +0200
+@@ -1039,31 +1039,56 @@
+    wire HSTimingCheckEnable = TimingCheckEnable & (HSModeEnabled == 1);
+    wire tstSTOP = STOP_Rcvd;
+ 
++// -------------------------------------------------------------------------------------------------------
++// VERILATOR COMPATIBILITY PATCH
++// -------------------------------------------------------------------------------------------------------
++// Problem:
++// When compiling with Verilator using `--timing` and `--public` (required for Cocotb), compiler fails to
++// generate correct C++ class syntax for 'specparam' variables and results in compilation errors.
++//
++// Solution:
++// Allows functional delays to work correctly with the `--timing` flag bypassing the specparam C++ 
++// generation problem
++// -------------------------------------------------------------------------------------------------------
++`ifdef VERILATOR_SIM_EEPROM_TIMING_PATCH
++   localparam real tHS_HI     = 60.0;
++   localparam real tHS_LO     = 160.0;
++   localparam real tHS_SU_STA = 160.0;
++   localparam real tHS_HD_STA = 160.0;
++   localparam real tHS_SU_DAT = 10.0;
++   localparam real tHS_SU_STO = 160.0;
++   localparam real tHI        = 400.0;
++   localparam real tLO        = 400.0;
++   localparam real tSU_STA    = 250.0;
++   localparam real tHD_STA    = 250.0;
++   localparam real tSU_DAT    = 50.0;
++   localparam real tSU_STO    = 250.0;
++   localparam real tBUF       = 500.0;
++   localparam real tSU_WP     = 600.0;
++   localparam real tHD_WP     = 1300.0;
++`else
+    specify
+-      // High-speed mode timing definitions
+       specparam
+-         tHS_HI = 60,                           // SCL pulse width - high
+-         tHS_LO = 160,                          // SCL pulse width - low
+-         tHS_SU_STA = 160,                      // SCL to SDA setup time
+-         tHS_HD_STA = 160,                      // SCL to SDA hold time
+-         tHS_SU_DAT = 10,                       // SDA to SCL setup time
+-         tHS_SU_STO = 160;                      // SCL to SDA setup time
++         tHS_HI = 60,
++         tHS_LO = 160,
++         tHS_SU_STA = 160,
++         tHS_HD_STA = 160,
++         tHS_SU_DAT = 10,
++         tHS_SU_STO = 160;
+ 
+-      // Non high-speed mode timing definitions
+       specparam
+-         tHI = 400,                             // SCL pulse width - high
+-         tLO = 400,                             // SCL pulse width - low
+-         tSU_STA = 250,                         // SCL to SDA setup time
+-         tHD_STA = 250,                         // SCL to SDA hold time
+-         tSU_DAT = 50,                          // SDA to SCL setup time
+-         tSU_STO = 250;                         // SCL to SDA setup time
+-         
+-      // Generic timing definitions
+-      specparam
+-         tBUF = 500,                            // Bus free time
+-         tSU_WP = 600,                          // WP to SDA setup time
+-         tHD_WP = 1300;                         // WP to SDA hold time
++         tHI = 400,
++         tLO = 400,
++         tSU_STA = 250,
++         tHD_STA = 250,
++         tSU_DAT = 50,
++         tSU_STO = 250;
+ 
++      specparam
++         tBUF = 500,
++         tSU_WP = 600,
++         tHD_WP = 1300;
++      
+       // High-speed mode timing checks
+       $width (posedge SCL &&& HSTimingCheckEnable, tHS_HI);
+       $width (negedge SCL &&& HSTimingCheckEnable, tHS_LO);
+@@ -1091,5 +1116,6 @@
+ 
+       $hold  (posedge tstSTOP &&& TimingCheckEnable, WP, tHD_WP);
+    endspecify
++`endif
+ 
+ endmodule

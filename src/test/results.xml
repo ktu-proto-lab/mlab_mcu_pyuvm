@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1770641744" />
+    <testcase name="run_test" classname="test" file="/home/manlam/Dev/MLAB_riscv_mcu/uvm/src/test/test.py" lineno="5" time="0.0027923583984375" sim_time_ns="250.01" ratio_time="89533.63584699453" />
+  </testsuite>
+</testsuites>
