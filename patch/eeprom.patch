@@ -1,5 +1,5 @@
---- 24CS512.sv	2026-02-09 14:45:59.932679421 +0200
-+++ 24CS512.sv.new	2026-02-09 14:43:57.689964325 +0200
+--- 24CS512.sv	2026-02-09 15:10:31.119238693 +0200
++++ 24CS512.sv.new	2026-02-09 15:10:13.342570602 +0200
 @@ -1039,31 +1039,56 @@
     wire HSTimingCheckEnable = TimingCheckEnable & (HSModeEnabled == 1);
     wire tstSTOP = STOP_Rcvd;
@@ -13,7 +13,7 @@
 +//
 +// Solution:
 +// Allows functional delays to work correctly with the `--timing` flag bypassing the specparam C++ 
-+// generation problem
++// generation problem. NOTE: this ignores timing violation logic.
 +// -------------------------------------------------------------------------------------------------------
 +`ifdef VERILATOR_SIM_EEPROM_TIMING_PATCH
 +   localparam real tHS_HI     = 60.0;
