@@ -1,5 +1,5 @@
-SIM ?= verilator
-TOPLEVEL_LANG ?= verilog
+SIM = verilator
+TOPLEVEL_LANG = verilog
 
 # TODO: maybe just run make from the script...
 PROJECT_ROOT = $(shell pwd)/../../..
@@ -21,7 +21,7 @@ COMPILE_ARGS += -Wno-MULTIDRIVEN -Wno-CASEINCOMPLETE -Wno-INITIALDLY \
 
 COMPILE_ARGS += -O0 -DVERILATOR_SIM_EEPROM_TIMING_PATCH
 
-EXTRA_ARGS += --trace --trace-structs --no-trace-params --timing
+EXTRA_ARGS += --trace --trace-structs --timing
 
 VERILOG_SOURCES += $(PROJECT_ROOT)/uvm/src/rtl/mcu.sv
 
