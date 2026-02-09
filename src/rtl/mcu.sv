@@ -35,7 +35,6 @@ module mcu #(
     // -------------------------------------------------------------------------
     // EEPROM
     // -------------------------------------------------------------------------
-    /* verilator tracing_off */
     M24CS512 #(
         .MEMInitFile(MEMInitFile)
     ) eeprom (
@@ -47,7 +46,6 @@ module mcu #(
         .SCL    (SCL),
         .RESET  (1'b0)
     );
-    /* verilator tracing_on */
 
     // -------------------------------------------------------------------------
     // Board Level Physics (Pullups/Pulldowns)
