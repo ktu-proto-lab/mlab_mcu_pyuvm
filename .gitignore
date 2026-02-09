@@ -1,3 +1,4 @@
 __pycache__/
 .venv/
 sim_build/
+src/test/results.xml
