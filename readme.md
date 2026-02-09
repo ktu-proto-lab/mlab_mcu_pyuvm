@@ -29,3 +29,18 @@ Some files require compatibility edits, apply them running patcher script:
 ```bash
 ./patch/patcher.sh --apply
 ```
+
+## Simulation
+
+As of 09.02.26, the cocotb test in `src/test/test.py` is pure nonsense, the current implementation just deals with integration of the MCU to the cocotb for testing the compatibility of MCU itself and Verilator.
+
+To build and run:
+
+```bash
+# Go to tb's Makefile location
+cd src/test
+# Build and Run
+make
+# Clear project
+make clean
+```
