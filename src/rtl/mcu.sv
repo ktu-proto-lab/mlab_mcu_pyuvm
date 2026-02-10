@@ -2,8 +2,7 @@
 
 module mcu #(
     parameter GPIO_COUNT = `GPIO_IOS,
-    // TODO: automate the memory initalization file or take it from uvm dir itself.
-    parameter MEMInitFile = "../../sw/ibex/verilog_hex.v"
+    parameter MEMInitFile = `MEM_HEX_FILE
 )(
     input  logic                    clk_sys,
     input  logic                    rst_sys_n,

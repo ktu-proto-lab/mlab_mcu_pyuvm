@@ -4,6 +4,8 @@ TOPLEVEL_LANG = verilog
 # TODO: maybe just run make from the script...
 PROJECT_ROOT = $(shell pwd)/../../..
 
+MEM_HEX_FILE_PATH ?= $(PROJECT_ROOT)/sw/ibex/verilog_hex.v
+
 COMPILE_ARGS += -I$(PROJECT_ROOT)/rtl/include \
                 -I$(PROJECT_ROOT)/rtl/peripherals \
                 -I$(PROJECT_ROOT)/rtl/core \
@@ -19,7 +21,11 @@ COMPILE_ARGS += -Wno-MULTIDRIVEN -Wno-CASEINCOMPLETE -Wno-INITIALDLY \
                 -Wno-PINMISSING -Wno-MODDUP -Wno-IMPLICIT \
                 -Wno-WIDTHCONCAT -Wno-UNOPTFLAT -Wno-SPECIFYIGN
 
-COMPILE_ARGS += -O0 -DVERILATOR_SIM_EEPROM_TIMING_PATCH
+# Enable EEPROM patch in tb/misc/24CS512.sv pathced file
+COMPILE_ARGS += -DVERILATOR_SIM_EEPROM_TIMING_PATCH
+
+# Load program to dut from provided path
+COMPILE_ARGS += -DMEM_HEX_FILE=\"$(MEM_HEX_FILE_PATH)\"
 
 EXTRA_ARGS += --trace --trace-structs --timing
 

@@ -16,7 +16,7 @@ source .venv/bin/activate
 # Important! Upgrade pip first
 pip install --upgrade pip
 # Install needed packages
-pip intall -r conf/requirements.txt
+pip install -r conf/requirements.txt
 # Exit venv
 deactivate
 ```
@@ -40,9 +40,9 @@ As of 09.02.26, the cocotb test in `src/test/test.py` is pure nonsense, the curr
 
 ### 2. Build and Run
 
-You must be inside Python's Virtual Environment.
-
 ```bash
+# You must be inside Python's Virtual Environment
+source .venv/bin/activate
 # Go to tb's Makefile location
 cd src/tb
 # Build and Run
