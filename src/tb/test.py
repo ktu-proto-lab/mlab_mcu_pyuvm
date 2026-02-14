@@ -8,7 +8,7 @@ async def run_test(dut):
     
     cocotb.start_soon(Clock(dut.clk_sys, 12.5, units="ns").start())
 
-    dut._log.info("Starting simulation with cocotb!")
+    dut._log.info("Starting simulation from cocotb.")
     
     dut.rst_sys_n.value = 0
     await Timer(100, units="ns")
