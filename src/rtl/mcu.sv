@@ -67,8 +67,8 @@ module mcu #(
         .A1     (1'b0),
         .A2     (1'b0),
         .WP     (1'b0),
-        .SDA    (SDA), // Connects to the combined inout wire
-        .SCL    (SCL), // Connects to the combined inout wire
+        .SDA    (SDA),
+        .SCL    (SCL),
         .RESET  (1'b0)
     );
 

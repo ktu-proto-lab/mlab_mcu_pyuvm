@@ -3,3 +3,4 @@ __pycache__/
 sim_build/
 src/tb/results.xml
 dump.vcd
+build/
