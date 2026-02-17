@@ -1,9 +1,11 @@
-PROGRAM = gpio_heartbeat
+PROGRAM = gpio
 
 PROJECT_ROOT = $(shell pwd)/../../../..
 
 COMMON_DIR = $(PROJECT_ROOT)/sw/ibex/common
 
-C_SOURCES = main.c
+C_SOURCES = core/src/main.c
+
+C_INCLUDES = -Icore/inc
 
 include $(COMMON_DIR)/common.mk
