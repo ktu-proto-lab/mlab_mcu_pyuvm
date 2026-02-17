@@ -1,6 +1,7 @@
 .venv/
 src/tb/results.xml
 build/
+__pycache__/
 
 # Avoid accidental insecure commits
 *.key
