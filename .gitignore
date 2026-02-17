@@ -1,6 +1,6 @@
-__pycache__/
 .venv/
-sim_build/
 src/tb/results.xml
-dump.vcd
 build/
+
+# Avoid accidental insecure commits
+*.key

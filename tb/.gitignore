@@ -1,0 +1,13 @@
+__pycache__/
+sim_build/
+results.xml
+
+# Verilator
+dump.vcd
+dump.fst
+
+# Xcelium
+.simvision/
+waves.shm/
+xrun.history
+xrun.log

@@ -38,7 +38,6 @@ COMPILE_ARGS += -DVERILATOR_SIM_EEPROM_TIMING_PATCH
 # Load program to dut from provided path
 COMPILE_ARGS += -DMEM_HEX_FILE=\"$(MEM_HEX_FILE_PATH)\"
 
-
 EXTRA_ARGS += --timing
 
 ifeq ($(WAVES),1)
