@@ -1,22 +1,18 @@
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import Timer, RisingEdge
+from cocotb.triggers import Timer, RisingEdge, ClockCycles
 
 @cocotb.test()
 async def run_test(dut):
     """Initial test to verify connection"""
     
-    cocotb.start_soon(Clock(dut.clk_sys, 12.5, units="ns").start())
+    cocotb.start_soon(Clock(dut.clk, 1, units="ns").start())
 
-    dut._log.info("Starting simulation from cocotb.")
+    dut._log.info("Starting simulation")
     
-    dut.rst_sys_n.value = 0
-    await Timer(100, units="ns")
-    dut.rst_sys_n.value = 1
-    
-    for i in range(5):
-        await RisingEdge(dut.clk_sys)
-        dut._log.info(f"Clock cycle {i} reached")
+    dut.rst.value = 0
+    await ClockCycles(dut.clk, 2)
+    dut.rst.value = 1
 
-    await Timer(100, units="ns")
-    dut._log.info("Simulation finished")
+    dut._log.info("Waiting for GPIO_PIN_0")
+    await RisingEdge(dut.ext_pad_io[0])

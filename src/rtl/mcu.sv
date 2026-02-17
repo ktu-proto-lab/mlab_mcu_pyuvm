@@ -4,8 +4,8 @@ module mcu #(
     parameter GPIO_COUNT  = `GPIO_IOS,
     parameter MEMInitFile = `MEM_HEX_FILE
 )(
-    input  logic                    clk_sys,
-    input  logic                    rst_sys_n,
+    input  logic                    clk,
+    input  logic                    rst,
     
     inout  wire [GPIO_COUNT-1:0]    ext_pad_io,
     inout  wire                     SDA,
@@ -41,8 +41,8 @@ module mcu #(
     ibex_simple_system #(
         .ICache(1'b0)
     ) dut (
-        .clk_sys      (clk_sys),
-        .rst_async_n  (rst_sys_n),
+        .clk_sys      (clk),
+        .rst_async_n  (rst),
 
         .scl_pad_i    (scl_i),
         .scl_pad_o    (scl_o),
