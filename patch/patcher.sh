@@ -43,6 +43,7 @@ cd "$PROJECT_ROOT"
 if $APPLY_PATCHES; then
     # EEPROM compatibility with cocotb
     patch -Nfs -V none -r - ./tb/misc/24CS512.sv < ./uvm/patch/eeprom.patch
+    patch -Nfs -V none -r - ./sim/rtl/files.f < ./uvm/patch/rtl_files.patch
     echo "[   INFO]: Patches applied"
 
 elif $REVERSE_PATCHES; then
