@@ -4,11 +4,13 @@
 
 ### Project
 
+#### Initial Setup
+
 ```bash
 # Clone the main project
 git clone https://github.com/dovydasliutkus/MLAB_riscv_mcu.git
 cd MLAB_riscv_mcu
-# Remove 'uvm' submodule
+# Remove static 'uvm' submodule
 rm -rf uvm
 # Clone this repository
 git clone https://github.com/ManfredasLamsargis/MLAB_riscv_mcu_uvm.git uvm
@@ -16,6 +18,8 @@ cd uvm
 ```
 
 `main` branch is the stable one and `dev` can have unstable or broken code
+
+#### Updating
 
 ```bash
 # Update to latest pushed commits
