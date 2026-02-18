@@ -40,3 +40,7 @@ class gpio:
         for i, pin in enumerate(self.pins):
             value |= (pin.value.integer << i)
         return value
+    
+    def read_pins_binsrt(self) -> str:
+        value = self.read_pins()
+        return f"0b{value:08b}"
