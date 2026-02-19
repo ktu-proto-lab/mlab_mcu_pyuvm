@@ -15,7 +15,9 @@ SIM = xcelium
 TOPLEVEL_LANG = verilog
 
 TOPLEVEL = mcu
-MODULE = tb
+
+TEST ?= gpio_basic_test
+MODULE = test.$(TEST)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Paths
