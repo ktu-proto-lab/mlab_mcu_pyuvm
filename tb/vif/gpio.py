@@ -1,6 +1,5 @@
 from typing import List
 from cocotb.handle import SimHandleBase
-from cocotb.binary import BinaryValue
 
 class gpio:
     """
