@@ -27,7 +27,4 @@ class gpio_env(uvm_env):
         await ClockCycles(self.dut.clk, 10)
         self.dut.rst.value = 1
 
-        # Wait for C code to start running
-        await ClockCycles(self.dut.clk, 110_000_000)
-
         self.drop_objection()

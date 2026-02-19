@@ -153,10 +153,16 @@ As of 17.02.26 the testbench monitors the `GPIO` pin outputs and passes when the
 Expected output:
 
 ```log
-97000090.00ns INFO     cocotb.mcu                         After 9600000 I/O pad value: 0000000000
-98000090.00ns INFO     cocotb.mcu                         After 9700000 I/O pad value: 0000000000
-99000090.00ns INFO     cocotb.mcu                         After 9800000 I/O pad value: 0000000000
-100000090.00ns INFO     cocotb.mcu                         After 9900000 I/O pad value: 0000000001
-101000090.00ns INFO     cocotb.mcu                         After 10000000 I/O pad value: 0000000001
-102000090.00ns INFO     cocotb.mcu                         After 10100000 I/O pad value: 0000000001
+99000980.00ns INFO     ..b/agent/gpio/gpio_monitor.py(30) [uvm_test_top.env.agent.monitor]: GPIO current pin values = 0x0
+100000990.00ns INFO     ..b/agent/gpio/gpio_monitor.py(30) [uvm_test_top.env.agent.monitor]: GPIO current pin values = 0x1
+100000990.00ns INFO     ..b/agent/gpio/gpio_monitor.py(39) [uvm_test_top.env.agent.monitor]: FLAG: GPIO values changed from 0x0 to 0x1
+100000990.00ns INFO     ..m/tb/test/gpio_basic_test.py(25) [uvm_test_top]: PASS: GPIO_PIN_0 is high, expected = 1, actual = 1
+100000990.01ns INFO     cocotb.regression                  gpio_basic_test passed
+100000990.01ns INFO     cocotb.regression                  **********************************************************************************************
+                                                           ** TEST                                  STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                           **********************************************************************************************
+                                                           ** test.gpio_basic_test.gpio_basic_test   PASS   100000990.01         734.06     136229.13  **
+                                                           **********************************************************************************************
+                                                           ** TESTS=1 PASS=1 FAIL=0 SKIP=0                  100000990.01         734.16     136211.78  **
+                                                           **********************************************************************************************
 ```

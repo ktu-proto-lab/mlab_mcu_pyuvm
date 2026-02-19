@@ -7,5 +7,6 @@ class gpio_seq_item(uvm_sequence_item):
         self.value = value
 
     def __eq__(self, other):
-        return self.pin == other.pin and self.value == other.value
+        return self.value == other.value
     
+    # TODO: str impl
