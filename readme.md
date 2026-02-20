@@ -85,29 +85,6 @@ cd sim/verilator
 make
 ```
 
-#### Options
-
-**Clean Simulation**
-To remove simulation artifacts:
-
-```bash
-make clean
-```
-
-**Waveforms**
-
-Script does not generate waveform files by default for compatibility reasons, to enable use command:
-
-```bash
-make WAVES=1
-```
-
-To see waveforms use GTKWave:
-
-```bash
-gtkwave dump.vcd &
-```
-
 ### Xcelium
 
 #### Build and Run
@@ -121,7 +98,9 @@ cd sim/xcelium
 make
 ```
 
-##### Options
+### Make Options
+
+#### Common
 
 **Clean Simulation**
 To remove simulation artifacts:
@@ -138,6 +117,18 @@ To capture waveforms:
 make WAVES=1
 ```
 
+#### Verilator
+
+Waveforms are generated in `sim/verilator` in the `dump.vcd` file.
+
+To see waveforms use GTKWave:
+
+```bash
+gtkwave dump.vcd &
+```
+
+#### Xcelium
+
 **SimVision (GUI)**
 
 To run in SimVision GUI (captures waveforms automatically too for the GUI itself):
@@ -148,7 +139,7 @@ make GUI=1
 
 ### Testbench
 
-As of 17.02.26 the testbench monitors the `GPIO` pin outputs and passes when the `GPIO_PIN_0` is set to `1` by the loaded program.
+As of 20.02.26 the testbench monitors the `GPIO` pin outputs and passes when the `GPIO_PIN_0` is set to `1` by the loaded program.
 
 Expected output:
 
