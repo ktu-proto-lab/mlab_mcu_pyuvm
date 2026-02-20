@@ -7,14 +7,10 @@
 #### Initial Setup
 
 ```bash
-# Clone the main project
-git clone https://github.com/dovydasliutkus/MLAB_riscv_mcu.git
-cd MLAB_riscv_mcu
-# Remove static 'uvm' submodule
-rm -rf uvm
-# Clone this repository
-git clone https://github.com/ManfredasLamsargis/MLAB_riscv_mcu_uvm.git uvm
-cd uvm
+# Clone the root project
+git clone --recurse-submodules https://github.com/dovydasliutkus/MLAB_MCU_edu.git
+# Enter 'uvm' project
+cd MLAB_MCU_edu/uvm
 ```
 
 `main` branch is the stable one and `dev` can have unstable or broken code
@@ -22,8 +18,10 @@ cd uvm
 #### Updating
 
 ```bash
-# Update to latest pushed commits
-git pull
+# Inside root project 'MLAB_MCU_edu'
+git submodule update --init --recursive
+# Enter 'uvm' submodule
+cd uvm
 ```
 
 ### Python Virtual Environment
