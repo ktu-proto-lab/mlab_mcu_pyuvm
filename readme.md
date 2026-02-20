@@ -11,6 +11,8 @@
 git clone --recurse-submodules https://github.com/dovydasliutkus/MLAB_MCU_edu.git
 # Enter 'uvm' project
 cd MLAB_MCU_edu/uvm
+# The submodule can be in the unatached HEAD state, checkout to main
+git checkout main
 ```
 
 `main` branch is the stable one and `dev` can have unstable or broken code
@@ -22,6 +24,8 @@ cd MLAB_MCU_edu/uvm
 git submodule update --init --recursive
 # Enter 'uvm' submodule
 cd uvm
+# The submodule can be in the unatached HEAD state, checkout to main
+git checkout main
 ```
 
 ### Python Virtual Environment
