@@ -2,7 +2,11 @@
 
 module mcu #(
     parameter GPIO_COUNT  = `GPIO_IOS,
-    parameter MEMInitFile = `MEM_HEX_FILE
+    parameter MEMInitFile = `MEM_HEX_FILE,
+
+    parameter IMEM_1_InitFile = `IMEM1_HEX_FILE,
+    parameter IMEM_2_InitFile = `IMEM2_HEX_FILE,
+    parameter DMEM_InitFile = `DMEM_HEX_FILE
 )(
     input  logic                    clk,
     input  logic                    rst,
@@ -39,7 +43,9 @@ module mcu #(
     // Ibex Core
     // -------------------------------------------------------------------------
     ibex_simple_system #(
-        .ICache(1'b0)
+        .IMEM_1_InitFile(IMEM_1_InitFile),
+        .IMEM_2_InitFile(IMEM_2_InitFile),
+        .DMEM_InitFile(DMEM_InitFile)
     ) dut (
         .clk_sys      (clk),
         .rst_async_n  (rst),

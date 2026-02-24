@@ -33,9 +33,12 @@ export PYTHONPATH := $(PROJECT_ROOT)/uvm/tb:$(PYTHONPATH)
 # DUT's Test Program
 # ----------------------------------------------------------------------------------------------------------------------
 
-# WARNING: this points explicitly to the GPIO test program (17.02.26)
+# WARNING: this points explicitly to the GPIO test program (24.02.26)
 # TODO: proper test selection mechanism
 MEM_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/verilog_hex.v
+IMEM1_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/instr_hex_1.mem
+IMEM2_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/instr_hex_2.mem
+DMEM_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/data_hex.mem
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Compilation Arguments
@@ -67,6 +70,9 @@ COMPILE_ARGS += -DVERILATOR_SIM_EEPROM_TIMING_PATCH
 
 # Load program to dut from provided path
 COMPILE_ARGS += -DMEM_HEX_FILE=\"$(MEM_HEX_FILE_PATH)\"
+COMPILE_ARGS += -DIMEM1_HEX_FILE=\"$(IMEM1_HEX_FILE_PATH)\"
+COMPILE_ARGS += -DIMEM2_HEX_FILE=\"$(IMEM2_HEX_FILE_PATH)\"
+COMPILE_ARGS += -DDMEM_HEX_FILE=\"$(DMEM_HEX_FILE_PATH)\"
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Options

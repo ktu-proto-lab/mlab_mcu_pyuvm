@@ -20,7 +20,7 @@ class gpio_monitor(uvm_monitor):
         prev_pin_values = self.vif.read_pins()
 
         while True:
-            await ClockCycles(self.dut.clk, 100_000)
+            await ClockCycles(self.dut.clk, 5)
 
             await RisingEdge(self.dut.clk)
             await ReadOnly()
