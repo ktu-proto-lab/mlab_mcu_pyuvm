@@ -9,4 +9,5 @@ class gpio_seq_item(uvm_sequence_item):
     def __eq__(self, other):
         return self.value == other.value
     
-    # TODO: str impl
+    def __str__(self):
+        return f"{hex(self.value)}"

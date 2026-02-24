@@ -20,21 +20,20 @@ class gpio_monitor(uvm_monitor):
         prev_pin_values = self.vif.read_pins()
 
         while True:
-            # NOTE: maybe sample time in clock cycles
             await ClockCycles(self.dut.clk, 100_000)
+
             await RisingEdge(self.dut.clk)
             await ReadOnly()
-
             curr_pin_values = self.vif.read_pins()
 
             self.logger.info(f"GPIO current pin values = {hex(curr_pin_values)}")
 
             if curr_pin_values != prev_pin_values:
                 # Monitor the change
-                txn = gpio_seq_item(name="gpio_mon_txn", value=curr_pin_values)
+                tr = gpio_seq_item(name="gpio_mon_tr", value=curr_pin_values)
                 
                 # Broadcast the transaction
-                self.ap.write(txn)
+                self.ap.write(tr)
 
                 self.logger.info(f"FLAG: GPIO values changed from {hex(prev_pin_values)} to {hex(curr_pin_values)}")
 
