@@ -2,9 +2,41 @@
 
 ## Required
 
+### Verilator
+
+#### EEPROM `tb/misc/24CS512.sv` patch
+
+_last checked on 24.02.26_
+
+Running on Verilator from the Makefile in `sim/verilator` directory you get these C++ generated code errors:
+
+```
+Vtop___024root__0__Slow.cpp:23:15: error: ‘class Vtop___024root’ has no member named ‘mcu__DOT__eeprom__DOT__tHS_HI’; did you mean ‘mcu__DOT__eeprom__DOT__MAN_ID’?
+   23 |     vlSelfRef.mcu__DOT__eeprom__DOT__tHS_HI = 60.0;
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |               mcu__DOT__eeprom__DOT__MAN_ID
+Vtop___024root__0__Slow.cpp:24:15: error: ‘class Vtop___024root’ has no member named ‘mcu__DOT__eeprom__DOT__tHS_LO’; did you mean ‘mcu__DOT__eeprom__DOT__MAN_ID’?
+   24 |     vlSelfRef.mcu__DOT__eeprom__DOT__tHS_LO = 160.0;
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+There is more than two of them, this is C++ generator specific issue, where it generates signal fields as private and then cocotb requires expose all signal values to the dut's interface (not guaranteed, but yeah).
+
+Apply the patch for the EEPROM misc file (from the `~/MLAB_MCU_edu`):
+
+```bash
+patch -Nfs -V none -r - ./tb/misc/24CS512.sv < ./uvm/patch/eeprom.patch
+```
+
+Clean the cashed files (because the same errors will occur) and run make again:
+
+```bash
+make clean && make
+```
+
 ## Platform specific
 
-### `sw/ibex/common/common.mk`
+### Makefile compile flags `sw/ibex/common/common.mk` patch
 
 _last checked on 23.02.26_
 

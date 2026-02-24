@@ -35,9 +35,9 @@ export PYTHONPATH := $(PROJECT_ROOT)/uvm/tb:$(PYTHONPATH)
 # DUT's Test Program
 # ----------------------------------------------------------------------------------------------------------------------
 
-# WARNING: this points explicitly to the GPIO test program (17.02.26)
+# WARNING: this points explicitly to the GPIO test program (24.02.26)
 # TODO: proper test selection mechanism
-MEM_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/gpio/build/verilog_hex.v
+MEM_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/verilog_hex.v
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Compilation Arguments
