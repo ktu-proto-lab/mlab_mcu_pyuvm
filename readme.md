@@ -57,14 +57,14 @@ As of 17.02.26, the only program that can be used to run in simulation is `sw/gp
 To compile and build this program:
 
 ```bash
-cd sw/gpio
+cd sw/test/gpio/heartbeat
 make
 ```
 
 Clean build:
 
 ```bash
-make clean && make all
+make clean && make
 ```
 
 ## Simulation
