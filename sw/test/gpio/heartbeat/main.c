@@ -1,10 +1,10 @@
-#include <main.h>
+#include "gpio.h"
 
 int main() {
-    volatile GPIO_reg_map_t *gpio;
-    gpio = (volatile GPIO_reg_map_t *)GPIO_BASE_ADDR;
-    gpio->OE = GPIO_PIN_0;
-    gpio->OUT = GPIO_PIN_0;
+    volatile gpio_handle_t gpio;
+    gpio_init(&gpio);
+    gpio.regs->OE = GPIO_PIN_0;
+    gpio.regs->OUT = GPIO_PIN_0;
     return 0;
 }
 
