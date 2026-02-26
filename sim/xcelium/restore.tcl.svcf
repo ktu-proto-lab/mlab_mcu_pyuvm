@@ -1,0 +1,109 @@
+# SimVision Command Script (Thu Feb 26 03:31:30 PM EET 2026)
+#
+# Version 24.03.s004
+#
+# You can restore this configuration with:
+#
+#      xrun -timescale 1ns/1ps -vhdl_time_precision 1ps +gui -access +rw -f /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../sim/rtl/files.f -DFUNCTIONAL -DRANDOM_NUMBER=59 -define MEM_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/verilog_hex.v" -define IMEM1_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/instr_hex_1.mem" -define IMEM2_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/instr_hex_2.mem" -define DMEM_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/data_hex.mem" -notimingchecks -licqueue -64 -xmlibdirpath sim_build -plinowarn -top mcu -loadvpi /home/la_52/MLAB_MCU_edu/uvm/.venv/lib/python3.6/site-packages/cocotb/libs/libcocotbvpi_ius.so:vlog_startup_routines_bootstrap -access +rwc -createdebugdb /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/rtl/mcu.sv -input /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/restore.tcl
+#
+
+
+#
+# Preferences
+#
+preferences set plugin-enable-svdatabrowser-new 1
+preferences set cursorctl-dont-show-sync-warning 1
+preferences set plugin-enable-groupscope 0
+preferences set plugin-enable-interleaveandcompare 0
+preferences set plugin-enable-waveformfrequencyplot 0
+
+#
+# Simulator
+#
+database require simulator -hints {
+	simulator "xrun -timescale 1ns/1ps -vhdl_time_precision 1ps +gui -access +rw -f /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../sim/rtl/files.f -DFUNCTIONAL -DRANDOM_NUMBER=59 -define MEM_HEX_FILE=\"/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/verilog_hex.v\" -define IMEM1_HEX_FILE=\"/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/instr_hex_1.mem\" -define IMEM2_HEX_FILE=\"/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/instr_hex_2.mem\" -define DMEM_HEX_FILE=\"/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/data_hex.mem\" -notimingchecks -licqueue -64 -xmlibdirpath sim_build -plinowarn -gui -top mcu -loadvpi /home/la_52/MLAB_MCU_edu/uvm/.venv/lib/python3.6/site-packages/cocotb/libs/libcocotbvpi_ius.so:vlog_startup_routines_bootstrap -access +rwc -createdebugdb /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/rtl/mcu.sv -input restore.tcl"
+}
+#
+# Groups
+#
+catch {group new -name gpio -overlay 0}
+group using gpio
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+
+group insert \
+    [subst  {simulator::[format {mcu.gpio_i[9:0]}]} ] \
+    [subst  {simulator::[format {mcu.gpio_o[9:0]}]} ] \
+    [subst  {simulator::[format {mcu.gpio_oe[9:0]}]} ]
+
+#
+# Mnemonic Maps
+#
+mmap new  -reuse -name {Boolean as Logic} -radix %b -contents {{%c=FALSE -edgepriority 1 -shape low}
+{%c=TRUE -edgepriority 1 -shape high}}
+mmap new  -reuse -name {Example Map} -radix %x -contents {{%b=11???? -bgcolor orange -label REG:%x -linecolor yellow -shape bus}
+{%x=1F -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=2C -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=* -label %x -linecolor gray -shape bus}}
+
+#
+# Design Browser windows
+#
+if {[catch {window new WatchList -name "Design Browser 1" -geometry 730x500+261+33}] != ""} {
+    window geometry "Design Browser 1" 730x500+261+33
+}
+window target "Design Browser 1" on
+browser using {Design Browser 1}
+browser set -scope [subst  {simulator::[format {mcu}]} ]
+browser set \
+    -signalsort name
+browser yview see [subst  {simulator::[format {mcu}]} ]
+browser timecontrol set -lock 0
+
+#
+# Waveform windows
+#
+if {[catch {window new WaveWindow -name "Waveform 1" -geometry 1010x600+1226+459}] != ""} {
+    window geometry "Waveform 1" 1010x600+1226+459
+}
+window target "Waveform 1" on
+waveform using {Waveform 1}
+waveform sidebar visibility partial
+waveform set \
+    -primarycursor TimeA \
+    -signalnames name \
+    -signalwidth 175 \
+    -units ps \
+    -valuewidth 75
+waveform baseline set -time 0
+
+set id [waveform add -signals [subst  {
+	{simulator::[format {mcu.rst}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{simulator::[format {mcu.clk}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{simulator::[format {mcu.ext_pad_io[9:0]}]}
+	} ]]
+
+set groupId0 [waveform add -groups gpio]
+
+
+waveform xview limits 0 2000ps
+
+#
+# Waveform Window Links
+#
+
+#
+# Console windows
+#
+console set -windowname Console
+window geometry Console 730x250+261+564
+
+#
+# Layout selection
+#
+

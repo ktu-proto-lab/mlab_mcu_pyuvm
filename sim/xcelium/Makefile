@@ -38,6 +38,9 @@ export PYTHONPATH := $(PROJECT_ROOT)/uvm/tb:$(PYTHONPATH)
 # WARNING: this points explicitly to the GPIO test program (24.02.26)
 # TODO: proper test selection mechanism
 MEM_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/verilog_hex.v
+IMEM1_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/instr_hex_1.mem
+IMEM2_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/instr_hex_2.mem
+DMEM_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/data_hex.mem
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Compilation Arguments
@@ -50,6 +53,9 @@ COMPILE_ARGS += -f $(PROJECT_ROOT)/sim/rtl/files.f
 COMPILE_ARGS += -DFUNCTIONAL
 COMPILE_ARGS += -DRANDOM_NUMBER=$(shell echo $$((1 + RANDOM % 255)))
 COMPILE_ARGS += -define MEM_HEX_FILE=\"$(MEM_HEX_FILE_PATH)\"
+COMPILE_ARGS += -define IMEM1_HEX_FILE=\"$(IMEM1_HEX_FILE_PATH)\"
+COMPILE_ARGS += -define IMEM2_HEX_FILE=\"$(IMEM2_HEX_FILE_PATH)\"
+COMPILE_ARGS += -define DMEM_HEX_FILE=\"$(DMEM_HEX_FILE_PATH)\"
 
 # Suppress timing violations from PDK memory models because of the Bootloader (not a design issue)
 COMPILE_ARGS += -notimingchecks
