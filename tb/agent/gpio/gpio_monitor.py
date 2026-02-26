@@ -17,6 +17,8 @@ class gpio_monitor(uvm_monitor):
         self.ap = uvm_analysis_port(name="ap", parent=self)
 
     async def run_phase(self):
+        await ClockCycles(self.dut.clk, 100)
+
         prev_pin_values = self.vif.read_pins()
 
         while True:

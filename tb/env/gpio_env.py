@@ -21,7 +21,7 @@ class gpio_env(uvm_env):
     async def run_phase(self):
         self.raise_objection()
 
-        cocotb.start_soon(Clock(self.dut.clk, 1, units='ns').start())
+        cocotb.start_soon(Clock(self.dut.clk, 10, units='ns').start())
         
         self.dut.rst.value = 0
         await ClockCycles(self.dut.clk, 10)

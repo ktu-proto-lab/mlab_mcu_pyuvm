@@ -50,8 +50,8 @@ DMEM_HEX_FILE_PATH = $(PROJECT_ROOT)/uvm/sw/test/gpio/heartbeat/build/data_hex.m
 COMPILE_ARGS += -f $(PROJECT_ROOT)/sim/rtl/files.f
 
 # Preprocessor defines
-COMPILE_ARGS += -DFUNCTIONAL
-COMPILE_ARGS += -DRANDOM_NUMBER=$(shell echo $$((1 + RANDOM % 255)))
+COMPILE_ARGS += -define FUNCTIONAL
+COMPILE_ARGS += -define RANDOM_NUMBER=$(shell echo $$((1 + RANDOM % 255)))
 COMPILE_ARGS += -define MEM_HEX_FILE=\"$(MEM_HEX_FILE_PATH)\"
 COMPILE_ARGS += -define IMEM1_HEX_FILE=\"$(IMEM1_HEX_FILE_PATH)\"
 COMPILE_ARGS += -define IMEM2_HEX_FILE=\"$(IMEM2_HEX_FILE_PATH)\"
