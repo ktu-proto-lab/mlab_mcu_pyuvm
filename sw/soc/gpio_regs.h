@@ -15,15 +15,18 @@
 #define GPIO_PIN_7 ((uint32_t)0x0080)
 #define GPIO_PIN_8 ((uint32_t)0x0100)
 
+#define GPIO_CTRL_ENA_INT (1 << 0)
+#define GPIO_CTRL_GLOBAL_INTS (1 << 1)
+
 typedef struct {
-  volatile uint32_t IN;
-  volatile uint32_t OUT;
-  volatile uint32_t OE;
-  volatile uint32_t INTE;
-  volatile uint32_t PTRIG;
-  volatile uint32_t AUX;
-  volatile uint32_t CTRL;
-  volatile uint32_t INTS;
+  volatile uint32_t in;
+  volatile uint32_t out;
+  volatile uint32_t oe;
+  volatile uint32_t inte;
+  volatile uint32_t ptrig;
+  volatile uint32_t aux;
+  volatile uint32_t ctrl;
+  volatile uint32_t ints;
 } gpio_reg_map_t;
 
 #endif

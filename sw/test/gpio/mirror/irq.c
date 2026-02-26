@@ -1,15 +1,6 @@
-#include "gpio.c"
+#include "main.h"
 
-int main() {
-    volatile gpio_handle_t gpio;
-    gpio_init(&gpio);
-    gpio.regs->oe = GPIO_PIN_0;
-    gpio.regs->out = GPIO_PIN_0;
-    return 0;
-}
-
-
-void __attribute__((interrupt)) GPIO_IRQHandler(void) { while(1); }
+void __attribute__((interrupt)) GPIO_IRQHandler(void) { gpio_irq_handler(&g_gpio_handle); }
 
 void __attribute__((interrupt)) I2C_IRQHandler(void) { while (1); }
 
