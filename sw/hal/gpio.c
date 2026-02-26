@@ -17,5 +17,8 @@ void gpio_init(volatile gpio_handle_t *gpio) {
 void gpio_irq_handler(volatile gpio_handle_t *gpio) {
     gpio->ints = gpio->regs->INTS;
     gpio->regs->INTS = 0;
-    gpio_irq_callback(gpio);
+
+    if (gpio_irq_callback != 0) {
+        gpio_irq_callback(gpio);
+    }
 }
