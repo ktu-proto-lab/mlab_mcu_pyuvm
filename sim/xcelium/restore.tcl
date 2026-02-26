@@ -54,5 +54,9 @@ set tcl_sigval_prefix {#}
 alias . run
 alias indago verisium
 alias quit exit
+database -open -shm -into waves.shm waves -default
+probe -create -database waves mcu.rst mcu.clk mcu.ext_pad_io mcu.gpio_i mcu.gpio_o mcu.gpio_oe
+probe -create -database waves mcu.dut.dmem.sram.i_SRAM_1P_behavioral_bm_bist.memory mcu.dut.imem.sram1.i_SRAM_1P_behavioral_bm_bist.memory
+probe -create -database waves mcu.dut.imem.sram2.i_SRAM_1P_behavioral_bm_bist.memory
 
 simvision -input restore.tcl.svcf
