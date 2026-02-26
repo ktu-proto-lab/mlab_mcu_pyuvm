@@ -4,9 +4,9 @@ PROJECT_ROOT = $(shell pwd)/../../../../..
 
 COMMON_DIR = $(PROJECT_ROOT)/sw/ibex/common
 
+# All other source files are include in the main.c (single-source build approach)
 C_SOURCES = \
-	main.c 	\
-	$(PROJECT_ROOT)/uvm/sw/hal/gpio.c
+	main.c 	
 
 C_INCLUDES = \
 	-Icore/inc \
