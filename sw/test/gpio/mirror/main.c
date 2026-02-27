@@ -1,5 +1,4 @@
 #include "main.h"
-
 #include "gpio.c"
 #include "irq.c"
 
@@ -7,13 +6,19 @@ volatile gpio_handle_t g_gpio_handle;
 
 int main() {
     gpio_init(&g_gpio_handle);
-    g_gpio_handle.regs->oe = GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7;
+    
+    g_gpio_handle.regs->oe = 0xF0;
+    g_gpio_handle.regs->ptrig = 0x0F;
+    g_gpio_handle.regs->ints = 0x0F; 
+    g_gpio_handle.regs->inte = 0x0F;
     g_gpio_handle.regs->ctrl = GPIO_CTRL_ENA_INT;
-    return 0;
+
+    while(1);
 }
 
 void gpio_irq_callback(volatile gpio_handle_t *gpio) {
-    uint32_t mirror_output;
-    mirror_output = (gpio->ints & (GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3));
-    gpio->regs->out = mirror_output << 4;
+    uint32_t current_inputs = (gpio->regs->in & 0x0F);
+    gpio->regs->out = current_inputs << 4;
+    gpio->regs->ptrig = (~current_inputs) & 0x0F;
+    gpio->regs->ints = 0x0F;
 }

@@ -10,3 +10,4 @@ dump.fst
 waves.shm/
 xrun.history
 xrun.log
+*.diag

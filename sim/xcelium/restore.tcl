@@ -5,7 +5,7 @@
 #
 # You can restore this configuration with:
 #
-#      xrun -timescale 1ns/1ps -vhdl_time_precision 1ps +gui -access +rw -f /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../sim/rtl/files.f -DFUNCTIONAL -DRANDOM_NUMBER=59 -define MEM_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/verilog_hex.v" -define IMEM1_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/instr_hex_1.mem" -define IMEM2_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/instr_hex_2.mem" -define DMEM_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/heartbeat/build/data_hex.mem" -notimingchecks -licqueue -64 -xmlibdirpath sim_build -plinowarn -top mcu -loadvpi /home/la_52/MLAB_MCU_edu/uvm/.venv/lib/python3.6/site-packages/cocotb/libs/libcocotbvpi_ius.so:vlog_startup_routines_bootstrap -access +rwc -createdebugdb /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/rtl/mcu.sv -input /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/restore.tcl
+#      xrun -timescale 1ns/1ps -vhdl_time_precision 1ps +gui -access +rw -f /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../sim/rtl/files.f -define FUNCTIONAL -define RANDOM_NUMBER=90 -define MEM_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/verilog_hex.v" -define IMEM1_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/instr_hex_1.mem" -define IMEM2_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/instr_hex_2.mem" -define DMEM_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/data_hex.mem" -notimingchecks -licqueue -64 -xmlibdirpath sim_build -plinowarn -top mcu -loadvpi /home/la_52/MLAB_MCU_edu/uvm/.venv/lib/python3.6/site-packages/cocotb/libs/libcocotbvpi_ius.so:vlog_startup_routines_bootstrap -access +rwc -createdebugdb /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/rtl/mcu.sv -s -input restore.tcl
 #
 
 set tcl_prompt1 {puts -nonewline "xcelium> "}
@@ -55,8 +55,6 @@ alias . run
 alias indago verisium
 alias quit exit
 database -open -shm -into waves.shm waves -default
-probe -create -database waves mcu.rst mcu.clk mcu.ext_pad_io mcu.gpio_i mcu.gpio_o mcu.gpio_oe
-probe -create -database waves mcu.dut.dmem.sram.i_SRAM_1P_behavioral_bm_bist.memory mcu.dut.imem.sram1.i_SRAM_1P_behavioral_bm_bist.memory
-probe -create -database waves mcu.dut.imem.sram2.i_SRAM_1P_behavioral_bm_bist.memory
+probe -create -database waves mcu.rst mcu.clk mcu.ext_pad_io mcu.gpio_i mcu.gpio_o mcu.gpio_oe mcu.dut.u_wb_ibex_top.inst_ibex_top.instr_addr_o mcu.dut.imem.sram2.i_SRAM_1P_behavioral_bm_bist.memory mcu.dut.imem.sram1.i_SRAM_1P_behavioral_bm_bist.memory mcu.dut.dmem.sram.i_SRAM_1P_behavioral_bm_bist.memory
 
 simvision -input restore.tcl.svcf

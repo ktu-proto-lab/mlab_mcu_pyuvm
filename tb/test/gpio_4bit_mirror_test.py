@@ -1,5 +1,6 @@
 import pyuvm
 from pyuvm import *
+from cocotb.triggers import Timer
 from env.gpio_env import gpio_env
 from obj.gpio_seq_item import gpio_seq_item
 from seq.gpio.gpio_4bit_rnd_seq import gpio_4bit_rnd_seq
@@ -20,5 +21,7 @@ class gpio_4bit_mirror_test(uvm_test):
         seq = gpio_4bit_rnd_seq(name="gpio_4bit_rnd_seq")
         
         await seq.start(self.env.agent.seqr)
+        
+        await Timer(5_000, 'ns')
 
         self.drop_objection()
