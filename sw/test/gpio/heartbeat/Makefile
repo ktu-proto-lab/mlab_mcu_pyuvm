@@ -1,4 +1,4 @@
-PROGRAM = gpio_heartbeat
+PROGRAM = heartbeat
 
 PROJECT_ROOT = $(shell pwd)/../../../../..
 

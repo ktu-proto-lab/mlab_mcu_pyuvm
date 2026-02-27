@@ -15,7 +15,7 @@ TOPLEVEL_LANG = verilog
 
 TOPLEVEL = mcu
 
-TEST ?= gpio_4bit_mirror_test
+TEST ?= gpio_mirror_test
 MODULE = test.$(TEST)
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -6,7 +6,7 @@ from obj.gpio_seq_item import gpio_seq_item
 from seq.gpio.gpio_4bit_rnd_seq import gpio_4bit_rnd_seq
 
 @pyuvm.test()
-class gpio_4bit_mirror_test(uvm_test):
+class gpio_mirror_test(uvm_test):
     def build_phase(self):
         self.env = gpio_env(name="env", parent=self)
 
