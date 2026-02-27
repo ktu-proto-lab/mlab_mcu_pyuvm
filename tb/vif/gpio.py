@@ -13,6 +13,8 @@ class gpio:
     PIN_NUM: int = 8
 
     def __init__(self, dut: SimHandleBase):
+        self.clk = dut.clk
+        
         self.pins: List[SimHandleBase] = []
 
         for i in range(self.PIN_NUM):
@@ -25,6 +27,12 @@ class gpio:
     def set_pin(self, pin: int) -> None:
         self._check_pin(pin)
         self.pins[pin].value = 1
+        
+    def set_pins(self, value: int):
+        if not 0 <= value < 2**self.PIN_NUM:
+            raise ValueError(f"Given value {value} exceeds physical GPIO pins: {self.PIN_NUM}")
+        for idx in range(self.PIN_NUM):
+            self.pins[idx].value = (value >> idx) & 1; 
     
     def reset_pin(self, pin: int) -> None:
         self._check_pin(pin)

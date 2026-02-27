@@ -1,4 +1,5 @@
 from pyuvm import *
+from cocotb.triggers import ClockCycles
 from vif.gpio import gpio
 from obj.gpio_seq_item import gpio_seq_item
 
@@ -15,5 +16,10 @@ class gpio_driver(uvm_driver):
             item: gpio_seq_item = await self.seq_item_port.get_next_item()
 
             # TODO: drive pins
+            self.vif.set_pins(int(item.value))
+            
+            self.logger.info(f"Driver: drove {item}")
+            
+            await ClockCycles(self.vif.clk, 1_000)
 
             self.seq_item_port.item_done()

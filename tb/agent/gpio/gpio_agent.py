@@ -1,6 +1,7 @@
 from pyuvm import *
 from agent.gpio.gpio_driver import gpio_driver
 from agent.gpio.gpio_monitor import gpio_monitor
+from seq.gpio.gpio_4bit_rnd_seq import gpio_4bit_rnd_seq
 
 class gpio_agent(uvm_agent):
     def build_phase(self):

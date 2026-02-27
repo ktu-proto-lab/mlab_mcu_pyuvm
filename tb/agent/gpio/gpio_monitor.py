@@ -28,7 +28,7 @@ class gpio_monitor(uvm_monitor):
             await ReadOnly()
             curr_pin_values = self.vif.read_pins()
 
-            self.logger.info(f"GPIO current pin values = {hex(curr_pin_values)}")
+            # self.logger.info(f"GPIO current pin values = {hex(curr_pin_values)}")
 
             if curr_pin_values != prev_pin_values:
                 # Monitor the change
