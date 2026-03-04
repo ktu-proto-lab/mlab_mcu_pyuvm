@@ -5,3 +5,7 @@ __pycache__/
 
 # Avoid accidental insecure commits
 *.key
+
+# Vim specific files
+*.swp
+*.swo
