@@ -10,33 +10,18 @@ module mcu #(
     input  logic                    clk,
     input  logic                    rst,
     
-    inout  wire [GPIO_COUNT-1:0]    ext_pad_io,
-    inout  wire                     SDA,
-    inout  wire                     SCL
+    input  logic [GPIO_COUNT-1:0]   gpio_i, 
+    output logic [GPIO_COUNT-1:0]   gpio_o, 
+    output logic [GPIO_COUNT-1:0]   gpio_oe,
+
+    input  logic                    sda_i,
+    output logic                    sda_o,
+    output logic                    sda_oe,
+
+    input  logic                    scl_i,
+    output logic                    scl_o,
+    output logic                    scl_oe
 );
-
-    logic [GPIO_COUNT-1:0] gpio_i, gpio_o, gpio_oe;
-    
-    logic scl_i, scl_o, scl_oe_n;
-    logic sda_i, sda_o, sda_oe_n;
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Bidirectional Tri-state Logic
-    // -----------------------------------------------------------------------------------------------------------------
-    
-    assign SDA   = sda_oe_n ? 1'bz : sda_o;
-    assign sda_i = SDA;
-
-    assign SCL   = scl_oe_n ? 1'bz : scl_o;
-    assign scl_i = SCL;
-
-    genvar i;
-    generate
-        for (i = 0; i < GPIO_COUNT; i++) begin : gen_gpio_tristate
-            assign ext_pad_io[i] = gpio_oe[i] ? gpio_o[i] : 1'bz;
-            assign gpio_i[i]     = ext_pad_io[i];
-        end
-    endgenerate
 
     // -----------------------------------------------------------------------------------------------------------------
     // Ibex Core
@@ -76,18 +61,5 @@ module mcu #(
         .SCL    (SCL),
         .RESET  (1'b0)
     );
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Pullups / Pulldowns
-    // -----------------------------------------------------------------------------------------------------------------
-    pullup(SDA);
-    pullup(SCL);
-
-    genvar j;
-    generate
-        for(j=0; j<GPIO_COUNT; j++) begin : gen_gpio_pd
-            pulldown(ext_pad_io[j]);
-        end
-    endgenerate
 
 endmodule

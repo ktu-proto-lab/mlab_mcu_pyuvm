@@ -2,14 +2,14 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles, ReadOnly
 from pyuvm import *
-from vif.gpio import gpio
+from vif.gpio_if import gpio_if
 from agent.gpio.gpio_agent import gpio_agent
 
 class gpio_env(uvm_env):
     def build_phase(self):
         self.dut = cocotb.top
 
-        self.vif = gpio(self.dut)
+        self.vif = gpio_if(self.dut)
 
         self.agent = gpio_agent(name="agent", parent=self)
 

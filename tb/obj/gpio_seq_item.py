@@ -1,3 +1,7 @@
+import warnings
+# don't cluster the log output of the simulation
+warnings.filterwarnings(action="ignore", category=DeprecationWarning, module="vsc")
+
 import vsc
 from pyuvm import *
 
