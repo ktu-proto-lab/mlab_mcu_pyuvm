@@ -4,6 +4,7 @@ from cocotb.triggers import ClockCycles, ReadOnly
 from pyuvm import *
 from vif.gpio_if import gpio_if
 from agent.gpio.gpio_agent import gpio_agent
+from sb.gpio.gpio_mirror_scoreboard import gpio_mirror_scoreboard
 
 class gpio_env(uvm_env):
     def build_phase(self):
@@ -12,10 +13,15 @@ class gpio_env(uvm_env):
         self.vif = gpio_if(self.dut)
 
         self.agent = gpio_agent(name="agent", parent=self)
+        
+        self.scoreboard = gpio_mirror_scoreboard(name="sb", parent=self)
 
-        # Make GPIO's Virtual Interface and the DUT itself visible to all child components with "*"
+        # Make GPIO's Virtual Interface visible to all child components with "*"
         ConfigDB().set(context=self, inst_name="*", field_name="vif", value=self.vif)
-        ConfigDB().set(self, "*", "dut", self.dut)
+
+    def connect_phase(self):
+        self.agent.driver.ap.connect(self.scoreboard.stim_fifo.analysis_export)
+        self.agent.monitor.ap.connect(self.scoreboard.mon_fifo.analysis_export)
 
 
     async def run_phase(self):

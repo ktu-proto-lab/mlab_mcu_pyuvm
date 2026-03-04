@@ -9,23 +9,20 @@ class gpio_monitor(uvm_monitor):
     def build_phase(self):
         super().build_phase()
 
-        self.dut: SimHandleBase = ConfigDB().get(context=self, inst_name="", field_name="dut")
-
         self.vif: gpio_if = ConfigDB().get(context=self, inst_name="", field_name="vif")
 
         # Broadcast to the Scoreboard
         self.ap = uvm_analysis_port(name="ap", parent=self)
 
     async def run_phase(self):
-        await ClockCycles(self.dut.clk, 100)
+        await RisingEdge(self.vif.clk)
 
         prev_pin_values = self.vif.read_pins()
 
         while True:
-            await ClockCycles(self.dut.clk, 5)
-
-            await RisingEdge(self.dut.clk)
+            await RisingEdge(self.vif.clk)
             await ReadOnly()
+            
             curr_pin_values = self.vif.read_pins()
 
             if curr_pin_values != prev_pin_values:
@@ -35,6 +32,6 @@ class gpio_monitor(uvm_monitor):
                 # Broadcast the transaction
                 self.ap.write(tr)
 
-                self.logger.info(f"GPIO values changed to {hex(curr_pin_values)}")
+                self.logger.debug(f"GPIO values changed to {hex(curr_pin_values)}")
 
                 prev_pin_values = curr_pin_values

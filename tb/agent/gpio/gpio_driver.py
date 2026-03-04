@@ -8,6 +8,8 @@ class gpio_driver(uvm_driver):
         super().build_phase()
 
         self.vif: gpio_if = ConfigDB().get(context=self, inst_name="", field_name="vif")
+        
+        self.ap = uvm_analysis_port(name="ap", parent=self)
 
     async def run_phase(self):
         await super().run_phase()
@@ -15,11 +17,12 @@ class gpio_driver(uvm_driver):
         while True:
             item: gpio_seq_item = await self.seq_item_port.get_next_item()
 
-            await ClockCycles(self.vif.clk, 500)
-            await RisingEdge(self.vif.clk)
-            self.vif.drive_pins(int(item.value))
+            self.vif.drive_pins(item.value)
             
-            self.logger.info(f"drove {hex(item.value)}")
+            self.logger.debug(f"drove {hex(item.value)}")
             
+            await ClockCycles(self.vif.clk, 1000)
+            
+            self.ap.write(item)
 
             self.seq_item_port.item_done()
