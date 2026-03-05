@@ -27,7 +27,7 @@ class gpio_monitor(uvm_monitor):
         await RisingEdge(self.vif.rst)
         await ReadOnly()
 
-        prev_val: int = self.vif.read_output()
+        prev_val: int = self.sample()
 
         while True:
             await RisingEdge(self.vif.clk)
