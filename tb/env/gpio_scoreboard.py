@@ -9,18 +9,18 @@ class gpio_mirror_scoreboard(uvm_component):
 
         self.model = gpio_mirror_ref_model()
 
-        self.stim_fifo = uvm_tlm_analysis_fifo("stim_fifo", self)
-        self.mon_fifo  = uvm_tlm_analysis_fifo("mon_fifo", self)
+        self.input_fifo = uvm_tlm_analysis_fifo("input_fifo", self)
+        self.output_fifo  = uvm_tlm_analysis_fifo("output_fifo", self)
         
         self.failure: int = 0
 
     async def run_phase(self):
         while True:
-            mon_tr: gpio_seq_item  = await self.mon_fifo.get()
-            stim_tr: gpio_seq_item = await self.stim_fifo.get()
+            input: gpio_seq_item = await self.input_fifo.get()
+            output: gpio_seq_item  = await self.output_fifo.get()
             
-            expected = self.model.predict(stim_tr.value)
-            actual   = int(mon_tr.value)
+            expected = self.model.predict(input.value)
+            actual   = int(output.value)
 
             if expected == actual:
                 self.logger.debug(f"PASS: expected {hex(expected)}, actual = {hex(actual)}")
