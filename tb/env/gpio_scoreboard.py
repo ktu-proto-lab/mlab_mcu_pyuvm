@@ -17,13 +17,18 @@ class gpio_mirror_scoreboard(uvm_component):
     async def run_phase(self):
         while True:
             input: gpio_seq_item = await self.input_fifo.get()
+            
+            self.logger.debug(f"got input: {input.value}")
+            
             output: gpio_seq_item  = await self.output_fifo.get()
+            
+            self.logger.debug(f"got output: {output.value}")
             
             expected = self.model.predict(input.value)
             actual   = int(output.value)
 
             if expected == actual:
-                self.logger.debug(f"PASS: expected {hex(expected)}, actual = {hex(actual)}")
+                self.logger.info(f"PASS: expected {hex(expected)}, actual = {hex(actual)}")
             else:
                 self.failure += 1
                 self.logger.error(f"FAIL: expected {hex(expected)}, actual = {hex(actual)}")

@@ -1,4 +1,6 @@
 import cocotb
+import logging
+import os
 from cocotb.handle import SimHandleBase
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
@@ -11,6 +13,15 @@ from vip.gpio.gpio_sequence import gpio_4bit_rnd_seq
 class gpio_mirror_test(uvm_test):
     def build_phase(self):
         super().build_phase()
+        
+        # Let set log level from the sim/Makefile itself, default to info
+        level_str = os.getenv("COCOTB_LOG_LEVEL", "INFO").upper()
+    
+        # Convert string (e.g., "DEBUG") to logging constant (e.g., logging.DEBUG)
+        log_level = getattr(logging, level_str, logging.INFO)
+        
+        # Apply to all pyuvm components
+        uvm_report_object.set_default_logging_level(log_level)
         
         self.dut: SimHandleBase = cocotb.top
         
