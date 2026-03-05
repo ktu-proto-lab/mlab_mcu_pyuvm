@@ -20,8 +20,8 @@ class gpio_env(uvm_env):
         ConfigDB().set(context=self, inst_name="*", field_name="vif", value=self.vif)
 
     def connect_phase(self):
-        self.agent.driver.ap.connect(self.scoreboard.stim_fifo.analysis_export)
-        self.agent.monitor.ap.connect(self.scoreboard.mon_fifo.analysis_export)
+        self.agent.input_analysis_port.connect(self.scoreboard.stim_fifo.analysis_export)
+        self.agent.output_analysis_port.connect(self.scoreboard.mon_fifo.analysis_export)
 
 
     async def run_phase(self):

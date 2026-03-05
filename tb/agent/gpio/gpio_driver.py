@@ -9,8 +9,6 @@ class gpio_driver(uvm_driver):
 
         self.vif: gpio_if = ConfigDB().get(context=self, inst_name="", field_name="vif")
         
-        self.ap = uvm_analysis_port(name="ap", parent=self)
-
     async def run_phase(self):
         await super().run_phase()
 
@@ -23,6 +21,4 @@ class gpio_driver(uvm_driver):
             
             await ClockCycles(self.vif.clk, 1000)
             
-            self.ap.write(item)
-
             self.seq_item_port.item_done()

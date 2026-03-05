@@ -1,24 +1,29 @@
 from pyuvm import *
 from agent.gpio.gpio_driver import gpio_driver
-from agent.gpio.gpio_monitor import gpio_monitor
+from agent.gpio.gpio_monitor import gpio_input_monitor, gpio_output_monitor
 from seq.gpio.gpio_4bit_rnd_seq import gpio_4bit_rnd_seq
 
 class gpio_agent(uvm_agent):
     def build_phase(self):
         super().build_phase()
 
-        # TODO: add actual GPIO Sequencer
-        self.seqr = uvm_sequencer(name="seqr", parent=self)
+        self.sequencer = uvm_sequencer(name="sequencer", parent=self)
 
         self.driver = gpio_driver(name="driver", parent=self)
 
-        self.monitor = gpio_monitor(name="monitor", parent=self)
+        self.input_monitor = gpio_input_monitor(name="input_monitor", parent=self)
+        self.output_monitor = gpio_output_monitor(name="output_monitor", parent=self)
+        
+        self.input_analysis_port = uvm_analysis_port(name="input_analysis_port", parent=self)
+        self.output_analysis_port = uvm_analysis_port(name="output_analysis_port", parent=self)
+        
 
     def connect_phase(self):
         super().connect_phase()
 
         # Connect Driver to the Sequencer
-        self.driver.seq_item_port.connect(self.seqr.seq_item_export)
+        self.driver.seq_item_port.connect(self.sequencer.seq_item_export)
 
-        # NOTE: optional export of the Monitor's analysis port to the Agent's boundary
-        # self.ap = self.monitor.ap
+        # Export Monitoring analysis ports to the Agent's boundary
+        self.input_monitor.analysis_port.connect(self.input_analysis_port)
+        self.output_monitor.analysis_port.connect(self.output_analysis_port)

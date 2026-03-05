@@ -12,11 +12,6 @@ class gpio_mirror_test(uvm_test):
         
         self.env = gpio_env(name="env", parent=self)
 
-        self.fifo = uvm_tlm_analysis_fifo(name="fifo", parent=self)
-
-    def connect_phase(self):
-        self.env.agent.monitor.ap.connect(self.fifo.analysis_export)
-
     async def run_phase(self):
         await super().run_phase()
         
@@ -24,10 +19,8 @@ class gpio_mirror_test(uvm_test):
 
         seq = gpio_4bit_rnd_seq(name="gpio_4bit_rnd_seq")
         
-        await seq.start(self.env.agent.seqr)
+        await seq.start(self.env.agent.sequencer)
         
-        await Timer(5_000, 'ns')
-
         self.drop_objection()
         
     def report_phase(self):

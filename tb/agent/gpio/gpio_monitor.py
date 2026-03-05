@@ -1,9 +1,7 @@
 from pyuvm import *
-from cocotb.triggers import ClockCycles, ReadOnly, RisingEdge
-from cocotb.handle import SimHandleBase
+from cocotb.triggers import ReadOnly, RisingEdge
 from vif.gpio_if import gpio_if
 from obj.gpio_seq_item import gpio_seq_item
-
 
 class gpio_monitor(uvm_monitor):
     def build_phase(self):
@@ -12,26 +10,42 @@ class gpio_monitor(uvm_monitor):
         self.vif: gpio_if = ConfigDB().get(context=self, inst_name="", field_name="vif")
 
         # Broadcast to the Scoreboard
-        self.ap = uvm_analysis_port(name="ap", parent=self)
+        self.analysis_port = uvm_analysis_port(name="analysis_port", parent=self)
+        
+    def sample(self) -> int:
+        """
+        @brief Template method for child Monitors to sample specific signals to be monitored
+        """
+        raise NotImplementedError
+        # TODO: Maybe use this?
+        uvm_not_implemeneted(header="", message="")
 
     async def run_phase(self):
-        await RisingEdge(self.vif.clk)
+        await super().run_phase()
+        
+        await ReadOnly()
 
-        prev_pin_values = self.vif.read_output()
+        prev_val: int = self.vif.read_output()
 
         while True:
             await RisingEdge(self.vif.clk)
             await ReadOnly()
             
-            curr_pin_values = self.vif.read_output()
+            curr_val: int = self.sample()
 
-            if curr_pin_values != prev_pin_values:
+            if curr_val != prev_val:
                 # Monitor the change
-                tr = gpio_seq_item(name="gpio_mon_tr", value=curr_pin_values)
+                tr = gpio_seq_item(name="gpio_mon_tr", value=curr_val)
                 
                 # Broadcast the transaction
-                self.ap.write(tr)
+                self.analysis_port.write(tr)
 
-                self.logger.debug(f"GPIO values changed to {hex(curr_pin_values)}")
+                prev_val = curr_val
 
-                prev_pin_values = curr_pin_values
+class gpio_input_monitor(gpio_monitor):
+    def sample(self) -> int:
+        return self.vif.read_input()
+                
+class gpio_output_monitor(gpio_monitor):
+    def sample(self) -> int:
+        return self.vif.read_output()
