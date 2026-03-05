@@ -47,7 +47,7 @@ class gpio_if:
     def read_output_enable(self) -> int:
         if not self.gpio_oe.value.is_resolvable:
             self.logger.warning(
-                f"gpio_oe value is unresolvable: {self.gpio_oe.binstr}, returning 0 instead"
+                f"gpio_oe value is unresolvable: {self.gpio_oe.value.binstr}, returning 0 instead"
             )
             return 0
         
