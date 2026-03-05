@@ -23,6 +23,8 @@ class gpio_monitor(uvm_monitor):
     async def run_phase(self):
         await super().run_phase()
         
+        # Wait for system to boot up to avoid unresolvable gpio pin output values
+        await RisingEdge(self.vif.rst)
         await ReadOnly()
 
         prev_val: int = self.vif.read_output()

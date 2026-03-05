@@ -14,6 +14,7 @@ class gpio_if:
 
     def __init__(self, dut: SimHandleBase, name="gpio_if", parent=None):
         self.clk: SimHandleBase = dut.clk
+        self.rst: SimHandleBase = dut.rst
         
         self.gpio_i: SimHandleBase = dut.gpio_i
         self.gpio_o: SimHandleBase = dut.gpio_o
