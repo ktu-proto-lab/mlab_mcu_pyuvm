@@ -72,10 +72,6 @@ ifeq ($(SIM), verilator)
 
 	# Aggresive optimization for speed
 	COMPILE_ARGS += -O3
-	COMPILE_ARGS += --x-assign fast
-	COMPILE_ARGS += --x-initial fast
-	COMPILE_ARGS += --noassert
-	COMPILE_ARGS += --output-split 20000
 
 	# Enable EEPROM patch in tb/misc/24CS512.sv pathced file
 	COMPILE_ARGS += -DVERILATOR_SIM_EEPROM_TIMING_PATCH

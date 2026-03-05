@@ -1,5 +1,3 @@
-`include "project_defs.svh"
-
 module mcu #(
     parameter GPIO_COUNT        = `GPIO_IOS,
     parameter MEMInitFile       = `MEM_HEX_FILE,
@@ -10,22 +8,33 @@ module mcu #(
     input  logic                    clk,
     input  logic                    rst,
     
-    input  logic [GPIO_COUNT-1:0]   gpio_i, 
-    output logic [GPIO_COUNT-1:0]   gpio_o, 
-    output logic [GPIO_COUNT-1:0]   gpio_oe,
-
-    input  logic                    sda_i,
-    output logic                    sda_o,
-    output logic                    sda_oe,
-
-    input  logic                    scl_i,
-    output logic                    scl_o,
-    output logic                    scl_oe
+    inout  wire [GPIO_COUNT-1:0]    ext_pad_io
 );
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Ibex Core
-    // -----------------------------------------------------------------------------------------------------------------
+    logic [GPIO_COUNT-1:0] gpio_i, gpio_o, gpio_oe;
+    logic scl_pad_i, scl_pad_o, scl_padoen_o;
+    logic sda_pad_i, sda_pad_o, sda_padoen_o;
+
+    tri SDA, SCL;
+
+    assign SCL       = scl_padoen_o ? 1'bz : scl_pad_o;
+    assign scl_pad_i = SCL;
+
+    assign SDA       = sda_padoen_o ? 1'bz : sda_pad_o;
+    assign sda_pad_i = SDA;
+
+    pullup(SDA);
+    pullup(SCL);
+
+    genvar i;
+    generate
+        for (i = 0; i < GPIO_COUNT; i++) begin : gen_gpio
+            assign ext_pad_io[i] = gpio_oe[i] ? gpio_o[i] : 1'bz;
+            assign gpio_i[i]     = ext_pad_io[i];
+            pulldown(ext_pad_io[i]);
+        end
+    endgenerate
+
     ibex_simple_system #(
         .IMEM_1_InitFile(IMEM_1_InitFile),
         .IMEM_2_InitFile(IMEM_2_InitFile),
@@ -33,23 +42,17 @@ module mcu #(
     ) dut (
         .clk_sys      (clk),
         .rst_async_n  (rst),
-
-        .scl_pad_i    (scl_i),
-        .scl_pad_o    (scl_o),
-        .scl_padoen_o (scl_oe_n),
-        
-        .sda_pad_i    (sda_i),
-        .sda_pad_o    (sda_o),
-        .sda_padoen_o (sda_oe_n),
-
+        .scl_pad_i    (scl_pad_i),
+        .scl_pad_o    (scl_pad_o),
+        .scl_padoen_o (scl_padoen_o),
+        .sda_pad_i    (sda_pad_i),
+        .sda_pad_o    (sda_pad_o),
+        .sda_padoen_o (sda_padoen_o),
         .ext_pad_i    (gpio_i),
         .gpio_o       (gpio_o),
         .gpio_oe      (gpio_oe)
     );
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // EEPROM
-    // -----------------------------------------------------------------------------------------------------------------
     M24CS512 #(
         .MEMInitFile(MEMInitFile)
     ) eeprom (
