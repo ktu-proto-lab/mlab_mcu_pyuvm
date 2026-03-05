@@ -1,6 +1,6 @@
 from pyuvm import *
-from ref.gpio.gpio_mirror_ref_model import gpio_mirror_ref_model
-from obj.gpio_seq_item import gpio_seq_item
+from vip.gpio.gpio_ref_model import gpio_mirror_ref_model
+from vip.gpio.gpio_sequence_item import gpio_seq_item
 
 class gpio_mirror_scoreboard(uvm_component):
 

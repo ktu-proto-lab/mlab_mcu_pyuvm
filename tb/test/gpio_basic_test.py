@@ -1,7 +1,7 @@
 import pyuvm
 from pyuvm import *
-from env.gpio_env import gpio_env
-from obj.gpio_seq_item import gpio_seq_item
+from tb.env.gpio_env import gpio_env
+from vip.gpio.gpio_sequence_item import gpio_seq_item
 
 @pyuvm.test()
 class gpio_basic_test(uvm_test):

@@ -16,7 +16,7 @@ TOPLEVEL_LANG = verilog
 TOPLEVEL = mcu
 
 TEST ?= gpio_mirror_test
-MODULE = test.$(TEST)
+MODULE = tb.test.$(TEST)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Paths
@@ -26,8 +26,8 @@ PROJECT_ROOT = $(shell pwd)/../../..
 # Used by the rtl's 'files.f' for Xcelium compatibility
 export PROJECT_ROOT
 
-# Cocotb discovers Python testbench modules via PYTHONPATH, 'tb.py' lives in 'uvm/tb'.
-export PYTHONPATH := $(PROJECT_ROOT)/uvm/tb:$(PYTHONPATH)
+# Cocotb discovers Python testbench modules via PYTHONPATH
+export PYTHONPATH := $(PROJECT_ROOT)/uvm:$(PYTHONPATH)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # DUT's Test Program

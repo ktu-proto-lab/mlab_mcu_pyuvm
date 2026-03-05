@@ -1,9 +1,7 @@
 import pyuvm
 from pyuvm import *
-from cocotb.triggers import Timer
-from env.gpio_env import gpio_env
-from obj.gpio_seq_item import gpio_seq_item
-from seq.gpio.gpio_4bit_rnd_seq import gpio_4bit_rnd_seq
+from tb.env.gpio_env import gpio_env
+from vip.gpio.gpio_sequence import gpio_4bit_rnd_seq
 
 @pyuvm.test()
 class gpio_mirror_test(uvm_test):

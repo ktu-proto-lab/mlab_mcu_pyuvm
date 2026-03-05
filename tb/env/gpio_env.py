@@ -1,10 +1,10 @@
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles, ReadOnly
+from cocotb.triggers import ClockCycles
 from pyuvm import *
-from vif.gpio_if import gpio_if
-from agent.gpio.gpio_agent import gpio_agent
-from sb.gpio.gpio_mirror_scoreboard import gpio_mirror_scoreboard
+from vip.gpio.gpio_vif import gpio_if
+from vip.gpio.gpio_agent import gpio_agent
+from tb.env.gpio_scoreboard import gpio_mirror_scoreboard
 
 class gpio_env(uvm_env):
     def build_phase(self):
