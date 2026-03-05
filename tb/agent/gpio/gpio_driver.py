@@ -17,7 +17,7 @@ class gpio_driver(uvm_driver):
         while True:
             item: gpio_seq_item = await self.seq_item_port.get_next_item()
 
-            self.vif.drive_pins(item.value)
+            self.vif.drive_input(item.value)
             
             self.logger.debug(f"drove {hex(item.value)}")
             

@@ -17,13 +17,13 @@ class gpio_monitor(uvm_monitor):
     async def run_phase(self):
         await RisingEdge(self.vif.clk)
 
-        prev_pin_values = self.vif.read_pins()
+        prev_pin_values = self.vif.read_output()
 
         while True:
             await RisingEdge(self.vif.clk)
             await ReadOnly()
             
-            curr_pin_values = self.vif.read_pins()
+            curr_pin_values = self.vif.read_output()
 
             if curr_pin_values != prev_pin_values:
                 # Monitor the change
