@@ -1,6 +1,4 @@
 import cocotb
-from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles
 from pyuvm import *
 from vip.gpio.gpio_vif import gpio_if
 from vip.gpio.gpio_agent import gpio_agent
@@ -22,15 +20,3 @@ class gpio_env(uvm_env):
     def connect_phase(self):
         self.agent.input_analysis_port.connect(self.scoreboard.stim_fifo.analysis_export)
         self.agent.output_analysis_port.connect(self.scoreboard.mon_fifo.analysis_export)
-
-
-    async def run_phase(self):
-        self.raise_objection()
-
-        cocotb.start_soon(Clock(self.dut.clk, 10, units='ns').start())
-        
-        self.dut.rst.value = 0
-        await ClockCycles(self.dut.clk, 10)
-        self.dut.rst.value = 1
-
-        self.drop_objection()

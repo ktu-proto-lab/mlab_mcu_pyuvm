@@ -1,3 +1,6 @@
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import ClockCycles
 import pyuvm
 from pyuvm import *
 from tb.env.gpio_env import gpio_env
@@ -14,6 +17,15 @@ class gpio_mirror_test(uvm_test):
         await super().run_phase()
         
         self.raise_objection()
+        
+        cocotb.start_soon(Clock(self.env.dut.clk, 10, units='ns').start())
+        
+        self.env.dut.rst.value = 0
+        await ClockCycles(self.env.dut.clk, 10)
+        self.env.dut.rst.value = 1
+        
+        # wait for main function to initialize gpio regs
+        await ClockCycles(self.env.dut.clk, 500)
 
         seq = gpio_4bit_rnd_seq(name="gpio_4bit_rnd_seq")
         
