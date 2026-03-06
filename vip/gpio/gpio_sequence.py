@@ -1,11 +1,11 @@
 from pyuvm import *
-from vip.gpio.gpio_sequence_item import gpio_seq_item
+from vip.gpio.gpio_sequence_item import gpio_sequence_item
 
-class gpio_4bit_rnd_seq(uvm_sequence):
+class gpio_4bit_random_sequence(uvm_sequence):
     async def body(self):
         
-        for _ in range(100):
-            req = gpio_seq_item("req")
+        for _ in range(10):
+            req = gpio_sequence_item("req")
             
             req.randomize()
             

@@ -1,6 +1,6 @@
 import cocotb
 from pyuvm import *
-from vip.gpio.gpio_vif import gpio_if
+from vip.gpio.gpio_if import gpio_if
 from vip.gpio.gpio_agent import gpio_agent
 from tb.env.gpio_scoreboard import gpio_mirror_scoreboard
 

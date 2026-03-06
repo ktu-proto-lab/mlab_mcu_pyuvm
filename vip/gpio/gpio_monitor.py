@@ -1,7 +1,7 @@
 from pyuvm import *
 from cocotb.triggers import ReadOnly, RisingEdge
-from vip.gpio.gpio_vif import gpio_if
-from vip.gpio.gpio_sequence_item import gpio_seq_item
+from vip.gpio.gpio_if import gpio_if
+from vip.gpio.gpio_sequence_item import gpio_sequence_item
 
 class gpio_monitor(uvm_monitor):
     def build_phase(self):
@@ -12,13 +12,15 @@ class gpio_monitor(uvm_monitor):
         # Broadcast to the Scoreboard
         self.analysis_port = uvm_analysis_port(name="analysis_port", parent=self)
         
+        self.logger.debug("build phase done")
+        
     def sample(self) -> int:
         """
         @brief Template method for child Monitors to sample specific signals to be monitored
         """
         raise NotImplementedError
         # TODO: Maybe use this?
-        uvm_not_implemeneted(header="", message="")
+        uvm_not_implemented(header="", message="")
 
     async def run_phase(self):
         await super().run_phase()
@@ -34,10 +36,12 @@ class gpio_monitor(uvm_monitor):
             await ReadOnly()
             
             curr_val: int = self.sample()
+            self.logger.debug(f"Sampled output {hex(curr_val)}")
 
             if curr_val != prev_val:
                 # Monitor the change
-                tr = gpio_seq_item(name="gpio_mon_tr", value=curr_val)
+                tr = gpio_sequence_item(name="gpio_mon_tr", value=curr_val)
+                self.logger.debug(f"Value changed to {tr}")
                 
                 # Broadcast the transaction
                 self.analysis_port.write(tr)
@@ -62,6 +66,8 @@ class gpio_input_monitor(uvm_monitor):
         await super().run_phase()
         
         while True:
-            tr: gpio_seq_item = await self.driver_fifo.get()
+            tr: gpio_sequence_item = await self.driver_fifo.get()
+            self.logger.debug(f"Got input item from the driver: {tr}")
+            
             # Forward Driver's input to the Scoreboard
             self.analysis_port.write(tr)

@@ -1,16 +1,16 @@
+# Disable VSC's inner warnings to not cluster the log output of the simulation
 import warnings
-# don't cluster the log output of the simulation
 warnings.filterwarnings(action="ignore", category=DeprecationWarning, module="vsc")
 
 import vsc
 from pyuvm import *
 
 @vsc.randobj
-class gpio_seq_item(uvm_sequence_item):
+class gpio_sequence_item(uvm_sequence_item):
     # Track last randomized value
     last_value = -1
     
-    def __init__(self, name="gpio_seq_item", value=None):
+    def __init__(self, name="gpio_sequence_item", value=None):
         super().__init__(name)
 
         if value is None:
@@ -27,11 +27,11 @@ class gpio_seq_item(uvm_sequence_item):
         # prevent the exact same value back-to-back
         # 0x07 0x0d 0x07 -> good
         # 0x07 0x07 0x0d -> not allowed (output Monitor won't detect the change)
-        self.value != gpio_seq_item.last_value
+        self.value != gpio_sequence_item.last_value
 
     # VSC hook that runs automatically after self.randomize()
     def post_randomize(self):
-        gpio_seq_item.last_value = self.value
+        gpio_sequence_item.last_value = self.value
     
     def __eq__(self, other):
         return self.value == other.value
