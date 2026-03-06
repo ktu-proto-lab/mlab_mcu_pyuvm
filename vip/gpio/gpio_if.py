@@ -27,9 +27,10 @@ class gpio_if:
         self.full_name = f"{self.parent_name}.{name}"
         self.logger = SimLog(self.full_name)
 
-    def drive_input(self, value: int, oe: int = 0xFF) -> None:
+    def drive_input(self, value: int, mask: int) -> None:
         self.tb_gpio_o.value = value
-        self.tb_gpio_oe.value = oe
+        # NOTE: input mask should not conflict with the firmware of the dut.
+        self.tb_gpio_oe.value = mask
         
     def read_input(self, mask: int = 0xFF) -> int:
         if not self.gpio_i.value.is_resolvable:
