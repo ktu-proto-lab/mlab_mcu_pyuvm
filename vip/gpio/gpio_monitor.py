@@ -58,7 +58,7 @@ class gpio_output_monitor(gpio_monitor):
         if value is None:
             return None
 
-        return value & 0xF0
+        return value
 
 class gpio_input_monitor(uvm_monitor):
     def build_phase(self):

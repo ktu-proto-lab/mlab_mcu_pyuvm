@@ -51,12 +51,13 @@ class gpio_if:
         return self.gpio_oe.value.integer
     
     def read_enabled_output(self, mask: int = 0xFF) -> int:
-        self.logger.debug(f"gpio_o = {self.gpio_o.value.binstr}, gpio_oe = {self.gpio_oe.value.binstr}")
+        o_value = self.read_output()
+        oe_value = self.read_output_enable()
         
-        o_val = self.read_output()
-        oe_val = self.read_output_enable()
+        if o_value is None or oe_value is None:
+            return None
         
-        return o_val & oe_val & mask
+        return o_value & oe_value & mask
 
     def read_output_binstr(self) -> str:
         return f"0b{self.read_output():0{self.PIN_NUM}b}"
