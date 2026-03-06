@@ -36,6 +36,10 @@ class gpio_monitor(uvm_monitor):
             await ReadOnly()
             
             curr_val: int = self.sample()
+            
+            if curr_val is None:
+                self.logger.warning("monitoring GPIO value, got None")
+                continue
 
             if curr_val != prev_val:
                 # Monitor the change
@@ -49,7 +53,7 @@ class gpio_monitor(uvm_monitor):
 
 class gpio_output_monitor(gpio_monitor):
     def sample(self) -> int:
-        return self.vif.read_output()
+        return self.vif.read_enabled_output()
 
 class gpio_input_monitor(uvm_monitor):
     def build_phase(self):

@@ -20,7 +20,7 @@ class gpio_sequence_item(uvm_sequence_item):
     
     @vsc.constraint
     def c_lower_pins_only(self):
-        self.value in vsc.rangelist(vsc.rng(1, 2**4 - 1))
+        self.value in vsc.rangelist(vsc.rng(0, 2**4 - 1))
         
     @vsc.constraint
     def c_no_repeat(self):

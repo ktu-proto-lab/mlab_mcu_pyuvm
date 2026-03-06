@@ -20,41 +20,38 @@ class gpio_if:
         self.gpio_o: SimHandleBase = dut.gpio_o
         self.gpio_oe: SimHandleBase = dut.gpio_oe
         
+        self.tb_gpio_o: SimHandleBase = dut.tb_gpio_o
+        self.tb_gpio_oe: SimHandleBase = dut.tb_gpio_oe
+        
         self.parent_name = parent.get_full_name() if hasattr(parent, "get_full_name") else "cocotb"
         self.full_name = f"{self.parent_name}.{name}"
         self.logger = SimLog(self.full_name)
 
-    def drive_input(self, val: int) -> None:
-        self.gpio_i.value = val
+    def drive_input(self, value: int, mask: int = 0x0F) -> None:
+        self.tb_gpio_o.value = value
+        self.tb_gpio_oe.value = mask
         
     def read_input(self) -> int:
         if not self.gpio_i.value.is_resolvable:
-            self.logger.warning(
-                f"gpio_i signal value is unresolvable: {self.gpio_i.value.binstr}, returning 0 instead"
-            )
-            return 0
+            return None
         
         return self.gpio_i.value.integer
         
     def read_output(self) -> int:
         if not self.gpio_o.value.is_resolvable:
-            self.logger.warning(
-                f"gpio_o value is unresolvable: {self.gpio_o.value.binstr}, returning 0 instead"
-            )
-            return 0
+            return None
         
         return self.gpio_o.value.integer
     
     def read_output_enable(self) -> int:
         if not self.gpio_oe.value.is_resolvable:
-            self.logger.warning(
-                f"gpio_oe value is unresolvable: {self.gpio_oe.value.binstr}, returning 0 instead"
-            )
-            return 0
+            return None
         
         return self.gpio_oe.value.integer
     
     def read_enabled_output(self) -> int:
+        self.logger.debug(f"gpio_o = {self.gpio_o.value.binstr}, gpio_oe = {self.gpio_oe.value.binstr}")
+        
         o_val = self.read_output()
         oe_val = self.read_output_enable()
         
