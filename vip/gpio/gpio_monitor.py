@@ -36,7 +36,6 @@ class gpio_monitor(uvm_monitor):
             await ReadOnly()
             
             curr_val: int = self.sample()
-            self.logger.debug(f"Sampled output {hex(curr_val)}")
 
             if curr_val != prev_val:
                 # Monitor the change
