@@ -53,7 +53,12 @@ class gpio_monitor(uvm_monitor):
 
 class gpio_output_monitor(gpio_monitor):
     def sample(self) -> int:
-        return self.vif.read_enabled_output()
+        value: int = self.vif.read_enabled_output()
+
+        if value is None:
+            return None
+
+        return value & 0xF0
 
 class gpio_input_monitor(uvm_monitor):
     def build_phase(self):
