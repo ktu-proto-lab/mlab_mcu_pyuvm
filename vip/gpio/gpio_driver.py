@@ -9,6 +9,10 @@ class gpio_driver(uvm_driver):
 
         self.vif: gpio_if = ConfigDB().get(context=self, inst_name="", field_name="vif")
         
+        # Report driven values dirrectly to the Input Monitor to avoid intermediate changing values being monitored by
+        # the Input Monitor
+        self.analysis_port = uvm_analysis_port(name="analysis_port", parent=self)
+        
     async def run_phase(self):
         await super().run_phase()
 
@@ -18,6 +22,8 @@ class gpio_driver(uvm_driver):
             self.vif.drive_input(item.value)
             
             self.logger.debug(f"drove {hex(item.value)}")
+            
+            self.analysis_port.write(item)
             
             await ClockCycles(self.vif.clk, 1000)
             

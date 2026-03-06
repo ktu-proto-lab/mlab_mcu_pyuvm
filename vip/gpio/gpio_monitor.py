@@ -44,10 +44,24 @@ class gpio_monitor(uvm_monitor):
 
                 prev_val = curr_val
 
-class gpio_input_monitor(gpio_monitor):
-    def sample(self) -> int:
-        return self.vif.read_input()
-                
 class gpio_output_monitor(gpio_monitor):
     def sample(self) -> int:
         return self.vif.read_output()
+
+class gpio_input_monitor(uvm_monitor):
+    def build_phase(self):
+        super().build_phase()
+        
+        # Subscribe to Driver's Analysis Port instead of sampling intermediate changing values directly from hardware
+        self.driver_fifo = uvm_tlm_analysis_fifo(name="driver_fifo", parent=self)
+        
+        # Broadcast directly to the Scoreboard
+        self.analysis_port = uvm_analysis_port(name="analysis_port", parent=self)
+    
+    async def run_phase(self):
+        await super().run_phase()
+        
+        while True:
+            tr: gpio_seq_item = await self.driver_fifo.get()
+            # Forward Driver's input to the Scoreboard
+            self.analysis_port.write(tr)

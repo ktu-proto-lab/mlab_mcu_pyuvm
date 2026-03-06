@@ -22,6 +22,9 @@ class gpio_agent(uvm_agent):
 
         # Connect Driver to the Sequencer
         self.driver.seq_item_port.connect(self.sequencer.seq_item_export)
+        
+        # Connect Driver to the Input Monitor for monitoring correct input values
+        self.driver.analysis_port.connect(self.input_monitor.driver_fifo.analysis_export)
 
         # Export Monitoring analysis ports to the Agent's boundary
         self.input_monitor.analysis_port.connect(self.input_analysis_port)

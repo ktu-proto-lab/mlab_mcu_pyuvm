@@ -18,11 +18,11 @@ class gpio_mirror_scoreboard(uvm_component):
         while True:
             input: gpio_seq_item = await self.input_fifo.get()
             
-            self.logger.debug(f"got input: {input.value}")
+            self.logger.debug(f"got input: {input}")
             
             output: gpio_seq_item  = await self.output_fifo.get()
             
-            self.logger.debug(f"got output: {output.value}")
+            self.logger.debug(f"got output: {output}")
             
             expected = self.model.predict(input.value)
             actual   = int(output.value)

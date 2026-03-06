@@ -12,7 +12,7 @@ class gpio_env(uvm_env):
 
         self.agent = gpio_agent(name="agent", parent=self)
         
-        self.scoreboard = gpio_mirror_scoreboard(name="sb", parent=self)
+        self.scoreboard = gpio_mirror_scoreboard(name="scoreboard", parent=self)
 
         # Make GPIO's Virtual Interface visible to all child components with "*"
         ConfigDB().set(context=self, inst_name="*", field_name="vif", value=self.vif)

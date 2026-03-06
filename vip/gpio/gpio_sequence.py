@@ -4,7 +4,7 @@ from vip.gpio.gpio_sequence_item import gpio_seq_item
 class gpio_4bit_rnd_seq(uvm_sequence):
     async def body(self):
         
-        for _ in range(10):
+        for _ in range(100):
             req = gpio_seq_item("req")
             
             req.randomize()

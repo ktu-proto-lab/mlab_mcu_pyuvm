@@ -137,6 +137,6 @@ VERILOG_SOURCES += $(PROJECT_ROOT)/uvm/rtl/mcu.sv
 # ----------------------------------------------------------------------------------------------------------------------
 # Cocotb
 # ----------------------------------------------------------------------------------------------------------------------
-export COCOTB_LOG_LEVEL ?= DEBUG
+export COCOTB_LOG_LEVEL ?= INFO
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
