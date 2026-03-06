@@ -27,21 +27,21 @@ class gpio_if:
         self.full_name = f"{self.parent_name}.{name}"
         self.logger = SimLog(self.full_name)
 
-    def drive_input(self, value: int, mask: int = 0x0F) -> None:
+    def drive_input(self, value: int, oe: int = 0xFF) -> None:
         self.tb_gpio_o.value = value
-        self.tb_gpio_oe.value = mask
+        self.tb_gpio_oe.value = oe
         
-    def read_input(self) -> int:
+    def read_input(self, mask: int = 0xFF) -> int:
         if not self.gpio_i.value.is_resolvable:
             return None
         
-        return self.gpio_i.value.integer
+        return self.gpio_i.value.integer & mask
         
-    def read_output(self) -> int:
+    def read_output(self, mask: int = 0xFF) -> int:
         if not self.gpio_o.value.is_resolvable:
             return None
         
-        return self.gpio_o.value.integer
+        return self.gpio_o.value.integer & mask
     
     def read_output_enable(self) -> int:
         if not self.gpio_oe.value.is_resolvable:
@@ -49,13 +49,13 @@ class gpio_if:
         
         return self.gpio_oe.value.integer
     
-    def read_enabled_output(self) -> int:
+    def read_enabled_output(self, mask: int = 0xFF) -> int:
         self.logger.debug(f"gpio_o = {self.gpio_o.value.binstr}, gpio_oe = {self.gpio_oe.value.binstr}")
         
         o_val = self.read_output()
         oe_val = self.read_output_enable()
         
-        return o_val & oe_val
+        return o_val & oe_val & mask
 
     def read_output_binstr(self) -> str:
         return f"0b{self.read_output():0{self.PIN_NUM}b}"
