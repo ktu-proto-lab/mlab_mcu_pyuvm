@@ -33,8 +33,6 @@ RUN git clone https://github.com/verilator/verilator && \
     make install && \
     rm -rf /tmp/verilator
 
-WORKDIR /home
-
 WORKDIR /home/mcu/uvm
 
 CMD ["/bin/bash"]

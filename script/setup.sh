@@ -1,4 +1,7 @@
 #!/bin/bash
+########################################################################################################################
+### Install dependencies and tools for ubuntu-based systems
+########################################################################################################################
 
 function riscv_build_tools {
     sudo apt-get install make gcc-riscv64-unknown-elf -y
