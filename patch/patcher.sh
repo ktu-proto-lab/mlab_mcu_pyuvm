@@ -30,6 +30,13 @@ EOF
     exit 1
 fi
 
+if ! command -v patch >/dev/null 2>&1; then
+    echo "[  ERROR]: 'patch' utility is not installed"
+    echo "            can be installed with:"
+    echo "            sudo at install patch"
+    exit 1
+fi
+
 APPLY_PATCHES=false
 REVERSE_PATCHES=false
 

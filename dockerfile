@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # verilator build  dependencies:    help2man, perl, autoconf, g++, flex, bison, ccache, libgoogle-perftools-dev,
 #                                   numactl, perl-doc, libfl2, libfl-dev, zlib1g, zlib1g-dev
 # gtkwave and gui:                  gtkwave, x11-utils
-# project tools:                    patch, cloc, tree
+# project utils:                    patch, cloc, tree
 RUN apt update && \
     apt install -y --no-install-recommends \
         git make \

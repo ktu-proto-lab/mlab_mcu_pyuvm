@@ -44,8 +44,8 @@ function verilator_v5_044 {
     rm -rf verilator
 }
 
-function report_tools {
-    sudo apt install tree cloc -y
+function project_utils {
+    sudo apt install patch tree cloc -y
 }
 
 ########################################################################################################################
@@ -56,4 +56,4 @@ sudo apt update
 riscv_build_tools
 python_env
 verilator_v5_044
-report_tools
+project_utils
