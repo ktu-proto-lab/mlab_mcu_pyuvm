@@ -1,0 +1,16 @@
+services:
+  uvm:
+    build: .
+    image: mlab-mcu-uvm:latest
+    hostname: mlab
+    stdin_open: true
+    tty: true
+    
+    environment:
+      # stop host machine and docker from fighting over compiled python files
+      - PYTHONDONTWRITEBYTECODE=1
+    
+    volumes:
+      
+      # workspace mount to local: MLAB_MCU or MLAB_MCU_edu
+      - ..:/home/mcu
