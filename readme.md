@@ -1,6 +1,6 @@
 # IBEX RISC-V Microcontroller UVM Testing Framework
 
-## Setup
+## Cloning the Project
 
 ### Project
 
@@ -21,46 +21,103 @@ git checkout main
 
 ```bash
 # Inside root project 'MLAB_MCU_edu'
+git pull
 git submodule update --init --recursive
 # Enter 'uvm' submodule
 cd uvm
 # The submodule can be in the unatached HEAD state, checkout to main
 git checkout main
+# Pull latest changes
+git pull
 ```
+## Initializing Working Environment
+### Ubuntu
+To run on Ubuntu or Ubuntu-based Linux operating systems, use `setup.sh` script for automatic tool instalation:
+```bash
+./script/setup.sh
+```
+### Docker
+If you are on other platforms that are not Ubuntu or Debian based, download [Docker](https://www.docker.com/).
 
-### Python Virtual Environment
+Run the `init.sh` script with `--docker` flag, note that docker requires `sudo` access.
 
 ```bash
-# Create virtual environment
-python3 -m venv .venv
-# Activate venv
-source .venv/bin/activate
-# Important! Upgrade pip first
-pip install --upgrade pip
-# Install needed packages
-pip install -r conf/requirements.txt
-# Exit venv
-deactivate
+./script/init.sh --docker
 ```
 
-### Patching
+On the first setup you may need to add yourself to the docker group, after this setup, just run `newgrp docker` and rerun the script.
 
-Some files require compatibility edits, apply them running patcher script:
+```
+$ ./script/init.sh --docker
+[WARNING]: docker requires sudo or user lacks permissions
+[INFO   ]: adding user 'la_52' to docker group...
+[sudo] password for la_52: 
+[INFO   ]: please log out and log back in, reboot, or run: 'newgrp docker'
+$ newgrp docker
+$ ./script/init.sh --docker
+```
+
+Running the second time script will build docker image and run it's container:
+
+```
+[INFO   ]: building docker image
+...
+[INFO   ]: running docker container
+...
+[SUCCESS]: you are now inside built container
+```
+
+You are inside docker container:
+```
+root@mlab:/home/mcu/uvm# 
+```
+Use to run simulations, compile code, generate reports. Local files are linked with the container, edit files from your local machine, do not edit them inside the docker, that is general tip.
+
+### Python's Virtual Environment
+
+When the setup is completed, run second project initialization step (run script inside the Docker container if you are using it):
 
 ```bash
-./patch/patcher.sh --apply
+./script/init.sh --env
+```
+
+### Optional: Run Sanity Test
+
+It runs GPIO Mirror test (as of 09.03.26):
+```
+./script/init.sh --test
+```
+
+On some machines you can get common makefile errors. Apply common Makefile's patch:
+```bash
+patch ../sw/ibex/common/common.mk < ./patch/makefile.patch
+```
+
+To reverse patch:
+```bash
+patch -R ../sw/ibex/common/common.mk < ./patch/makefile.patch
+```
+
+Expected output:
+```
+10015090.01ns INFO     cocotb.regression                  gpio_mirror_test passed
+10015090.01ns INFO     cocotb.regression                  ***************************************************************************************************
+** TEST                                       STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+***************************************************************************************************
+** tb.test.gpio_mirror_test.gpio_mirror_test   PASS    10015090.01          63.84     156879.12  **
+***************************************************************************************************
+** TESTS=1 PASS=1 FAIL=0 SKIP=0                        10015090.01          65.07     153921.18  **
+***************************************************************************************************
 ```
 
 ## Software
 
-As of 17.02.26, the only program that can be used to run in simulation is `sw/gpio`.
-To compile and build this program:
+To build program:
 
 ```bash
-cd sw/test/gpio/heartbeat
+cd sw/test/gpio/mirror
 make
 ```
-
 Clean build:
 
 ```bash
@@ -73,8 +130,7 @@ make clean && make
 
 #### Dependencies
 
-- [Verilator (v5.036+)](https://verilator.org/guide/latest/install.html#git-quick-install)
-- [GTKWave](https://gtkwave.sourceforge.net/)
+- [GTKWave](https://gtkwave.sourceforge.net/) for waveform viewing.
 
 #### Build and Run
 
@@ -82,9 +138,13 @@ make clean && make
 # You must be inside Python's Virtual Environment
 source .venv/bin/activate
 # Go to tb's Makefile location
-cd sim/verilator
+cd sim/
 # Build and Run
 make
+# Generate waveform file
+make WAVES=1
+# Clean cashed files
+make clean
 ```
 
 ### Xcelium
@@ -95,67 +155,13 @@ make
 # You must be inside Python's Virtual Environment
 source .venv/bin/activate
 # Go to tb's Makefile location
-cd sim/xcelium
+cd sim/
 # Build and Run
-make
-```
-
-### Make Options
-
-#### Common
-
-**Clean Simulation**
-To remove simulation artifacts:
-
-```bash
-make clean
-```
-
-**Waveforms**
-
-To capture waveforms:
-
-```bash
-make WAVES=1
-```
-
-#### Verilator
-
-Waveforms are generated in `sim/verilator` in the `dump.vcd` file.
-
-To see waveforms use GTKWave:
-
-```bash
-gtkwave dump.vcd &
-```
-
-#### Xcelium
-
-**SimVision (GUI)**
-
-To run in SimVision GUI (captures waveforms automatically too for the GUI itself):
-
-```bash
-make GUI=1
-```
-
-### Testbench
-
-As of 20.02.26 the testbench monitors the `GPIO` pin outputs and passes when the `GPIO_PIN_0` is set to `1` by the loaded program.
-
-Expected output:
-
-```log
-99000980.00ns INFO     ..b/agent/gpio/gpio_monitor.py(30) [uvm_test_top.env.agent.monitor]: GPIO current pin values = 0x0
-100000990.00ns INFO     ..b/agent/gpio/gpio_monitor.py(30) [uvm_test_top.env.agent.monitor]: GPIO current pin values = 0x1
-100000990.00ns INFO     ..b/agent/gpio/gpio_monitor.py(39) [uvm_test_top.env.agent.monitor]: FLAG: GPIO values changed from 0x0 to 0x1
-100000990.00ns INFO     ..m/tb/test/gpio_basic_test.py(25) [uvm_test_top]: PASS: GPIO_PIN_0 is high, expected = 1, actual = 1
-100000990.01ns INFO     cocotb.regression                  gpio_basic_test passed
-100000990.01ns INFO     cocotb.regression                  **********************************************************************************************
-                                                           ** TEST                                  STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
-                                                           **********************************************************************************************
-                                                           ** test.gpio_basic_test.gpio_basic_test   PASS   100000990.01         734.06     136229.13  **
-                                                           **********************************************************************************************
-                                                           ** TESTS=1 PASS=1 FAIL=0 SKIP=0                  100000990.01         734.16     136211.78  **
-                                                           **********************************************************************************************
+make SIM=xcelium
+# Clean cashed files
+make SIM=xcelium clean
+# Generate waveform file
+make SIM=xcelium WAVES=1
+# Run simulation in SimVision
+make SIM=xcelium GUI=1
 ```
