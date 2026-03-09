@@ -1,10 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-if [[ -z "${_PROJECT_LIB_LOGGER_SH_INCLUDED:-}" ]]; then
-  _PROJECT_LIB_LOGGER_SH_INCLUDED=1
+if [[ -z "${_PROJECT_SCRIPT_LOGGER_SH_INCLUDED:-}" ]]; then
+  _PROJECT_SCRIPT_LOGGER_SH_INCLUDED=1
 
-readonly _PROJECT_LIB_LOGGER_SH_SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+readonly _PROJECT_SCRIPT_LOGGER_SH_SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 function logger {
 
@@ -13,7 +13,7 @@ function logger {
 ###########################################################
 
 Function name: logger
-Source file: $_PROJECT_LIB_LOGGER_SH_SCRIPT_DIR/$(basename "$0")
+Source file: $_PROJECT_SCRIPT_LOGGER_SH_SCRIPT_DIR/$(basename "$0")
 
 Prints colored log messages with formatted flags
 
@@ -72,7 +72,7 @@ EOF
   local -r ALIGN_SIZE=7
   local -r LEFT_ALIGN="-"
   local -r FLAG_FORMAT="%${LEFT_ALIGN}${ALIGN_SIZE}s"
-  local -r FLAG_PREFIX="[${BEGIN_COLOR}${FLAG_FORMAT}${END_COLOR}]"
+  local -r FLAG_PREFIX="${BEGIN_COLOR}[${FLAG_FORMAT}]${END_COLOR}"
   local -r TEXT=$2
 
   printf "${FLAG_PREFIX}: %s\\n" "$FLAG" "$TEXT"

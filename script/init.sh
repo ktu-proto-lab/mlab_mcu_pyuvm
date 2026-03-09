@@ -9,9 +9,9 @@ readonly INIT_ARG_COUNT=$#
 readonly INIT_OPT_HELP="--help"
 readonly INIT_OPT_DOCKER="--docker"
 readonly INIT_OPT_ENV="--env"
-readonly INIT_OPT_RUN_SANITY_TEST="--run-sanity-test"
+readonly INIT_OPT_RUN_SANITY_TEST="--test"
 
-source "$INIT_PROJECT_ROOT/lib/logger.sh"
+source "$INIT_PROJECT_ROOT/script/logger.sh"
 
 function init_docker {
     if ! docker info >/dev/null 2>&1; then
@@ -31,7 +31,7 @@ function init_docker {
     docker compose build
     logger INFO "running docker container"
     docker compose run --rm uvm \
-        bash -c "source /home/mcu/uvm/lib/logger.sh && logger SUCCESS 'you are now inside built container'; exec bash"
+        bash -c "source /home/mcu/uvm/script/logger.sh && logger SUCCESS 'you are now inside built container'; exec bash"
 }
 
 function init_env {
@@ -63,9 +63,9 @@ Usage:
     $(basename "$0") [options]
 
 Options:
-    $INIT_OPT_DOCKER:       Docker Container (otherwise use script/setup.sh)
-    $INIT_OPT_ENV:          Python's Virtual Environment and Patching
-    $INIT_OPT_RUN_SANITY_TEST:   Run GPIO's Mirror Test
+    $INIT_OPT_DOCKER:           Docker Container (otherwise use script/setup.sh)
+    $INIT_OPT_ENV:              Python's Virtual Environment and Patching
+    $INIT_OPT_RUN_SANITY_TEST:             Run GPIO's Mirror Test
 
 Simulator:
     Yet to be added as of 07.03.26
