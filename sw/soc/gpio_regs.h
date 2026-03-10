@@ -1,5 +1,5 @@
-#ifndef GPIO_REGS_H
-#define GPIO_REGS_H
+#ifndef SOC_GPIO_REGS_H
+#define SOC_GPIO_REGS_H
 
 #include <stdint.h>
 
@@ -20,14 +20,14 @@
 #define GPIO_CTRL_GLOBAL_INTS (1 << 1)
 
 typedef struct {
-  volatile uint32_t in;
-  volatile uint32_t out;
-  volatile uint32_t oe;
-  volatile uint32_t inte;
-  volatile uint32_t ptrig;
-  volatile uint32_t aux;
-  volatile uint32_t ctrl;
-  volatile uint32_t ints;
+    volatile uint32_t in;
+    volatile uint32_t out;
+    volatile uint32_t oe;
+    volatile uint32_t inte;
+    volatile uint32_t ptrig;
+    volatile uint32_t aux;
+    volatile uint32_t ctrl;
+    volatile uint32_t ints;
 } gpio_reg_map_t;
 
 #endif

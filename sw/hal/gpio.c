@@ -18,7 +18,7 @@ void gpio_irq_handler(volatile gpio_handle_t *gpio) {
     gpio->ints = gpio->regs->ints;
     gpio->regs->ints = 0;
 
-    if (gpio_irq_callback != 0) {
+    if (gpio_irq_callback != NULL) {
         gpio_irq_callback(gpio);
     }
 }
