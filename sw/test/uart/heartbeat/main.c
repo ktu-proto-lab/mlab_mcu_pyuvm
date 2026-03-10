@@ -622,6 +622,9 @@ void UART_TX_NOT_FULL_IRQHandler(void) {
 
 void DEFAULT_IRQHandler(void) { while (1); }
 
+void uart_delay(volatile int count) {
+    while(count--) { __asm__("nop"); }
+}
 
 int main() {
     GPIO_Init(&gpio);
@@ -631,12 +634,22 @@ int main() {
     huart.Init.Parity = 0;
     huart.Init.ParityMode = 0;
     huart.Init.ParityLock = 0;
+
     UART_Init(&huart);
     UART_TX_Enable(&huart);
+    UART_RX_Enable(&huart);
+
     gpio.regs->AUX |= GPIO_PIN_1;
     gpio.regs->OE  |= GPIO_PIN_1;
+
+
     uint8_t buffer[] = "hello uart";
-    UART_Transmit(&huart, buffer, sizeof(buffer));
+    uint8_t rx_buffer[10];
+    uint8_t tx_buffer[] = "rodger that";
+    UART_Transmit(&huart, buffer, 10);
+    UART_Receive(&huart, rx_buffer, 10);
+    uart_delay(5000);
+    UART_Transmit(&huart, tx_buffer, 11);
     while(1);
 }
 
