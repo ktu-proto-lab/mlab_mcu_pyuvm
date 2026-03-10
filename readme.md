@@ -88,16 +88,6 @@ It runs GPIO Mirror test (as of 09.03.26):
 ./script/init.sh --test
 ```
 
-On some machines you can get common makefile errors. Apply common Makefile's patch:
-```bash
-patch ../sw/ibex/common/common.mk < ./patch/makefile.patch
-```
-
-To reverse patch:
-```bash
-patch -R ../sw/ibex/common/common.mk < ./patch/makefile.patch
-```
-
 Expected output:
 ```
 10015090.01ns INFO     cocotb.regression                  gpio_mirror_test passed
@@ -108,6 +98,34 @@ Expected output:
 ***************************************************************************************************
 ** TESTS=1 PASS=1 FAIL=0 SKIP=0                        10015090.01          65.07     153921.18  **
 ***************************************************************************************************
+```
+
+#### Fix: Building Program
+
+On some machines you can get common makefile errors:
+
+```
+mkdir -p build/
+riscv64-unknown-elf-gcc -march=rv32imc_zicsr -mabi=ilp32 -Wall -O2 -Os -Oz -nostdlib -nostartfiles -ffreestanding -fdata-sections -g  -Icore/inc -I/home/la_yk/MLAB_MCU_edu/uvm/sw/test/gpio/mirror/../../../../../uvm/sw/hal -I/home/la_yk/MLAB_MCU_edu/uvm/sw/test/gpio/mirror/../../../../../uvm/sw/soc -c main.c -o build/main.o
+cc1: error: argument to '-O' should be a non-negative integer, 'g', 's' or 'fast'
+cc1: error: '-march=rv32imc_zicsr': unsupported ISA subset 'z'
+make: *** [/home/la_yk/MLAB_MCU_edu/uvm/sw/test/gpio/mirror/../../../../../sw/ibex/common/common.mk:81: build/main.o] Error 1
+```
+
+
+Apply common Makefile's patch:
+```bash
+patch ../sw/ibex/common/common.mk < ./patch/makefile.patch
+```
+
+And try running test again:
+```bash
+./script/init.sh --test
+```
+
+To reverse Makefile patch:
+```bash
+patch -R ../sw/ibex/common/common.mk < ./patch/makefile.patch
 ```
 
 ## Software
