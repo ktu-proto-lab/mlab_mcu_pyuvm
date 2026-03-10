@@ -6,13 +6,12 @@
 #include "hal/gpio.h"
 #include "hal/uart.h"
 
+#include "sys/time.h"
+
 #include "hal/gpio.c"
 #include "hal/uart.c"
 #include "sys/int.c"
-
-void uart_delay(volatile int count) {
-    while(count--) { __asm__("nop"); }
-}
+#include "sys/time.c"
 
 int main() {
     gpio_handle_t gpio;
@@ -44,13 +43,13 @@ int main() {
     uint8_t expected_rx_buffer[] = "hello back";
     for (uint8_t i = 0; i < 10; ++i) {
         if (rx_buffer[i] != expected_rx_buffer[i]) {
-            uart_delay(5000);
+            time_delay_microseconds(5, cpu_freq_mhz);
             uint8_t tx_err[] = "error: bad msg";
             uart_transmit(&uart, tx_err, 14);
         }
     }
 
-    uart_delay(5000);
+    time_delay_microseconds(5, cpu_freq_mhz);
     uint8_t tx_buffer[] = "rodger that";
     uart_transmit(&uart, tx_buffer, 11);
 
