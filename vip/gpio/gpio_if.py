@@ -1,6 +1,7 @@
 from cocotb.log import SimLog
 from cocotb.handle import SimHandleBase
 
+# TODO: old code, gpio_pin_0 is uart rx and gpio_pin_1 is uart tx
 class gpio_if:
     """
     @brief GPIO Module's Virtual Interface
