@@ -26,7 +26,7 @@ TOPLEVEL_LANG = verilog
 TOPLEVEL = mcu
 
 TEST ?= gpio_mirror_test
-MODULE = tb.test.$(TEST)
+MODULE = tb.test.gpio.$(TEST)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Paths
