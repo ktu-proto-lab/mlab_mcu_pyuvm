@@ -1,6 +1,6 @@
-PROGRAM = uart_heartbeat
+PROGRAM = uart_simple
 
-PROJECT_ROOT = $(shell pwd)/../../../../..
+PROJECT_ROOT = $(shell pwd)/../../../..
 
 COMMON_DIR = $(PROJECT_ROOT)/sw/ibex/common
 

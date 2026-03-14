@@ -1,6 +1,6 @@
 import pyuvm
 from pyuvm import uvm_tlm_analysis_fifo
-from tb.test.gpio.gpio_base_test import gpio_base_test
+from tb.test.gpio.base import gpio_base_test
 from vip.gpio.gpio_sequence_item import gpio_sequence_item
 
 @pyuvm.test()

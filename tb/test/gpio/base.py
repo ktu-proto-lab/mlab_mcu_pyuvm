@@ -1,5 +1,5 @@
 from tb.env.gpio_env import gpio_env
-from tb.test.base_test import base_test
+from tb.test.base import base_test
 
 # TODO (06.03.26): check if the running program on the DUT exists.
 class gpio_base_test(base_test):
