@@ -49,8 +49,8 @@ function run_sanity_test {
     logger INFO "building dut's behavioral firmware"
     cd "$INIT_PROJECT_ROOT/sw/test/gpio/mirror"
     make clean && make
-    source "$INIT_PROJECT_ROOT/.venv/bin/activate"
     cd "$INIT_PROJECT_ROOT/sim"
+    source "$INIT_PROJECT_ROOT/.venv/bin/activate"
     logger INFO "running simulation"
     make clean && make
 }

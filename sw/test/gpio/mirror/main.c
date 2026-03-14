@@ -1,17 +1,21 @@
-#include "main.h"
-#include "gpio.c"
-#include "irq.c"
+#include "hal/gpio.h"
+#include "sys/int.h"
+#include "soc/gpio_regs.h"
 
-volatile gpio_handle_t g_gpio_handle;
+#define GPIO_IRQ_HANDLER_ENABLE
+#include "hal/gpio.c"
+#include "sys/int.c"
+
+volatile gpio_handle_t gpio;
 
 int main() {
-    gpio_init(&g_gpio_handle);
+    gpio_init(&gpio);
     
-    g_gpio_handle.regs->oe = 0xF0;
-    g_gpio_handle.regs->ptrig = 0x0F;
-    g_gpio_handle.regs->ints = 0x0F; 
-    g_gpio_handle.regs->inte = 0x0F;
-    g_gpio_handle.regs->ctrl = GPIO_CTRL_ENA_INT;
+    gpio.regs->oe = 0xF0;
+    gpio.regs->ptrig = 0x0F;
+    gpio.regs->ints = 0x0F; 
+    gpio.regs->inte = 0x0F;
+    gpio.regs->ctrl = GPIO_CTRL_ENA_INT;
 
     while(1);
 }
