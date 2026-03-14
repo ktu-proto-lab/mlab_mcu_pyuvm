@@ -1,5 +1,6 @@
 import pyuvm
 import cocotb
+from pyuvm import *
 from pyuvm import ConfigDB
 from tb.test.base import base_test
 from vip.uart.agent import uart_agent
