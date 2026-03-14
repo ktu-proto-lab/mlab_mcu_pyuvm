@@ -25,11 +25,11 @@ class base_test(uvm_test):
         self.dut: SimHandleBase = cocotb.top
         
         self.clock: SimHandleBase = self.dut.clk
-        self.clock_period: Decimal = 10
+        self.clock_period: Decimal = 12.5
         self.clock_time_step: str = 'ns'
         
         self.reset: SimHandleBase = self.dut.rst
-        self.reset_duration: Decimal = 10
+        self.reset_duration: Decimal = 20
         
     def connect_phase(self):
         super().connect_phase()
