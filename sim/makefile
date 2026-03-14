@@ -114,7 +114,7 @@ SW_IMEM2_HEX_FILE_PATH 	= $(SW_TEST_DIR_PATH)/build/instr_hex_2.mem
 SW_DMEM_HEX_FILE_PATH  	= $(SW_TEST_DIR_PATH)/build/data_hex.mem
 
 # pass the static paths to simulator to avoid recompilation
-SW_PAYLOAD_DIR         = $(PROJECT_ROOT)/uvm/sim/payload
+SW_PAYLOAD_DIR         = $(PROJECT_ROOT)/uvm/sim/sim_build/payload
 SW_PAYLOAD_MEM_HEX     = $(SW_PAYLOAD_DIR)/verilog_hex.v
 SW_PAYLOAD_IMEM1_HEX   = $(SW_PAYLOAD_DIR)/instr_hex_1.mem
 SW_PAYLOAD_IMEM2_HEX   = $(SW_PAYLOAD_DIR)/instr_hex_2.mem
@@ -128,14 +128,14 @@ build_test_sw:
 			logger INFO "building test software for $(TEST_GROUP) -> $(TEST_NAME)"; \
 			$(MAKE) -C $(SW_TEST_DIR_PATH) clean; \
 			$(MAKE) -C $(SW_TEST_DIR_PATH); \
-			logger INFO "copying software to static 'sim/payload' directory"; \
+			logger INFO "copying software to static 'sim/sim_build/payload' directory"; \
 			mkdir -p $(SW_PAYLOAD_DIR); \
 			cp $(SW_MEM_HEX_FILE_PATH) $(SW_PAYLOAD_MEM_HEX); \
 			cp $(SW_IMEM1_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM1_HEX); \
 			cp $(SW_IMEM2_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM2_HEX); \
 			cp $(SW_DMEM_HEX_FILE_PATH) $(SW_PAYLOAD_DMEM_HEX); \
 		else \
-			logger ERROR "test software directory '$(SW_TEST_DIR_PATH)' not found, skipping compilation"; \
+			logger ERROR "test software directory '$(SW_TEST_DIR_PATH)' not found, could not compile, exiting"; \
 			exit 1; \
 		fi
 
