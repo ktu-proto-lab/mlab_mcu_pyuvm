@@ -40,8 +40,7 @@ function init_env {
     source "$INIT_PROJECT_ROOT/.venv/bin/activate"
     pip install --upgrade pip
     pip install -r "$INIT_PROJECT_ROOT/conf/requirements.txt"
-    logger INFO "applying patches"
-    source "$INIT_PROJECT_ROOT/patch/patcher.sh" --apply
+    source "$INIT_PROJECT_ROOT/script/patcher.sh" --apply
     logger SUCCESS "environment initialized"
 }
 
