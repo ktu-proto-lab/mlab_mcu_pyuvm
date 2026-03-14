@@ -1,6 +1,6 @@
 from cocotb.handle import SimHandleBase
 from cocotb.triggers import FallingEdge, RisingEdge, Timer
-from vip.base_if import base_if
+from vip.base_vif import base_if
 
 class uart_if(base_if):
     

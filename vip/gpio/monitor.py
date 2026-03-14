@@ -1,7 +1,7 @@
 from pyuvm import *
 from cocotb.triggers import ReadOnly, RisingEdge
-from vip.gpio.gpio_if import gpio_if
-from vip.gpio.gpio_sequence_item import gpio_sequence_item
+from vip.gpio.vif import gpio_if
+from vip.gpio.sequence_item import gpio_sequence_item
 
 class gpio_monitor(uvm_monitor):
     def build_phase(self):

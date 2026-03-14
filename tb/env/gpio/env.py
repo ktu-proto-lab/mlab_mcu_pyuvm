@@ -1,8 +1,8 @@
 import cocotb
 from pyuvm import *
-from vip.gpio.gpio_if import gpio_if
-from vip.gpio.gpio_agent import gpio_agent
-from tb.env.gpio_scoreboard import gpio_mirror_scoreboard
+from vip.gpio.vif import gpio_if
+from vip.gpio.agent import gpio_agent
+from tb.env.gpio.scoreboard import gpio_mirror_scoreboard
 
 class gpio_env(uvm_env):
     def build_phase(self):

@@ -1,7 +1,7 @@
 import pyuvm
 from cocotb.triggers import ClockCycles
 from tb.test.gpio.base import gpio_base_test
-from vip.gpio.gpio_sequence import gpio_4bit_random_sequence
+from vip.gpio.sequence import gpio_4bit_random_sequence
 
 @pyuvm.test()
 class gpio_mirror_test(gpio_base_test):

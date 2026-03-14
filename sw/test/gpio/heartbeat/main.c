@@ -1,4 +1,4 @@
-#include "gpio.c"
+#include "hal/gpio.c"
 
 int main() {
     volatile gpio_handle_t gpio;

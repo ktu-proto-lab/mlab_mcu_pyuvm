@@ -1,6 +1,6 @@
 from pyuvm import *
-from vip.gpio.gpio_driver import gpio_driver
-from vip.gpio.gpio_monitor import gpio_input_monitor, gpio_output_monitor
+from vip.gpio.driver import gpio_driver
+from vip.gpio.monitor import gpio_input_monitor, gpio_output_monitor
 
 class gpio_agent(uvm_agent):
     def build_phase(self):

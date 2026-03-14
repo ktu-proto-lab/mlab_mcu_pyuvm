@@ -1,7 +1,7 @@
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
-from vip.uart.uart_if import uart_if
+from vip.uart.vif import uart_if
 
 @cocotb.test
 async def simple_uart_heartbeat_test(dut):

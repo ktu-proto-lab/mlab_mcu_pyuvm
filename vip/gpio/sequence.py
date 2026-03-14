@@ -1,5 +1,5 @@
 from pyuvm import *
-from vip.gpio.gpio_sequence_item import gpio_sequence_item
+from vip.gpio.sequence_item import gpio_sequence_item
 
 class gpio_4bit_random_sequence(uvm_sequence):
     async def body(self):
