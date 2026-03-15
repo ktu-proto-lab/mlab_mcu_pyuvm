@@ -26,7 +26,6 @@ class mcu(uvm_component):
     uart_rx: SimHandleBase
     uart_rx_en: SimHandleBase
     uart_boud_rate: Decimal = 115200
-    uart_bit_time_ns: Real = 1e9 / uart_boud_rate
     
     def __init__(self, name, parent):
         super().__init__(name, parent)
@@ -65,5 +64,5 @@ class mcu(uvm_component):
     async def clock_cycle(self):
         await ClockCycles(signal=self.clock, num_cycles=1, rising=True)
         
-    async def system_clock_cycles(self, cycle_count: int):
+    async def clock_cycles(self, cycle_count: int):
         await ClockCycles(signal=self.clock, num_cycles=cycle_count, rising=True)
