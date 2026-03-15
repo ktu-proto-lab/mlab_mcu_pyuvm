@@ -3,16 +3,16 @@ from cocotb.triggers import FallingEdge, RisingEdge, Timer, Event, ReadOnly
 from decimal import Decimal
 from numbers import Real
 from typing import cast
-from vip.base_vif import base_if
+from vip.base_vif import base_vif
 
-class uart_if(base_if):
+class uart_vif(base_vif):
     
     transmit: SimHandleBase
-    transmit_pin: Decimal = 0
+    transmit_pin: int = 0
+    transmit_enable: SimHandleBase
     
     receive: SimHandleBase
-    receive_pin: Decimal = 1
-    receive_enable: SimHandleBase
+    receive_pin: int = 1
     
     boud_rate: Decimal = 115200
     bit_time_ns: Real = 1e9 / boud_rate
@@ -24,10 +24,6 @@ class uart_if(base_if):
         self.transmit_enable= cast(SimHandleBase, dut.tb_gpio_oe[self.transmit_pin])
         
         self.receive = cast(SimHandleBase, dut.ext_pad_io[self.receive_pin])
-        
-        # TODO: make event class wrapper or even an event pool
-        self._receive_enabled_flag = False
-        self._receive_enabled_event = Event()
 
         self.boud_rate: Decimal = 115200
         self.bit_time_ns: Real = 1e9 / self.boud_rate
@@ -55,27 +51,6 @@ class uart_if(base_if):
         # stop bit
         self.transmit.value = 1
         await self.bit_time()     
-    
-    async def wait_receive_enable(self):
-        while not self._receive_enabled_flag:
-            self._receive_enabled_event.clear()
-            await self._receive_enabled_event.wait()
-            
-    async def wait_receive_disable(self):
-        while self._receive_enabled_flag:
-            self._receive_enabled_event.clear()
-            await self._receive_enabled_event.wait()
-            
-    def receive_enable(self) -> bool:
-        return self._receive_enabled_flag
-        
-    def enable_receive(self):
-        self._receive_enabled_flag = True
-        self._receive_enabled_event.set()
-        
-    def disable_receive(self):
-        self._receive_enabled_flag = False
-        self._receive_enabled_event.set()
         
     async def receive_byte(self) -> int:
         # sync to idle

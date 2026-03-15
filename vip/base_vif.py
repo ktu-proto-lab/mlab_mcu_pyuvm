@@ -3,7 +3,7 @@ from cocotb.log import SimLog
 from cocotb.triggers import RisingEdge, ClockCycles
 from typing import cast
 
-class base_if:
+class base_vif:
     
     system_clock: SimHandleBase
     system_reset: SimHandleBase

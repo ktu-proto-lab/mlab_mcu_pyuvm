@@ -1,36 +1,25 @@
 from cocotb.triggers import RisingEdge, ReadOnly
 from pyuvm import uvm_monitor, uvm_analysis_port, ConfigDB
-from vip.uart.vif import uart_if
+from typing import cast
+from vip.uart.vif import uart_vif
 from vip.uart.sequence_item import uart_sequence_item
 
 class uart_monitor(uvm_monitor):
+    
+    vif: uart_vif
+    analysis_port: uvm_analysis_port
+    
     def build_phase(self):
-        self.vif: uart_if = ConfigDB().get(self, "", "vif")
+        super().build_phase()
         
-        self.analysis_port = uvm_analysis_port("analysis_port", self)
+        self.vif = cast(uart_vif, ConfigDB().get(context=self, inst_name="", field_name="vif"))
+        self.analysis_port = uvm_analysis_port(name="analysis_port", parent=self)
 
     async def run_phase(self):
-        
-        await self.vif.wait_receive_enable()
+        await super().run_phase()
         
         while True:
-            
-            await self.vif.wait_receive_enable()
-            
-            self.logger.debug("receive enabled, starting monitoring uart output")
-            
-            if not self.vif.receive_enable():
-                continue
-            
-            self.logger.debug("receiving byte")
-            byte: int = await self.vif.receive_byte()
-            self.logger.debug(f"byte received {hex(byte)}")
-            
-            if not self.vif.receive_enable():
-                continue
-            
-            item = uart_sequence_item("rx_item", byte)
-            
-            self.logger.info(f"monitored: {item}")
-
+            received_byte: int = await self.vif.receive_byte()
+            item = uart_sequence_item(name="receive_item", byte=received_byte)
+            self.logger.debug(f"{item}")
             self.analysis_port.write(item)

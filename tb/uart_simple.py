@@ -1,7 +1,7 @@
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
-from vip.uart.vif import uart_if
+from vip.uart.vif import uart_vif
 
 @cocotb.test
 async def simple_uart_heartbeat_test(dut):
@@ -14,7 +14,7 @@ async def simple_uart_heartbeat_test(dut):
     dut.rst.value = 1
     dut._log.info(f"applied system reset")
     
-    uart = uart_if(dut)
+    uart = uart_vif(dut)
     
     uart.enable_transmit()
     dut._log.info(f"enabled uart transmit")
