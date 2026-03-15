@@ -1,24 +1,36 @@
 from cocotb.handle import SimHandleBase
 from cocotb.triggers import FallingEdge, RisingEdge, Timer, Event, ReadOnly
+from decimal import Decimal
+from numbers import Real
+from typing import cast
 from vip.base_vif import base_if
 
 class uart_if(base_if):
     
+    transmit: SimHandleBase
+    transmit_pin: Decimal = 0
+    
+    receive: SimHandleBase
+    receive_pin: Decimal = 1
+    receive_enable: SimHandleBase
+    
+    boud_rate: Decimal = 115200
+    bit_time_ns: Real = 1e9 / boud_rate
+    
     def __init__(self, dut: SimHandleBase, name="uart_if", parent=None):
         super().__init__(dut, name, parent)
         
-        self.transmit_pin = 0
-        self.receive_pin = 1
+        self.transmit = cast(SimHandleBase, dut.tb_gpio_o[self.transmit_pin])
+        self.transmit_enable= cast(SimHandleBase, dut.tb_gpio_oe[self.transmit_pin])
         
-        self.transmit: SimHandleBase = dut.tb_gpio_o[self.transmit_pin]
-        self.transmit_enable: SimHandleBase = dut.tb_gpio_oe[self.transmit_pin]
+        self.receive = cast(SimHandleBase, dut.ext_pad_io[self.receive_pin])
         
-        self.receive: SimHandleBase = dut.ext_pad_io[self.receive_pin]
+        # TODO: make event class wrapper or even an event pool
         self._receive_enabled_flag = False
         self._receive_enabled_event = Event()
 
-        self.boud_rate = 115200
-        self.bit_time_ns = 1e9 / self.boud_rate
+        self.boud_rate: Decimal = 115200
+        self.bit_time_ns: Real = 1e9 / self.boud_rate
         
     def enable_transmit(self):
         self.transmit_enable.value = 1

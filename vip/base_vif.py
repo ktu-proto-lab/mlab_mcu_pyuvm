@@ -1,15 +1,21 @@
 from cocotb.handle import SimHandleBase
 from cocotb.log import SimLog
-from cocotb.triggers import RisingEdge, ReadOnly, ClockCycles
+from cocotb.triggers import RisingEdge, ClockCycles
+from typing import cast
 
 class base_if:
     
+    system_clock: SimHandleBase
+    system_reset: SimHandleBase
+    
+    logger: SimLog
+    
     def __init__(self, dut: SimHandleBase, name="base_if", parent=None):
-        self.system_clock: SimHandleBase = dut.clk
-        self.system_reset: SimHandleBase = dut.rst
+        self.system_clock = cast(SimHandleBase, dut.clk)
+        self.system_reset = cast(SimHandleBase, dut.rst)
         
-        parent_name = parent.get_full_name() if hasattr(parent, "get_full_name") else "cocotb"
-        full_name = f"{parent_name}.{name}"
+        parent_name: str = parent.get_full_name() if hasattr(parent, "get_full_name") else "cocotb"
+        full_name: str = f"{parent_name}.{name}"
         self.logger = SimLog(full_name)
         
     async def system_reset_done(self):
