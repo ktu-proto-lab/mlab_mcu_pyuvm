@@ -34,16 +34,16 @@ module mcu #(
     generate
         for (i = 0; i < GPIO_COUNT; i++) begin : gen_gpio
 
-            // DUT drives the pad
+            // dut drives the pad
             assign ext_pad_io[i] = gpio_oe[i] ? gpio_o[i] : 1'bz;
 
-            // TB driving the pad
+            // top driving the pad
             assign ext_pad_io[i] = tb_gpio_oe[i] ? tb_gpio_o[i] : 1'bz;
 
-            // DUT reading the pad
+            // dut reading the pad
             assign gpio_i[i]     = ext_pad_io[i];
 
-            // Weak pulldown
+            // weak pulldown
             pulldown(ext_pad_io[i]);
         end
     endgenerate

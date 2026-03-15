@@ -5,12 +5,14 @@ from vip.uart.sequence import uart_string_sequence
 from vip.uart.vif import uart_vif
 from vip.uart.agent import uart_agent
 from pyuvm import ConfigDB, uvm_tlm_analysis_fifo
+from vip.mcu import mcu
 
 @pyuvm.test()
 class uart_greet_test(base_test):
     def build_phase(self):
         super().build_phase()
-        self.vif = uart_vif(dut=self.dut, name="vif", parent=self)
+        self.mcu: mcu = mcu.create(name="mcu", parent=self)
+        self.vif = uart_vif(dut=self.mcu.dut, name="vif", parent=self)
         ConfigDB().set(self, "*", "vif", self.vif)
         self.agent = uart_agent("agent", self)
         self.monitor_fifo = uvm_tlm_analysis_fifo(name="monitor_fifo", parent=self)
@@ -29,7 +31,7 @@ class uart_greet_test(base_test):
 
     async def run_phase(self):
         self.raise_objection()
-        await super().run_phase()
+        await self.mcu.run_phase()
 
         self.logger.debug("waiting to receive 'hello uart'")
         received = await self.receive_string(10)
