@@ -62,8 +62,8 @@ class mcu(uvm_component):
         self.sda_oe = cast(SimHandleBase, self.dut.sda_padoen_o)
         
         self.scl_i = cast(SimHandleBase, self.dut.scl_pad_i)
-        self.scl_i = cast(SimHandleBase, self.dut.scl_pad_o)
-        self.scl_i = cast(SimHandleBase, self.dut.scl_padoen_o)
+        self.scl_o = cast(SimHandleBase, self.dut.scl_pad_o)
+        self.scl_oe = cast(SimHandleBase, self.dut.scl_padoen_o)
         
         self.logger.debug("connect phase done")
         
