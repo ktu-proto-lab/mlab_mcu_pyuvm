@@ -4,6 +4,7 @@ from decimal import Decimal
 from numbers import Real
 from typing import cast
 from vip.base_vif import base_vif
+from vip.mcu import mcu
 
 class uart_vif(base_vif):
     
@@ -27,6 +28,13 @@ class uart_vif(base_vif):
 
         self.boud_rate: Decimal = 115200
         self.bit_time_ns: Real = 1e9 / self.boud_rate
+        
+    def connect(self, dut: mcu):
+        self.transmit = dut.uart_rx
+        self.transmit_enable = dut.uart_rx_en
+        self.receive = dut.uart_tx
+        self.boud_rate = dut.uart_boud_rate
+        self.bit_time_ns = dut.uart_bit_time_ns
         
     def enable_transmit(self):
         self.transmit_enable.value = 1

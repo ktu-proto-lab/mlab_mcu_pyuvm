@@ -18,10 +18,15 @@ class uart_greet_test(base_test):
         self.agent = uart_agent("agent", self)
         self.monitor_fifo = uvm_tlm_analysis_fifo(name="monitor_fifo", parent=self)
         
+        self.logger.debug("build phase done")
+        
     def connect_phase(self):
         super().connect_phase()
 
+        self.vif.connect(self.mcu)
         self.agent.monitor.analysis_port.connect(self.monitor_fifo.analysis_export)
+        
+        self.logger.debug("connect phase done")
 
     async def receive_string(self, length: int) -> str:
         result = ""

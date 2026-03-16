@@ -3,6 +3,7 @@ from cocotb.handle import SimHandleBase
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles, RisingEdge
 from decimal import Decimal
+from numbers import Real
 from pyuvm import uvm_component
 from typing import cast
 
@@ -25,6 +26,7 @@ class mcu(uvm_component):
     uart_rx: SimHandleBase
     uart_rx_en: SimHandleBase
     uart_boud_rate: Decimal = 115200
+    uart_bit_time_ns: Real = 1e9 / uart_boud_rate
     
     sda_i: SimHandleBase
     sda_o: SimHandleBase
