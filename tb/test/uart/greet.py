@@ -1,3 +1,4 @@
+import cocotb
 import pyuvm
 from tb.test.base import base_test
 from vip.uart.sequence_item import uart_sequence_item
@@ -12,7 +13,7 @@ class uart_greet_test(base_test):
     def build_phase(self):
         super().build_phase()
         self.mcu: mcu = mcu.create(name="mcu", parent=self)
-        self.vif = uart_vif(dut=self.mcu.dut, name="vif", parent=self)
+        self.vif = uart_vif(dut=cocotb.top, name="vif", parent=self)
         ConfigDB().set(self, "*", "vif", self.vif)
         self.agent = uart_agent("agent", self)
         self.monitor_fifo = uvm_tlm_analysis_fifo(name="monitor_fifo", parent=self)

@@ -4,7 +4,6 @@ from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles, RisingEdge
 from decimal import Decimal
 from pyuvm import uvm_component
-from numbers import Real
 from typing import cast
 
 class mcu(uvm_component):
@@ -27,24 +26,44 @@ class mcu(uvm_component):
     uart_rx_en: SimHandleBase
     uart_boud_rate: Decimal = 115200
     
-    def __init__(self, name, parent):
-        super().__init__(name, parent)
+    sda_i: SimHandleBase
+    sda_o: SimHandleBase
+    sda_oe: SimHandleBase
+    
+    scl_i: SimHandleBase
+    scl_o: SimHandleBase
+    scl_oe: SimHandleBase
+    
+    def build_phase(self):
+        super().build_phase()
         
         self.dut = cocotb.top
         
-    def build_phase(self):
-        super().build_phase()
+        self.logger.debug("build phase done")
 
-        self.clock = self.dut.clk
-        self.reset = self.dut.rst
+    def connect_phase(self):
+        super().connect_phase()
+
+        self.clock = cast(SimHandleBase, self.dut.clk)
+        self.reset = cast(SimHandleBase, self.dut.rst)
         
-        self.uart_tx = self.dut.ext_pad_io[1]
-        self.uart_rx = self.dut.tb_gpio_o[0]
-        self.uart_rx_en = self.dut.tb_gpio_oe[0]
+        self.uart_tx = cast(SimHandleBase, self.dut.ext_pad_io[1])
+        self.uart_rx = cast(SimHandleBase, self.dut.tb_gpio_o[0])
+        self.uart_rx_en = cast(SimHandleBase, self.dut.tb_gpio_oe[0])
         
-        self.gpio_i = self.dut.gpio_i
-        self.gpio_o = self.dut.tb_gpio_o
-        self.gpio_oe = self.dut.tb_gpio_oe
+        self.gpio_i = cast(SimHandleBase, self.dut.gpio_i)
+        self.gpio_o = cast(SimHandleBase, self.dut.tb_gpio_o)
+        self.gpio_oe = cast(SimHandleBase, self.dut.tb_gpio_oe)
+        
+        self.sda_i = cast(SimHandleBase, self.dut.sda_pad_i)
+        self.sda_o = cast(SimHandleBase, self.dut.sda_pad_o)
+        self.sda_oe = cast(SimHandleBase, self.dut.sda_padoen_o)
+        
+        self.scl_i = cast(SimHandleBase, self.dut.scl_pad_i)
+        self.scl_i = cast(SimHandleBase, self.dut.scl_pad_o)
+        self.scl_i = cast(SimHandleBase, self.dut.scl_padoen_o)
+        
+        self.logger.debug("connect phase done")
         
     async def run_phase(self):
         await super().run_phase()
@@ -57,6 +76,8 @@ class mcu(uvm_component):
         await ClockCycles(self.clock, self.reset_duration)
         self.reset.value = 1
         self.logger.debug("system wide reset done")
+        
+        self.logger.debug("run phase done")
     
     async def reset_done(self):
         await RisingEdge(self.reset)
