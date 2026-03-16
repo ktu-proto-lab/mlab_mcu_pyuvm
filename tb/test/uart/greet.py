@@ -6,28 +6,28 @@ from vip.uart.sequence import uart_string_sequence
 from vip.uart.vif import uart_vif
 from vip.uart.agent import uart_agent
 from pyuvm import ConfigDB, uvm_tlm_analysis_fifo
-from vip.mcu import mcu
 
 @pyuvm.test()
 class uart_greet_test(base_test):
+    vif: uart_vif
+    agent: uart_agent
+    
+    monitor_fifo: uvm_tlm_analysis_fifo
+    
     def build_phase(self):
         super().build_phase()
-        self.mcu: mcu = mcu.create(name="mcu", parent=self)
-        self.vif = uart_vif(dut=cocotb.top, name="vif", parent=self)
-        ConfigDB().set(self, "*", "vif", self.vif)
-        self.agent = uart_agent("agent", self)
-        self.monitor_fifo = uvm_tlm_analysis_fifo(name="monitor_fifo", parent=self)
         
-        self.logger.debug("build phase done")
+        self.vif = uart_vif(dut=self.dut, name="vif", parent=self)
+        ConfigDB().set(context=self, inst_name="*", field_name="vif", value=self.vif)
+        
+        self.agent = uart_agent.create(name="agent", parent=self)
+        self.monitor_fifo = uvm_tlm_analysis_fifo(name="monitor_fifo", parent=self)
         
     def connect_phase(self):
         super().connect_phase()
 
-        self.vif.connect(self.mcu)
         self.agent.monitor.analysis_port.connect(self.monitor_fifo.analysis_export)
         
-        self.logger.debug("connect phase done")
-
     async def receive_string(self, length: int) -> str:
         result = ""
         for _ in range(length):
@@ -37,7 +37,7 @@ class uart_greet_test(base_test):
 
     async def run_phase(self):
         self.raise_objection()
-        await self.mcu.run_phase()
+        await super().run_phase()
 
         self.logger.debug("waiting to receive 'hello uart'")
         received = await self.receive_string(10)

@@ -9,30 +9,19 @@ from vip.mcu import mcu
 class uart_vif(base_vif):
     
     transmit: SimHandleBase
-    transmit_pin: int = 0
     transmit_enable: SimHandleBase
-    
     receive: SimHandleBase
-    receive_pin: int = 1
     
-    boud_rate: Decimal = 115200
-    bit_time_ns: Real = 1e9 / boud_rate
+    boud_rate: Decimal
+    bit_time_ns: Real
     
-    def __init__(self, dut: SimHandleBase, name="uart_if", parent=None):
+    def __init__(self, dut: mcu, name="uart_if", parent=None):
         super().__init__(dut, name, parent)
         
-        self.transmit = cast(SimHandleBase, dut.tb_gpio_o[self.transmit_pin])
-        self.transmit_enable= cast(SimHandleBase, dut.tb_gpio_oe[self.transmit_pin])
-        
-        self.receive = cast(SimHandleBase, dut.ext_pad_io[self.receive_pin])
-
-        self.boud_rate: Decimal = 115200
-        self.bit_time_ns: Real = 1e9 / self.boud_rate
-        
-    def connect(self, dut: mcu):
         self.transmit = dut.uart_rx
         self.transmit_enable = dut.uart_rx_en
         self.receive = dut.uart_tx
+        
         self.boud_rate = dut.uart_boud_rate
         self.bit_time_ns = dut.uart_bit_time_ns
         

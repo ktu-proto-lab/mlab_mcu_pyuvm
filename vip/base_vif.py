@@ -2,6 +2,7 @@ from cocotb.handle import SimHandleBase
 from cocotb.log import SimLog
 from cocotb.triggers import RisingEdge, ClockCycles
 from typing import cast
+from vip.mcu import mcu
 
 class base_vif:
     
@@ -10,9 +11,9 @@ class base_vif:
     
     logger: SimLog
     
-    def __init__(self, dut: SimHandleBase, name="base_if", parent=None):
-        self.system_clock = cast(SimHandleBase, dut.clk)
-        self.system_reset = cast(SimHandleBase, dut.rst)
+    def __init__(self, dut: mcu, name="base_if", parent=None):
+        self.system_clock = cast(SimHandleBase, dut.clock)
+        self.system_reset = cast(SimHandleBase, dut.reset)
         
         parent_name: str = parent.get_full_name() if hasattr(parent, "get_full_name") else "cocotb"
         full_name: str = f"{parent_name}.{name}"
