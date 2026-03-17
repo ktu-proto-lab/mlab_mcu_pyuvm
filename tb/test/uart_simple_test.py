@@ -11,10 +11,18 @@ class uart_simple_test(base_test):
     
     monitor_fifo: uvm_tlm_analysis_fifo
     
+    def __init__(self, name="gpio_base_test", parent=None):
+        super().__init__(name, parent)
+        
+        self.vif = None
+        self.agent = None
+        self.monitor_fifo = None
+    
     def build_phase(self):
         super().build_phase()
         
-        self.vif = uart_if(dut=self.dut, name="vif", parent=self)
+        self.vif = uart_if(name="vif", parent=self)
+        self.vif.connect(self.dut_vif)
         ConfigDB().set(context=self, inst_name="*", field_name="vif", value=self.vif)
         
         self.agent = uart_agent.create(name="agent", parent=self)

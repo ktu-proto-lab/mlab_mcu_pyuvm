@@ -3,7 +3,7 @@ from cocotb.triggers import FallingEdge, RisingEdge, Timer, ReadOnly
 from decimal import Decimal
 from numbers import Real
 from uvc.base_if import base_if
-from vif.mcu_vif import mcu_vif
+from vif import mcu_vif
 
 class uart_if(base_if):
     
@@ -14,8 +14,18 @@ class uart_if(base_if):
     boud_rate: Decimal
     bit_time_ns: Real
     
-    def __init__(self, dut: mcu_vif, name="uart_if", parent=None):
-        super().__init__(dut, name, parent)
+    def __init__(self, name="uart_if", parent=None):
+        super().__init__(name, parent)
+        
+        self.transmit = None
+        self.transmit_enable = None
+        self.receive = None
+        
+        self.boud_rate = None
+        self.bit_time_ns = None
+
+    def connect(self, dut: mcu_vif):
+        super().connect(dut)
         
         self.transmit = dut.uart_rx
         self.transmit_enable = dut.uart_rx_en
@@ -23,6 +33,7 @@ class uart_if(base_if):
         
         self.boud_rate = dut.uart_boud_rate
         self.bit_time_ns = dut.uart_bit_time_ns
+
         
     def enable_transmit(self):
         self.transmit_enable.value = 1

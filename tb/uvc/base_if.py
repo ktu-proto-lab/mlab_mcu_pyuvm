@@ -2,7 +2,7 @@ from cocotb.handle import SimHandleBase
 from cocotb.log import SimLog
 from cocotb.triggers import RisingEdge, ClockCycles
 from typing import cast
-from vif.mcu_vif import mcu_vif
+from vif import mcu_vif
 
 class base_if:
     
@@ -11,14 +11,18 @@ class base_if:
     
     logger: SimLog
     
-    def __init__(self, dut: mcu_vif, name="base_if", parent=None):
-        self.system_clock = cast(SimHandleBase, dut.clock)
-        self.system_reset = cast(SimHandleBase, dut.reset)
-        
+    def __init__(self, name="base_if", parent=None):
         parent_name: str = parent.get_full_name() if hasattr(parent, "get_full_name") else "cocotb"
         full_name: str = f"{parent_name}.{name}"
         self.logger = SimLog(full_name)
         
+        self.system_clock = None
+        self.system_reset = None
+        
+    def connect(self, dut: mcu_vif):
+        self.system_clock = dut.clock
+        self.system_reset = dut.reset
+    
     async def system_reset_done(self):
         await RisingEdge(self.system_reset)
         
