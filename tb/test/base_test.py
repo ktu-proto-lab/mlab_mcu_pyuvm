@@ -1,7 +1,8 @@
+import cocotb
 import logging
 import os
 from pyuvm import uvm_test, uvm_report_object
-from vif.mcu_vif import mcu_vif
+from vif import mcu_vif
 
 class base_test(uvm_test):
     dut: mcu_vif
@@ -16,9 +17,13 @@ class base_test(uvm_test):
         
         super().__init__(name, parent)
         
+        self.dut = None
+        
     def build_phase(self):
         super().build_phase()
+        
         self.dut = mcu_vif(name="dut", parent=self)
+        self.dut.connect(dut=cocotb.top)
         
     def connect_phase(self):
         super().connect_phase()

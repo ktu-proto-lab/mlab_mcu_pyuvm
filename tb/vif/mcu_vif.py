@@ -7,8 +7,6 @@ from numbers import Real
 from typing import cast
 
 class mcu_vif:
-    dut: SimHandleBase
-    
     clock: SimHandleBase
     clock_units: str = 'ns'
     clock_period: Decimal = 12.5
@@ -35,28 +33,48 @@ class mcu_vif:
     scl_o: SimHandleBase
     scl_oe: SimHandleBase
     
-    def __init__(self, name: str, parent):
-        self.dut = cocotb.top
+    def __init__(self, name = "mcu_vif", parent=None):
         
-        self.clock = cast(SimHandleBase, self.dut.clk)
-        self.reset = cast(SimHandleBase, self.dut.rst)
+        self.clock = None
+        self.reset = None
         
-        self.uart_tx = cast(SimHandleBase, self.dut.ext_pad_io[1])
-        self.uart_rx = cast(SimHandleBase, self.dut.tb_gpio_o[0])
-        self.uart_rx_en = cast(SimHandleBase, self.dut.tb_gpio_oe[0])
+        self.uart_tx = None
+        self.uart_rx = None
+        self.uart_rx_en = None
         
-        self.gpio_i = cast(SimHandleBase, self.dut.gpio_i)
-        self.gpio_o = cast(SimHandleBase, self.dut.tb_gpio_o)
-        self.gpio_oe = cast(SimHandleBase, self.dut.tb_gpio_oe)
+        self.gpio_i = None
+        self.gpio_o = None
+        self.gpio_oe = None
         
-        self.sda_i = cast(SimHandleBase, self.dut.sda_pad_i)
-        self.sda_o = cast(SimHandleBase, self.dut.sda_pad_o)
-        self.sda_oe = cast(SimHandleBase, self.dut.sda_padoen_o)
+        self.sda_i = None
+        self.sda_o = None
+        self.sda_oe = None
         
-        self.scl_i = cast(SimHandleBase, self.dut.scl_pad_i)
-        self.scl_o = cast(SimHandleBase, self.dut.scl_pad_o)
-        self.scl_oe = cast(SimHandleBase, self.dut.scl_padoen_o)
+        self.scl_i = None
+        self.scl_o = None
+        self.scl_oe = None
+    
+    def connect(self, dut: SimHandleBase):
+        # TODO: check if dut contains needed signals
         
+        self.clock = cast(SimHandleBase, dut.clk)
+        self.reset = cast(SimHandleBase, dut.rst)
+        
+        self.uart_tx = cast(SimHandleBase, dut.ext_pad_io[1])
+        self.uart_rx = cast(SimHandleBase, dut.tb_gpio_o[0])
+        self.uart_rx_en = cast(SimHandleBase, dut.tb_gpio_oe[0])
+        
+        self.gpio_i = cast(SimHandleBase, dut.gpio_i)
+        self.gpio_o = cast(SimHandleBase, dut.tb_gpio_o)
+        self.gpio_oe = cast(SimHandleBase, dut.tb_gpio_oe)
+        
+        self.sda_i = cast(SimHandleBase, dut.sda_pad_i)
+        self.sda_o = cast(SimHandleBase, dut.sda_pad_o)
+        self.sda_oe = cast(SimHandleBase, dut.sda_padoen_o)
+        
+        self.scl_i = cast(SimHandleBase, dut.scl_pad_i)
+        self.scl_o = cast(SimHandleBase, dut.scl_pad_o)
+        self.scl_oe = cast(SimHandleBase, dut.scl_padoen_o)
     
     def release_clock(self):
         cocotb.start_soon(Clock(self.clock, self.clock_period, self.clock_units).start())
