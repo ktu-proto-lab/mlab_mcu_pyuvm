@@ -1,43 +1,7 @@
-# ======================================================================================================================
-# Simulation Makefile
-# ======================================================================================================================
-# Verilator
-# ======================================================================================================================
-# Usage:
-#   make SIM=verilator 					- explicitly run on Verilator (no waveforms, terminal-only)
-#   make SIM=verilator WAVES=1  		- capture waveforms (dump.vcd)
-#   make SIM=verilator clean    		- remove simulation artifacts
-# ======================================================================================================================
-# Xcelium
-# ======================================================================================================================
-# Usage:
-#   make SIM=xcelium				- run simulation on Xcelium (no waveforms, terminal-only)
-#   make SIM=xcelium WAVES=1  		- capture waveforms
-#   make SIM=xcelium GUI=1    		- run in SimVision GUI (waves are captured too)
-#   make SIM=xcelium clean    		- remove simulation artifacts
-# ======================================================================================================================
-# Cocotb
-# ======================================================================================================================
-# 	make LOG=INFO		- print logs of the testbench (levels: TRACE, DEBUG, default: INFO, WARNING, ERROR, FATAL)
-# ======================================================================================================================
-# Examples
-# ======================================================================================================================
-# Run on Verilator, pyuvm test with log level as TRACE and dump waveforms to 'dump.vcd':
-#
-#	make SIM=verilator TEST=gpio.gpio_mirror_test LOG=TRACE WAVES=1
-#
-# Run on Cadence Xcelium, cocotb testbench via SimVisio GUI
-#	make SIM=xcelium TB=simple_uart_tb.py GUI=1
-# 
-# Run on Verilator, cocotb testbench
-# 	make TB=uart_simple
-# ======================================================================================================================
-
-# force to use bash
 SHELL := /bin/bash
 
-# prevent from building sw with custom makefile exiting early when sw compilation finishes 
-.DEFAULT_GOAL := all
+PROJECT_ROOT = $(abspath ../..)
+export PROJECT_ROOT
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Options
@@ -62,6 +26,47 @@ LOG ?= INFO
 # test software running on dut
 SW ?= 
 
+define HELP_USAGE
+Usage:
+  make [SIM=...] [TEST=... | TB=...] [WAVES=1] [GUI=1] [LOG=...]
+
+Simulators:
+  SIM=verilator (default)   : run on Verilator
+  SIM=xcelium               : run on Cadence Xcelium
+
+Test:
+  TEST=test_name            : run a pyuvm test with software from 'sw/test/test_name'
+  TB=tb_name                : run a cocotb testbench with software from 'sw/tb/tb_name'
+  SW=dir_name               : override software directory (default: same name as TEST or TB)
+
+Options:
+  WAVES=1                   : capture waves in waveform 'dump.vcd' file
+  GUI=1                     : open SimVision GUI (only when SIM=xcelium)
+  LOG=TRACE|DEBUG|...       : set logging level (default: INFO)
+
+Requirements:
+  1. TEST or TB must be defined.
+  2. Software directory must contain a 'main.c' file.
+
+Examples:
+  make TEST=simple_gpio_test WAVES=1
+  make SIM=xcelium TB=uart_tb GUI=1
+  make TEST=uart_simple_test LOG=DEBUG
+endef
+export HELP_USAGE
+
+.PHONY: help
+help:
+	@echo "$$HELP_USAGE"
+
+
+ifeq ($(TEST)$(TB),)
+    .DEFAULT_GOAL := help
+else
+	# prevent from building sw with custom makefile exiting early when sw compilation finishes
+    .DEFAULT_GOAL := all
+endif
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Configuration
 # ----------------------------------------------------------------------------------------------------------------------
@@ -72,13 +77,6 @@ TOPLEVEL = mcu
 # ----------------------------------------------------------------------------------------------------------------------
 # Paths
 # ----------------------------------------------------------------------------------------------------------------------
-PROJECT_ROOT = $(abspath ../..)
-
-# Used by: 
-# the rtl's 'files.f' for Xcelium compatibility
-# makefiles of the c code
-export PROJECT_ROOT
-
 # Cocotb discovers Python testbench modules via PYTHONPATH
 export PYTHONPATH := $(PROJECT_ROOT)/uvm/tb:$(PYTHONPATH)
 
@@ -155,7 +153,6 @@ build_sw:
 			logger INFO "building test software for $(TEST) in $(SW_DIR)"; \
 			$(MAKE) -C $(SW_DIR) clean; \
 			$(MAKE) -C $(SW_DIR); \
-			logger INFO "copying software to static 'sim/sim_build/payload' directory"; \
 			mkdir -p $(SW_PAYLOAD_DIR); \
 			cp $(SW_MEM_HEX_FILE_PATH) $(SW_PAYLOAD_MEM_HEX); \
 			cp $(SW_IMEM1_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM1_HEX); \
