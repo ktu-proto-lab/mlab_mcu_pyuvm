@@ -18,13 +18,13 @@
 # ======================================================================================================================
 # Cocotb
 # ======================================================================================================================
-# 	make LOG_LEVEL=INFO		- print logs of the testbench (levels: TRACE, DEBUG, default: INFO, WARNING, ERROR, FATAL)
+# 	make LOG=INFO		- print logs of the testbench (levels: TRACE, DEBUG, default: INFO, WARNING, ERROR, FATAL)
 # ======================================================================================================================
 # Examples
 # ======================================================================================================================
 # Run on Verilator, pyuvm test with log level as TRACE and dump waveforms to 'dump.vcd':
 #
-#	make SIM=verilator TEST=gpio.gpio_mirror_test LOG_LEVEL=TRACE WAVES=1
+#	make SIM=verilator TEST=gpio.gpio_mirror_test LOG=TRACE WAVES=1
 #
 # Run on Cadence Xcelium, cocotb testbench via SimVisio GUI
 #	make SIM=xcelium TB=simple_uart_tb.py GUI=1
@@ -57,7 +57,7 @@ WAVES ?= 0
 GUI ?= 0
 
 # Log level of testbenches and tests
-LOG_LEVEL ?= INFO
+LOG ?= INFO
 
 # test software running on dut
 SW ?= 
@@ -72,70 +72,67 @@ TOPLEVEL = mcu
 # ----------------------------------------------------------------------------------------------------------------------
 # Paths
 # ----------------------------------------------------------------------------------------------------------------------
-
-ifeq ($(TB),)
-	# gpio.mirror => TEST_GROUP=gpio, TEST_NAME=mirror
-	TEST_GROUP := $(word 1, $(subst ., ,$(TEST)))
-	TEST_NAME  := $(word 2, $(subst ., ,$(TEST)))
-	MODULE = tb.test.$(TEST_GROUP).$(TEST_NAME)
-
-	ifeq ($(SW),)
-		# TEST=gpio.mirror => SW_TEST_PATH=uvm/sw/test/gpio/mirror
-		SW_TEST_DIR_PATH = $(PROJECT_ROOT)/uvm/sw/test/$(TEST_GROUP)/$(TEST_NAME)
-	else
-		SW_TEST_DIR_PATH = $(PROJECT_ROOT)/uvm/sw/test/$(SW)
-	endif
-else
-	MODULE = tb.$(TB)
-
-	ifeq ($(SW),)
-		SW_TEST_DIR_PATH = $(PROJECT_ROOT)/uvm/sw/tb/$(TB)
-	else
-		SW_TEST_DIR_PATH = $(PROJECT_ROOT)/uvm/sw/tb/$(SW)
-	endif
-endif
-
 PROJECT_ROOT = $(shell pwd)/../..
 
-# Used by the rtl's 'files.f' for Xcelium compatibility
+# Used by: 
+# the rtl's 'files.f' for Xcelium compatibility
+# makefiles of the c code
 export PROJECT_ROOT
 
 # Cocotb discovers Python testbench modules via PYTHONPATH
-export PYTHONPATH := $(PROJECT_ROOT)/uvm:$(PYTHONPATH)
+export PYTHONPATH := $(PROJECT_ROOT)/uvm/tb:$(PYTHONPATH)
+
+ifeq ($(TB),)
+	MODULE = test.$(TEST)
+
+	ifeq ($(SW),)
+		TEST_SW_DIR = $(PROJECT_ROOT)/uvm/sw/test/$(TEST)
+	else
+		TEST_SW_DIR = $(PROJECT_ROOT)/uvm/sw/test/$(SW)
+	endif
+else
+	MODULE = $(TB)
+
+	ifeq ($(SW),)
+		TEST_SW_DIR = $(PROJECT_ROOT)/uvm/sw/tb/$(TB)
+	else
+		TEST_SW_DIR = $(PROJECT_ROOT)/uvm/sw/tb/$(SW)
+	endif
+endif
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Test
 # ----------------------------------------------------------------------------------------------------------------------
 
 # software
-SW_MEM_HEX_FILE_PATH   	= $(SW_TEST_DIR_PATH)/build/verilog_hex.v
-SW_IMEM1_HEX_FILE_PATH 	= $(SW_TEST_DIR_PATH)/build/instr_hex_1.mem
-SW_IMEM2_HEX_FILE_PATH 	= $(SW_TEST_DIR_PATH)/build/instr_hex_2.mem
-SW_DMEM_HEX_FILE_PATH  	= $(SW_TEST_DIR_PATH)/build/data_hex.mem
+TEST_SW_MEM_HEX_FILE_PATH   	= $(TEST_SW_DIR)/build/verilog_hex.v
+TEST_SW_IMEM1_HEX_FILE_PATH 	= $(TEST_SW_DIR)/build/instr_hex_1.mem
+TEST_SW_IMEM2_HEX_FILE_PATH 	= $(TEST_SW_DIR)/build/instr_hex_2.mem
+TEST_SW_DMEM_HEX_FILE_PATH  	= $(TEST_SW_DIR)/build/data_hex.mem
 
 # pass the static paths to simulator to avoid recompilation
-SW_PAYLOAD_DIR         = $(PROJECT_ROOT)/uvm/sim/sim_build/payload
-SW_PAYLOAD_MEM_HEX     = $(SW_PAYLOAD_DIR)/verilog_hex.v
-SW_PAYLOAD_IMEM1_HEX   = $(SW_PAYLOAD_DIR)/instr_hex_1.mem
-SW_PAYLOAD_IMEM2_HEX   = $(SW_PAYLOAD_DIR)/instr_hex_2.mem
-SW_PAYLOAD_DMEM_HEX    = $(SW_PAYLOAD_DIR)/data_hex.mem
+TEST_SW_PAYLOAD_DIR         = $(PROJECT_ROOT)/uvm/sim/sim_build/payload
+TEST_SW_PAYLOAD_MEM_HEX     = $(TEST_SW_PAYLOAD_DIR)/verilog_hex.v
+TEST_SW_PAYLOAD_IMEM1_HEX   = $(TEST_SW_PAYLOAD_DIR)/instr_hex_1.mem
+TEST_SW_PAYLOAD_IMEM2_HEX   = $(TEST_SW_PAYLOAD_DIR)/instr_hex_2.mem
+TEST_SW_PAYLOAD_DMEM_HEX    = $(TEST_SW_PAYLOAD_DIR)/data_hex.mem
 
 # compilation
 .PHONY: build_test_sw
 build_test_sw:
 		@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
-		if [ -d "$(SW_TEST_DIR_PATH)" ]; then \
-			logger INFO "building test software for $(TEST_GROUP) -> $(TEST_NAME)"; \
-			$(MAKE) -C $(SW_TEST_DIR_PATH) clean; \
-			$(MAKE) -C $(SW_TEST_DIR_PATH); \
+		if [ -d "$(TEST_SW_DIR)" ]; then \
+			logger INFO "building test software for $(TEST) in $(TEST_SW_DIR)"; \
+			$(MAKE) -C $(TEST_SW_DIR) clean; \
+			$(MAKE) -C $(TEST_SW_DIR); \
 			logger INFO "copying software to static 'sim/sim_build/payload' directory"; \
-			mkdir -p $(SW_PAYLOAD_DIR); \
-			cp $(SW_MEM_HEX_FILE_PATH) $(SW_PAYLOAD_MEM_HEX); \
-			cp $(SW_IMEM1_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM1_HEX); \
-			cp $(SW_IMEM2_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM2_HEX); \
-			cp $(SW_DMEM_HEX_FILE_PATH) $(SW_PAYLOAD_DMEM_HEX); \
+			mkdir -p $(TEST_SW_PAYLOAD_DIR); \
+			cp $(TEST_SW_MEM_HEX_FILE_PATH) $(TEST_SW_PAYLOAD_MEM_HEX); \
+			cp $(TEST_SW_IMEM1_HEX_FILE_PATH) $(TEST_SW_PAYLOAD_IMEM1_HEX); \
+			cp $(TEST_SW_IMEM2_HEX_FILE_PATH) $(TEST_SW_PAYLOAD_IMEM2_HEX); \
+			cp $(TEST_SW_DMEM_HEX_FILE_PATH) $(TEST_SW_PAYLOAD_DMEM_HEX); \
 		else \
-			logger ERROR "test software directory '$(SW_TEST_DIR_PATH)' not found, could not compile, exiting"; \
+			logger ERROR "test software directory '$(TEST_SW_DIR)' not found, could not compile, exiting"; \
 			exit 1; \
 		fi
 
@@ -168,10 +165,10 @@ ifeq ($(SIM), verilator)
 	COMPILE_ARGS += -DVERILATOR_SIM_EEPROM_TIMING_PATCH
 
 	# load compiled software program statically to dut
-	COMPILE_ARGS += -DMEM_HEX_FILE=\"$(SW_PAYLOAD_MEM_HEX)\"
-	COMPILE_ARGS += -DIMEM1_HEX_FILE=\"$(SW_PAYLOAD_IMEM1_HEX)\"
-	COMPILE_ARGS += -DIMEM2_HEX_FILE=\"$(SW_PAYLOAD_IMEM2_HEX)\"
-	COMPILE_ARGS += -DDMEM_HEX_FILE=\"$(SW_PAYLOAD_DMEM_HEX)\"
+	COMPILE_ARGS += -DMEM_HEX_FILE=\"$(TEST_SW_PAYLOAD_MEM_HEX)\"
+	COMPILE_ARGS += -DIMEM1_HEX_FILE=\"$(TEST_SW_PAYLOAD_IMEM1_HEX)\"
+	COMPILE_ARGS += -DIMEM2_HEX_FILE=\"$(TEST_SW_PAYLOAD_IMEM2_HEX)\"
+	COMPILE_ARGS += -DDMEM_HEX_FILE=\"$(TEST_SW_PAYLOAD_DMEM_HEX)\"
 endif
 
 ifeq ($(SIM), xcelium)
@@ -180,10 +177,10 @@ ifeq ($(SIM), xcelium)
 
 	# preprocessor defines
 	COMPILE_ARGS += -define FUNCTIONAL
-	COMPILE_ARGS += -define MEM_HEX_FILE=\"$(SW_PAYLOAD_MEM_HEX)\"
-	COMPILE_ARGS += -define IMEM1_HEX_FILE=\"$(SW_PAYLOAD_IMEM1_HEX)\"
-	COMPILE_ARGS += -define IMEM2_HEX_FILE=\"$(SW_PAYLOAD_IMEM2_HEX)\"
-	COMPILE_ARGS += -define DMEM_HEX_FILE=\"$(SW_PAYLOAD_DMEM_HEX)\"
+	COMPILE_ARGS += -define MEM_HEX_FILE=\"$(TEST_SW_PAYLOAD_MEM_HEX)\"
+	COMPILE_ARGS += -define IMEM1_HEX_FILE=\"$(TEST_SW_PAYLOAD_IMEM1_HEX)\"
+	COMPILE_ARGS += -define IMEM2_HEX_FILE=\"$(TEST_SW_PAYLOAD_IMEM2_HEX)\"
+	COMPILE_ARGS += -define DMEM_HEX_FILE=\"$(TEST_SW_PAYLOAD_DMEM_HEX)\"
 
 	# suppress timing violations from pdk memory models because of the bootloader (not a design issue)
 	COMPILE_ARGS += -notimingchecks
@@ -222,6 +219,6 @@ VERILOG_SOURCES += $(PROJECT_ROOT)/uvm/rtl/mcu.sv
 # ----------------------------------------------------------------------------------------------------------------------
 # Cocotb
 # ----------------------------------------------------------------------------------------------------------------------
-export COCOTB_LOG_LEVEL ?= $(LOG_LEVEL)
+export COCOTB_LOG_LEVEL ?= $(LOG)
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
