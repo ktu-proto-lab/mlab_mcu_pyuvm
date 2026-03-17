@@ -72,7 +72,7 @@ TOPLEVEL = mcu
 # ----------------------------------------------------------------------------------------------------------------------
 # Paths
 # ----------------------------------------------------------------------------------------------------------------------
-PROJECT_ROOT = $(shell pwd)/../..
+PROJECT_ROOT = $(abspath ../..)
 
 # Used by: 
 # the rtl's 'files.f' for Xcelium compatibility
@@ -86,58 +86,88 @@ ifeq ($(TB),)
 	MODULE = test.$(TEST)
 
 	ifeq ($(SW),)
-		TEST_SW_DIR = $(PROJECT_ROOT)/uvm/sw/test/$(TEST)
+		SW_DIR = $(PROJECT_ROOT)/uvm/sw/test/$(TEST)
 	else
-		TEST_SW_DIR = $(PROJECT_ROOT)/uvm/sw/test/$(SW)
+		SW_DIR = $(PROJECT_ROOT)/uvm/sw/test/$(SW)
 	endif
 else
 	MODULE = $(TB)
 
 	ifeq ($(SW),)
-		TEST_SW_DIR = $(PROJECT_ROOT)/uvm/sw/tb/$(TB)
+		SW_DIR = $(PROJECT_ROOT)/uvm/sw/tb/$(TB)
 	else
-		TEST_SW_DIR = $(PROJECT_ROOT)/uvm/sw/tb/$(SW)
+		SW_DIR = $(PROJECT_ROOT)/uvm/sw/tb/$(SW)
 	endif
 endif
 
+# verify that the test or tb are provided
+.PHONY: check_test_defined
+check_test_defined:
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	if [ -z "$(TEST)" ] && [ -z "$(TB)" ]; then \
+		logger ERROR "no simulation target specified: TEST=... (for pyuvm) or TB=... (for cocotb)."; \
+		exit 1; \
+	fi
+
+CUSTOM_COMPILE_DEPS += check_test_defined
+
 # ----------------------------------------------------------------------------------------------------------------------
-# Test
+# Test Software
 # ----------------------------------------------------------------------------------------------------------------------
+
+.PHONY: check_sw_dir_exists
+check_sw_dir_exists:
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	if [ ! -d "$(SW_DIR)" ]; then \
+		logger ERROR "test software directory not found in '$(SW_DIR)'"; \
+		exit 1; \
+	fi
+
+CUSTOM_COMPILE_DEPS += check_sw_dir_exists
+
+.PHONY: check_sw_dir_contains_main
+check_sw_dir_contains_main:
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	if [ -z "$$(find $(SW_DIR) -name "main.c")" ]; then \
+		logger ERROR "'main.c' not found in '$(SW_DIR)', software can not be compiled"; \
+		exit 1; \
+	fi
+
+CUSTOM_COMPILE_DEPS += check_sw_dir_contains_main
 
 # software
-TEST_SW_MEM_HEX_FILE_PATH   	= $(TEST_SW_DIR)/build/verilog_hex.v
-TEST_SW_IMEM1_HEX_FILE_PATH 	= $(TEST_SW_DIR)/build/instr_hex_1.mem
-TEST_SW_IMEM2_HEX_FILE_PATH 	= $(TEST_SW_DIR)/build/instr_hex_2.mem
-TEST_SW_DMEM_HEX_FILE_PATH  	= $(TEST_SW_DIR)/build/data_hex.mem
+SW_MEM_HEX_FILE_PATH   	= $(SW_DIR)/build/verilog_hex.v
+SW_IMEM1_HEX_FILE_PATH 	= $(SW_DIR)/build/instr_hex_1.mem
+SW_IMEM2_HEX_FILE_PATH 	= $(SW_DIR)/build/instr_hex_2.mem
+SW_DMEM_HEX_FILE_PATH  	= $(SW_DIR)/build/data_hex.mem
 
 # pass the static paths to simulator to avoid recompilation
-TEST_SW_PAYLOAD_DIR         = $(PROJECT_ROOT)/uvm/sim/sim_build/payload
-TEST_SW_PAYLOAD_MEM_HEX     = $(TEST_SW_PAYLOAD_DIR)/verilog_hex.v
-TEST_SW_PAYLOAD_IMEM1_HEX   = $(TEST_SW_PAYLOAD_DIR)/instr_hex_1.mem
-TEST_SW_PAYLOAD_IMEM2_HEX   = $(TEST_SW_PAYLOAD_DIR)/instr_hex_2.mem
-TEST_SW_PAYLOAD_DMEM_HEX    = $(TEST_SW_PAYLOAD_DIR)/data_hex.mem
+SW_PAYLOAD_DIR         = $(PROJECT_ROOT)/uvm/sim/sim_build/payload
+SW_PAYLOAD_MEM_HEX     = $(SW_PAYLOAD_DIR)/verilog_hex.v
+SW_PAYLOAD_IMEM1_HEX   = $(SW_PAYLOAD_DIR)/instr_hex_1.mem
+SW_PAYLOAD_IMEM2_HEX   = $(SW_PAYLOAD_DIR)/instr_hex_2.mem
+SW_PAYLOAD_DMEM_HEX    = $(SW_PAYLOAD_DIR)/data_hex.mem
 
-# compilation
-.PHONY: build_test_sw
-build_test_sw:
+.PHONY: build_sw
+build_sw:
 		@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
-		if [ -d "$(TEST_SW_DIR)" ]; then \
-			logger INFO "building test software for $(TEST) in $(TEST_SW_DIR)"; \
-			$(MAKE) -C $(TEST_SW_DIR) clean; \
-			$(MAKE) -C $(TEST_SW_DIR); \
+		if [ -d "$(SW_DIR)" ]; then \
+			logger INFO "building test software for $(TEST) in $(SW_DIR)"; \
+			$(MAKE) -C $(SW_DIR) clean; \
+			$(MAKE) -C $(SW_DIR); \
 			logger INFO "copying software to static 'sim/sim_build/payload' directory"; \
-			mkdir -p $(TEST_SW_PAYLOAD_DIR); \
-			cp $(TEST_SW_MEM_HEX_FILE_PATH) $(TEST_SW_PAYLOAD_MEM_HEX); \
-			cp $(TEST_SW_IMEM1_HEX_FILE_PATH) $(TEST_SW_PAYLOAD_IMEM1_HEX); \
-			cp $(TEST_SW_IMEM2_HEX_FILE_PATH) $(TEST_SW_PAYLOAD_IMEM2_HEX); \
-			cp $(TEST_SW_DMEM_HEX_FILE_PATH) $(TEST_SW_PAYLOAD_DMEM_HEX); \
+			mkdir -p $(SW_PAYLOAD_DIR); \
+			cp $(SW_MEM_HEX_FILE_PATH) $(SW_PAYLOAD_MEM_HEX); \
+			cp $(SW_IMEM1_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM1_HEX); \
+			cp $(SW_IMEM2_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM2_HEX); \
+			cp $(SW_DMEM_HEX_FILE_PATH) $(SW_PAYLOAD_DMEM_HEX); \
 		else \
-			logger ERROR "test software directory '$(TEST_SW_DIR)' not found, could not compile, exiting"; \
+			logger ERROR "test software directory '$(SW_DIR)' not found, could not compile, exiting"; \
 			exit 1; \
 		fi
 
 # load software before the simulation to prevent old software running on mcu with a different test
-CUSTOM_COMPILE_DEPS += build_test_sw
+CUSTOM_COMPILE_DEPS += build_sw
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Compilation Arguments
@@ -165,10 +195,10 @@ ifeq ($(SIM), verilator)
 	COMPILE_ARGS += -DVERILATOR_SIM_EEPROM_TIMING_PATCH
 
 	# load compiled software program statically to dut
-	COMPILE_ARGS += -DMEM_HEX_FILE=\"$(TEST_SW_PAYLOAD_MEM_HEX)\"
-	COMPILE_ARGS += -DIMEM1_HEX_FILE=\"$(TEST_SW_PAYLOAD_IMEM1_HEX)\"
-	COMPILE_ARGS += -DIMEM2_HEX_FILE=\"$(TEST_SW_PAYLOAD_IMEM2_HEX)\"
-	COMPILE_ARGS += -DDMEM_HEX_FILE=\"$(TEST_SW_PAYLOAD_DMEM_HEX)\"
+	COMPILE_ARGS += -DMEM_HEX_FILE=\"$(SW_PAYLOAD_MEM_HEX)\"
+	COMPILE_ARGS += -DIMEM1_HEX_FILE=\"$(SW_PAYLOAD_IMEM1_HEX)\"
+	COMPILE_ARGS += -DIMEM2_HEX_FILE=\"$(SW_PAYLOAD_IMEM2_HEX)\"
+	COMPILE_ARGS += -DDMEM_HEX_FILE=\"$(SW_PAYLOAD_DMEM_HEX)\"
 endif
 
 ifeq ($(SIM), xcelium)
@@ -177,10 +207,10 @@ ifeq ($(SIM), xcelium)
 
 	# preprocessor defines
 	COMPILE_ARGS += -define FUNCTIONAL
-	COMPILE_ARGS += -define MEM_HEX_FILE=\"$(TEST_SW_PAYLOAD_MEM_HEX)\"
-	COMPILE_ARGS += -define IMEM1_HEX_FILE=\"$(TEST_SW_PAYLOAD_IMEM1_HEX)\"
-	COMPILE_ARGS += -define IMEM2_HEX_FILE=\"$(TEST_SW_PAYLOAD_IMEM2_HEX)\"
-	COMPILE_ARGS += -define DMEM_HEX_FILE=\"$(TEST_SW_PAYLOAD_DMEM_HEX)\"
+	COMPILE_ARGS += -define MEM_HEX_FILE=\"$(SW_PAYLOAD_MEM_HEX)\"
+	COMPILE_ARGS += -define IMEM1_HEX_FILE=\"$(SW_PAYLOAD_IMEM1_HEX)\"
+	COMPILE_ARGS += -define IMEM2_HEX_FILE=\"$(SW_PAYLOAD_IMEM2_HEX)\"
+	COMPILE_ARGS += -define DMEM_HEX_FILE=\"$(SW_PAYLOAD_DMEM_HEX)\"
 
 	# suppress timing violations from pdk memory models because of the bootloader (not a design issue)
 	COMPILE_ARGS += -notimingchecks

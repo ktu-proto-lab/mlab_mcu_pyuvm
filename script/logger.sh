@@ -70,8 +70,8 @@ EOF
   local -r BEGIN_COLOR="\033[1;${LOG_FLAG_COLOR}m"
   local -r END_COLOR="\033[0m"
   local -r ALIGN_SIZE=7
-  local -r LEFT_ALIGN="-"
-  local -r FLAG_FORMAT="%${LEFT_ALIGN}${ALIGN_SIZE}s"
+  local -r RIGHT_ALIGN="+"
+  local -r FLAG_FORMAT="%${RIGHT_ALIGN}${ALIGN_SIZE}s"
   local -r FLAG_PREFIX="${BEGIN_COLOR}[${FLAG_FORMAT}]${END_COLOR}"
   local -r TEXT=$2
 
