@@ -1,8 +1,8 @@
 from enum import Enum
-from pyuvm import uvm_object, uvm_active_passive_enum
+from pyuvm import uvm_object
 from uvc.gpio.gpio_if import gpio_if
 
-class gpio_config(uvm_object):
+class gpio_agent_config(uvm_object):
     class port_type_enum(Enum):
         INPUT = 1
         OUTPUT = 2
