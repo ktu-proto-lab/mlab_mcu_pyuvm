@@ -25,6 +25,12 @@ class gpio_agent(uvm_agent):
         
         self.cfg: gpio_agent_config = ConfigDB().get(self, "", "cfg")
         
+        self.vif = self.cfg.vif
+        
+        self.cfg.monitor_cfg.vif = self.vif
+        
+        ConfigDB().set(self, "monitor", "cfg", self.cfg.monitor_cfg)
+
         if self.cfg.port_type == gpio_agent_config.port_type_enum.INPUT:
             self.monitor = gpio_input_monitor.create(name="monitor", parent=self)
         
@@ -36,6 +42,9 @@ class gpio_agent(uvm_agent):
             
         if self.cfg.is_active:
             self.sequencer: uvm_sequencer = uvm_sequencer.create(name="sequencer", parent=self)
+            
+            self.cfg.driver_cfg.vif = self.vif
+            ConfigDB().set(self, "driver", "cfg", self.cfg.driver_cfg)
             self.driver: gpio_driver = gpio_driver.create(name="driver", parent=self)
             
         self.analysis_port = uvm_analysis_port("analysis_port", self)

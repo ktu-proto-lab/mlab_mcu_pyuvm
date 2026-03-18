@@ -6,3 +6,5 @@ from .gpio_sequence_item import gpio_sequence_item
 from .gpio_input_monitor import gpio_input_monitor
 from .gpio_output_monitor import gpio_output_monitor
 from .gpio_agent_config import gpio_agent_config
+from .gpio_monitor_config import gpio_monitor_config
+from .gpio_driver_config import gpio_driver_config

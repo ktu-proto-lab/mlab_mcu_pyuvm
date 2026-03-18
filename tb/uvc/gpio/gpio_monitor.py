@@ -1,26 +1,35 @@
 from pyuvm import *
 from cocotb.triggers import ReadOnly, RisingEdge
 from uvc.gpio.gpio_sequence_item import gpio_sequence_item
+from uvc.gpio.gpio_monitor_config import gpio_monitor_config
 from uvc.gpio.gpio_if import gpio_if
 
 class gpio_monitor(uvm_monitor):
+    cfg: gpio_monitor_config
+    vif: gpio_if
+    mask: int
+    analysis_port: uvm_analysis_port
+    
     def build_phase(self):
         super().build_phase()
 
-        self.vif: gpio_if = ConfigDB().get(context=self, inst_name="", field_name="vif")
+        if not ConfigDB().exists(self, "", "cfg"):
+            self.logger.error("can not build without configuration")
+        
+        self.cfg = ConfigDB().get(self, "", "cfg")
+
+        self.vif = self.cfg.vif
+
+        self.mask = self.cfg.mask
 
         # Broadcast to the Scoreboard
         self.analysis_port = uvm_analysis_port(name="analysis_port", parent=self)
-        
-        self.logger.debug("build phase done")
         
     def sample(self) -> int:
         """
         @brief Template method for child Monitors to sample specific signals to be monitored
         """
         raise NotImplementedError
-        # TODO: Maybe use this?
-        uvm_not_implemented(header="", message="")
 
     async def run_phase(self):
         await super().run_phase()
