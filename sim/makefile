@@ -244,8 +244,10 @@ endif
 VERILOG_SOURCES += $(PROJECT_ROOT)/uvm/rtl/mcu.sv
 
 # ----------------------------------------------------------------------------------------------------------------------
-# Cocotb
+# Cocotb / PyUVM
 # ----------------------------------------------------------------------------------------------------------------------
-export COCOTB_LOG_LEVEL ?= $(LOG)
+export COCOTB_LOG_LEVEL ?= INFO
+
+export PYUVM_LOG_LEVEL = $(LOG)
 
 include $(shell cocotb-config --makefiles)/Makefile.sim

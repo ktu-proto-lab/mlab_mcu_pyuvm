@@ -11,7 +11,7 @@ class base_test(uvm_test):
     
     def __init__(self, name="gpio_base_test", parent=None):
         # let set log level from the makefile itself, default to info
-        level: str = os.getenv(key="COCOTB_LOG_LEVEL", default="INFO").upper()
+        level: str = os.getenv(key="PYUVM_LOG_LEVEL", default="INFO").upper()
         log_level = getattr(logging, level, logging.INFO)
         
         # make log level consistent across all uvm objects
