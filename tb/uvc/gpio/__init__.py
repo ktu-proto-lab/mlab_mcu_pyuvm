@@ -5,3 +5,4 @@ from .gpio_monitor import gpio_monitor
 from .gpio_sequence_item import gpio_sequence_item
 from .gpio_input_monitor import gpio_input_monitor
 from .gpio_output_monitor import gpio_output_monitor
+from .gpio_config import gpio_config

@@ -1,32 +1,51 @@
-from pyuvm import *
+from pyuvm import uvm_agent, uvm_sequencer, uvm_analysis_port, ConfigDB
 from uvc.gpio.gpio_driver import gpio_driver
+from uvc.gpio.gpio_monitor import gpio_monitor
 from uvc.gpio.gpio_input_monitor import gpio_input_monitor
 from uvc.gpio.gpio_output_monitor import gpio_output_monitor
+from uvc.gpio.gpio_config import gpio_config
 
 class gpio_agent(uvm_agent):
+    cfg: gpio_config
+    monitor: gpio_monitor
+    analysis_port: uvm_analysis_port
+    
+    def __init__(self, name, parent):
+        super().__init__(name, parent)
+        
+        self.cfg = None
+        self.monitor = None
+        self.analysis_port = None
+    
     def build_phase(self):
         super().build_phase()
-
-        self.sequencer = uvm_sequencer(name="sequencer", parent=self)
-
-        self.driver = gpio_driver(name="driver", parent=self)
-
-        self.input_monitor = gpio_input_monitor(name="input_monitor", parent=self)
-        self.output_monitor = gpio_output_monitor(name="output_monitor", parent=self)
         
-        self.input_analysis_port = uvm_analysis_port(name="input_analysis_port", parent=self)
-        self.output_analysis_port = uvm_analysis_port(name="output_analysis_port", parent=self)
+        if not ConfigDB().exists(self, "", "cfg"):
+            self.logger.error("can't build agent without set configuration")
+        
+        self.cfg: gpio_config = ConfigDB().get(self, "", "cfg")
+        
+        if self.cfg.port_type == gpio_config.port_type_enum.INPUT:
+            self.monitor = gpio_input_monitor.create(name="monitor", parent=self)
+        
+        elif self.cfg.port_type == gpio_config.port_type_enum.OUTPUT:
+            self.monitor = gpio_output_monitor.create(name="monitor", parent=self)
+        
+        else:
+            self.logger.error("monitor can only be configured as input or output")
+            
+        if self.cfg.is_active:
+            self.sequencer: uvm_sequencer = uvm_sequencer.create(name="sequencer", parent=self)
+            self.driver: gpio_driver = gpio_driver.create(name="driver", parent=self)
+            
+        self.analysis_port = uvm_analysis_port("analysis_port", self)
         
 
     def connect_phase(self):
         super().connect_phase()
 
-        # Connect Driver to the Sequencer
-        self.driver.seq_item_port.connect(self.sequencer.seq_item_export)
-        
-        # Connect Driver to the Input Monitor for monitoring correct input values
-        self.driver.analysis_port.connect(self.input_monitor.driver_fifo.analysis_export)
+        self.monitor.analysis_port.connect(self.analysis_port)
 
-        # Export Monitoring analysis ports to the Agent's boundary
-        self.input_monitor.analysis_port.connect(self.input_analysis_port)
-        self.output_monitor.analysis_port.connect(self.output_analysis_port)
+        if self.cfg.is_active:
+            self.driver.seq_item_port.connect(self.sequencer.seq_item_export)
+        

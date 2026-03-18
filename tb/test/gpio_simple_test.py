@@ -21,7 +21,7 @@ class gpio_simple_test(base_test):
 
         sequence = gpio_sequence.create(name="gpio_sequence")
         
-        await sequence.start(self.env.agent.sequencer)
+        await sequence.start(self.env.input_agent.sequencer)
         
         await ClockCycles(self.dut_vif.clock, 1000)
         

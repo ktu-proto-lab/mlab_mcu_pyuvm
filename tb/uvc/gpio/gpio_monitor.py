@@ -38,7 +38,6 @@ class gpio_monitor(uvm_monitor):
             curr_val: int = self.sample()
             
             if curr_val is None:
-                self.logger.warning("monitoring GPIO value, got None")
                 continue
 
             if curr_val != prev_val:
