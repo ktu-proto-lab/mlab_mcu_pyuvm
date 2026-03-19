@@ -27,6 +27,9 @@ function init_docker {
         exit 1
     fi
     cd "$INIT_PROJECT_ROOT"
+    # arguments for docker compose
+    export HOST_UID=$(id -u)
+    export HOST_GID=$(id -g)
     logger INFO "building docker image"
     docker compose build
     logger INFO "running docker container"
