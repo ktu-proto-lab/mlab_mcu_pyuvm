@@ -1,9 +1,10 @@
-from pyuvm import uvm_agent, uvm_sequencer, uvm_analysis_port, ConfigDB
+from pyuvm import uvm_agent, uvm_analysis_port, ConfigDB
 from uvc.gpio.gpio_driver import gpio_driver
 from uvc.gpio.gpio_monitor import gpio_monitor
 from uvc.gpio.gpio_input_monitor import gpio_input_monitor
 from uvc.gpio.gpio_output_monitor import gpio_output_monitor
 from uvc.gpio.gpio_agent_config import gpio_agent_config
+from uvc.gpio.gpio_sequencer import gpio_sequencer
 
 class gpio_agent(uvm_agent):
     cfg: gpio_agent_config
@@ -41,7 +42,7 @@ class gpio_agent(uvm_agent):
             self.logger.error("monitor can only be configured as input or output")
             
         if self.cfg.is_active:
-            self.sequencer: uvm_sequencer = uvm_sequencer.create(name="sequencer", parent=self)
+            self.sequencer: gpio_sequencer = gpio_sequencer.create(name="sequencer", parent=self)
             
             self.cfg.driver_cfg.vif = self.vif
             ConfigDB().set(self, "driver", "cfg", self.cfg.driver_cfg)
