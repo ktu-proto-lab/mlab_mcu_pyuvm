@@ -250,4 +250,19 @@ export COCOTB_LOG_LEVEL ?= INFO
 
 export PYUVM_LOG_LEVEL = $(LOG)
 
+.PHONY: check_venv
+check_venv:
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	if [ -z "$(VIRTUAL_ENV)" ]; then \
+		logger ERROR "python's virtual environment not activated"; \
+		logger INFO "run: source $(PROJECT_ROOT)/uvm/.venv/bin/activate"; \
+		exit 1; \
+	fi
+
+CUSTOM_COMPILE_DEPS += check_venv
+
+ifeq ($(VIRTUAL_ENV),)
+all: check_venv
+else
 include $(shell cocotb-config --makefiles)/Makefile.sim
+endif
