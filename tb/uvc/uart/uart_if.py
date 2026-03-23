@@ -24,8 +24,8 @@ class uart_if(base_if):
         self.boud_rate = None
         self.bit_time_ns = None
 
-    def connect(self, dut: mcu_vif):
-        super().connect(dut)
+    def wire(self, dut: mcu_vif):
+        super().wire(dut)
         
         self.transmit = dut.uart_rx
         self.transmit_enable = dut.uart_rx_en

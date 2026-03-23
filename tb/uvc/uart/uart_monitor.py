@@ -2,7 +2,7 @@ from cocotb.triggers import RisingEdge, ReadOnly
 from pyuvm import uvm_monitor, uvm_analysis_port, ConfigDB
 from typing import cast
 from uvc.uart.uart_if import uart_if
-from uvc.uart.uart_sequence_item import uart_sequence_item
+from uvc.uart.uart_char_item import uart_char_item
 
 class uart_monitor(uvm_monitor):
     
@@ -20,6 +20,6 @@ class uart_monitor(uvm_monitor):
         
         while True:
             received_byte: int = await self.vif.receive_byte()
-            item = uart_sequence_item(name="receive_item", byte=received_byte)
+            item = uart_char_item("received_item", received_byte)
             self.logger.debug(f"{item}")
             self.analysis_port.write(item)

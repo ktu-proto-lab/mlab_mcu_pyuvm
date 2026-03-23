@@ -19,7 +19,7 @@ class base_if:
         self.system_clock = None
         self.system_reset = None
         
-    def connect(self, dut: mcu_vif):
+    def wire(self, dut: mcu_vif):
         self.system_clock = dut.clock
         self.system_reset = dut.reset
     

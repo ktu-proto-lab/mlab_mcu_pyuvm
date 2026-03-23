@@ -54,7 +54,7 @@ class mcu_vif:
         self.scl_o = None
         self.scl_oe = None
     
-    def connect(self, dut: SimHandleBase):
+    def wire(self, dut: SimHandleBase):
         # TODO: check if dut contains needed signals
         
         self.clock = cast(SimHandleBase, dut.clk)

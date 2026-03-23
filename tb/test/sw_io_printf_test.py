@@ -1,11 +1,10 @@
 import pyuvm
 from pyuvm import ConfigDB, uvm_tlm_analysis_fifo
-from test import base_test
+from test.base_test import base_test
 from uvc.uart import uart_if, uart_agent, uart_sequence_item
-from seq.uart_sequence import uart_sequence
 
 @pyuvm.test()
-class uart_simple_test(base_test):
+class sw_io_printf_test(base_test):
     vif: uart_if
     agent: uart_agent
     
@@ -22,7 +21,7 @@ class uart_simple_test(base_test):
         super().build_phase()
         
         self.vif = uart_if(name="vif", parent=self)
-        self.vif.connect(self.dut_vif)
+        self.vif.wire(self.dut)
         ConfigDB().set(context=self, inst_name="*", field_name="vif", value=self.vif)
         
         self.agent = uart_agent.create(name="agent", parent=self)

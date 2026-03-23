@@ -2,7 +2,7 @@ import pyuvm
 from pyuvm import ConfigDB, uvm_tlm_analysis_fifo
 from test import base_test
 from uvc.uart import uart_if, uart_agent, uart_sequence_item
-from seq.uart_sequence import uart_sequence
+from seq import uart_string_sequence
 
 @pyuvm.test()
 class uart_simple_test(base_test):
@@ -22,7 +22,7 @@ class uart_simple_test(base_test):
         super().build_phase()
         
         self.vif = uart_if(name="vif", parent=self)
-        self.vif.connect(self.dut_vif)
+        self.vif.wire(self.dut)
         ConfigDB().set(context=self, inst_name="*", field_name="vif", value=self.vif)
         
         self.agent = uart_agent.create(name="agent", parent=self)
@@ -50,7 +50,7 @@ class uart_simple_test(base_test):
         assert received == "hello uart", f"expected 'hello uart', got '{received}'"
 
         self.vif.enable_transmit()
-        await uart_sequence(string="hello back").start(self.agent.sequencer)
+        await uart_string_sequence(string="hello back").start(self.agent.sequencer)
         self.vif.disable_transmit()
         self.logger.debug("transmitted: 'hello back'")
 

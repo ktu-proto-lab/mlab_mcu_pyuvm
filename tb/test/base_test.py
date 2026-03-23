@@ -7,7 +7,7 @@ from vif import mcu_vif
 
 class base_test(uvm_test):
     dut: SimHandleBase
-    dut_vif: mcu_vif
+    dut: mcu_vif
     
     def __init__(self, name="gpio_base_test", parent=None):
         # let set log level from the makefile itself, default to info
@@ -20,15 +20,13 @@ class base_test(uvm_test):
         super().__init__(name, parent)
         
         self.dut = None
-        self.dut_vif = None
+        self.dut = None
         
     def build_phase(self):
         super().build_phase()
         
-        self.dut = cocotb.top
-        
-        self.dut_vif = mcu_vif(name="dut_vif", parent=self)
-        self.dut_vif.connect(self.dut)
+        self.dut = mcu_vif(name="dut", parent=self)
+        self.dut.wire(cocotb.top)
         
     def connect_phase(self):
         super().connect_phase()
@@ -43,10 +41,10 @@ class base_test(uvm_test):
         self.raise_objection()
         await super().run_phase()
 
-        self.dut_vif.release_clock()
+        self.dut.release_clock()
         self.logger.debug("dut clock released")
         
-        await self.dut_vif.reset_system()
+        await self.dut.reset_system()
         self.logger.debug("dut system-wide reset done")
 
         self.drop_objection()

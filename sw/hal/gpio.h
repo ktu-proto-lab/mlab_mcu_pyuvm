@@ -1,12 +1,10 @@
 #ifndef HAL_GPIO_H
 #define HAL_GPIO_H
 
+#include <stddef.h>
 #include <stdint.h>
-#include "soc/gpio_regs.h"
 
-#ifndef NULL
-#define NULL ((void *)0)
-#endif
+#include "soc/gpio_regs.h"
 
 typedef struct {
     volatile gpio_reg_map_t *regs;

@@ -1,4 +1,4 @@
-PROGRAM = io_printf_test
+PROGRAM = sw_io_printf_test
 
 C_INCLUDES = -I$(PROJECT_ROOT)/uvm/sw
 

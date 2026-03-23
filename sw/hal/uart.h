@@ -1,15 +1,16 @@
 #ifndef HAL_UART_H
 #define HAL_UART_H
 
+#include <stddef.h>
 #include <stdint.h>
 
+#include "soc/gpio_regs.h"
 #include "soc/uart_regs.h"
 
 #define UART_BAUD_INTERVAL(cpu_freq_mhz, baudrate) ((cpu_freq_mhz * 1000000) / (baudrate))
 
-#ifndef NULL
-#define NULL ((void *)0)
-#endif
+#define UART_GPIO_TX_PIN GPIO_PIN_1
+#define UART_GPIO_RX_PIN GPIO_PIN_0
 
 typedef struct {
     uint32_t baud_rate;
