@@ -40,8 +40,10 @@ class cli_cmd_echo_test(base_test):
             f"expected ack message {ack_expected}, actual = {ack_actual}"
         )
         
+        expected_received_string = "mlab mcu 2025"
+        
         echo_transmit_string_sequence: uart_string_sequence = uart_string_sequence.create("echo_sequence")
-        echo_transmit_string_sequence.string = "echo string\0";
+        echo_transmit_string_sequence.string = f"echo \"{expected_received_string}\"\0";
         self.logger.debug(f"transmitting: {echo_transmit_string_sequence}")
         self.vif.enable_transmit()
         await echo_transmit_string_sequence.start(self.env.agent.sequencer)
@@ -49,14 +51,16 @@ class cli_cmd_echo_test(base_test):
         self.logger.info(f"transmitted {echo_transmit_string_sequence}")
         
         self.logger.debug("waiting echo response")
-        echo_receive_string = await self.receive_string()
-        self.logger.info(f"received {echo_receive_string}")
+        self.receive_fifo.flush()
+        actual_received_string = await self.receive_string()
+        self.logger.info(f"received '{actual_received_string}'")
         
         assert (
-            f"{echo_transmit_string_sequence}" == echo_receive_string
+            f"{expected_received_string}\0" == actual_received_string
                 ),( 
-            "echoed strings do not match:" 
-            f"transmitted = {echo_transmit_string_sequence}, received = {echo_receive_string}"
+            "echoed strings do not match: " 
+            f"transmitted = {echo_transmit_string_sequence},"
+            f"expected = '{expected_received_string}' actual = '{actual_received_string}'"
         )
         
         self.drop_objection()
@@ -64,8 +68,7 @@ class cli_cmd_echo_test(base_test):
 
     async def receive_string(self) -> str:
         string = ""
-        self.receive_fifo.flush()
-        
+                
         while True:
             character: uart_char_item = await self.receive_fifo.get()
             string += character.char_value()
