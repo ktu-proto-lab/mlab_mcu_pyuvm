@@ -6,7 +6,7 @@ from env.uart import uart_env, uart_env_config
 from seq import uart_string_sequence
 
 @pyuvm.test()
-class cli_cmd_echo_test(base_test):
+class cli_cmd_echo_simple_test(base_test):
     def build_phase(self):
         super().build_phase()
         

@@ -4,7 +4,7 @@ from test.base_test import base_test
 from uvc.uart import uart_if, uart_agent, uart_sequence_item
 
 @pyuvm.test()
-class sw_io_printf_test(base_test):
+class sw_io_printf_simple_test(base_test):
     vif: uart_if
     agent: uart_agent
     
