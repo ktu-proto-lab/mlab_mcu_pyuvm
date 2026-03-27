@@ -61,20 +61,20 @@ class mcu_vif:
         self.reset = cast(SimHandleBase, dut.rst)
         
         self.uart_tx = cast(SimHandleBase, dut.ext_pad_io[1])
-        self.uart_rx = cast(SimHandleBase, dut.tb_gpio_o[0])
-        self.uart_rx_en = cast(SimHandleBase, dut.tb_gpio_oe[0])
+        self.uart_rx = cast(SimHandleBase, dut.top_gpio_o[0])
+        self.uart_rx_en = cast(SimHandleBase, dut.top_gpio_oe[0])
         
         self.gpio_i = cast(SimHandleBase, dut.gpio_i)
-        self.gpio_o = cast(SimHandleBase, dut.tb_gpio_o)
-        self.gpio_oe = cast(SimHandleBase, dut.tb_gpio_oe)
+        self.gpio_o = cast(SimHandleBase, dut.top_gpio_o)
+        self.gpio_oe = cast(SimHandleBase, dut.top_gpio_oe)
         
-        self.sda_i = cast(SimHandleBase, dut.sda_pad_i)
-        self.sda_o = cast(SimHandleBase, dut.sda_pad_o)
-        self.sda_oe = cast(SimHandleBase, dut.sda_padoen_o)
+        self.sda_i = cast(SimHandleBase, dut.sda_i)
+        self.sda_o = cast(SimHandleBase, dut.sda_o)
+        self.sda_oe = cast(SimHandleBase, dut.sda_oe_o)
         
-        self.scl_i = cast(SimHandleBase, dut.scl_pad_i)
-        self.scl_o = cast(SimHandleBase, dut.scl_pad_o)
-        self.scl_oe = cast(SimHandleBase, dut.scl_padoen_o)
+        self.scl_i = cast(SimHandleBase, dut.scl_i)
+        self.scl_o = cast(SimHandleBase, dut.scl_o)
+        self.scl_oe = cast(SimHandleBase, dut.scl_oe_o)
     
     def release_clock(self):
         cocotb.start_soon(Clock(self.clock, self.clock_period, self.clock_units).start())

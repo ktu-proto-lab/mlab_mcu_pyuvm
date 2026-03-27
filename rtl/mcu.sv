@@ -1,5 +1,6 @@
 module mcu #(
     parameter GPIO_COUNT        = `GPIO_IOS,
+
     parameter MEMInitFile       = `MEM_HEX_FILE,
     parameter IMEM_1_InitFile   = `IMEM1_HEX_FILE,
     parameter IMEM_2_InitFile   = `IMEM2_HEX_FILE,
@@ -12,38 +13,29 @@ module mcu #(
 );
 
     logic [GPIO_COUNT-1:0] gpio_i, gpio_o, gpio_oe;
+    logic [GPIO_COUNT-1:0] top_gpio_o   = '0;
+    logic [GPIO_COUNT-1:0] top_gpio_oe  = '0;
 
-    logic [GPIO_COUNT-1:0] tb_gpio_o = '0;
-    logic [GPIO_COUNT-1:0] tb_gpio_oe  = '0;
+    logic scl_i, scl_o, scl_oe_o;
+    logic sda_i, sda_o, sda_oe_o;
 
-    logic scl_pad_i, scl_pad_o, scl_padoen_o;
-    logic sda_pad_i, sda_pad_o, sda_padoen_o;
+    tri sda, scl;
 
-    tri SDA, SCL;
+    assign scl   = scl_oe_o ? 1'bz : scl_o;
+    assign scl_i = scl;
 
-    assign SCL       = scl_padoen_o ? 1'bz : scl_pad_o;
-    assign scl_pad_i = SCL;
+    assign sda   = sda_oe_o ? 1'bz : sda_o;
+    assign sda_i = sda;
 
-    assign SDA       = sda_padoen_o ? 1'bz : sda_pad_o;
-    assign sda_pad_i = SDA;
-
-    pullup(SDA);
-    pullup(SCL);
+    pullup(sda);
+    pullup(scl);
 
     genvar i;
     generate
         for (i = 0; i < GPIO_COUNT; i++) begin : gen_gpio
-
-            // dut drives the pad
             assign ext_pad_io[i] = gpio_oe[i] ? gpio_o[i] : 1'bz;
-
-            // top driving the pad
-            assign ext_pad_io[i] = tb_gpio_oe[i] ? tb_gpio_o[i] : 1'bz;
-
-            // dut reading the pad
+            assign ext_pad_io[i] = top_gpio_oe[i] ? top_gpio_o[i] : 1'bz;
             assign gpio_i[i]     = ext_pad_io[i];
-
-            // weak pulldown
             pulldown(ext_pad_io[i]);
         end
     endgenerate
@@ -55,12 +47,12 @@ module mcu #(
     ) dut (
         .clk_sys      (clk),
         .rst_async_n  (rst),
-        .scl_pad_i    (scl_pad_i),
-        .scl_pad_o    (scl_pad_o),
-        .scl_padoen_o (scl_padoen_o),
-        .sda_pad_i    (sda_pad_i),
-        .sda_pad_o    (sda_pad_o),
-        .sda_padoen_o (sda_padoen_o),
+        .scl_pad_i    (scl_i),
+        .scl_pad_o    (scl_o),
+        .scl_padoen_o (scl_oe_o),
+        .sda_pad_i    (sda_i),
+        .sda_pad_o    (sda_o),
+        .sda_padoen_o (sda_oe_o),
         .ext_pad_i    (gpio_i),
         .gpio_o       (gpio_o),
         .gpio_oe      (gpio_oe)
@@ -73,8 +65,8 @@ module mcu #(
         .A1     (1'b0),
         .A2     (1'b0),
         .WP     (1'b0),
-        .SDA    (SDA),
-        .SCL    (SCL),
+        .SDA    (sda),
+        .SCL    (scl),
         .RESET  (1'b0)
     );
 
