@@ -3,11 +3,11 @@ from uvc.gpio.gpio_driver import gpio_driver
 from uvc.gpio.gpio_monitor import gpio_monitor
 from uvc.gpio.gpio_input_monitor import gpio_input_monitor
 from uvc.gpio.gpio_output_monitor import gpio_output_monitor
-from uvc.gpio.gpio_agent_config import gpio_agent_config
+from uvc.gpio.gpio_config import gpio_config
 from uvc.gpio.gpio_sequencer import gpio_sequencer
 
 class gpio_agent(uvm_agent):
-    cfg: gpio_agent_config
+    cfg: gpio_config
     monitor: gpio_monitor
     analysis_port: uvm_analysis_port
     
@@ -24,7 +24,7 @@ class gpio_agent(uvm_agent):
         if not ConfigDB().exists(self, "", "cfg"):
             self.logger.error("can't build agent without set configuration")
         
-        self.cfg: gpio_agent_config = ConfigDB().get(self, "", "cfg")
+        self.cfg: gpio_config = ConfigDB().get(self, "", "cfg")
         
         self.vif = self.cfg.vif
         
@@ -32,10 +32,10 @@ class gpio_agent(uvm_agent):
         
         ConfigDB().set(self, "monitor", "cfg", self.cfg.monitor_cfg)
 
-        if self.cfg.port_type == gpio_agent_config.port_type_enum.INPUT:
+        if self.cfg.port_type == gpio_config.port_type_enum.INPUT:
             self.monitor = gpio_input_monitor.create(name="monitor", parent=self)
         
-        elif self.cfg.port_type == gpio_agent_config.port_type_enum.OUTPUT:
+        elif self.cfg.port_type == gpio_config.port_type_enum.OUTPUT:
             self.monitor = gpio_output_monitor.create(name="monitor", parent=self)
         
         else:

@@ -4,7 +4,7 @@ from uvc.gpio.gpio_if import gpio_if
 from uvc.gpio.gpio_driver_config import gpio_driver_config
 from uvc.gpio.gpio_monitor_config import gpio_monitor_config
 
-class gpio_agent_config(uvm_object):
+class gpio_config(uvm_object):
     class port_type_enum(Enum):
         INPUT = 1
         OUTPUT = 2

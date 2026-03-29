@@ -1,5 +1,5 @@
 from pyuvm import uvm_env, ConfigDB
-from uvc.gpio import gpio_agent_config, gpio_agent, gpio_if, gpio_monitor_config, gpio_driver_config
+from uvc.gpio import gpio_config, gpio_agent, gpio_if, gpio_monitor_config, gpio_driver_config
 from env.gpio.gpio_env_config import gpio_env_config
 from env.gpio.gpio_scoreboard import gpio_scoreboard
 
@@ -17,9 +17,9 @@ class gpio_env(uvm_env):
         
         self.vif = self.cfg.vif
         
-        input_agent_cfg: gpio_agent_config = gpio_agent_config.create("input_agent_cfg")
+        input_agent_cfg: gpio_config = gpio_config.create("input_agent_cfg")
         input_agent_cfg.vif = self.vif
-        input_agent_cfg.port_type = gpio_agent_config.port_type_enum.INPUT
+        input_agent_cfg.port_type = gpio_config.port_type_enum.INPUT
         input_agent_cfg.is_active = True
         input_agent_cfg.monitor_cfg = gpio_monitor_config.create("input_monitor_cfg")
         input_agent_cfg.monitor_cfg.mask = self.cfg.input_mask
@@ -28,9 +28,9 @@ class gpio_env(uvm_env):
         ConfigDB().set(self, "input_agent", "cfg", input_agent_cfg)
         self.input_agent: gpio_agent = gpio_agent.create("input_agent", self)
         
-        output_agent_cfg: gpio_agent_config = gpio_agent_config.create("output_agent_cfg")
+        output_agent_cfg: gpio_config = gpio_config.create("output_agent_cfg")
         output_agent_cfg.vif = self.vif
-        output_agent_cfg.port_type = gpio_agent_config.port_type_enum.OUTPUT
+        output_agent_cfg.port_type = gpio_config.port_type_enum.OUTPUT
         output_agent_cfg.is_active = False
         output_agent_cfg.monitor_cfg = gpio_monitor_config.create("output_monitor_cfg")
         output_agent_cfg.monitor_cfg.mask = self.cfg.output_mask
