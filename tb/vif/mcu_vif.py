@@ -17,6 +17,8 @@ class mcu_vif:
     gpio_i: SimHandleBase
     gpio_o: SimHandleBase
     gpio_oe: SimHandleBase
+    top_gpio_o: SimHandleBase
+    top_gpio_oe: SimHandleBase
     gpio_count: Decimal = 10
     
     uart_tx: SimHandleBase
@@ -45,6 +47,8 @@ class mcu_vif:
         self.gpio_i = None
         self.gpio_o = None
         self.gpio_oe = None
+        self.top_gpio_o = None
+        self.top_gpio_oe = None
         
         self.sda_i = None
         self.sda_o = None
@@ -55,8 +59,6 @@ class mcu_vif:
         self.scl_oe = None
     
     def wire(self, dut: SimHandleBase):
-        # TODO: check if dut contains needed signals
-        
         self.clock = cast(SimHandleBase, dut.clk)
         self.reset = cast(SimHandleBase, dut.rst)
         
@@ -65,8 +67,10 @@ class mcu_vif:
         self.uart_rx_en = cast(SimHandleBase, dut.top_gpio_oe[0])
         
         self.gpio_i = cast(SimHandleBase, dut.gpio_i)
-        self.gpio_o = cast(SimHandleBase, dut.top_gpio_o)
-        self.gpio_oe = cast(SimHandleBase, dut.top_gpio_oe)
+        self.gpio_o = cast(SimHandleBase, dut.gpio_o)
+        self.gpio_oe = cast(SimHandleBase, dut.gpio_oe)
+        self.top_gpio_o = cast(SimHandleBase, dut.top_gpio_o)
+        self.top_gpio_oe = cast(SimHandleBase, dut.top_gpio_oe)
         
         self.sda_i = cast(SimHandleBase, dut.sda_i)
         self.sda_o = cast(SimHandleBase, dut.sda_o)

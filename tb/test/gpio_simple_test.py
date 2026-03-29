@@ -1,24 +1,22 @@
-import cocotb
 import pyuvm
 from pyuvm import ConfigDB
-from cocotb.handle import SimHandleBase
 from cocotb.triggers import ClockCycles
-from test import base_test
+from test.base_test import base_test
 from seq import gpio_sequence
 from env.gpio import gpio_env, gpio_env_config
 from uvc.gpio import gpio_if
 
 @pyuvm.test()
 class gpio_simple_test(base_test):
-    dut: SimHandleBase
     vif: gpio_if
+    env: gpio_env
+    env_cfg: gpio_env_config
     
     def build_phase(self):
         super().build_phase()
         
-        self.dut = cocotb.top
-        
-        self.vif = gpio_if(self.dut)
+        self.vif = gpio_if("vif", self)
+        self.vif.wire(self.dut)
         
         env_cfg = gpio_env_config.create("env_cfg")
         env_cfg.vif = self.vif
@@ -34,13 +32,13 @@ class gpio_simple_test(base_test):
         await super().run_phase()
         
         # wait for main function to initialize gpio regs
-        await ClockCycles(self.dut.clock, 500)
+        await self.dut.clock_cycles(500)
 
         sequence = gpio_sequence.create(name="gpio_sequence")
         
         await sequence.start(self.env.input_agent.sequencer)
         
-        await ClockCycles(self.dut.clock, 1000)
+        await self.dut.clock_cycles(1000)
         
         self.drop_objection()
         

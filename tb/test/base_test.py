@@ -1,12 +1,10 @@
 import cocotb
 import logging
 import os
-from cocotb.handle import SimHandleBase
 from pyuvm import uvm_test, uvm_report_object
 from vif import mcu_vif
 
 class base_test(uvm_test):
-    dut: SimHandleBase
     dut: mcu_vif
     
     def __init__(self, name="gpio_base_test", parent=None):

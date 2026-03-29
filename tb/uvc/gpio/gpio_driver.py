@@ -1,5 +1,4 @@
 from pyuvm import *
-from cocotb.triggers import ClockCycles
 from uvc.gpio.gpio_if import gpio_if
 from uvc.gpio.gpio_sequence_item import gpio_sequence_item
 from uvc.gpio.gpio_driver_config import gpio_driver_config
@@ -26,13 +25,9 @@ class gpio_driver(uvm_driver):
 
         while True:
             item: gpio_sequence_item = await self.seq_item_port.get_next_item()
-
             self.vif.drive_input(item.value, self.mask)
-            
             self.logger.debug(f"drove {hex(item.value)}")
             
             self.analysis_port.write(item)
-            
-            await ClockCycles(self.vif.clk, 1000)
-            
+            await self.vif.system_clock_cycles(1000)
             self.seq_item_port.item_done()

@@ -1,37 +1,43 @@
-from cocotb.log import SimLog
 from cocotb.handle import SimHandleBase
+from decimal import Decimal
+from vif import mcu_vif
+from uvc.base_if import base_if
 
-# TODO: old code, gpio_pin_0 is uart rx and gpio_pin_1 is uart tx
-class gpio_if:
-    """
-    @brief GPIO Module's Virtual Interface
+class gpio_if(base_if):
+    
+    gpio_count: Decimal
+    
+    gpio_i: SimHandleBase
+    gpio_o: SimHandleBase
+    gpio_oe: SimHandleBase
+    
+    top_gpio_o: SimHandleBase
+    top_gpio_oe: SimHandleBase
 
-    - Total external pads are 10 
-    - Pads 0-7 are usable GPIO pins
-    - Logical GPIO_PIN_0 corresponds to LSB
-    """
-
-    PIN_NUM: int = 8
-
-    def __init__(self, dut: SimHandleBase, name="gpio_if", parent=None):
-        self.clk: SimHandleBase = dut.clk
-        self.rst: SimHandleBase = dut.rst
+    def __init__(self, name="gpio_if", parent=None):
+        super().__init__(name, parent)
         
-        self.gpio_i: SimHandleBase = dut.gpio_i
-        self.gpio_o: SimHandleBase = dut.gpio_o
-        self.gpio_oe: SimHandleBase = dut.gpio_oe
+        self.gpio_count = None
+        self.gpio_i = None
+        self.gpio_o = None
+        self.gpio_oe = None
+        self.top_gpio_o = None
+        self.top_gpio_oe = None
+    
+    def wire(self, dut: mcu_vif):
+        super().wire(dut)
         
-        self.tb_gpio_o: SimHandleBase = dut.tb_gpio_o
-        self.tb_gpio_oe: SimHandleBase = dut.tb_gpio_oe
-        
-        self.parent_name = parent.get_full_name() if hasattr(parent, "get_full_name") else "cocotb"
-        self.full_name = f"{self.parent_name}.{name}"
-        self.logger = SimLog(self.full_name)
+        self.gpio_count = dut.gpio_count
+        self.gpio_i = dut.gpio_i
+        self.gpio_o = dut.gpio_o
+        self.gpio_oe = dut.gpio_oe
+        self.top_gpio_o = dut.top_gpio_o
+        self.top_gpio_oe = dut.top_gpio_oe
 
     def drive_input(self, value: int, mask: int) -> None:
-        self.tb_gpio_o.value = value
+        self.top_gpio_o.value = value
         # NOTE: input mask should not conflict with the firmware of the dut.
-        self.tb_gpio_oe.value = mask
+        self.top_gpio_oe.value = mask
         
     def read_input(self, mask: int = 0xFF) -> int:
         if not self.gpio_i.value.is_resolvable:
@@ -61,4 +67,4 @@ class gpio_if:
         return o_value & oe_value & mask
 
     def read_output_binstr(self) -> str:
-        return f"0b{self.read_output():0{self.PIN_NUM}b}"
+        return f"0b{self.read_output():0{self.gpio_count}b}"

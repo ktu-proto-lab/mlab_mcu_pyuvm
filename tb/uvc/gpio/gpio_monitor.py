@@ -35,13 +35,13 @@ class gpio_monitor(uvm_monitor):
         await super().run_phase()
         
         # Wait for system to boot up to avoid unresolvable gpio pin output values
-        await RisingEdge(self.vif.rst)
+        await RisingEdge(self.vif.system_reset)
         await ReadOnly()
 
         prev_val: int = self.sample()
 
         while True:
-            await RisingEdge(self.vif.clk)
+            await RisingEdge(self.vif.system_clock)
             await ReadOnly()
             
             curr_val: int = self.sample()
