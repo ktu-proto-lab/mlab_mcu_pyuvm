@@ -6,7 +6,7 @@ readonly PATCHER_PROJECT_ROOT="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &>
 readonly PATCHER_OPT_APPLY_PATCHES="--apply"
 readonly PATCHER_OPT_REVERSE_PATCHES="--reverse"
 
-source "$INIT_PROJECT_ROOT/script/logger.sh"
+source "$PATCHER_PROJECT_ROOT/uvm/script/logger.sh"
 
 function apply_patch {
     # >/dev/null    - suppress stdout
