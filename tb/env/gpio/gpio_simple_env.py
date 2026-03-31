@@ -1,11 +1,11 @@
 from pyuvm import uvm_env, ConfigDB
 from uvc.gpio import gpio_config, gpio_agent, gpio_if, gpio_monitor_config, gpio_driver_config
-from env.gpio.gpio_env_config import gpio_env_config
-from env.gpio.gpio_scoreboard import gpio_scoreboard
+from env.gpio.gpio_simple_env_config import gpio_simple_env_config
+from env.gpio.gpio_simple_scoreboard import gpio_simple_scoreboard
 
-class gpio_env(uvm_env):
+class gpio_simple_env(uvm_env):
     
-    cfg: gpio_env_config
+    cfg: gpio_simple_env_config
     vif: gpio_if
     
     def build_phase(self):
@@ -37,7 +37,7 @@ class gpio_env(uvm_env):
         ConfigDB().set(self, "output_agent", "cfg", output_agent_cfg)
         self.output_agent: gpio_agent = gpio_agent.create("output_agent", self)
         
-        self.scoreboard = gpio_scoreboard(name="scoreboard", parent=self)
+        self.scoreboard = gpio_simple_scoreboard(name="scoreboard", parent=self)
 
         ConfigDB().set(context=self, inst_name="*", field_name="vif", value=self.vif)
 

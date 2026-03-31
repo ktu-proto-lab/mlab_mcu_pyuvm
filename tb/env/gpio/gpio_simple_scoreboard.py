@@ -2,7 +2,7 @@ from pyuvm import *
 from model import gpio_mirror_ref_model
 from uvc.gpio import gpio_sequence_item
 
-class gpio_scoreboard(uvm_component):
+class gpio_simple_scoreboard(uvm_component):
 
     def build_phase(self):
         super().build_phase()

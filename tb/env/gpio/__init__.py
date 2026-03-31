@@ -1,3 +1,3 @@
-from .gpio_env import gpio_env
-from .gpio_scoreboard import gpio_scoreboard
-from .gpio_env_config import gpio_env_config
+from .gpio_simple_env import gpio_simple_env
+from .gpio_simple_scoreboard import gpio_simple_scoreboard
+from .gpio_simple_env_config import gpio_simple_env_config

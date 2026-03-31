@@ -2,7 +2,7 @@ import pyuvm
 from pyuvm import ConfigDB, uvm_tlm_analysis_fifo
 from uvc.uart import uart_if, uart_char_item
 from test.base_test import base_test
-from env.uart import uart_env, uart_env_config
+from env.uart import uart_simple_env, uart_simple_env_config
 from seq import uart_string_sequence
 
 @pyuvm.test()
@@ -13,12 +13,12 @@ class cli_cmd_echo_simple_test(base_test):
         self.vif = uart_if("vif", self)
         self.vif.wire(self.dut)
         
-        self.env_cfg: uart_env_config = uart_env_config.create("env_cfg")
+        self.env_cfg: uart_simple_env_config = uart_simple_env_config.create("env_cfg")
         self.env_cfg.vif = self.vif
         self.env_cfg.is_set = True
         ConfigDB().set(self, "env", "cfg", self.env_cfg)
         
-        self.env: uart_env = uart_env.create("env", self)
+        self.env: uart_simple_env = uart_simple_env.create("env", self)
         
         self.receive_fifo: uvm_tlm_analysis_fifo = uvm_tlm_analysis_fifo.create("receive_fifo", self)
         
@@ -40,7 +40,7 @@ class cli_cmd_echo_simple_test(base_test):
             f"expected ack message {ack_expected}, actual = {ack_actual}"
         )
         
-        expected_received_string = "mlab mcu 2025"
+        expected_received_string = "mlab mcu 2026"
         
         echo_transmit_string_sequence: uart_string_sequence = uart_string_sequence.create("echo_sequence")
         echo_transmit_string_sequence.string = f"echo \"{expected_received_string}\"\0";
