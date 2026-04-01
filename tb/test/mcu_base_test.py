@@ -1,36 +1,50 @@
+import pyuvm
 from pyuvm import ConfigDB
-from env.mcu import mcu_env, mcu_env_config
-from uvc.gpio import gpio_config, gpio_if, gpio_monitor_config, gpio_driver_config
-from uvc.uart import uart_config, uart_if
-from test.base_test import base_test
+from test.base_test import BaseTest
+from env import McuEnv
+from uvc.gpio import GpioAgent, GpioInterface, GpioDriver
+from vif import McuVirtualInterface
 
-class mcu_base_test(base_test):
-    def __init__(self, name="mcu_base_test", parent=None):
+@pyuvm.test()
+class McuBaseTest(BaseTest):
+    def __init__(self, name="McuBaseTest", parent=None):
         super().__init__(name, parent)
-        self.cfg: mcu_env_config = None
-        self.env: mcu_env = None
+        self.vif: McuVirtualInterface = None
+        self.gpio_if: GpioInterface = None
+        self.env_cfg: McuEnv.Config = None
+        self.env: McuEnv = None
     
     def build_phase(self):
         super().build_phase()
-        self.cfg = mcu_env_config.create("cfg")
-        self.cfg.vif = self.mcu_vif
-        self.cfg.gpio_enable = True
-        self.cfg.uart_enable = True
-        self.cfg.i2c_enable = False # TODO: implement I2C Agent
-        self.cfg.gpio_cfg = gpio_config.create("gpio_cfg")
-        self.cfg.gpio_cfg.vif = gpio_if("vif", self)
-        self.cfg.gpio_cfg.vif.wire(self.cfg.vif)
-        self.cfg.gpio_cfg.is_active = True
-        self.cfg.gpio_cfg.monitor_cfg = gpio_monitor_config.create("cfg")
-        self.cfg.gpio_cfg.port_type = gpio_config.port_type_enum.NONE
-        self.cfg.gpio_cfg.driver_cfg = gpio_driver_config.create("cfg")
-        self.cfg.gpio_cfg.monitor_cfg.mask = 0xFF
-        self.cfg.gpio_cfg.driver_cfg.mask = 0x0F
-        self.cfg.uart_cfg = uart_config.create("uart_cfg")
-        ConfigDB().set(self, "env", "cfg", self.cfg)
-        self.env = mcu_env.create("env", self)
+        self.vif = McuVirtualInterface("vif", self)
+        self.vif.wire(self.dut)
+        self.logger.debug("mcu virtual interface wired to the dut")
+        self.gpio_if = GpioInterface("gpio_if", self)
+        self.gpio_if.map(self.vif)
+        self.logger.debug("gpio interface mapped to the mcu virtual interface")
+        self.env_cfg = McuEnv.Config.create("env_cfg")
+        self.logger.debug("built mcu environment configuration")
+        self.env_cfg.gpio_if = self.gpio_if
+        self.logger.debug("assigned gpio interface to the mcu environment configuration")
+        ConfigDB().set(self, "env", "cfg", self.env_cfg)
+        self.env = McuEnv.create("env", self)
+        self.logger.debug("mcu environement built")
+        self.logger.debug("build phase done")
         
     async def run_phase(self):
         self.raise_objection()
+        self.logger.debug("raising the objection")
         await super().run_phase()
+        self.logger.debug("releasing system clock")
+        # TODO (feat): save clock task so on simulation end it is terminated safelly
+        self.vif.release_clock()
+        self.logger.info(f"system clock: {self.vif.clock_period}{self.vif.clock_units}")
+        self.logger.info(f"system reset for {self.vif.reset_duration} clock cycles")
+        await self.vif.read_only()
+        assert self.vif.reset.value == 0, "expected reset low"
+        await self.vif.reset_system()
+        await self.vif.read_only()
+        assert self.vif.reset.value == 1, "expected reset high"
+        self.logger.debug("system reset: done")
+        self.logger.debug("dropping the objection")
         self.drop_objection()

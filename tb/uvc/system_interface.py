@@ -1,27 +1,21 @@
 from cocotb.handle import SimHandleBase
 from cocotb.log import SimLog
 from cocotb.triggers import RisingEdge, ClockCycles
-from typing import cast
-from vif import mcu_vif
+from vif import McuVirtualInterface
 
-class base_if:
-    
-    system_clock: SimHandleBase
-    system_reset: SimHandleBase
-    
-    logger: SimLog
-    
-    def __init__(self, name="base_if", parent=None):
+class SystemInterface:
+    def __init__(self, name="SystemInterface", parent=None):
         parent_name: str = parent.get_full_name() if hasattr(parent, "get_full_name") else "cocotb"
         full_name: str = f"{parent_name}.{name}"
+        # TODO (refac): logger should be from uvm maybe?
         self.logger = SimLog(full_name)
+        self.system_clock: SimHandleBase = None
+        self.system_reset: SimHandleBase = None
         
-        self.system_clock = None
-        self.system_reset = None
-        
-    def wire(self, dut: mcu_vif):
-        self.system_clock = dut.clock
-        self.system_reset = dut.reset
+    def map(self, vif: McuVirtualInterface):
+        # TODO (debug): debug logs
+        self.system_clock = vif.clock
+        self.system_reset = vif.reset
     
     async def system_reset_done(self):
         await RisingEdge(self.system_reset)

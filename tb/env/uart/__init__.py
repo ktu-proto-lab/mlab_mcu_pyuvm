@@ -1,2 +1,0 @@
-from .uart_simple_env_config import uart_simple_env_config
-from .uart_simple_env import uart_simple_env
