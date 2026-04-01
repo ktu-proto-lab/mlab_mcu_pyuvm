@@ -23,6 +23,7 @@ class gpio_if(base_if):
         self.gpio_oe = None
         self.top_gpio_o = None
         self.top_gpio_oe = None
+        self.exit_pad_io = None
     
     def wire(self, dut: mcu_vif):
         super().wire(dut)
@@ -33,6 +34,7 @@ class gpio_if(base_if):
         self.gpio_oe = dut.gpio_oe
         self.top_gpio_o = dut.top_gpio_o
         self.top_gpio_oe = dut.top_gpio_oe
+        self.exit_pad_io = dut.exit_pad_io
 
     def drive_input(self, value: int, mask: int) -> None:
         self.top_gpio_o.value = value
@@ -44,6 +46,11 @@ class gpio_if(base_if):
             return None
         
         return self.gpio_i.value.integer & mask
+    
+    def read_pins(self, mask: int = 0xFF) -> int:
+        if not self.exit_pad_io.value.is_resolvable:
+            return None
+        return self.exit_pad_io.value & mask
         
     def read_output(self, mask: int = 0xFF) -> int:
         if not self.gpio_o.value.is_resolvable:

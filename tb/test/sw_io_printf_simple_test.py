@@ -21,7 +21,7 @@ class sw_io_printf_simple_test(base_test):
         super().build_phase()
         
         self.vif = uart_if(name="vif", parent=self)
-        self.vif.wire(self.dut)
+        self.vif.wire(self.vif)
         ConfigDB().set(context=self, inst_name="*", field_name="vif", value=self.vif)
         
         self.agent = uart_agent.create(name="agent", parent=self)

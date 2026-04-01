@@ -7,15 +7,11 @@ from uvc.gpio import gpio_if
 
 @pyuvm.test()
 class gpio_simple_test(base_test):
-    vif: gpio_if
-    env: gpio_simple_env
-    env_cfg: gpio_simple_env_config
-    
     def build_phase(self):
         super().build_phase()
         
         self.vif = gpio_if("vif", self)
-        self.vif.wire(self.dut)
+        self.vif.wire(self.mcu_vif)
         
         env_cfg = gpio_simple_env_config.create("env_cfg")
         env_cfg.vif = self.vif
@@ -31,13 +27,13 @@ class gpio_simple_test(base_test):
         await super().run_phase()
         
         # wait for main function to initialize gpio regs
-        await self.dut.clock_cycles(500)
+        await self.mcu_vif.clock_cycles(500)
 
         sequence = gpio_sequence.create(name="gpio_sequence")
         
         await sequence.start(self.env.input_agent.sequencer)
         
-        await self.dut.clock_cycles(1000)
+        await self.mcu_vif.clock_cycles(1000)
         
         self.drop_objection()
         

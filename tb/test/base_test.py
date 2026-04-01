@@ -1,13 +1,12 @@
 import cocotb
 import logging
 import os
+from cocotb.handle import SimHandleBase
 from pyuvm import uvm_test, uvm_report_object
 from vif import mcu_vif
 
-class base_test(uvm_test):
-    dut: mcu_vif
-    
-    def __init__(self, name="gpio_base_test", parent=None):
+class base_test(uvm_test):    
+    def __init__(self, name="base_test", parent=None):
         # let set log level from the makefile itself, default to info
         level: str = os.getenv(key="PYUVM_LOG_LEVEL", default="INFO").upper()
         log_level = getattr(logging, level, logging.INFO)
@@ -17,14 +16,14 @@ class base_test(uvm_test):
         
         super().__init__(name, parent)
         
-        self.dut = None
-        self.dut = None
+        self.dut: SimHandleBase = None
+        self.mcu_vif: mcu_vif = None
         
     def build_phase(self):
         super().build_phase()
-        
-        self.dut = mcu_vif(name="dut", parent=self)
-        self.dut.wire(cocotb.top)
+        self.dut = cocotb.top
+        self.mcu_vif = mcu_vif(name="dut", parent=self)
+        self.mcu_vif.wire(self.dut)
         
     def connect_phase(self):
         super().connect_phase()
@@ -39,10 +38,10 @@ class base_test(uvm_test):
         self.raise_objection()
         await super().run_phase()
 
-        self.dut.release_clock()
+        self.mcu_vif.release_clock()
         self.logger.debug("dut clock released")
         
-        await self.dut.reset_system()
+        await self.mcu_vif.reset_system()
         self.logger.debug("dut system-wide reset done")
 
         self.drop_objection()

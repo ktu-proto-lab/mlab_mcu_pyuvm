@@ -14,6 +14,8 @@ class mcu_vif:
     reset: SimHandleBase
     reset_duration: Decimal = 20
     
+    exit_pad_io: SimHandleBase
+    
     gpio_i: SimHandleBase
     gpio_o: SimHandleBase
     gpio_oe: SimHandleBase
@@ -40,6 +42,8 @@ class mcu_vif:
         self.clock = None
         self.reset = None
         
+        self.exit_pad_io = None
+        
         self.uart_tx = None
         self.uart_rx = None
         self.uart_rx_en = None
@@ -61,6 +65,8 @@ class mcu_vif:
     def wire(self, dut: SimHandleBase):
         self.clock = cast(SimHandleBase, dut.clk)
         self.reset = cast(SimHandleBase, dut.rst)
+        
+        self.exit_pad_io = cast(SimHandleBase, dut.ext_pad_io)
         
         self.uart_tx = cast(SimHandleBase, dut.ext_pad_io[1])
         self.uart_rx = cast(SimHandleBase, dut.top_gpio_o[0])

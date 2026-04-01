@@ -29,7 +29,7 @@ class gpio_monitor(uvm_monitor):
         """
         @brief Template method for child Monitors to sample specific signals to be monitored
         """
-        raise NotImplementedError
+        return self.vif.read_pins()
 
     async def run_phase(self):
         await super().run_phase()
@@ -38,7 +38,7 @@ class gpio_monitor(uvm_monitor):
         await RisingEdge(self.vif.system_reset)
         await ReadOnly()
 
-        prev_val: int = self.sample()
+        prev_val: int = None
 
         while True:
             await RisingEdge(self.vif.system_clock)

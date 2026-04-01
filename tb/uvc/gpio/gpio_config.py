@@ -6,6 +6,7 @@ from uvc.gpio.gpio_monitor_config import gpio_monitor_config
 
 class gpio_config(uvm_object):
     class port_type_enum(Enum):
+        NONE = 0
         INPUT = 1
         OUTPUT = 2
     

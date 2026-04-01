@@ -11,7 +11,7 @@ class cli_cmd_echo_simple_test(base_test):
         super().build_phase()
         
         self.vif = uart_if("vif", self)
-        self.vif.wire(self.dut)
+        self.vif.wire(self.vif)
         
         self.env_cfg: uart_simple_env_config = uart_simple_env_config.create("env_cfg")
         self.env_cfg.vif = self.vif

@@ -32,7 +32,10 @@ class gpio_agent(uvm_agent):
         
         ConfigDB().set(self, "monitor", "cfg", self.cfg.monitor_cfg)
 
-        if self.cfg.port_type == gpio_config.port_type_enum.INPUT:
+        if self.cfg.port_type == gpio_config.port_type_enum.NONE:
+            self.monitor = gpio_monitor.create("monitor", self)
+        
+        elif self.cfg.port_type == gpio_config.port_type_enum.INPUT:
             self.monitor = gpio_input_monitor.create(name="monitor", parent=self)
         
         elif self.cfg.port_type == gpio_config.port_type_enum.OUTPUT:
