@@ -47,5 +47,7 @@ class UartAgent(uvm_agent):
 
     def connect_phase(self):
         super().connect_phase()
+        if not self.cfg.is_active:
+            return
         self.driver.seq_item_port.connect(self.sequencer.seq_item_export)
         self.monitor.analysis_port.connect(self.analysis_port)
