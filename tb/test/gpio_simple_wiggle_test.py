@@ -9,6 +9,7 @@ class GpioSimpleWiggleTest(McuBaseTest):
         
     def build_phase(self):
         super().build_phase()
+        self.env_cfg.uart.is_active = False
         self.logger.debug("build phase done")
         
     async def run_phase(self):
