@@ -10,6 +10,7 @@ class GpioAgent(uvm_agent):
         def __init__(self, name="GpioAgentConfig"):
             super().__init__(name)
             # TODO (feat): add activation trigger
+            self.is_active: bool = True
             self.vif: GpioInterface = None
             self.driver: GpioDriver.Config = GpioDriver.Config.create("driver")
             self.monitor: GpioMonitor.Config = GpioMonitor.Config.create("monitor")
@@ -27,6 +28,9 @@ class GpioAgent(uvm_agent):
         if not ConfigDB().exists(self, "", "cfg"):
             raise ConfigError("no configuration provided for the gpio agent", self)
         self.cfg = ConfigDB().get(self, "", "cfg")
+        if not self.cfg.is_active:
+            self.logger.info("uart agent is not active")
+            return
         if self.cfg.vif is None:
             raise ConfigError("no provided interface for the gpio agent", self)
         self.cfg.driver.vif = self.cfg.vif
@@ -41,5 +45,7 @@ class GpioAgent(uvm_agent):
 
     def connect_phase(self):
         super().connect_phase()
-        self.monitor.analysis_port.connect(self.analysis_port)
+        if not self.cfg.is_active:
+            return
         self.driver.seq_item_port.connect(self.sequencer.seq_item_export)
+        self.monitor.analysis_port.connect(self.analysis_port)

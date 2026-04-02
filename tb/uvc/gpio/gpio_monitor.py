@@ -20,7 +20,7 @@ class GpioMonitor(uvm_monitor):
     def build_phase(self):
         super().build_phase()
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError("no configuration provided for the monitor", self)
+            raise ConfigError("no configuration provided for the gpio monitor", self)
         self.cfg = ConfigDB().get(self, "", "cfg")
         if self.cfg.vif is None:
             raise ConfigError("no provided interface for the gpio monitor")
