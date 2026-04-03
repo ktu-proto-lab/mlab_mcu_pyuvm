@@ -1,6 +1,6 @@
 from pyuvm import uvm_env, uvm_object, ConfigDB
-from uvc.gpio import GpioAgent, GpioInterface
-from uvc.uart import UartAgent, UartInterface
+from uvc.gpio import GpioAgent
+from uvc.uart import UartAgent
 from log.error import ConfigError
 
 class McuEnv(uvm_env):
