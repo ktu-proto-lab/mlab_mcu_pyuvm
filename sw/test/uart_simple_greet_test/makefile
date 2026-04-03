@@ -1,4 +1,4 @@
-PROGRAM = uart_simple_test
+PROGRAM = uart_simple_greet_test
 
 C_INCLUDES = -I$(PROJECT_ROOT)/uvm/sw
 

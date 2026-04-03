@@ -50,13 +50,11 @@ int main() {
             uart_tx_enable(&uart);
             uart_transmit(&uart, tx_err, 14);
             uart_tx_disable(&uart);
-
         }
     }
 
     time_delay_microseconds(5, cpu_freq_mhz);
-
-    uint8_t tx_buffer[] = "rodger that";
+    uint8_t tx_buffer[] = "roger that";
     uart_tx_enable(&uart);
     uart_transmit(&uart, tx_buffer, 11);
     uart_tx_disable(&uart);

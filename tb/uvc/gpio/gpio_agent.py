@@ -29,7 +29,7 @@ class GpioAgent(uvm_agent):
             raise ConfigError("no configuration provided for the gpio agent", self)
         self.cfg = ConfigDB().get(self, "", "cfg")
         if not self.cfg.is_active:
-            self.logger.info("uart agent is not active")
+            self.logger.info("gpio agent is not active")
             return
         if self.cfg.vif is None:
             raise ConfigError("no provided interface for the gpio agent", self)

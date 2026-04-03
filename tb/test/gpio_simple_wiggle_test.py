@@ -24,7 +24,7 @@ class GpioSimpleWiggleTest(McuBaseTest):
         self.logger.debug("created gpio sequence")
         self.logger.info("starting gpio sequence")
         # TODO (refac): move to the virtual sequencer
-        await gpio_sequence.start(self.env.gpio_agent.sequencer)
+        await gpio_sequence.start(self.env.gpio.sequencer)
         self.logger.info("gpio sequence completed")
         self.logger.debug("dropping the objection")
         self.drop_objection()

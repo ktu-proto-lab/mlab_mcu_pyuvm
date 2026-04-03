@@ -36,7 +36,7 @@ class UartDriver(uvm_driver):
         while True:
             txn: UartTransaction = await self.seq_item_port.get_next_item()
             self.logger.debug(f"{txn}")
-            await self.vif.transmit_byte(txn.byte)
+            await self.cfg.vif.transmit_byte(txn.byte)
             self.analysis_port.write(txn)
             self.seq_item_port.item_done()
     
