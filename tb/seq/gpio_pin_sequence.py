@@ -1,7 +1,7 @@
 from pyuvm import *
 from uvc.gpio import GpioTransaction
 
-class GpioSequence(uvm_sequence):
+class GpioPinSequence(uvm_sequence):
     async def body(self):
         for _ in range(10):
             req = GpioTransaction("req")

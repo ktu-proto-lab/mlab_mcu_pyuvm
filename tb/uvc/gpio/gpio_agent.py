@@ -9,7 +9,6 @@ class GpioAgent(uvm_agent):
     class Config(uvm_object):
         def __init__(self, name="GpioAgentConfig"):
             super().__init__(name)
-            # TODO (feat): add activation trigger
             self.is_active: bool = True
             self.vif: GpioInterface = None
             self.driver: GpioDriver.Config = GpioDriver.Config.create("driver")

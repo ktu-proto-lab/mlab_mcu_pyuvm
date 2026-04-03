@@ -1,2 +1,2 @@
-from .gpio_sequence import GpioSequence
+from .gpio_pin_sequence import GpioPinSequence
 from .uart_string_sequence import UartStringSequence

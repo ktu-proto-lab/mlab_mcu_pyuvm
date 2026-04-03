@@ -1,6 +1,6 @@
 import pyuvm
 from test.mcu_base_test import McuBaseTest
-from seq import GpioSequence
+from seq import GpioPinSequence
 
 @pyuvm.test()
 class GpioWiggleSimpleTest(McuBaseTest):
@@ -20,7 +20,7 @@ class GpioWiggleSimpleTest(McuBaseTest):
         self.logger.debug(f"waiting for {cycle_count} clock cycles for program to start it's state machine")
         await self.vif.clock_cycles(cycle_count)
         self.logger.debug(f"waiting for {cycle_count} done")
-        gpio_sequence: GpioSequence = GpioSequence.create("gpio_sequence")
+        gpio_sequence: GpioPinSequence = GpioPinSequence.create("gpio_sequence")
         self.logger.debug("created gpio sequence")
         self.logger.info("starting gpio sequence")
         # TODO (refac): move to the virtual sequencer
