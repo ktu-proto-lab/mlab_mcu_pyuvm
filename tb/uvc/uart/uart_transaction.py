@@ -16,3 +16,9 @@ class UartTransaction(uvm_sequence_item):
         
     def __str__(self):
         return f"{chr(self.byte)}"
+    
+    def __eq__(self, other):
+        return type(self) == type(other) and self.byte == other.byte
+    
+    def do_copy(self, rhs):
+        self.byte = rhs.byte
