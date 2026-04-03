@@ -3,8 +3,8 @@ from test.mcu_base_test import McuBaseTest
 from seq import GpioSequence
 
 @pyuvm.test()
-class GpioSimpleWiggleTest(McuBaseTest):
-    def __init__(self, name="GpioWiggleTest", parent=None):
+class GpioWiggleSimpleTest(McuBaseTest):
+    def __init__(self, name="GpioWiggleSimpleTest", parent=None):
         super().__init__(name, parent)
         
     def build_phase(self):

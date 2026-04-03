@@ -1,4 +1,4 @@
-PROGRAM = gpio_simple_test
+PROGRAM = gpio_wiggle_simple_test
 
 C_INCLUDES = -I$(PROJECT_ROOT)/uvm/sw
 

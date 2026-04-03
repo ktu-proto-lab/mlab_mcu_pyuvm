@@ -1,4 +1,5 @@
 # for cocotb
 from .mcu_base_test import McuBaseTest
-from .gpio_simple_wiggle_test import GpioSimpleWiggleTest
-from .uart_simple_greet_test import UartSimpleGreetTest
+from .gpio_wiggle_simple_test import GpioWiggleSimpleTest
+from .uart_greet_simple_test import UartGreetSimpleTest
+from .sw_io_printf_simple_test import SwIoPrintfSimpleTest

@@ -37,5 +37,5 @@ class UartMonitor(uvm_monitor):
         while True:
             byte: int = await self.cfg.vif.receive_byte()
             txn = UartTransaction("txn", byte)
-            self.logger.debug(f"{txn}")
+            self.logger.debug(f"{txn.hex_value()}")
             self.analysis_port.write(txn)

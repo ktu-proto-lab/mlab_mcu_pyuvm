@@ -5,8 +5,8 @@ from uvc.uart import UartTransaction
 from seq import UartStringSequence
 
 @pyuvm.test()
-class UartSimpleGreetTest(McuBaseTest):
-    def __init__(self, name="UartSimpleGreetTest", parent=None):
+class UartGreetSimpleTest(McuBaseTest):
+    def __init__(self, name="UartGreetSimpleTest", parent=None):
         super().__init__(name, parent)
         self.fifo: uvm_tlm_analysis_fifo = None
         
@@ -67,6 +67,7 @@ class UartSimpleGreetTest(McuBaseTest):
                 ),(f"expected='{success_response_string}', actual='{response_string}'")
             self.logger.info("received expected success string")
         else:
+            # TODO: failure must be reported, maybe fail the test?
             assert (response_string == error_response_string
                 ),(f"expected='{error_response_string}', actual='{response_string}'")
             self.logger.info("received expected error string")
