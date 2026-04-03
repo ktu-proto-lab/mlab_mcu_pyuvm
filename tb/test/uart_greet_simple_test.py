@@ -9,19 +9,19 @@ class UartGreetSimpleTest(McuBaseTest):
     def __init__(self, name="UartGreetSimpleTest", parent=None):
         super().__init__(name, parent)
         self.fifo: uvm_tlm_analysis_fifo = None
-        
+
     def build_phase(self):
         super().build_phase()
         self.env_cfg.gpio.is_active = False
         self.fifo = uvm_tlm_analysis_fifo.create("fifo", self)
         self.logger.debug("build phase done")
-        
+
     def connect_phase(self):
         super().connect_phase()
         self.env.uart.monitor.analysis_port.connect(self.fifo.analysis_export)
         self.logger.debug("connected uart monitor to fifo")
         self.logger.debug("connect phase done")
-        
+
     async def receive_string_buffer(self, length: int) -> str:
         string = ""
         for _ in range(length):
@@ -38,7 +38,7 @@ class UartGreetSimpleTest(McuBaseTest):
         received_string = await self.receive_string_buffer(len(expected_string))
         self.logger.info(f"received: '{received_string}'")
         assert received_string == expected_string, f"expected '{expected_string}', got '{received_string}'"
-        self.uart_if.enable_transmit() 
+        self.uart_if.enable_transmit()
         self.logger.info("enabled transmittion to the mcu")
         transmit_string = "hello back"
         transmit_string_sequence: UartStringSequence = UartStringSequence.create("transmit_string")

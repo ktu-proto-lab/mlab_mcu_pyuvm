@@ -35,10 +35,10 @@
 #define UART_TX_BYTE (1 << 0)
 
 typedef struct {
-    volatile uint32_t setup;   
-    volatile uint32_t control; 
-    volatile uint32_t rx_data; 
-    volatile uint32_t tx_data; 
+    volatile uint32_t setup;
+    volatile uint32_t control;
+    volatile uint32_t rx_data;
+    volatile uint32_t tx_data;
 } uart_regs_t;
 
 #endif

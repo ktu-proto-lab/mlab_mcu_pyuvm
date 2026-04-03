@@ -6,5 +6,5 @@ C_SOURCES = main.c \
 			$(PROJECT_ROOT)/uvm/sw/hal/gpio.c
 
 COMMON_DIR = $(PROJECT_ROOT)/sw/ibex/common
-	
+
 include $(COMMON_DIR)/common.mk

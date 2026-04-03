@@ -9,18 +9,18 @@ class CliCmdEchoSimpleTest(McuBaseTest):
     def __init__(self, name="McuBaseTest", parent=None):
         super().__init__(name, parent)
         self.fifo: uvm_tlm_analysis_fifo = None
-    
+
     def build_phase(self):
         super().build_phase()
         self.env_cfg.gpio.is_active = False
         self.fifo = uvm_tlm_analysis_fifo.create("fifo", self)
         self.logger.debug("build phase done")
-        
+
     def connect_phase(self):
         super().connect_phase()
         self.env.uart.monitor.analysis_port.connect(self.fifo.analysis_export)
         self.logger.debug("connect phase done")
-        
+
     async def receive_string_buffer(self, length: int) -> str:
         while True:
             txn: UartTransaction = await self.fifo.peek()
@@ -33,7 +33,7 @@ class CliCmdEchoSimpleTest(McuBaseTest):
             txn: UartTransaction = await self.fifo.get()
             string += chr(txn.byte)
         return string
-        
+
     async def run_phase(self):
         self.raise_objection()
         self.logger.debug("raising the objection")
@@ -57,8 +57,8 @@ class CliCmdEchoSimpleTest(McuBaseTest):
         self.logger.info("waiting echo response")
         actual_received_string = await self.receive_string_buffer(len(expected_string))
         self.logger.info(f"received '{actual_received_string}'")
-        assert (expected_string == actual_received_string),( 
-            "echoed strings do not match: " 
+        assert (expected_string == actual_received_string),(
+            "echoed strings do not match: "
             f"transmitted = {echo_transmit_string_sequence},"
             f"expected '{expected_string}', received '{actual_received_string}'"
         )

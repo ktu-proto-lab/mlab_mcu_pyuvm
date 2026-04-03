@@ -13,7 +13,7 @@ class GpioAgent(uvm_agent):
             self.vif: GpioInterface = None
             self.driver: GpioDriver.Config = GpioDriver.Config.create("driver")
             self.monitor: GpioMonitor.Config = GpioMonitor.Config.create("monitor")
-            
+
     def __init__(self, name, parent):
         super().__init__(name, parent)
         self.cfg: GpioAgent.Config = None
@@ -40,7 +40,7 @@ class GpioAgent(uvm_agent):
         self.monitor = GpioMonitor.create("monitor", self)
         self.sequencer = GpioSequencer.create("sequencer", self)
         self.analysis_port = uvm_analysis_port("analysis_port", self)
-        
+
 
     def connect_phase(self):
         super().connect_phase()

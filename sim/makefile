@@ -9,7 +9,7 @@ export PROJECT_ROOT
 SIM ?= verilator
 
 # pyuvm tests
-TEST ?= 
+TEST ?=
 
 # cocotb testbenches
 TB ?=
@@ -24,7 +24,7 @@ GUI ?= 0
 LOG ?= INFO
 
 # test software running on dut
-SW ?= 
+SW ?=
 
 define HELP_USAGE
 Usage:

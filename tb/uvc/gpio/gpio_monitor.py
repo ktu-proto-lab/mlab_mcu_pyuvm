@@ -11,12 +11,12 @@ class GpioMonitor(uvm_monitor):
             self.vif: GpioInterface = None
             self.is_active: bool = True
             self.mask: int = 0xFF
-            
+
     def __init__(self, name="GpioMonitor", parent=None):
         super().__init__(name, parent)
         self.cfg: GpioMonitor.Config = None
         self.analysis_port: uvm_analysis_port = None
-    
+
     def build_phase(self):
         super().build_phase()
         if not ConfigDB().exists(self, "", "cfg"):

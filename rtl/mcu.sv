@@ -8,7 +8,7 @@ module mcu #(
 )(
     input  logic                    clk,
     input  logic                    rst,
-    
+
     inout  wire [GPIO_COUNT-1:0]    ext_pad_io
 );
 
@@ -44,7 +44,7 @@ module mcu #(
         .IMEM_1_InitFile(IMEM_1_InitFile),
         .IMEM_2_InitFile(IMEM_2_InitFile),
         .DMEM_InitFile(DMEM_InitFile)
-    ) dut (
+    ) top (
         .clk_sys      (clk),
         .rst_async_n  (rst),
         .scl_pad_i    (scl_i),

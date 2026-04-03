@@ -13,7 +13,7 @@ class GpioInterface(SystemInterface):
         self.top_gpio_oe: SimHandleBase = None
         self.exit_pad_io: SimHandleBase = None
         self.gpio_count: Decimal = None
-    
+
     def map(self, vif: McuVirtualInterface):
         super().map(vif)
         self.gpio_count = vif.gpio_count
@@ -27,27 +27,27 @@ class GpioInterface(SystemInterface):
     def drive_input(self, value: int, mask: int = 0xFF) -> None:
         self.top_gpio_o.value = value
         self.top_gpio_oe.value = mask
-        
+
     def read_pins(self, mask: int = 0xFF) -> int:
         if not self.exit_pad_io.value.is_resolvable:
             return None
         return self.exit_pad_io.value & mask
-        
+
     def read_input(self, mask: int = 0xFF) -> int:
         if not self.gpio_i.value.is_resolvable:
             return None
         return self.gpio_i.value.integer & mask
-        
+
     def read_output(self, mask: int = 0xFF) -> int:
         if not self.gpio_o.value.is_resolvable:
             return None
         return self.gpio_o.value.integer & mask
-    
+
     def read_output_enable(self) -> int:
         if not self.gpio_oe.value.is_resolvable:
             return None
         return self.gpio_oe.value.integer
-    
+
     def read_enabled_output(self, mask: int = 0xFF) -> int:
         o_value = self.read_output()
         oe_value = self.read_output_enable()

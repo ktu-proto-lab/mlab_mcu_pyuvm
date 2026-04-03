@@ -4,18 +4,18 @@ import os
 from cocotb.handle import SimHandleBase
 from pyuvm import uvm_test, uvm_report_object
 
-class BaseTest(uvm_test):    
+class BaseTest(uvm_test):
     def __init__(self, name="BaseTest", parent=None):
         level: str = os.getenv(key="PYUVM_LOG_LEVEL", default="INFO").upper()
         log_level = getattr(logging, level, logging.INFO)
         uvm_report_object.set_default_logging_level(log_level)
         super().__init__(name, parent)
         self.dut: SimHandleBase = None
-        
+
     def build_phase(self):
         super().build_phase()
         self.dut = cocotb.top
-        
+
     def connect_phase(self):
         super().connect_phase()
 

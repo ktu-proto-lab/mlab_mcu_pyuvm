@@ -25,7 +25,7 @@ int main() {
     uart_init(&uart);
     gpio.regs->aux |= UART_GPIO_TX_PIN;
     gpio.regs->oe  |= UART_GPIO_TX_PIN;
-    
+
     uart_tx_enable(&uart);
     uart_transmit(&uart, (uint8_t *)"ack", sizeof("ack"));
     uart_tx_disable(&uart);

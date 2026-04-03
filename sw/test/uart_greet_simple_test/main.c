@@ -16,7 +16,7 @@
 int main() {
     gpio_handle_t gpio;
     gpio_init(&gpio);
-    
+
     uart_handle_t uart;
     const uint32_t cpu_freq_mhz = 80;
     const uint32_t uart_baud_rate = 115200;
@@ -28,10 +28,10 @@ int main() {
     uart.config.parity_lock = 0;
 
     uart_init(&uart);
-    
+
     gpio.regs->aux |= GPIO_PIN_1;
     gpio.regs->oe  |= GPIO_PIN_1;
-    
+
     uint8_t buffer[] = "hello uart";
     uart_tx_enable(&uart);
     uart_transmit(&uart, buffer, 10);

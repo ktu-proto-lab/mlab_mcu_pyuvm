@@ -15,7 +15,7 @@ class McuBaseTest(BaseTest):
         self.uart_if: UartInterface = None
         self.env_cfg: McuEnv.Config = None
         self.env: McuEnv = None
-    
+
     def build_phase(self):
         super().build_phase()
         self.vif = McuVirtualInterface("vif", self)
@@ -37,7 +37,7 @@ class McuBaseTest(BaseTest):
         self.env = McuEnv.create("env", self)
         self.logger.info("mcu environment created")
         self.logger.debug("build phase done")
-        
+
     async def run_phase(self):
         self.raise_objection()
         self.logger.debug("raising the objection")

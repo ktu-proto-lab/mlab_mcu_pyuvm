@@ -14,12 +14,12 @@ static void print_number(int number, int base, int sign) {
     char buffer[12];
     int i = 0;
     unsigned int unsigned_number;
-    
+
     if (number == 0) {
         put_char('0');
         return;
     }
-    
+
     if (sign && number < 0) {
         put_char('-');
         unsigned_number = (unsigned int)(~number + 1);
@@ -35,7 +35,7 @@ static void print_number(int number, int base, int sign) {
         } else {
             buffer[i] = remainder - 10 + 'a';
         }
-        
+
         unsigned_number /= base;
     }
 
@@ -95,5 +95,5 @@ void printf(const char *format, ...) {
     put_char('\0');
 
     // clean up the stack (required by C standard)
-    va_end(args); 
+    va_end(args);
 }

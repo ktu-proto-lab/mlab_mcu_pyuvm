@@ -13,7 +13,7 @@ class UartAgent(uvm_agent):
             self.vif: UartInterface = None
             self.driver: UartDriver.Config = UartDriver.Config.create("driver")
             self.monitor: UartMonitor.Config = UartMonitor.Config.create("monitor")
-    
+
     def __init__(self, name="UartAgent", parent=None):
         super().__init__(name, parent)
         self.cfg: UartAgent.Config = None
@@ -21,7 +21,7 @@ class UartAgent(uvm_agent):
         self.monitor: UartMonitor = None
         self.sequencer: UartSequencer = None
         self.analysis_port: uvm_analysis_port = None
-    
+
     def build_phase(self):
         super().build_phase()
         if not ConfigDB().exists(self, "", "cfg"):

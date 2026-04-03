@@ -2,7 +2,7 @@
 
 void uart_init(uart_handle_t *uart) {
     uart->regs = (volatile uart_regs_t *)UART_BASE_ADDR;
-    
+
     if (uart->tx_state == UART_STATE_RESET) {
 
         uart->regs->setup = ((uart->config.baud_rate << 0) & UART_SETUP_BAUD_MASK)

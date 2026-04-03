@@ -11,15 +11,15 @@ class SystemInterface:
         self.logger = SimLog(full_name)
         self.system_clock: SimHandleBase = None
         self.system_reset: SimHandleBase = None
-        
+
     def map(self, vif: McuVirtualInterface):
         # TODO (debug): debug logs
         self.system_clock = vif.clock
         self.system_reset = vif.reset
-    
+
     async def system_reset_done(self):
         await RisingEdge(self.system_reset)
-        
+
     async def system_clock_cycle(self):
         await ClockCycles(signal=self.system_clock, num_cycles=1, rising=True)
 

@@ -10,12 +10,12 @@ class GpioDriver(uvm_driver):
             self.vif: GpioInterface = None
             self.is_active: bool = True
             self.mask: int = 0xFF
-            
+
     def __init__(self, name="GpioDriver", parent=None):
         super().__init__(name, parent)
         self.cfg: GpioDriver.Config = None
         self.analysis_port: uvm_analysis_port = None
-    
+
     def build_phase(self):
         super().build_phase()
         if not ConfigDB().exists(self, "", "cfg"):
@@ -25,7 +25,7 @@ class GpioDriver(uvm_driver):
             raise ConfigError("no provided interface for the gpio driver")
         self.logger.info(f"gpio driver configuration: active={self.cfg.is_active}, mask={self.cfg.mask}")
         self.analysis_port = uvm_analysis_port("analysis_port", self)
-        
+
     async def run_phase(self):
         await super().run_phase()
         if not self.cfg.is_active:

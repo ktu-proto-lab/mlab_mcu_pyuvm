@@ -10,10 +10,10 @@ volatile gpio_handle_t gpio;
 
 int main() {
     gpio_init(&gpio);
-    
+
     gpio.regs->oe = 0xF0;
     gpio.regs->ptrig = 0x0F;
-    gpio.regs->ints = 0x0F; 
+    gpio.regs->ints = 0x0F;
     gpio.regs->inte = 0x0F;
     gpio.regs->ctrl = GPIO_CTRL_ENA_INT;
 

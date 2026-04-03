@@ -16,7 +16,7 @@ class UartMonitor(uvm_monitor):
         super().__init__(name, parent)
         self.cfg: UartMonitor.Config = None
         self.analysis_port: uvm_analysis_port = None
-    
+
     def build_phase(self):
         super().build_phase()
         if not ConfigDB().exists(self, "", "cfg"):

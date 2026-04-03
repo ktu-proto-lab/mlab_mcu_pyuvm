@@ -21,17 +21,17 @@ class UartInterface(SystemInterface):
         self.receive = vif.uart_tx
         self.boud_rate = vif.uart_boud_rate
         self.bit_time_ns = vif.uart_bit_time_ns
-        
+
     def enable_transmit(self):
         self.transmit_enable.value = 1
         self.transmit.value = 1
-        
+
     def disable_transmit(self):
         self.transmit_enable.value = 0
-        
+
     async def bit_time(self, factor: float = 1.0):
         await Timer(self.bit_time_ns * factor, units='ns', round_mode='round')
-    
+
     async def transmit_byte(self, byte: int):
         # start bit
         self.transmit.value = 0
@@ -42,8 +42,8 @@ class UartInterface(SystemInterface):
             await self.bit_time()
         # stop bit
         self.transmit.value = 1
-        await self.bit_time()     
-        
+        await self.bit_time()
+
     async def receive_byte(self) -> int:
         # sync to idle
         await ReadOnly()
