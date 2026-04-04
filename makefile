@@ -4,7 +4,7 @@ PROJECT_ROOT = $(abspath ..)
 VERILATOR_NAME = Verilator v5.044
 XCELIUM_NAME = Cadence Xcelium v24.03-s004
 
-IMAGE_VERILATOR   := mlab-mcu-uvm-verilator-$(shell whoami):latest
+VERILATOR_IMAGE   := mlab-mcu-uvm-verilator-$(shell whoami):latest
 XCELIUM_IMAGE     := mlab-mcu-uvm-xcelium-$(shell whoami):latest
 
 export CADENCE_ROOT := /eda/cadence/2024-25/RHELx86/XCELIUM_24.03.004
@@ -51,29 +51,42 @@ clean:
 	podman compose down -v || true
 	rm -rf .venv
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Verilator (Docker)
+# ----------------------------------------------------------------------------------------------------------------------
+.PHONY: verilator-build-image verilator-setup-env verilator-run-container verilator-purge
 
-.PHONY: build-verilator setup-verilator shell-verilator run-verilator
-
-verilator-build:
+verilator-build-image:
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "building $(VERILATOR_NAME) image"; \
-	docker compose build verilator
+	docker compose build verilator; \
+	logger SUCCESS "$(VERILATOR_NAME) image '$(VERILATOR_IMAGE)' built"
 
-verilator-setup:
+verilator-setup-env:
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "initializing the environment inside the $(VERILATOR_NAME) container"; \
 	docker compose run --rm verilator /bin/bash -c \
-		"python3 -m venv .venv && source .venv/bin/activate && pip install --upgrade pip && pip install -r conf/requirements.txt"
+		"python3 -m venv .venv && source .venv/bin/activate && pip install --upgrade pip && pip install -r conf/requirements.txt"; \
+	logger SUCCESS "$(VERILATOR_NAME) environment setup done"
 
-verilator-shell:
+verilator-run-container:
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "entering $(VERILATOR_NAME) container shell"; \
-	docker compose run --rm verilator /bin/bash
+	docker compose run --rm verilator \
+		/bin/bash -c "source /home/mcu/uvm/script/logger.sh && logger SUCCESS 'you are inside $(VERILATOR_NAME) container'; exec bash"
+
+verilator-purge:
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	logger INFO "deleting virtual environment '.venv'"; \
+	rm -rf .venv; \
+	logger INFO "removing $(VERILATOR_NAME) built image '$(VERILATOR_IMAGE)'"; \
+	docker rmi $(VERILATOR_IMAGE); \
+	logger SUCCESS "$(VERILATOR_NAME) purging successful"
 
 # ----------------------------------------------------------------------------------------------------------------------
-# Xcelium (Podman Engine)
+# Xcelium (Podman)
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: build-xcelium setup-xcelium shell-xcelium run-xcelium
+.PHONY: xcelium-build-image xcelium-setup-env xcelium-run-container xcelium-purge
 
 xcelium-build-image:
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
@@ -102,4 +115,4 @@ xcelium-purge:
 	rm -rf .venv; \
 	logger INFO "removing $(XCELIUM_NAME) built image '$(XCELIUM_IMAGE)'"; \
 	podman rmi $(XCELIUM_IMAGE); \
-	logger SUCCESS "purging successful"
+	logger SUCCESS "$(XCELIUM_NAME) purging successful"

@@ -27,7 +27,7 @@ services:
     tty: true
     environment:
       - PYTHONDONTWRITEBYTECODE=1
-      - CDS_LIC_FILE=${CDS_LIC_FILE}
+      - CDS_LIC_FILE=${CDS_LIC_FILE:-}
       - PATH=${CADENCE_ROOT}/tools/bin/64bit:${CADENCE_ROOT}/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     volumes:
       - ..:/home/mcu:z
