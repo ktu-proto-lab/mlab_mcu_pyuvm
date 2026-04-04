@@ -15,7 +15,7 @@ services:
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
       - ..:/home/mcu
-  
+
   xcelium:
     build:
       context: .
