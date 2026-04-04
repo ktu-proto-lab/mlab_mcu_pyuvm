@@ -42,6 +42,8 @@ class McuBaseTest(BaseTest):
         self.raise_objection()
         self.logger.debug("raising the objection")
         await super().run_phase()
+        self.vif.initialize()
+        self.logger.debug("initialized signal values to 0")
         self.logger.debug("releasing system clock")
         # TODO (feat): save clock task so on simulation end it is terminated safelly
         self.vif.release_clock()

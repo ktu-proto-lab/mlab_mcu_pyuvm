@@ -54,6 +54,26 @@ class McuVirtualInterface:
         self.scl_i = cast(SimHandleBase, dut.scl_i)
         self.scl_o = cast(SimHandleBase, dut.scl_o)
         self.scl_oe = cast(SimHandleBase, dut.scl_oe_o)
+        
+    def initialize(self):
+        self.clock.value = 0
+        self.reset.value = 0
+        self.gpio_i.value = 0
+        self.exit_pad_io = 0
+        self.gpio_i = 0
+        self.gpio_o = 0
+        self.gpio_oe = 0
+        self.top_gpio_o = 0
+        self.top_gpio_oe = 0
+        self.uart_tx = 0
+        self.uart_rx = 0
+        self.uart_rx_en = 0
+        self.sda_i = 0
+        self.sda_o = 0
+        self.sda_oe = 0
+        self.scl_i = 0
+        self.scl_o = 0
+        self.scl_oe = 0
 
     def release_clock(self):
         cocotb.start_soon(Clock(self.clock, self.clock_period, self.clock_units).start())
