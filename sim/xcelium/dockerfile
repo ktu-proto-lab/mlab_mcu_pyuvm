@@ -12,7 +12,8 @@ FROM rockylinux:8
 # inside uvm folder
 # build image:
 # cd sim/xcelium
-# podman build -t uvm-xcelium -f dockerfile .
+# podman compose build xcelium
+# podman compose run --rm xcelium
 # cd ../..
 # podman run -it --rm   --hostname mlab-eda   -e PYTHONDONTWRITEBYTECODE=1   -e CDS_LIC_FILE=$CDS_LIC_FILE   -e PATH=/eda/cadence/2024-25/RHELx86/XCELIUM_24.03.004/tools/bin/64bit:/eda/cadence/2024-25/RHELx86/XCELIUM_24.03.004/tools/bin:$PATH   -v ..:/home/mcu:z   -v /eda:/eda:ro   localhost/uvm-xcelium
 # inside the container

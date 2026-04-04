@@ -6,18 +6,40 @@ services:
       args:
         USER_UID: ${HOST_UID:-1000}
         USER_GID: ${HOST_GID:-1000}
-
     # uniquely tag the image per-user to avoid shared-server conflicts
-    image: mlab-mcu-uvm-${USER:-latest}:latest
-
-    hostname: mlab
+    image: mlab-mcu-uvm-verilator-${USER:-latest}:latest
+    container_name: mlab-mcu-uvm-verilator-container
+    hostname: container-verilator
     stdin_open: true
     tty: true
-
     environment:
       # stop host machine and docker from fighting over compiled python files
       - PYTHONDONTWRITEBYTECODE=1
-
     # workspace mount to local: MLAB_MCU or MLAB_MCU_edu root project repo
     volumes:
       - ..:/home/mcu
+  
+  xcelium:
+    build:
+      context: .
+      dockerfile: sim/xcelium/dockerfile
+    image: mlab-mcu-uvm-xcelium-${USER:-latest}:latest
+    container_name: mlab-mcu-uvm-xcelium-container
+    hostname: container-xcelium
+    stdin_open: true
+    tty: true
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      # use licenses of the host machine
+      - CDS_LIC_FILE=${CDS_LIC_FILE}
+      - PATH=${CADENCE_PATH}/tools/bin/64bit:${CADENCE_PATH}/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - PS1=\[\\e[1;34m\][container-xcelium]\[\\e[0m\] \w \$ # Explicit prompt
+    volumes:
+      # the ':z' flag allows to write to the mounted directory
+      - ..:/home/mcu:z
+      # eda tools read-only
+      - /eda:/eda:ro
+    # fix for rootless podman dnsmasq permission error, network is not needed inside the container anyway
+    network_mode: none
+    user: "0:0"
+    working_dir: /home/mcu/uvm
