@@ -1,33 +1,12 @@
-FROM rockylinux:8
+FROM rockylinux:8sha256:e8a49c5403b687db05d4d67333fa45808fbe74f36e683cec7abb1f7d0f2338c6
 
-# configure podman
-# mkdir -p ~/.config/containers
-# cat <<EOF > ~/.config/containers/storage.conf
-# [storage]
-# driver = "overlay"
-
-# [storage.options]
-# ignore_chown_errors = "true"
-# EOF
-# inside uvm folder
-# build image:
-# cd sim/xcelium
-# podman compose build xcelium
-# podman compose run --rm xcelium
-# cd ../..
-# podman run -it --rm   --hostname mlab-eda   -e PYTHONDONTWRITEBYTECODE=1   -e CDS_LIC_FILE=$CDS_LIC_FILE   -e PATH=/eda/cadence/2024-25/RHELx86/XCELIUM_24.03.004/tools/bin/64bit:/eda/cadence/2024-25/RHELx86/XCELIUM_24.03.004/tools/bin:$PATH   -v ..:/home/mcu:z   -v /eda:/eda:ro   localhost/uvm-xcelium
-# inside the container
-# python3 -m venv .venv
-# source .venv/bin/activate
-# pip install -r conf/requirements.txt
-# cd sim
-# make SIM=xcelium TEST=uart_greet_simple_test
 RUN dnf install -y epel-release dnf-plugins-core && \
     dnf config-manager --set-enabled powertools || true
 
 RUN dnf install -y \
-        gcc gcc-c++ make patch automake autoconf bison flex findutils \
+        gcc gcc-c++ make patch automake autoconf bison flex \
         gcc-riscv64-linux-gnu \
+        findutils which \
         python3.11 python3.11-devel python3.11-pip \
         libX11 libXext libXft libXrender \
         glibc.i686 glibc-devel.i686 && \
