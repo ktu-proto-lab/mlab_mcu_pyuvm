@@ -1,7 +1,8 @@
 services:
-  uvm:
+  verilator:
     build:
       context: .
+      dockerfile: sim/verilator/dockerfile
       args:
         USER_UID: ${HOST_UID:-1000}
         USER_GID: ${HOST_GID:-1000}
@@ -17,6 +18,6 @@ services:
       # stop host machine and docker from fighting over compiled python files
       - PYTHONDONTWRITEBYTECODE=1
 
-    # workspace mount to local: MLAB_MCU or MLAB_MCU_edu
+    # workspace mount to local: MLAB_MCU or MLAB_MCU_edu root project repo
     volumes:
       - ..:/home/mcu

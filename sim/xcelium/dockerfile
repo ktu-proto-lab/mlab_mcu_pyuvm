@@ -1,0 +1,41 @@
+FROM rockylinux:8
+
+# configure podman
+# mkdir -p ~/.config/containers
+# cat <<EOF > ~/.config/containers/storage.conf
+# [storage]
+# driver = "overlay"
+
+# [storage.options]
+# ignore_chown_errors = "true"
+# EOF
+# inside uvm folder
+# build image:
+# cd sim/xcelium
+# podman build -t uvm-xcelium -f dockerfile .
+# cd ../..
+# podman run -it --rm   --hostname mlab-eda   -e PYTHONDONTWRITEBYTECODE=1   -e CDS_LIC_FILE=$CDS_LIC_FILE   -e PATH=/eda/cadence/2024-25/RHELx86/XCELIUM_24.03.004/tools/bin/64bit:/eda/cadence/2024-25/RHELx86/XCELIUM_24.03.004/tools/bin:$PATH   -v ..:/home/mcu:z   -v /eda:/eda:ro   localhost/uvm-xcelium
+# inside the container
+# python3 -m venv .venv
+# source .venv/bin/activate
+# pip install -r conf/requirements.txt
+# cd sim
+# make SIM=xcelium TEST=uart_greet_simple_test
+RUN dnf install -y epel-release dnf-plugins-core && \
+    dnf config-manager --set-enabled powertools || true
+
+RUN dnf install -y \
+        gcc gcc-c++ make patch automake autoconf bison flex findutils \
+        gcc-riscv64-linux-gnu \
+        python3.11 python3.11-devel python3.11-pip \
+        libX11 libXext libXft libXrender \
+        glibc.i686 glibc-devel.i686 && \
+    dnf clean all
+
+RUN alternatives --set python3 /usr/bin/python3.11
+
+WORKDIR /home/mcu/uvm
+
+ENV PYTHONDONTWRITEBYTECODE=1
+
+CMD ["/bin/bash"]
