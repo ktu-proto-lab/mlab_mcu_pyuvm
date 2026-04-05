@@ -31,7 +31,7 @@ Usage:
   make [SIM=...] [TEST=... | TB=...] [WAVES=1] [GUI=1] [LOG=...]
 
 Simulators:
-  SIM=verilator (default)   : run on Verilator
+  SIM=verilator             : run on Verilator
   SIM=xcelium               : run on Cadence Xcelium
 
 Test:
@@ -58,7 +58,6 @@ export HELP_USAGE
 .PHONY: help
 help:
 	@echo "$$HELP_USAGE"
-
 
 ifeq ($(TEST)$(TB),)
     .DEFAULT_GOAL := help
@@ -255,7 +254,7 @@ check_venv:
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	if [ -z "$(VIRTUAL_ENV)" ]; then \
 		logger ERROR "python's virtual environment not activated"; \
-		logger INFO "run: source $(PROJECT_ROOT)/uvm/.venv/bin/activate"; \
+		logger INFO "run: 'source $(PROJECT_ROOT)/uvm/.venv/bin/activate'"; \
 		exit 1; \
 	fi
 
