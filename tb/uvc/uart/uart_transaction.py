@@ -5,14 +5,17 @@ class UartTransaction(uvm_sequence_item):
         super().__init__(name)
         self.byte = byte
 
-    def char_value(self):
+    def char_value(self) -> chr:
         return chr(self.byte)
 
-    def hex_value(self):
+    def hex_value(self) -> str:
         return hex(self.byte)
 
-    def bin_value(self):
+    def bin_value(self) -> str:
         return bin(self.byte)
+
+    def is_null_terminator(self) -> bool:
+        return self.byte == 0x00
 
     def __str__(self):
         return f"{chr(self.byte)}"

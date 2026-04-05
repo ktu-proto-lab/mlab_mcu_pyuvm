@@ -3,6 +3,8 @@ SHELL := /bin/bash
 PROJECT_ROOT = $(abspath ../..)
 export PROJECT_ROOT
 
+# TODO: BUILD=cli_cmd_mem_simple_test for building specific software, this can also support defines, for example: DEBUG
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Options
 # ----------------------------------------------------------------------------------------------------------------------

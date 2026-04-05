@@ -34,6 +34,22 @@ class CliCmdMemSimpleTest(McuBaseTest):
             string += chr(txn.byte)
         return string
 
+    async def receive_string_response(self) -> str:
+        string = ""
+        while True:
+            txn: UartTransaction = await self.fifo.get()
+            if txn.char_value() == '\n':
+                return string
+            if txn.is_null_terminator():
+                continue
+            string += txn.char_value()
+
+    # TODO: add a console that just prints the output from the uart tx
+    # The cocotb task should be used for this to continuesly monitor the output
+    async def monitor_uart_transmit(self):
+        string = ""
+
+
     async def run_phase(self):
         self.raise_objection()
         self.logger.debug("raising the objection")
@@ -45,9 +61,9 @@ class CliCmdMemSimpleTest(McuBaseTest):
         assert (expected_string == received_string),(
             f"expected ack message '{expected_string}', received='{received_string}'"
         )
-        expected_string = "[  DEBUG]: cli_cmd_mem_handler"
+        expected_string = "[  DEBUG]: cmd mem read"
         cmd_mem_sequence: UartStringSequence = UartStringSequence.create("cmd_mem_sequence")
-        cmd_mem_sequence.string = "mem read 0x0000\0"
+        cmd_mem_sequence.set_string("mem read 0x0000")
         self.logger.info(f"transmitting '{cmd_mem_sequence}'")
         self.fifo.flush()
         self.uart_if.enable_transmit()
@@ -55,11 +71,11 @@ class CliCmdMemSimpleTest(McuBaseTest):
         self.uart_if.disable_transmit()
         self.logger.info(f"transmitted '{cmd_mem_sequence}'")
         self.logger.info("waiting for response")
-        received_string = await self.receive_string_buffer(len(expected_string))
+        received_string = await self.receive_string_response()
         self.logger.info(f"received '{received_string}'")
         assert expected_string == received_string, (
             "did not receive debug message from the cli",
-            f"transmitted = {cmd_mem_sequence},"
+            f"transmitted = {cmd_mem_sequence}, "
             f"expected '{expected_string}', received '{received_string}'"
         )
         self.logger.debug("dropping the objection")

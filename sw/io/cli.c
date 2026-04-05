@@ -11,7 +11,41 @@ static void cli_cmd_echo_handler(int argc, char **argv) {
 }
 
 static void cli_cmd_mem_handler(int argc, char **argv) {
-    printf("[  DEBUG]: cli_cmd_mem_handler");
+    if (argc < 2) {
+        return;
+    }
+    const char *subcmd = argv[1];
+    uint32_t addr = 0;
+    uint32_t value = 0;
+    // TODO: default is from the given address to the end
+    uint32_t word_cnt = 0;
+    if (string_compare(subcmd, "read") == 0) {
+        // mem read <addr>
+        if (argc != 3) {
+            return;
+        }
+        printf("[  DEBUG]: cmd mem read\n");
+    } else if (string_compare(subcmd, "write") == 0) {
+        // mem write <addr> <value>
+        if (argc != 4) {
+            return;
+        }
+        printf("[  DEBUG]: cmd mem write\n");
+    } else if (string_compare(subcmd, "dump") == 0) {
+        // mem dump <addr> [word_cnt]
+        if (argc < 3) {
+            return;
+        }
+        printf("[  DEBUG]: cmd mem dump\n");
+    } else if (string_compare(subcmd, "checksum")) {
+        // mem checksum <addr> [word_cnt]
+        if (argc < 3) {
+            return;
+        }
+        printf("[  DEBUG]: cmd mem checksum\n");
+    } else {
+        printf("[  ERROR]: unknown mem sub-command '%s'\n", subcmd);
+    }
 }
 
 typedef void (*cli_cmd_handler_t)(int argc, char **argv);
