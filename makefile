@@ -22,9 +22,9 @@ Simulators:
   xcelium    : $(XCELIUM_NAME)
 
 Verilator Actions:
-  verilator-build         : build the Verilator Docker image
-  verilator-setup         : initialize venv and install requirements
-  verilator-shell         : enter the Verilator container
+  verilator-build-image         : build the Verilator Docker image
+  verilator-setup-env         		: initialize venv and install requirements
+  verilator-shell-container: enter the Verilator container
 
 Xcelium Actions:
   xcelium-build-image     : build the Xcelium Podman image
@@ -32,8 +32,12 @@ Xcelium Actions:
   xcelium-run-container   : enter the Xcelium container
 
 Cleanup:
-  clean                   : stop all containers and remove local .venv
+  verilator-purge         : remove local .venv and delete Verilator image
   xcelium-purge           : remove local .venv and delete Xcelium image
+
+Patching:
+  apply-patches           : apply uvm-specific patches to the RTL files
+  reverse-patches         : reverse patches of the RTL files
 
 Examples:
   make xcelium-build-image
@@ -41,15 +45,20 @@ Examples:
 endef
 export HELP_USAGE
 
-.PHONY: help clean
+.PHONY: help
 help:
 	@echo "$$HELP_USAGE"
 
-clean:
-	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
-	docker compose down -v || true
-	podman compose down -v || true
-	rm -rf .venv
+# ----------------------------------------------------------------------------------------------------------------------
+# Patching
+# ----------------------------------------------------------------------------------------------------------------------
+.PHONY: apply-patches reverse-patches
+
+apply-patches:
+	@. $(PROJECT_ROOT)/uvm/script/patcher.sh --apply
+
+reverse-patches:
+	@. $(PROJECT_ROOT)/uvm/script/patcher.sh --reverse
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Verilator (Docker)

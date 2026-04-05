@@ -31,17 +31,14 @@ Options:
 EOF
     exit 1
 fi
-
 if ! command -v patch >/dev/null 2>&1; then
     logger ERROR "'patch' utility is not installed"
     echo "            can be installed with:"
     echo "            sudo at install patch"
     exit 1
 fi
-
 PATCHER_APPLY_PATCHES=false
 PATCHER_REVERSE_PATCHES=false
-
 while [ $# -gt 0 ]; do
     case $1 in
     "$PATCHER_OPT_APPLY_PATCHES")
@@ -57,22 +54,26 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
-
 cd "$PATCHER_PROJECT_ROOT"
-
+eeprom_original_file="./tb/misc/24CS512.sv"
+rtl_files_original_file="./sim/rtl/files.f"
 if $PATCHER_APPLY_PATCHES; then
     # EEPROM compatibility with cocotb (to work on Verilator)
-    apply_patch ./tb/misc/24CS512.sv  ./uvm/patch/eeprom.patch
-
+    apply_patch "$eeprom_original_file"  ./uvm/patch/eeprom.patch
+    logger INFO \
+        "EEPROM compatibility patch with cocotb to work on Verilator patch applied on '$eeprom_original_file'"
     # Avoiding relative paths to RTL source files (to work on XCelium)
-    apply_patch ./sim/rtl/files.f     ./uvm/patch/rtl_files.patch
-
-    logger INFO "patches applied"
-
+    apply_patch "$rtl_files_original_file" ./uvm/patch/rtl_files.patch
+    logger INFO \
+        "avoiding relative paths to RTL source files (to work on XCelium) patch applied on '$rtl_files_original_file'"
+    logger SUCCESS "patches applied"
 elif $PATCHER_REVERSE_PATCHES; then
-    reverse_patch ./tb/misc/24CS512.sv  ./uvm/patch/eeprom.patch
-    reverse_patch ./sim/rtl/files.f     ./uvm/patch/rtl_files.patch
-    logger INFO "returned to previous state"
+    reverse_patch "$eeprom_original_file"  ./uvm/patch/eeprom.patch
+    logger INFO \
+        "EEPROM compatibility patch with cocotb to work on Verilator patch reversed on '$eeprom_original_file'"
+    reverse_patch "$rtl_files_original_file" ./uvm/patch/rtl_files.patch
+    logger INFO \
+        "avoiding relative paths to RTL source files (to work on XCelium) patch reversed on '$rtl_files_original_file'"
+    logger SUCCESS "returned to previous state"
 fi
-
 cd "$PATCHER_CALL_PATH"
