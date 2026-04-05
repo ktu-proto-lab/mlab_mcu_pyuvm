@@ -4,8 +4,8 @@ readonly PROJECT_ROOT="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/nu
 
 function code_line_metrics {
     cloc --quiet \
-        --exclude-dir="__pycache__,sim_build,build,verilator,xcelium,.venv" \
-        --match-f='(\.(c|h|v|sv|sh|py|yml)$|^makefile$|^dockerfile)' "$PROJECT_ROOT" | \
+        --exclude-dir="__pycache__,sim_build,build,.venv" \
+        --match-f='(\.(c|h|v|sv|sh|py|yml)$|^makefile$|^dockerfile$)' "$PROJECT_ROOT" | \
         grep -v "github.com"
 }
 
