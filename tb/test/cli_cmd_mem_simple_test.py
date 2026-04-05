@@ -38,6 +38,9 @@ class CliCmdMemSimpleTest(McuBaseTest):
         string = ""
         while True:
             txn: UartTransaction = await self.fifo.get()
+            # TODO: wtf????? maybe use is_ascii or smth
+            if txn.byte == 0xFF:
+                continue
             if txn.char_value() == '\n':
                 return string
             if txn.is_null_terminator():
@@ -50,22 +53,11 @@ class CliCmdMemSimpleTest(McuBaseTest):
         string = ""
 
 
-    async def run_phase(self):
-        self.raise_objection()
-        self.logger.debug("raising the objection")
-        await super().run_phase()
-        expected_string = "ack\0"
-        self.logger.info(f"waiting for dut's acknowledgement message '{expected_string}'")
-        received_string = await self.receive_string_buffer(len(expected_string))
-        self.logger.info(f"received message: {received_string}")
-        assert (expected_string == received_string),(
-            f"expected ack message '{expected_string}', received='{received_string}'"
-        )
-        expected_string = "[  DEBUG]: cmd mem read"
+    async def check_cli_cmd_mem(self, cmd_string, expected_response):
+        expected_string = expected_response
         cmd_mem_sequence: UartStringSequence = UartStringSequence.create("cmd_mem_sequence")
-        cmd_mem_sequence.set_string("mem read 0x0000")
+        cmd_mem_sequence.set_string(cmd_string)
         self.logger.info(f"transmitting '{cmd_mem_sequence}'")
-        self.fifo.flush()
         self.uart_if.enable_transmit()
         await cmd_mem_sequence.start(self.env.uart.sequencer)
         self.uart_if.disable_transmit()
@@ -78,5 +70,27 @@ class CliCmdMemSimpleTest(McuBaseTest):
             f"transmitted = {cmd_mem_sequence}, "
             f"expected '{expected_string}', received '{received_string}'"
         )
+
+    async def run_phase(self):
+        self.raise_objection()
+        self.logger.debug("raising the objection")
+        await super().run_phase()
+        expected_string = "ack\0"
+        self.logger.info(f"waiting for dut's acknowledgement message '{expected_string}'")
+        received_string = await self.receive_string_buffer(len(expected_string))
+        self.logger.info(f"received message: {received_string}")
+        assert (expected_string == received_string),(
+            f"expected ack message '{expected_string}', received='{received_string}'"
+        )
+        await self.check_cli_cmd_mem("mem read <addr>", "[  DEBUG]: cmd mem read")
+        await self.receive_string_response()
+        await self.check_cli_cmd_mem("mem write <addr> <value>", "[  DEBUG]: cmd mem write")
+        await self.receive_string_response()
+        await self.check_cli_cmd_mem("mem dump <addr> [word_cnt]", "[  DEBUG]: cmd mem dump")
+        await self.receive_string_response()
+        await self.check_cli_cmd_mem("mem checksum <addr> [word_cnt]", "[  DEBUG]: cmd mem checksum")
+        await self.receive_string_response()
+        await self.check_cli_cmd_mem("mem cmd <arg1> <arg2>", "[  ERROR]: unknown mem sub-command 'cmd'")
+        await self.receive_string_response()
         self.logger.debug("dropping the objection")
         self.drop_objection()

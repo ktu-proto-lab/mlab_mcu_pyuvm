@@ -15,10 +15,10 @@ static void cli_cmd_mem_handler(int argc, char **argv) {
         return;
     }
     const char *subcmd = argv[1];
-    uint32_t addr = 0;
-    uint32_t value = 0;
-    // TODO: default is from the given address to the end
-    uint32_t word_cnt = 0;
+    // uint32_t addr = 0;
+    // uint32_t value = 0;
+    // // TODO: default is from the given address to the end
+    // uint32_t word_cnt = 0;
     if (string_compare(subcmd, "read") == 0) {
         // mem read <addr>
         if (argc != 3) {
@@ -37,7 +37,7 @@ static void cli_cmd_mem_handler(int argc, char **argv) {
             return;
         }
         printf("[  DEBUG]: cmd mem dump\n");
-    } else if (string_compare(subcmd, "checksum")) {
+    } else if (string_compare(subcmd, "checksum") == 0) {
         // mem checksum <addr> [word_cnt]
         if (argc < 3) {
             return;
