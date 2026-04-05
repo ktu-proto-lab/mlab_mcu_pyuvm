@@ -11,9 +11,10 @@
 uart_handle_t uart;
 gpio_handle_t gpio;
 
+#include "sys/int.c"
+
 int main() {
     gpio_init(&gpio);
-
     const uint32_t cpu_freq_mhz = 80;
     const uint32_t uart_baud_rate = 115200;
     uart.config.baud_rate = UART_BAUD_INTERVAL(cpu_freq_mhz, uart_baud_rate);
@@ -25,14 +26,11 @@ int main() {
     uart_init(&uart);
     gpio.regs->aux |= UART_GPIO_TX_PIN;
     gpio.regs->oe  |= UART_GPIO_TX_PIN;
-
     uart_tx_enable(&uart);
     uart_transmit(&uart, (uint8_t *)"ack", sizeof("ack"));
     uart_tx_disable(&uart);
-
     char buffer[256];
     string_receive(buffer, sizeof(buffer));
-
     time_delay_microseconds(5, cpu_freq_mhz);
     uart_tx_enable(&uart);
     cli_exec_cmd((char *)buffer);

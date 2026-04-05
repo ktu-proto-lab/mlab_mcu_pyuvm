@@ -5,8 +5,8 @@ from seq import UartStringSequence
 from uvc.uart import UartTransaction
 
 @pyuvm.test()
-class CliCmdEchoSimpleTest(McuBaseTest):
-    def __init__(self, name="CliCmdEchoSimpleTest", parent=None):
+class CliCmdMemSimpleTest(McuBaseTest):
+    def __init__(self, name="CliCmdMemSimpleTest", parent=None):
         super().__init__(name, parent)
         self.fifo: uvm_tlm_analysis_fifo = None
 
@@ -45,22 +45,22 @@ class CliCmdEchoSimpleTest(McuBaseTest):
         assert (expected_string == received_string),(
             f"expected ack message '{expected_string}', received='{received_string}'"
         )
-        expected_string = "mlab mcu 2026\0"
-        echo_transmit_string_sequence: UartStringSequence = UartStringSequence.create("echo_sequence")
-        echo_transmit_string_sequence.string = f"echo \"{expected_string}\"\0";
-        self.logger.info(f"transmitting '{echo_transmit_string_sequence}'")
+        expected_string = "[  DEBUG]: cli_cmd_mem_handler"
+        cmd_mem_sequence: UartStringSequence = UartStringSequence.create("cmd_mem_sequence")
+        cmd_mem_sequence.string = "mem read 0x0000\0"
+        self.logger.info(f"transmitting '{cmd_mem_sequence}'")
         self.fifo.flush()
         self.uart_if.enable_transmit()
-        await echo_transmit_string_sequence.start(self.env.uart.sequencer)
+        await cmd_mem_sequence.start(self.env.uart.sequencer)
         self.uart_if.disable_transmit()
-        self.logger.info(f"transmitted '{echo_transmit_string_sequence}'")
-        self.logger.info("waiting echo response")
-        actual_received_string = await self.receive_string_buffer(len(expected_string))
-        self.logger.info(f"received '{actual_received_string}'")
-        assert (expected_string == actual_received_string),(
-            "echoed strings do not match: "
-            f"transmitted = {echo_transmit_string_sequence},"
-            f"expected '{expected_string}', received '{actual_received_string}'"
+        self.logger.info(f"transmitted '{cmd_mem_sequence}'")
+        self.logger.info("waiting for response")
+        received_string = await self.receive_string_buffer(len(expected_string))
+        self.logger.info(f"received '{received_string}'")
+        assert expected_string == received_string, (
+            "did not receive debug message from the cli",
+            f"transmitted = {cmd_mem_sequence},"
+            f"expected '{expected_string}', received '{received_string}'"
         )
         self.logger.debug("dropping the objection")
         self.drop_objection()
