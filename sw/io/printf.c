@@ -11,6 +11,7 @@ static void put_char(const char character) {
 }
 
 static void print_number(int number, int base, int sign) {
+    // BUG: what if the base is 2, or 8?
     char buffer[12];
     int i = 0;
     unsigned int unsigned_number;

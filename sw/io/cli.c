@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include "io/printf.h"
 #include "lib/string.h"
+#include "sys/mem.h"
+#include "sys/err.h"
 
 static void cli_cmd_echo_handler(int argc, char **argv) {
     for (int i = 1; i < argc; ++i) {
@@ -10,21 +12,25 @@ static void cli_cmd_echo_handler(int argc, char **argv) {
     }
 }
 
-static void cli_cmd_mem_handler(int argc, char **argv) {
+static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
     if (argc < 2) {
         return;
     }
     const char *subcmd = argv[1];
-    // uint32_t addr = 0;
-    // uint32_t value = 0;
-    // // TODO: default is from the given address to the end
-    // uint32_t word_cnt = 0;
+    uint32_t addr;
     if (string_compare(subcmd, "read") == 0) {
         // mem read <addr>
         if (argc != 3) {
             return;
         }
-        printf("[  DEBUG]: cmd mem read\n");
+        if (!string_hex_to_uint(argv[2], &addr)) {
+            return SYS_ERR_STRING_INVALID_HEX_ADDR_FORMAT;
+        }
+        if (!SYS_MEM_ADDR_VALID(addr)) {
+            return SYS_ERR_MEM_INVALID_ADDR;
+        }
+        uint32_t value = *((volatile uint32_t *)addr);
+        printf("%x\n", value);
     } else if (string_compare(subcmd, "write") == 0) {
         // mem write <addr> <value>
         if (argc != 4) {
