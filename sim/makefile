@@ -151,19 +151,13 @@ SW_PAYLOAD_DMEM_HEX    = $(SW_PAYLOAD_DIR)/data_hex.mem
 .PHONY: build_sw
 build_sw:
 		@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
-		if [ -d "$(SW_DIR)" ]; then \
-			logger INFO "building test software for $(TEST) in $(SW_DIR)"; \
-			$(MAKE) -C $(SW_DIR) clean; \
-			$(MAKE) -C $(SW_DIR); \
-			mkdir -p $(SW_PAYLOAD_DIR); \
-			cp $(SW_MEM_HEX_FILE_PATH) $(SW_PAYLOAD_MEM_HEX); \
-			cp $(SW_IMEM1_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM1_HEX); \
-			cp $(SW_IMEM2_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM2_HEX); \
-			cp $(SW_DMEM_HEX_FILE_PATH) $(SW_PAYLOAD_DMEM_HEX); \
-		else \
-			logger ERROR "test software directory '$(SW_DIR)' not found, could not compile, exiting"; \
-			exit 1; \
-		fi
+		$(MAKE) -C $(PROJECT_ROOT)/uvm/sw SW_SOURCE_FULL_PATH=$(SW_DIR); \
+		mkdir -p $(SW_PAYLOAD_DIR); \
+		cp $(SW_MEM_HEX_FILE_PATH) $(SW_PAYLOAD_MEM_HEX); \
+		cp $(SW_IMEM1_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM1_HEX); \
+		cp $(SW_IMEM2_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM2_HEX); \
+		cp $(SW_DMEM_HEX_FILE_PATH) $(SW_PAYLOAD_DMEM_HEX); \
+		logger INFO "binaries moved to payload directory '$(SW_PAYLOAD_DIR)'"
 
 # load software before the simulation to prevent old software running on mcu with a different test
 CUSTOM_COMPILE_DEPS += build_sw
