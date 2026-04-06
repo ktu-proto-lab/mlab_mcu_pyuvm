@@ -34,15 +34,16 @@ int main() {
     gpio.regs->oe  |= UART_GPIO_TX_PIN;
     uart_tx_enable(&uart);
     uart_transmit(&uart, (uint8_t *)"ack", sizeof("ack"));
-    // uart_tx_disable(&uart);
+    uart_tx_disable(&uart);
     char buffer[256];
     do {
-        // uart_tx_enable(&uart);
+        uart_tx_enable(&uart);
         string_receive(buffer, sizeof(buffer));
         time_delay_microseconds(5, cpu_freq_mhz);
         cli_exec_cmd((char *)buffer);
+        // BUG: this takes time and, it needs to say that it is busy, set gpio_pin_8 for example
         clear_buffer(buffer, sizeof(buffer));
         printf("[  DEBUG]: cleared buffer\n");
-        // uart_tx_disable(&uart);
+        uart_tx_disable(&uart);
     } while(1);
 }
