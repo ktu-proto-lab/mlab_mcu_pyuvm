@@ -98,9 +98,10 @@ verilator-purge:
 .PHONY: xcelium-build-image xcelium-setup-env xcelium-run-container xcelium-purge
 
 xcelium-build-image:
-	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	@set -e; \
+	source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "building $(XCELIUM_NAME) image"; \
-	CADENCE_PATH=$(CADENCE_PATH) podman compose build xcelium; \
+	CADENCE_PATH=$(CADENCE_PATH) podman build -f ./sim/xcelium/dockerfile -t $(XCELIUM_IMAGE) .; \
 	logger SUCCESS "$(XCELIUM_NAME) image '$(XCELIUM_IMAGE)' built"
 
 xcelium-setup-env:
