@@ -2,7 +2,7 @@ define HELP_USAGE
 Build mlab mcu software from the 'uvm/sw' directory
 
 Usage:
-    make SOURCE=<source_dir>
+    make build SOURCE=<source_dir>
 
 Options:
     SOURCE  : source directory path in 'uvm/sw'

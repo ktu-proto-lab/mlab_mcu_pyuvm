@@ -32,11 +32,11 @@ static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
         }
 
         if (!string_hex_to_uint(argv[2], &addr)) {
-            return SYSTEM_ERROR_STRING_INVALID_HEX_ADDR_FORMAT;
+            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
         }
 
         if (!SYS_MEM_ADDR_VALID(addr)) {
-            return SYSTEM_ERROR_MEM_INVALID_ADDR;
+            return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ADDR;
         }
 
         uint32_t value = *((volatile uint32_t *)addr);
@@ -48,7 +48,29 @@ static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
         if (argc != 4) {
             return;
         }
-        printf("[  DEBUG]: cmd mem write\n");
+
+        // TODO (refac): this should be nested with read sub-command to save some space
+        if (!string_hex_to_uint(argv[2], &addr)) {
+            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
+        }
+
+
+        if (!SYS_MEM_ADDR_VALID(addr)) {
+            return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ADDR;
+        }
+
+        uint32_t value;
+        if (!string_hex_to_uint(argv[3], &value)) {
+            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
+        }
+
+        // TODO (refac): repeats identically like read sub-command
+        uint32_t old_value = *((volatile uint32_t *)addr);
+
+        // WARN: writing blindly, if it is writing on top of the actual program binaries - too bad
+        *(volatile uint32_t *)addr = value;
+
+        printf("%x\n", old_value);
     } else if (string_compare(subcmd, "dump") == 0) {
         // mem dump <addr> [word_cnt]
         if (argc < 3) {

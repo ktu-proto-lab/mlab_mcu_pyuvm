@@ -16,6 +16,11 @@ static void print_number(int number, int base, int sign) {
     int i = 0;
     unsigned int unsigned_number;
 
+    if (base == 16) {
+        put_char('0');
+        put_char('x');
+    }
+
     if (number == 0) {
         put_char('0');
         return;

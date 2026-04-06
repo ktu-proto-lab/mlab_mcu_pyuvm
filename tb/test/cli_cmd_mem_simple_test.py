@@ -83,9 +83,11 @@ class CliCmdMemSimpleTest(McuBaseTest):
             f"expected ack message '{expected_string}', received='{received_string}'"
         )
         # TODO: 6f0940 value is not checked if it is actually correct in the imem space
-        await self.check_cli_cmd_mem("mem read 0x80000006", "6f0940")
+        await self.check_cli_cmd_mem("mem read 0x80000006", "0x6f0940")
         await self.receive_string_response()
-        await self.check_cli_cmd_mem("mem write <addr> <value>", "[  DEBUG]: cmd mem write")
+        await self.check_cli_cmd_mem("mem write 0x80001990 0xffffffff", "0x0")
+        await self.receive_string_response()
+        await self.check_cli_cmd_mem("mem read 0x80001990", "0xffffffff")
         await self.receive_string_response()
         await self.check_cli_cmd_mem("mem dump <addr> [word_cnt]", "[  DEBUG]: cmd mem dump")
         await self.receive_string_response()
