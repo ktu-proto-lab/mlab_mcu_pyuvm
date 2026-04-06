@@ -1,3 +1,6 @@
+SHELL := /bin/bash
+.SHELLFLAGS := -euo pipefail -c
+
 # enforce single source define dependency
 ifndef PROJECT_ROOT
     $(error PROJECT_ROOT is not defined)

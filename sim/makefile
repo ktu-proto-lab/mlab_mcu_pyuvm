@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+.SHELLFLAGS := -euo pipefail -c
 
 PROJECT_ROOT = $(abspath ../..)
 export PROJECT_ROOT

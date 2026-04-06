@@ -1,4 +1,6 @@
 SHELL := /bin/bash
+# exit immediatelly on errors, undefined variables, on pipeline fails
+.SHELLFLAGS := -euo pipefail -c
 
 PROJECT_ROOT = $(abspath ..)
 VERILATOR_NAME = Verilator v5.044
@@ -98,8 +100,7 @@ verilator-purge:
 .PHONY: xcelium-build-image xcelium-setup-env xcelium-run-container xcelium-purge
 
 xcelium-build-image:
-	@set -e; \
-	source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "building $(XCELIUM_NAME) image"; \
 	CADENCE_PATH=$(CADENCE_PATH) podman build -f ./sim/xcelium/dockerfile -t $(XCELIUM_IMAGE) .; \
 	logger SUCCESS "$(XCELIUM_NAME) image '$(XCELIUM_IMAGE)' built"
