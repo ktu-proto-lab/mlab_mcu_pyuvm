@@ -2,9 +2,6 @@
 #include "soc/gpio_regs.h"
 #include "sys/int.h"
 
-#define GPIO_IRQ_HANDLER_ENABLE
-#include "sys/int.c"
-
 volatile gpio_handle_t gpio;
 
 int main() {
@@ -25,3 +22,7 @@ void gpio_irq_callback(volatile gpio_handle_t *gpio) {
     gpio->regs->ptrig = (~current_inputs) & 0x0F;
     gpio->regs->ints = 0x0F;
 }
+
+#define SYS_INT_IMPL
+#define SYS_INT_GPIO_IRQ_HANDLER_ENABLE
+#include "sys/int.h"

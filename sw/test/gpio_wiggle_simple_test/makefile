@@ -1,10 +1,3 @@
 PROGRAM = gpio_wiggle_simple_test
-
-C_INCLUDES = -I$(PROJECT_ROOT)/uvm/sw
-
-C_SOURCES = main.c \
-			$(PROJECT_ROOT)/uvm/sw/hal/gpio.c
-
-COMMON_DIR = $(PROJECT_ROOT)/sw/ibex/common
-
-include $(COMMON_DIR)/common.mk
+C_SOURCES = main.c
+include $(PROJECT_ROOT)/uvm/sw/comm/makefile

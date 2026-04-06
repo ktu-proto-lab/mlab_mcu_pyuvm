@@ -8,11 +8,6 @@
 
 #include "sys/time.h"
 
-#include "hal/gpio.c"
-#include "hal/uart.c"
-#include "sys/int.c"
-#include "sys/time.c"
-
 int main() {
     gpio_handle_t gpio;
     gpio_init(&gpio);
@@ -61,3 +56,6 @@ int main() {
 
     while(1);
 }
+
+#define SYS_INT_IMPL
+#include "sys/int.h"

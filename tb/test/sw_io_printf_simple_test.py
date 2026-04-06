@@ -23,24 +23,25 @@ class SwIoPrintfSimpleTest(McuBaseTest):
         self.logger.debug("connect phase done")
 
     # TODO (refac): move to utils or smth, this will be used in many tests
-    async def receive_string_buffer(self, length: int) -> str:
+    async def receive_string(self) -> str:
         string = ""
-        for _ in range(length):
+        while True:
             txn: UartTransaction = await self.fifo.get()
-            string += chr(txn.byte)
-        return string
+            if txn.char_value() == '\n':
+                return string
+            string += txn.char_value()
 
     async def run_phase(self):
         self.raise_objection()
         self.logger.debug("raising the objection")
         await super().run_phase()
-        expected_string= "printf: s: string, int: 189, int: -9021, uint: 1926478, int: 0, uint: 0, char: h, %r\x00"
+        expected_string= "printf: s: string, int: 189, int: -9021, uint: 1926478, int: 0, uint: 0, char: h, %r"
         self.logger.info(f"waiting to receive '{expected_string}'")
-        received_string = await self.receive_string_buffer(len(expected_string))
+        received_string = await self.receive_string()
         assert received_string == expected_string, f"expected='{expected_string}', actual='{received_string}'"
         self.logger.info(f"received: '{received_string}'")
-        expected_string = "printf: over!\x00"
-        received_string = await self.receive_string_buffer(len(expected_string))
+        expected_string = "printf: over!"
+        received_string = await self.receive_string()
         assert received_string == expected_string, f"expected='{expected_string}', actual='{received_string}'"
         self.logger.info(f"received: '{received_string}'")
         self.logger.debug("dropping the objection")

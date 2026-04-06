@@ -11,8 +11,6 @@
 uart_handle_t uart;
 gpio_handle_t gpio;
 
-#include "sys/int.c"
-
 static void clear_buffer(char *buffer, uint32_t size) {
     for (uint32_t i = 0; i < size; ++i) {
         buffer[i] = 0;
@@ -47,3 +45,7 @@ int main() {
         uart_tx_disable(&uart);
     } while(1);
 }
+
+// heads up for mr. Zozin
+#define SYS_INT_IMPL
+#include "sys/int.h"

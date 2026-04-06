@@ -6,31 +6,43 @@
 #include "sys/mem.h"
 #include "sys/err.h"
 
-static void cli_cmd_echo_handler(int argc, char **argv) {
+static system_error_t cli_cmd_echo_handler(int argc, char **argv) {
+    if (argc < CLI_CMD_ECHO_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_ECHO_INVALID_ARG_COUNT;
+    }
+
     for (int i = 1; i < argc; ++i) {
         printf("%s", argv[i]);
     }
+
+    return SYSTEM_ERROR_NONE;
 }
 
 static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
-    if (argc < 2) {
-        return;
+    if (argc < CLI_CMD_MEM_MIN_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT;
     }
+
     const char *subcmd = argv[1];
     uint32_t addr;
+
     if (string_compare(subcmd, "read") == 0) {
-        // mem read <addr>
-        if (argc != 3) {
-            return;
+        if (argc != CLI_CMD_MEM_READ_ARG_COUNT) {
+            return SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ARG_COUNT;
         }
+
         if (!string_hex_to_uint(argv[2], &addr)) {
-            return SYS_ERR_STRING_INVALID_HEX_ADDR_FORMAT;
+            return SYSTEM_ERROR_STRING_INVALID_HEX_ADDR_FORMAT;
         }
+
         if (!SYS_MEM_ADDR_VALID(addr)) {
-            return SYS_ERR_MEM_INVALID_ADDR;
+            return SYSTEM_ERROR_MEM_INVALID_ADDR;
         }
+
         uint32_t value = *((volatile uint32_t *)addr);
+
         printf("%x\n", value);
+
     } else if (string_compare(subcmd, "write") == 0) {
         // mem write <addr> <value>
         if (argc != 4) {
@@ -52,9 +64,11 @@ static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
     } else {
         printf("[  ERROR]: unknown mem sub-command '%s'\n", subcmd);
     }
+
+    return SYSTEM_ERROR_NONE;
 }
 
-typedef void (*cli_cmd_handler_t)(int argc, char **argv);
+typedef system_error_t (*cli_cmd_handler_t)(int argc, char **argv);
 
 typedef struct {
     const char *name;
@@ -68,7 +82,7 @@ static const cli_cmd_t cli_cmd_table[] = {
 
 static const uint32_t cli_cmd_count = sizeof(cli_cmd_table) / sizeof(cli_cmd_table[0]);
 
-void cli_exec_cmd(char *input_buffer) {
+system_error_t cli_exec_cmd(char *input_buffer) {
     char *argv[CLI_MAX_ARGS];
     int argc = 0;
     bool in_word = false;
@@ -103,10 +117,14 @@ void cli_exec_cmd(char *input_buffer) {
 
     for (uint32_t i = 0; i < cli_cmd_count; ++i) {
         if (string_compare(argv[0], cli_cmd_table[i].name) == 0) {
-            cli_cmd_table[i].handler(argc, argv);
+            system_error_t e = cli_cmd_table[i].handler(argc, argv);
+            if (e != SYSTEM_ERROR_NONE) {
+                system_error_print(e);
+            }
+            // BUG
             return;
         }
     }
 
-    printf("[  ERROR]: cmd not found: %s\n", argv[0]);
+    return SYSTEM_ERROR_CLI_CMD_NOT_FOUND;
 }

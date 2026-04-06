@@ -39,3 +39,6 @@ int main() {
     uart_tx_disable(&uart);
     while(1);
 }
+
+#define SYS_INT_IMPL
+#include "sys/int.h"

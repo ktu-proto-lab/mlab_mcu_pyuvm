@@ -1,9 +1,9 @@
 #include <stdint.h>
 
-#include "hal/gpio.c"
-#include "hal/uart.c"
-#include "io/printf.c"
-#include "sys/int.c"
+#include "hal/gpio.h"
+#include "hal/uart.h"
+#include "io/printf.h"
+#include "sys/int.h"
 
 uart_handle_t uart;
 gpio_handle_t gpio;
@@ -24,7 +24,7 @@ int main() {
     uart_init(&uart);
     uart_tx_enable(&uart);
 
-    // printf: s: string, int: 189, int: -9021, uint: 1926478, int: 0, uint: 0, char: h, %r\x00
+    // printf: s: string, int: 189, int: -9021, uint: 1926478, int: 0, uint: 0, char: h, %r
     const char *string = "string";
     const int positive_integer = 189;
     const int negative_integer = -9021;
@@ -33,15 +33,18 @@ int main() {
     const unsigned int unsigned_zero_integer = 0;
     const char character = 'h';
     const char *unknown_format = "fmt";
-    printf("printf: s: %s, int: %i, int: %i, uint: %u, int: %i, uint: %u, char: %c, %r",
+    printf("printf: s: %s, int: %i, int: %i, uint: %u, int: %i, uint: %u, char: %c, %r\n",
             string, positive_integer, negative_integer, unsigned_integer,
             zero_integer, unsigned_zero_integer, character, unknown_format);
 
-    // printf: over!\x00
+    // printf: over!
     const char *print = "printf";
     const char *over = "over";
-    printf("%s: %s!", print, over);
+    printf("%s: %s!\n", print, over);
 
     uart_tx_disable(&uart);
     while(1);
 }
+
+#define SYS_INT_IMPL
+#include "sys/int.h"

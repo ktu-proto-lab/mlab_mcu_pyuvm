@@ -10,5 +10,6 @@ extern uart_handle_t uart;
 
 int string_compare(const char *lstring, const char *rstring);
 bool string_receive(char *buffer, uint32_t lenght);
+bool string_hex_to_uint(const char *string, uint32_t *out_value);
 
 #endif
