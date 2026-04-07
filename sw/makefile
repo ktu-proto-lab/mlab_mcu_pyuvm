@@ -1,16 +1,31 @@
+SHELL := /bin/bash
+
+export PROJECT_ROOT = $(abspath ../..)
+
 define HELP_USAGE
-Build mlab mcu software from the 'uvm/sw' directory
+-------------------------------------------------------------------------------
+Builds C MCU firmware from a given source directory.
 
 Usage:
-    make build <SW_SOURCE=<source_dir_path>|SW_SOURCE_FULL_PATH=<source_dir_full_path>>
+	make [build] SW_SOURCE_DIR=<relative_path>
+	make [build] SW_SOURCE_FULL_PATH=<absolute_path>
+
+Targets:
+    build   : cleans and compiles the firmware at the given source directory
+    help    : show this message (default)
 
 Options:
-    SW_SOURCE_FULL_PATH     : full path to the SW_SOURCE directory (used by the 'uvm/sim/makefile')
-    SW_SOURCE               : SW_SW_SOURCE directory path in project's 'uvm/sw'
+    SW_SOURCE_DIR           : path to the firmware source directory,
+                              relative to 'project_root/uvm/sw/'.
+
+    SW_SOURCE_FULL_PATH     : absolute path to the firmware source directory
+                              passed in by the parent UVM sim makefile,
+                              but can also be used directly.
 
 Example:
-    make SW_SOURCE=test/mcu_base_test
-    make SW_SOURCE_FULL_PATH=~/mlab_mcu/uvm/tb/gpio_simple_tb
+	make SW_SOURCE_DIR=test/mcu_base_test
+	make SW_SOURCE_FULL_PATH=/home/user/mlab_mcu/uvm/test/mcu_base_test
+-------------------------------------------------------------------------------
 endef
 export HELP_USAGE
 
@@ -18,22 +33,16 @@ export HELP_USAGE
 help:
 	@echo "$$HELP_USAGE"
 
-SHELL := /bin/bash
-
-export PROJECT_ROOT = $(abspath ../..)
-
-# TODO: rename SW_SOURCE full path
-ifndef SW_SOURCE_FULL_PATH
-    ifndef SW_SOURCE
-        $(error either SW_SOURCE or SW_SOURCE_FULL_PATH must be defined)
-    endif
-    SW_SOURCE_FULL_PATH ?= $(PROJECT_ROOT)/uvm/sw/$(SW_SOURCE)
-endif
-
-.DEFAULT_GOAL := build
+.DEFAULT_GOAL := help
 
 .PHONY: build
 build:
+ifndef SW_SOURCE_FULL_PATH
+ifndef SW_SOURCE_DIR
+	$(error either SW_SOURCE_DIR or SW_SOURCE_FULL_PATH must be defined)
+endif
+	$(eval SW_SOURCE_FULL_PATH := $(PROJECT_ROOT)/uvm/sw/$(SW_SOURCE_DIR))
+endif
 	@set -e; \
 	source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	if [ -d "$(SW_SOURCE_FULL_PATH)" ]; then \
@@ -42,6 +51,6 @@ build:
 		$(MAKE) -C $(SW_SOURCE_FULL_PATH); \
 		logger SUCCESS "$(SW_SOURCE_FULL_PATH) built"; \
 	else \
-		logger ERROR "SW_SOURCE directory $(SW_SOURCE_FULL_PATH) not found"; \
+		logger ERROR "software source directory '$(SW_SOURCE_FULL_PATH)' not found"; \
 		exit 1; \
 	fi

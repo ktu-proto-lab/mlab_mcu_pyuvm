@@ -30,17 +30,18 @@ LOG ?= INFO
 SW ?=
 
 define HELP_USAGE
+-------------------------------------------------------------------------------
 Usage:
   make [SIM=...] [TEST=... | TB=...] [WAVES=1] [GUI=1] [LOG=...]
 
 Simulators:
-  SIM=verilator             : run on Verilator
-  SIM=xcelium               : run on Cadence Xcelium
+  SIM=verilator     : run on Verilator
+  SIM=xcelium       : run on Cadence Xcelium
 
 Test:
-  TEST=test_name            : run a pyuvm test with software from 'sw/test/test_name'
-  TB=tb_name                : run a cocotb testbench with software from 'sw/tb/tb_name'
-  SW=dir_name               : override software directory (default: same name as TEST or TB)
+  TEST=test_name    : run a pyuvm test with software from 'sw/test'
+  TB=tb_name        : run a cocotb testbench with software from 'sw/tb'
+  SW=dir_name       : override software directory
 
 Options:
   WAVES=1                   : capture waves in waveform 'dump.vcd' file
@@ -55,19 +56,16 @@ Examples:
   make TEST=simple_gpio_test WAVES=1
   make SIM=xcelium TB=uart_tb GUI=1
   make TEST=uart_simple_test LOG=DEBUG
+-------------------------------------------------------------------------------
 endef
 export HELP_USAGE
 
 .PHONY: help
 help:
-	@echo "$$HELP_USAGE"
+	@echo "$$HELP_USAGE"; \
+	exit
 
-ifeq ($(TEST)$(TB),)
-    .DEFAULT_GOAL := help
-else
-	# prevent from building sw with custom makefile exiting early when sw compilation finishes
-    .DEFAULT_GOAL := all
-endif
+.DEFAULT_GOAL := all
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Configuration
@@ -151,7 +149,7 @@ SW_PAYLOAD_DMEM_HEX    = $(SW_PAYLOAD_DIR)/data_hex.mem
 .PHONY: build_sw
 build_sw:
 		@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
-		$(MAKE) -C $(PROJECT_ROOT)/uvm/sw SW_SOURCE_FULL_PATH=$(SW_DIR); \
+		$(MAKE) -C $(PROJECT_ROOT)/uvm/sw build SW_SOURCE_FULL_PATH=$(SW_DIR); \
 		mkdir -p $(SW_PAYLOAD_DIR); \
 		cp $(SW_MEM_HEX_FILE_PATH) $(SW_PAYLOAD_MEM_HEX); \
 		cp $(SW_IMEM1_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM1_HEX); \
@@ -259,6 +257,8 @@ CUSTOM_COMPILE_DEPS += check_venv
 
 ifeq ($(VIRTUAL_ENV),)
 all: check_venv
+else ifeq ($(MAKECMDGOALS),help)
+# skip cocotb include when just printing help
 else
 include $(shell cocotb-config --makefiles)/Makefile.sim
 endif
