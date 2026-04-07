@@ -72,13 +72,41 @@ static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
 
         printf("%x\n", old_value);
     } else if (string_compare(subcmd, "dump") == 0) {
-        // mem dump <addr> [word_cnt]
-        if (argc < 3) {
+        // mem dump <addr> <word_count>
+        if (argc < 4) {
             return;
         }
-        printf("[  DEBUG]: cmd mem dump\n");
+
+        if (!string_hex_to_uint(argv[2], &addr)) {
+            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
+        }
+
+        if (!SYS_MEM_ADDR_VALID(addr)) {
+            return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ADDR;
+        }
+
+        uint32_t word_count;
+
+        if (!string_hex_to_uint(argv[3], &word_count)) {
+                return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
+        }
+
+        if (!SYS_MEM_ADDR_VALID(addr + (word_count * SYS_MEM_WORD_SIZE_BYTES) - SYS_MEM_WORD_SIZE_BYTES)) {
+            return SYSTEM_ERROR_CLI_CMD_MEM_WORD_COUNT_EXCEED_MEMORY;
+        }
+
+        uint32_t *start = addr;
+        const uint32_t *end = (uint32_t *)addr + word_count;
+        
+        while (start < end) {
+            uint32_t value = *start;
+            printf("%x ", value);
+            start++;
+        }
+        printf("\n");
+
     } else if (string_compare(subcmd, "checksum") == 0) {
-        // mem checksum <addr> [word_cnt]
+        // mem checksum <addr> [word_count]
         if (argc < 3) {
             return;
         }
