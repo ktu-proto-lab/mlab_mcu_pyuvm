@@ -95,7 +95,7 @@ static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
             return SYSTEM_ERROR_CLI_CMD_MEM_WORD_COUNT_EXCEED_MEMORY;
         }
 
-        uint32_t *start = addr;
+        uint32_t *start = (uint32_t *)addr;
         const uint32_t *end = (uint32_t *)addr + word_count;
         
         while (start < end) {
@@ -107,12 +107,41 @@ static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
 
     } else if (string_compare(subcmd, "checksum") == 0) {
         // mem checksum <addr> [word_count]
-        if (argc < 3) {
+        if (argc < 4) {
             return;
         }
-        printf("[  DEBUG]: cmd mem checksum\n");
+
+        if (!string_hex_to_uint(argv[2], &addr)) {
+            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
+        }
+
+        if (!SYS_MEM_ADDR_VALID(addr)) {
+            return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ADDR;
+        }
+
+        uint32_t word_count;
+
+        if (!string_hex_to_uint(argv[3], &word_count)) {
+                return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
+        }
+
+        if (!SYS_MEM_ADDR_VALID(addr + (word_count * SYS_MEM_WORD_SIZE_BYTES) - SYS_MEM_WORD_SIZE_BYTES)) {
+            return SYSTEM_ERROR_CLI_CMD_MEM_WORD_COUNT_EXCEED_MEMORY;
+        }
+
+        uint32_t *start = (uint32_t *)addr;
+        uint32_t *end = (uint32_t *)addr + word_count;
+        uint32_t checksum = *start;
+        ++start;
+
+        while (start < end) {
+            checksum ^= (*start);
+            ++start;
+        }
+        
+        printf("%x\n", checksum);
     } else {
-        printf("[  ERROR]: unknown mem sub-command '%s'\n", subcmd);
+        return SYSTEM_ERROR_CLI_CMD_MEM_SUBCMD_NOT_FOUND;
     }
 
     return SYSTEM_ERROR_NONE;
