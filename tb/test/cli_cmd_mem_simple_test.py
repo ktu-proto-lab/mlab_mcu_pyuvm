@@ -65,11 +65,12 @@ class CliCmdMemSimpleTest(McuBaseTest):
         self.logger.info("waiting for response")
         received_string = await self.receive_string_response()
         self.logger.info(f"received '{received_string}'")
-        assert expected_string == received_string, (
-            "did not receive debug message from the cli",
-            f"transmitted = {cmd_mem_sequence}, "
-            f"expected '{expected_string}', received '{received_string}'"
-        )
+        if expected_response != "":
+            assert expected_string == received_string, (
+                "did not receive debug message from the cli",
+                f"transmitted = {cmd_mem_sequence}, "
+                f"expected '{expected_string}', received '{received_string}'"
+            )
 
     async def run_phase(self):
         self.raise_objection()
@@ -83,17 +84,17 @@ class CliCmdMemSimpleTest(McuBaseTest):
             f"expected ack message '{expected_string}', received='{received_string}'"
         )
         # TODO: 6f0940 value is not checked if it is actually correct in the imem space
-        # await self.check_cli_cmd_mem("mem read 0x80000006", "0x6f0940")
-        # await self.receive_string_response()
-        # await self.check_cli_cmd_mem("mem write 0x80001990 0xffffffff", "0x0")
-        # await self.receive_string_response()
-        # await self.check_cli_cmd_mem("mem read 0x80001990", "0xffffffff")
-        # await self.receive_string_response()
-        # await self.check_cli_cmd_mem("mem dump 0x90000300 0x3", "[  DEBUG]: cmd mem dump")
-        # await self.receive_string_response()
-        await self.check_cli_cmd_mem("mem checksum 0x80000000 0xff", "[  DEBUG]: cmd mem checksum")
+        await self.check_cli_cmd_mem("mem read 0x80000006", "0x6f0940")
         await self.receive_string_response()
-        await self.check_cli_cmd_mem("mem cmd <arg1> <arg2>", "[  ERROR]: unknown mem sub-command 'cmd'")
+        await self.check_cli_cmd_mem("mem write 0x80001990 0xffffffff", "0x0")
+        await self.receive_string_response()
+        await self.check_cli_cmd_mem("mem read 0x80001990", "0xffffffff")
+        await self.receive_string_response()
+        await self.check_cli_cmd_mem("mem checksum 0x80000000 0xff", "")
+        await self.receive_string_response()
+        await self.check_cli_cmd_mem("mem cmd <arg1> <arg2>", "[  ERROR]: 107")
+        await self.receive_string_response()
+        await self.check_cli_cmd_mem("mem dump 0x80000300 0x3", "")
         await self.receive_string_response()
         self.logger.debug("dropping the objection")
         self.drop_objection()

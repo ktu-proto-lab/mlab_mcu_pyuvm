@@ -7,6 +7,7 @@
 #include "lib/string.h"
 #include "sys/int.h"
 #include "sys/time.h"
+#include "sys/err.h"
 
 uart_handle_t uart;
 gpio_handle_t gpio;
@@ -38,10 +39,13 @@ int main() {
         uart_tx_enable(&uart);
         string_receive(buffer, sizeof(buffer));
         time_delay_microseconds(5, cpu_freq_mhz);
-        cli_exec_cmd((char *)buffer);
+        system_error_t e = cli_exec_cmd((char *)buffer);
+        if (e != SYSTEM_ERROR_NONE) {
+            system_error_print(e);
+        }
         // BUG: this takes time and, it needs to say that it is busy, set gpio_pin_8 for example
         clear_buffer(buffer, sizeof(buffer));
-        printf("[  DEBUG]: cleared buffer\n");
+        printf("ready\n");
         uart_tx_disable(&uart);
     } while(1);
 }

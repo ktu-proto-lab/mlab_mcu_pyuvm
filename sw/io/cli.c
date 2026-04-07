@@ -7,144 +7,134 @@
 #include "sys/err.h"
 
 static system_error_t cli_cmd_echo_handler(int argc, char **argv) {
-    if (argc < CLI_CMD_ECHO_ARG_COUNT) {
+    if (argc != CLI_CMD_ECHO_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_ECHO_INVALID_ARG_COUNT;
     }
-
     for (int i = 1; i < argc; ++i) {
         printf("%s", argv[i]);
     }
+    return SYSTEM_ERROR_NONE;
+}
 
+static system_error_t cli_cmd_mem_read_handler(int argc, char **argv) {
+    if (argc != CLI_CMD_MEM_READ_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ARG_COUNT;
+    }
+    uint32_t addr;
+    if (!string_hex_to_uint(argv[2], &addr)) {
+       return SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ADDR_HEX_FORMAT; 
+    }
+    if (!SYS_MEM_ADDR_VALID(addr)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ADDR;
+    }
+    uint32_t value = *((volatile uint32_t *)addr);
+    printf("%x\n", value);
+    return SYSTEM_ERROR_NONE;
+}
+
+static system_error_t cli_cmd_mem_write_handler(int argc, char **argv) {
+    if (argc != CLI_CMD_MEM_WRITE_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_WRITE_INVALID_ARG_COUNT;
+    }
+    uint32_t addr;
+    if (!string_hex_to_uint(argv[2], &addr)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_WRITE_INVALID_ADDR_HEX_COUNT;
+    }
+    if (!SYS_MEM_ADDR_VALID(addr)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_WRITE_INVALID_ADDR;
+    }
+    uint32_t new_value;
+    if (!string_hex_to_uint(argv[3], &new_value)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_WRITE_INVALID_VALUE_HEX_FORMAT;
+    }
+    uint32_t prev_value = *((volatile uint32_t *)addr);
+    *((volatile uint32_t *)addr) = new_value;
+    printf("%x\n", prev_value);
+    return SYSTEM_ERROR_NONE;
+}
+
+static system_error_t cli_cmd_mem_dump_handler(int argc, char **argv) {
+    if (argc != CLI_CMD_MEM_DUMP_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_ARG_COUNT;
+    }
+    uint32_t addr;
+    if (!string_hex_to_uint(argv[2], &addr)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_ADDR_HEX_FORMAT;
+    }
+    if (!SYS_MEM_ADDR_VALID(addr)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_ADDR;
+    }
+    uint32_t word_count;
+    if (!string_hex_to_uint(argv[3], &word_count)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_WORD_COUNT_HEX_FORMAT;
+    }
+    if (!SYS_MEM_ADDR_VALID(addr + (word_count * SYS_MEM_WORD_SIZE_BYTES) - SYS_MEM_WORD_SIZE_BYTES)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_WORD_COUNT_EXCEED_MEMORY;
+    }
+    volatile uint32_t *start = (uint32_t *)addr;
+    const uint32_t *end = (uint32_t *)addr + word_count;
+    if (start >= end) {
+       return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_START_ADDR_EXCEEDS_END_ADDR; 
+    }
+    while(start < end) {
+        uint32_t value = *start;
+        // TODO (edit): end with a newline after test is updated
+        printf("%x ", value);
+        ++start;
+    }
+    printf("\n");
+    return SYSTEM_ERROR_NONE;
+}
+
+static system_error_t cli_cmd_mem_checksum_handler(int argc, char **argv) {
+    if (argc != CLI_CMD_MEM_CHECKSUM_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_ARG_COUNT;
+    }
+    uint32_t addr;
+    if (!string_hex_to_uint(argv[2], &addr)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_ADDR_HEX_FORMAT;
+    }
+    if (!SYS_MEM_ADDR_VALID(addr)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_ADDR;
+    }
+    uint32_t word_count;
+    if (!string_hex_to_uint(argv[3], &word_count)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_WORD_COUNT_HEX_FORMAT;
+    }
+    if (!SYS_MEM_ADDR_VALID(addr + (word_count * SYS_MEM_WORD_SIZE_BYTES) - SYS_MEM_WORD_SIZE_BYTES)) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_WORD_COUNT_EXCEED_MEMORY;
+    }
+    volatile uint32_t *start = (volatile uint32_t *)addr;
+    uint32_t *end = (uint32_t *)addr + word_count;
+    if (start >= end) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_START_ADDR_EXCEEDS_END_ADDR;
+    }
+    uint32_t checksum = *start;
+    ++start;
+    while (start < end) {
+        checksum ^= (*start);
+        ++start;
+    }
+    printf("%x\n", checksum);
     return SYSTEM_ERROR_NONE;
 }
 
 static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
-    if (argc < CLI_CMD_MEM_MIN_ARG_COUNT) {
+    if (argc < CLI_CMD_MEM_MIN_ARG_COUNT || argc > CLI_CMD_MEM_MAX_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT;
     }
-
-    const char *subcmd = argv[1];
-    uint32_t addr;
-
-    if (string_compare(subcmd, "read") == 0) {
-        if (argc != CLI_CMD_MEM_READ_ARG_COUNT) {
-            return SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ARG_COUNT;
-        }
-
-        if (!string_hex_to_uint(argv[2], &addr)) {
-            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
-        }
-
-        if (!SYS_MEM_ADDR_VALID(addr)) {
-            return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ADDR;
-        }
-
-        uint32_t value = *((volatile uint32_t *)addr);
-
-        printf("%x\n", value);
-
-    } else if (string_compare(subcmd, "write") == 0) {
-        // mem write <addr> <value>
-        if (argc != 4) {
-            return;
-        }
-
-        // TODO (refac): this should be nested with read sub-command to save some space
-        if (!string_hex_to_uint(argv[2], &addr)) {
-            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
-        }
-
-
-        if (!SYS_MEM_ADDR_VALID(addr)) {
-            return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ADDR;
-        }
-
-        uint32_t value;
-        if (!string_hex_to_uint(argv[3], &value)) {
-            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
-        }
-
-        // TODO (refac): repeats identically like read sub-command
-        uint32_t old_value = *((volatile uint32_t *)addr);
-
-        // WARN: writing blindly, if it is writing on top of the actual program binaries - too bad
-        *(volatile uint32_t *)addr = value;
-
-        printf("%x\n", old_value);
-    } else if (string_compare(subcmd, "dump") == 0) {
-        // mem dump <addr> <word_count>
-        if (argc < 4) {
-            return;
-        }
-
-        if (!string_hex_to_uint(argv[2], &addr)) {
-            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
-        }
-
-        if (!SYS_MEM_ADDR_VALID(addr)) {
-            return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ADDR;
-        }
-
-        uint32_t word_count;
-
-        if (!string_hex_to_uint(argv[3], &word_count)) {
-                return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
-        }
-
-        if (!SYS_MEM_ADDR_VALID(addr + (word_count * SYS_MEM_WORD_SIZE_BYTES) - SYS_MEM_WORD_SIZE_BYTES)) {
-            return SYSTEM_ERROR_CLI_CMD_MEM_WORD_COUNT_EXCEED_MEMORY;
-        }
-
-        uint32_t *start = (uint32_t *)addr;
-        const uint32_t *end = (uint32_t *)addr + word_count;
-        
-        while (start < end) {
-            uint32_t value = *start;
-            printf("%x ", value);
-            start++;
-        }
-        printf("\n");
-
-    } else if (string_compare(subcmd, "checksum") == 0) {
-        // mem checksum <addr> [word_count]
-        if (argc < 4) {
-            return;
-        }
-
-        if (!string_hex_to_uint(argv[2], &addr)) {
-            return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
-        }
-
-        if (!SYS_MEM_ADDR_VALID(addr)) {
-            return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ADDR;
-        }
-
-        uint32_t word_count;
-
-        if (!string_hex_to_uint(argv[3], &word_count)) {
-                return SYSTEM_ERROR_STRING_INVALID_HEX_FORMAT;
-        }
-
-        if (!SYS_MEM_ADDR_VALID(addr + (word_count * SYS_MEM_WORD_SIZE_BYTES) - SYS_MEM_WORD_SIZE_BYTES)) {
-            return SYSTEM_ERROR_CLI_CMD_MEM_WORD_COUNT_EXCEED_MEMORY;
-        }
-
-        uint32_t *start = (uint32_t *)addr;
-        uint32_t *end = (uint32_t *)addr + word_count;
-        uint32_t checksum = *start;
-        ++start;
-
-        while (start < end) {
-            checksum ^= (*start);
-            ++start;
-        }
-        
-        printf("%x\n", checksum);
+    const char *subcommand = argv[1];
+    if (string_compare(subcommand, "read") == 0) {
+        return cli_cmd_mem_read_handler(argc, argv);
+    } else if (string_compare(subcommand, "write") == 0) {
+        return cli_cmd_mem_write_handler(argc, argv);
+    } else if (string_compare(subcommand, "dump") == 0) {
+        return cli_cmd_mem_dump_handler(argc, argv);
+    } else if (string_compare(subcommand, "checksum") == 0) {
+        return cli_cmd_mem_checksum_handler(argc, argv);
     } else {
         return SYSTEM_ERROR_CLI_CMD_MEM_SUBCMD_NOT_FOUND;
     }
-
-    return SYSTEM_ERROR_NONE;
 }
 
 typedef system_error_t (*cli_cmd_handler_t)(int argc, char **argv);
@@ -190,18 +180,13 @@ system_error_t cli_exec_cmd(char *input_buffer) {
 
     input_buffer[write_index] = '\0';
 
-    if (argc == 0) {
-        return;
+    if (argc <= 0 || argc > CLI_MAX_ARGS) {
+        return SYSTEM_ERROR_CLI_INVALID_ARGUMENT_COUNT;
     }
 
     for (uint32_t i = 0; i < cli_cmd_count; ++i) {
         if (string_compare(argv[0], cli_cmd_table[i].name) == 0) {
-            system_error_t e = cli_cmd_table[i].handler(argc, argv);
-            if (e != SYSTEM_ERROR_NONE) {
-                system_error_print(e);
-            }
-            // BUG
-            return;
+            return cli_cmd_table[i].handler(argc, argv);
         }
     }
 
