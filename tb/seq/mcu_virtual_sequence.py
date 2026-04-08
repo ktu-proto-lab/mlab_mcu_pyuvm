@@ -39,8 +39,8 @@ class McuVirtualSequence(uvm_sequence):
         uart_string_sequence: UartStringSequence = UartStringSequence.create("uart_string_sequence")
         uart_string_sequence.set_string(string)
         self.sequencer.logger.info(f"sending {uart_string_sequence}")
-        self.sequencer.uart_sequencer.vif.enable_transmit()
+        await self.sequencer.uart_sequencer.vif.enable_transmit()
         await uart_string_sequence.start(self.sequencer.uart_sequencer)
-        self.sequencer.uart_sequencer.vif.disable_transmit()
+        await self.sequencer.uart_sequencer.vif.disable_transmit()
         self.sequencer.logger.info(f"sent {uart_string_sequence}")
 

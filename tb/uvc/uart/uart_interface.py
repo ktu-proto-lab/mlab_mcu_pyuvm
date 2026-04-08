@@ -1,5 +1,5 @@
 from cocotb.handle import SimHandleBase
-from cocotb.triggers import FallingEdge, RisingEdge, Timer, ReadOnly
+from cocotb.triggers import FallingEdge, RisingEdge, Timer, ReadOnly, ReadWrite
 from decimal import Decimal
 from numbers import Real
 from uvc.system_interface import SystemInterface
@@ -22,17 +22,20 @@ class UartInterface(SystemInterface):
         self.boud_rate = vif.uart_boud_rate
         self.bit_time_ns = vif.uart_bit_time_ns
 
-    def enable_transmit(self):
+    async def enable_transmit(self):
+        await ReadWrite()
         self.transmit_enable.value = 1
         self.transmit.value = 1
 
-    def disable_transmit(self):
+    async def disable_transmit(self):
+        await ReadWrite()
         self.transmit_enable.value = 0
 
     async def bit_time(self, factor: float = 1.0):
         await Timer(self.bit_time_ns * factor, units='ns', round_mode='round')
 
     async def transmit_byte(self, byte: int):
+        await ReadWrite()
         # start bit
         self.transmit.value = 0
         await self.bit_time()

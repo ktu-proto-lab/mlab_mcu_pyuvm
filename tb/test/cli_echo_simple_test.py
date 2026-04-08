@@ -50,9 +50,9 @@ class CliEchoSimpleTest(McuBaseTest):
         echo_transmit_string_sequence.string = f"echo \"{expected_string}\"\0";
         self.logger.info(f"transmitting '{echo_transmit_string_sequence}'")
         self.fifo.flush()
-        self.uart_if.enable_transmit()
+        await self.uart_if.enable_transmit()
         await echo_transmit_string_sequence.start(self.env.uart.sequencer)
-        self.uart_if.disable_transmit()
+        await self.uart_if.disable_transmit()
         self.logger.info(f"transmitted '{echo_transmit_string_sequence}'")
         self.logger.info("waiting echo response")
         actual_received_string = await self.receive_string_buffer(len(expected_string))

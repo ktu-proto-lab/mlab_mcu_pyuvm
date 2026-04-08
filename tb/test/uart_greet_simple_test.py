@@ -38,14 +38,14 @@ class UartGreetSimpleTest(McuBaseTest):
         received_string = await self.receive_string_buffer(len(expected_string))
         self.logger.info(f"received: '{received_string}'")
         assert received_string == expected_string, f"expected '{expected_string}', got '{received_string}'"
-        self.uart_if.enable_transmit()
+        await self.uart_if.enable_transmit()
         self.logger.info("enabled transmittion to the mcu")
         transmit_string = "hello back"
         transmit_string_sequence: UartStringSequence = UartStringSequence.create("transmit_string")
         transmit_string_sequence.string = transmit_string
         self.logger.info(f"transmitting '{transmit_string}' to mcu")
         await transmit_string_sequence.start(self.env.uart.sequencer)
-        self.uart_if.disable_transmit()
+        await self.uart_if.disable_transmit()
         self.logger.info(f"transmitted '{transmit_string}'")
         self.fifo.flush() # ignore garbage values if any recorded while transmitting to dut
         self.logger.debug("fifo flushed")
