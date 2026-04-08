@@ -13,7 +13,7 @@ function main {
     TRACER_PANE=$(tmux split-window -h -p 10 -P -F "#{pane_id}")
 
     # Allow to use mouse and provide quick session kill key bind
-    tmux source-file "$PROJECT_ROOT/uvm/conf/tmux.config"
+    tmux source-file "$PROJECT_ROOT/uvm/conf/tmux"
 
     # Give names at the top of panes to express intent
     tmux set-option -t "$SESSION_NAME" pane-border-status top

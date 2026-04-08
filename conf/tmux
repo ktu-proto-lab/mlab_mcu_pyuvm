@@ -1,0 +1,23 @@
+# allow mouse usage
+set -g set-clipboard on
+set -g mouse on
+
+# close whole session with uppercase X
+bind-key X kill-session
+
+# extensive logs when running simulations
+set -g history-limit 50000
+
+# do not automatically rename to whatever command is currently running
+set-option -g allow-rename off
+
+# start window numbering at 1
+set -g base-index 1
+# start pane numbering at 1
+set -g pane-base-index 1
+set-window-option -g pane-base-index 1
+# re-number windows automatically when one is closed
+set -g renumber-windows on
+
+# hide the bottom status bar
+set -g status off
