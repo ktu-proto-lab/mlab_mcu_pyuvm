@@ -2,20 +2,36 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="$(realpath "$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/../..")"
-SESSION_NAME="mlab_mcu_uvm"
+SESSION_NAME="mlab_mcu_uvm_env"
 
 function main {
     tmux kill-session -t "$SESSION_NAME" 2>/dev/null || true
-    tmux new-session -d -s "$SESSION_NAME"
+
+    # Configure pane layout
+    SIM_PANE=$(tmux new-session -d -P -F "#{pane_id}" -s "$SESSION_NAME" -e "PROJECT_ROOT=$PROJECT_ROOT")
+    GENERAL_PANE=$(tmux split-window -v -p 20 -P -F "#{pane_id}")
+    TRACER_PANE=$(tmux split-window -h -p 10 -P -F "#{pane_id}")
+
+    # Allow to use mouse and provide quick session kill key bind
     tmux source-file "$PROJECT_ROOT/uvm/conf/tmux.config"
-    tmux split-window -v -p 50
-    tmux split-window -h -p 20
-    tmux split-window -v -p 10
+
+    # Give names at the top of panes to express intent
+    tmux set-option -t "$SESSION_NAME" pane-border-status top
+    tmux select-pane -t "$SIM_PANE" -T "sim"
+    tmux select-pane -t "$TRACER_PANE" -T "tracer"
+    tmux select-pane -t "$GENERAL_PANE" -T "terminal"
+
+    # Start session
     if [ -n "${TMUX:-}" ]; then
+        # if by mistake user is inside the other tmux session
         tmux switch-client -t "$SESSION_NAME"
     else
         tmux attach-session -t "$SESSION_NAME"
     fi
 }
 
+# TODO:
+# if none args provided, inform to use help
+# if help is provided, show usage of the script
+# if init is provided initialize tmux session
 main
