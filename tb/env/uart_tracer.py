@@ -1,5 +1,5 @@
 from pyuvm import uvm_subscriber, uvm_object, ConfigDB
-from log.error import ConfigError, UartAsciiError
+from error import ConfigError, UartAsciiError
 from uvc.uart import UartTransaction
 
 # tail -f sim/sim_build/uart_trace.log

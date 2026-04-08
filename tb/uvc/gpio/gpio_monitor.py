@@ -1,6 +1,6 @@
 from pyuvm import ConfigDB, uvm_monitor, uvm_object, uvm_analysis_port
 from cocotb.triggers import ReadOnly, RisingEdge
-from log.error import ConfigError
+from error import ConfigError
 from uvc.gpio.gpio_transaction import GpioTransaction
 from uvc.gpio.gpio_interface import GpioInterface
 

@@ -3,7 +3,7 @@ from uvc.uart.uart_interface import UartInterface
 from uvc.uart.uart_driver import UartDriver
 from uvc.uart.uart_monitor import UartMonitor
 from uvc.uart.uart_sequencer import UartSequencer
-from log.error import ConfigError
+from error import ConfigError
 
 class UartAgent(uvm_agent):
     class Config(uvm_object):

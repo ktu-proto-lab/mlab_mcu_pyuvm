@@ -1,7 +1,7 @@
 from pyuvm import uvm_driver, ConfigDB, uvm_analysis_port, uvm_object
 from uvc.uart.uart_interface import UartInterface
 from uvc.uart.uart_transaction import UartTransaction
-from log.error import ConfigError
+from error import ConfigError
 
 class UartDriver(uvm_driver):
     class Config(uvm_object):

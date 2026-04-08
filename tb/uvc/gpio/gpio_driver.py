@@ -1,5 +1,5 @@
 from pyuvm import  ConfigDB, uvm_analysis_port, uvm_driver, uvm_object
-from log.error import ConfigError
+from error import ConfigError
 from uvc.gpio.gpio_interface import GpioInterface
 from uvc.gpio.gpio_transaction import GpioTransaction
 

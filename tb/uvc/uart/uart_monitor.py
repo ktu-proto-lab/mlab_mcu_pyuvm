@@ -3,7 +3,7 @@ from pyuvm import uvm_monitor, uvm_analysis_port, ConfigDB, uvm_object
 from typing import cast
 from uvc.uart.uart_interface import UartInterface
 from uvc.uart.uart_transaction import UartTransaction
-from log.error import ConfigError
+from error import ConfigError
 
 class UartMonitor(uvm_monitor):
     class Config(uvm_object):

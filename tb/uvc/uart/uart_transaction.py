@@ -1,5 +1,5 @@
 from pyuvm import uvm_sequence_item
-from log.error import UartAsciiError
+from error import UartAsciiError
 
 class UartTransaction(uvm_sequence_item):
     def __init__(self, name="uart_transaction", byte: int = 0xFF):

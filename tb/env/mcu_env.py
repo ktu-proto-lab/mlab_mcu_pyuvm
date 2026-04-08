@@ -1,7 +1,7 @@
 from pyuvm import uvm_env, uvm_object, ConfigDB
 from uvc.gpio import GpioAgent
 from uvc.uart import UartAgent
-from log.error import ConfigError
+from error import ConfigError
 from env.uart_tracer import UartTracer
 
 
