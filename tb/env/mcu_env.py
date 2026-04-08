@@ -49,12 +49,14 @@ class McuEnv(uvm_env):
         super().connect_phase()
         if not self.cfg.is_active:
             return
-        if self.cfg.uart_tracer.is_active:
+        if self.cfg.uart_tracer.is_active and self.cfg.uart.is_active:
             if self.cfg.uart_tracer.enable_transmit_stream:
                 self.uart.driver.analysis_port.connect(self.uart_tracer.transmit_export)
             if self.cfg.uart_tracer.enable_receive_stream:
                 self.uart.monitor.analysis_port.connect(self.uart_tracer.receive_export)
         if self.cfg.gpio.is_active:
             self.virtual_sequencer.gpio_sequencer = self.gpio.sequencer
+            self.logger.debug("connected gpio agent sequencer to the virtual sequencer")
         if self.cfg.uart.is_active:
             self.virtual_sequencer.uart_sequencer = self.uart.sequencer
+            self.logger.debug("connected uart agent sequenver to the virtual sequencer")
