@@ -24,22 +24,22 @@ Simulators:
   xcelium    : $(XCELIUM_NAME)
 
 Verilator Actions:
-  verilator-build-image         : build the Verilator Docker image
-  verilator-setup-env         		: initialize venv and install requirements
-  verilator-shell-container: enter the Verilator container
+  verilator-build-image      : build the Verilator Docker image
+  verilator-setup-env        : initialize venv and install requirements
+  verilator-shell-container  : enter the Verilator container
 
 Xcelium Actions:
-  xcelium-build-image     : build the Xcelium Podman image
-  xcelium-setup-env       : initialize venv and install requirements
-  xcelium-run-container   : enter the Xcelium container
+  xcelium-build-image        : build the Xcelium Podman image
+  xcelium-setup-env          : initialize venv and install requirements
+  xcelium-run-container      : enter the Xcelium container
 
 Cleanup:
-  verilator-purge         : remove local .venv and delete Verilator image
-  xcelium-purge           : remove local .venv and delete Xcelium image
+  verilator-purge            : remove local .venv and delete Verilator image
+  xcelium-purge              : remove local .venv and delete Xcelium image
 
 Patching:
-  apply-patches           : apply uvm-specific patches to the RTL files
-  reverse-patches         : reverse patches of the RTL files
+  apply-patches              : apply uvm-specific patches to the RTL files
+  reverse-patches            : reverse patches of the RTL files
 
 Examples:
   make xcelium-build-image
