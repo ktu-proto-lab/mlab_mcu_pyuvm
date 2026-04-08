@@ -35,7 +35,7 @@ int main() {
 
     time_delay_microseconds(5, cpu_freq_mhz);
     uart_tx_enable(&uart);
-    cli_exec_cmd((char *)buffer);
+    cli_exec((char *)buffer);
     uart_tx_disable(&uart);
     while(1);
 }

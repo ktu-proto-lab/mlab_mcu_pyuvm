@@ -5,8 +5,8 @@ from seq import UartStringSequence
 from uvc.uart import UartTransaction
 
 @pyuvm.test()
-class CliCmdEchoSimpleTest(McuBaseTest):
-    def __init__(self, name="CliCmdEchoSimpleTest", parent=None):
+class CliEchoSimpleTest(McuBaseTest):
+    def __init__(self, name="CliEchoSimpleTest", parent=None):
         super().__init__(name, parent)
         self.fifo: uvm_tlm_analysis_fifo = None
 

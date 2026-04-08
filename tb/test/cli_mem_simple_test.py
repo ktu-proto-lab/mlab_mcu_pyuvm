@@ -4,7 +4,7 @@ from test.mcu_base_test import McuBaseTest
 from seq import CliMemSequence
 
 @pyuvm.test()
-class CliCmdEchoSimpleTest(McuBaseTest):
+class CliMemSimpleTest(McuBaseTest):
     def __init__(self, name="CliCmdEchoSimpleTest", parent=None):
         super().__init__(name, parent)
         self.uart_receive_fifo: uvm_tlm_analysis_fifo = None

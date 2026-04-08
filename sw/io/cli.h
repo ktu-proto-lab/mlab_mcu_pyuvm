@@ -22,6 +22,6 @@
 // echo "string"
 #define CLI_CMD_ECHO_ARG_COUNT 2UL
 
-system_error_t cli_exec_cmd(char *input_buffer);
+system_error_t cli_exec(char *input_buffer);
 
 #endif

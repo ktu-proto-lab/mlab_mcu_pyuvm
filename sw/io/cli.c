@@ -6,7 +6,7 @@
 #include "sys/mem.h"
 #include "sys/err.h"
 
-static system_error_t cli_cmd_echo_handler(int argc, char **argv) {
+static system_error_t cli_echo_handler(int argc, char **argv) {
     if (argc != CLI_CMD_ECHO_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_ECHO_INVALID_ARG_COUNT;
     }
@@ -16,7 +16,7 @@ static system_error_t cli_cmd_echo_handler(int argc, char **argv) {
     return SYSTEM_ERROR_NONE;
 }
 
-static system_error_t cli_cmd_mem_read_handler(int argc, char **argv) {
+static system_error_t cli_mem_read_handler(int argc, char **argv) {
     if (argc != CLI_CMD_MEM_READ_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ARG_COUNT;
     }
@@ -32,7 +32,7 @@ static system_error_t cli_cmd_mem_read_handler(int argc, char **argv) {
     return SYSTEM_ERROR_NONE;
 }
 
-static system_error_t cli_cmd_mem_write_handler(int argc, char **argv) {
+static system_error_t cli_mem_write_handler(int argc, char **argv) {
     if (argc != CLI_CMD_MEM_WRITE_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_MEM_WRITE_INVALID_ARG_COUNT;
     }
@@ -53,7 +53,7 @@ static system_error_t cli_cmd_mem_write_handler(int argc, char **argv) {
     return SYSTEM_ERROR_NONE;
 }
 
-static system_error_t cli_cmd_mem_dump_handler(int argc, char **argv) {
+static system_error_t cli_mem_dump_handler(int argc, char **argv) {
     if (argc != CLI_CMD_MEM_DUMP_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_ARG_COUNT;
     }
@@ -86,7 +86,7 @@ static system_error_t cli_cmd_mem_dump_handler(int argc, char **argv) {
     return SYSTEM_ERROR_NONE;
 }
 
-static system_error_t cli_cmd_mem_checksum_handler(int argc, char **argv) {
+static system_error_t cli_mem_cksum_handler(int argc, char **argv) {
     if (argc != CLI_CMD_MEM_CHECKSUM_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_ARG_COUNT;
     }
@@ -119,19 +119,19 @@ static system_error_t cli_cmd_mem_checksum_handler(int argc, char **argv) {
     return SYSTEM_ERROR_NONE;
 }
 
-static system_error_t cli_cmd_mem_handler(int argc, char **argv) {
+static system_error_t cli_mem_handler(int argc, char **argv) {
     if (argc < CLI_CMD_MEM_MIN_ARG_COUNT || argc > CLI_CMD_MEM_MAX_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT;
     }
     const char *subcommand = argv[1];
     if (string_compare(subcommand, "read") == 0) {
-        return cli_cmd_mem_read_handler(argc, argv);
+        return cli_mem_read_handler(argc, argv);
     } else if (string_compare(subcommand, "write") == 0) {
-        return cli_cmd_mem_write_handler(argc, argv);
+        return cli_mem_write_handler(argc, argv);
     } else if (string_compare(subcommand, "dump") == 0) {
-        return cli_cmd_mem_dump_handler(argc, argv);
-    } else if (string_compare(subcommand, "checksum") == 0) {
-        return cli_cmd_mem_checksum_handler(argc, argv);
+        return cli_mem_dump_handler(argc, argv);
+    } else if (string_compare(subcommand, "cksum") == 0) {
+        return cli_mem_cksum_handler(argc, argv);
     } else {
         return SYSTEM_ERROR_CLI_CMD_MEM_SUBCMD_NOT_FOUND;
     }
@@ -145,13 +145,13 @@ typedef struct {
 } cli_cmd_t;
 
 static const cli_cmd_t cli_cmd_table[] = {
-    {"echo", cli_cmd_echo_handler},
-    {"mem", cli_cmd_mem_handler}
+    {"echo", cli_echo_handler},
+    {"mem", cli_mem_handler}
 };
 
 static const uint32_t cli_cmd_count = sizeof(cli_cmd_table) / sizeof(cli_cmd_table[0]);
 
-system_error_t cli_exec_cmd(char *input_buffer) {
+system_error_t cli_exec(char *input_buffer) {
     char *argv[CLI_MAX_ARGS];
     int argc = 0;
     bool in_word = false;

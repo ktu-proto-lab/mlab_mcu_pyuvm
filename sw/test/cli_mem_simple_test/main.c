@@ -39,7 +39,7 @@ int main() {
         uart_tx_enable(&uart);
         string_receive(buffer, sizeof(buffer));
         time_delay_microseconds(5, cpu_freq_mhz);
-        system_error_t e = cli_exec_cmd((char *)buffer);
+        system_error_t e = cli_exec((char *)buffer);
         if (e != SYSTEM_ERROR_NONE) {
             system_error_print(e);
         }
