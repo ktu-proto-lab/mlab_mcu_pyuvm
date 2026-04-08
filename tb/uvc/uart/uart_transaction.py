@@ -1,4 +1,5 @@
 from pyuvm import uvm_sequence_item
+from log.error import UartAsciiError
 
 class UartTransaction(uvm_sequence_item):
     def __init__(self, name="uart_transaction", byte: int = 0xFF):
@@ -17,11 +18,16 @@ class UartTransaction(uvm_sequence_item):
     def is_null_terminator(self) -> bool:
         return self.byte == 0x00
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{chr(self.byte)}"
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return type(self) == type(other) and self.byte == other.byte
 
     def do_copy(self, rhs):
         self.byte = rhs.byte
+        
+    def to_ascii(self) -> chr:
+        if self.byte < 0 or self.byte > 127:
+            raise UartAsciiError(f"byte {self.hex_value()} can not be converted to ascci character")
+        return chr(self.byte)

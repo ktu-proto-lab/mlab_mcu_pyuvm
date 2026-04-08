@@ -1,1 +1,1 @@
-from .test_errors import ConfigError
+from .test_errors import ConfigError, UartAsciiError

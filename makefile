@@ -67,6 +67,7 @@ reverse-patches:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: verilator-build-image verilator-setup-env verilator-run-container verilator-purge
 
+# TODO: I think this should be build-image SIM=verilator or smth like that or make verilator build-image make xcelium run-container
 verilator-build-image:
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "building $(VERILATOR_NAME) image"; \
