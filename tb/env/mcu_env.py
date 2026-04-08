@@ -46,5 +46,9 @@ class McuEnv(uvm_env):
         super().connect_phase()
         if not self.cfg.is_active:
             return
-        if self.cfg.uart_tracer.is_active:
-            self.uart.monitor.analysis_port.connect(self.uart_tracer.analysis_export)
+        if not self.cfg.uart_tracer.is_active:
+            return
+        if self.cfg.uart_tracer.enable_transmit_stream:
+            self.uart.driver.analysis_port.connect(self.uart_tracer.transmit_export)
+        if self.cfg.uart_tracer.enable_receive_stream:
+            self.uart.monitor.analysis_port.connect(self.uart_tracer.receive_export)

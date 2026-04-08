@@ -27,6 +27,9 @@ class UartTransaction(uvm_sequence_item):
     def do_copy(self, rhs):
         self.byte = rhs.byte
         
+    def is_idle_byte(self) -> bool:
+        return self.byte == 0xff
+        
     def to_ascii(self) -> chr:
         if self.byte < 0 or self.byte > 127:
             raise UartAsciiError(f"byte {self.hex_value()} can not be converted to ascci character")
