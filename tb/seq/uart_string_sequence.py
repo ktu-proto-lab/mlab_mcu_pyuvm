@@ -11,11 +11,15 @@ class UartStringSequence(uvm_sequence):
 
     async def body(self):
         txn: UartTransaction = None
+        self.sequencer.logger.debug(f"sending {self.string}")
         for char in self.string:
             txn = UartTransaction.create("txn")
             txn.byte = ord(char)
+            self.sequencer.logger.debug(f"start {txn} item")
             await self.start_item(txn)
+            self.sequencer.logger.debug(f"finish {txn} item")
             await self.finish_item(txn)
+            self.sequencer.logger.debug(f"item {txn} finished")
 
     def __str__(self) -> str:
         return self.string

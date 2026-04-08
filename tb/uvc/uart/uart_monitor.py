@@ -35,7 +35,11 @@ class UartMonitor(uvm_monitor):
             return
         await self.cfg.vif.system_reset_done()
         while True:
+            self.logger.debug("waiting to receive byte")
             byte: int = await self.cfg.vif.receive_byte()
             txn = UartTransaction("txn", byte)
+            if txn.is_idle_byte():
+                self.logger.debug("idle byte ignored")
+                continue
             self.logger.debug(f"{txn.hex_value()}")
             self.analysis_port.write(txn)

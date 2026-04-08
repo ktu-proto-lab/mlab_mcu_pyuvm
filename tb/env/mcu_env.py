@@ -3,6 +3,7 @@ from uvc.gpio import GpioAgent
 from uvc.uart import UartAgent
 from error import ConfigError
 from env.uart_tracer import UartTracer
+from env.mcu_virtual_sequencer import McuVirtualSequencer
 
 
 class McuEnv(uvm_env):
@@ -20,6 +21,7 @@ class McuEnv(uvm_env):
         self.gpio: GpioAgent = None
         self.uart: UartAgent = None
         self.uart_tracer: UartTracer = None
+        self.virtual_sequencer: McuVirtualSequencer = None
 
     def build_phase(self):
         super().build_phase()
@@ -41,14 +43,18 @@ class McuEnv(uvm_env):
             raise ConfigError("no uart tracer configuration provided for the environment", self)
         ConfigDB().set(self, "uart_tracer", "cfg", self.cfg.uart_tracer)
         self.uart_tracer = UartTracer.create("uart_tracer", self)
+        self.virtual_sequencer = McuVirtualSequencer.create("virtual_sequencer", self)
 
     def connect_phase(self):
         super().connect_phase()
         if not self.cfg.is_active:
             return
-        if not self.cfg.uart_tracer.is_active:
-            return
-        if self.cfg.uart_tracer.enable_transmit_stream:
-            self.uart.driver.analysis_port.connect(self.uart_tracer.transmit_export)
-        if self.cfg.uart_tracer.enable_receive_stream:
-            self.uart.monitor.analysis_port.connect(self.uart_tracer.receive_export)
+        if self.cfg.uart_tracer.is_active:
+            if self.cfg.uart_tracer.enable_transmit_stream:
+                self.uart.driver.analysis_port.connect(self.uart_tracer.transmit_export)
+            if self.cfg.uart_tracer.enable_receive_stream:
+                self.uart.monitor.analysis_port.connect(self.uart_tracer.receive_export)
+        if self.cfg.gpio.is_active:
+            self.virtual_sequencer.gpio_sequencer = self.gpio.sequencer
+        if self.cfg.uart.is_active:
+            self.virtual_sequencer.uart_sequencer = self.uart.sequencer

@@ -19,7 +19,7 @@ class UartTransaction(uvm_sequence_item):
         return self.byte == 0x00
 
     def __str__(self) -> str:
-        return f"{chr(self.byte)}"
+        return f"{hex(self.byte)}"
 
     def __eq__(self, other) -> bool:
         return type(self) == type(other) and self.byte == other.byte
