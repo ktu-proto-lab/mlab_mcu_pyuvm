@@ -5,4 +5,3 @@ pytest==8.3.5
 pyucis-viewer==0.0.4.*
 pyuvm==3.0.0
 pyvsc==0.9.4.*
-z3-solver==4.16.0.0
