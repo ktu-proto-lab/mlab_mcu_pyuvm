@@ -38,8 +38,8 @@ export HOST_UID := $(shell id -u)
 export HOST_GID := $(shell id -g)
 export USER := $(shell whoami)
 # must match with names given in docker-compose.yml
-VERILATOR_IMAGE := mlab-mcu-uvm-verilator-$(shell whoami):latest
-XCELIUM_IMAGE := mlab-mcu-uvm-xcelium-$(shell whoami):latest
+VERILATOR_IMAGE := mlab-mcu-uvm-verilator-$(USER):latest
+XCELIUM_IMAGE := mlab-mcu-uvm-xcelium-$(USER):latest
 # used in docker-compose.yml
 export CADENCE_ROOT := /eda/cadence/2024-25/RHELx86/XCELIUM_24.03.004
 
@@ -72,6 +72,15 @@ IMAGE_ACTION_OPTION_PURGE := purge
 image:
 ifeq ($(SIMULATOR),verilator)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	if ! docker info >/dev/null 2>&1; then \
+		logger WARNING "docker requires sudo, is not running, or user lacks permissions"; \
+		if ! groups | grep -q docker; then \
+			logger INFO "adding user '$(USER)' to docker group..."; \
+			sudo usermod -aG docker "$(USER)"; \
+			logger INFO "please log out and log back in, reboot, or run: 'newgrp docker'"; \
+		fi; \
+		exit 1; \
+	fi; \
 	if [ "$(IMAGE_ACTION_OPTION)" = "$(IMAGE_ACTION_OPTION_PURGE)" ]; then \
 		logger INFO "purging $(VERILATOR_NAME) image"; \
 		docker rmi $(VERILATOR_IMAGE); \
@@ -86,6 +95,10 @@ ifeq ($(SIMULATOR),verilator)
 	fi
 else ifeq ($(SIMULATOR),xcelium)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	if ! command -v podman >/dev/null 2>&1; then \
+		logger ERROR "podman is not installed or not in PATH"; \
+		exit 1; \
+	fi; \
 	if [ "$(IMAGE_ACTION_OPTION)" = "$(IMAGE_ACTION_OPTION_PURGE)" ]; then \
 		logger INFO "purging $(XCELIUM_NAME) image"; \
 		podman rmi $(XCELIUM_IMAGE); \
