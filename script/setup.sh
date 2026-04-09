@@ -48,7 +48,7 @@ function verilator_v5_044 {
 }
 
 function project_utils {
-    sudo apt install patch tree cloc -y
+    sudo apt install patch tree cloc tmux -y
 }
 
 ########################################################################################################################
