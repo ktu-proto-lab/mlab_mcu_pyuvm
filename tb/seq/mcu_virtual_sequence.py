@@ -1,5 +1,5 @@
 from pyuvm import uvm_sequence, uvm_tlm_analysis_fifo
-from env import McuVirtualSequencer
+from env.mcu_virtual_sequencer import McuVirtualSequencer
 from seq.uart_string_sequence import UartStringSequence
 from uvc.uart import UartTransaction
 

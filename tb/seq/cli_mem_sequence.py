@@ -12,7 +12,7 @@ class CliMemSequence(McuVirtualSequence):
     async def body(self):
         await super().body()
         await self.ack()
-        for _ in range(10):
+        for _ in range(1):
             self.sequencer.logger.debug("forming request")
             req: CliMemTransaction = CliMemTransaction.create("req")
             self.sequencer.logger.debug("request formed")

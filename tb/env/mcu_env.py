@@ -4,6 +4,8 @@ from uvc.uart import UartAgent
 from error import ConfigError
 from env.uart_tracer import UartTracer
 from env.mcu_virtual_sequencer import McuVirtualSequencer
+from env.mcu_scoreboard import McuScoreboard
+from env.mcu_ref_model import McuReferenceModel
 
 
 class McuEnv(uvm_env):
@@ -22,6 +24,8 @@ class McuEnv(uvm_env):
         self.uart: UartAgent = None
         self.uart_tracer: UartTracer = None
         self.virtual_sequencer: McuVirtualSequencer = None
+        self.scoreboard: McuScoreboard = None
+        self.reference_model: McuReferenceModel = None
 
     def build_phase(self):
         super().build_phase()
@@ -44,6 +48,8 @@ class McuEnv(uvm_env):
         ConfigDB().set(self, "uart_tracer", "cfg", self.cfg.uart_tracer)
         self.uart_tracer = UartTracer.create("uart_tracer", self)
         self.virtual_sequencer = McuVirtualSequencer.create("virtual_sequencer", self)
+        self.scoreboard = McuScoreboard.create("scoreboard", self)
+        self.reference_model = McuReferenceModel.create("reference_model", self)
 
     def connect_phase(self):
         super().connect_phase()
@@ -60,3 +66,6 @@ class McuEnv(uvm_env):
         if self.cfg.uart.is_active:
             self.virtual_sequencer.uart_sequencer = self.uart.sequencer
             self.logger.debug("connected uart agent sequenver to the virtual sequencer")
+        self.uart.receive_analysis_port.connect(self.scoreboard.actual_fifo.analysis_export)
+        self.uart.transmit_analysis_port.connect(self.reference_model.input.analysis_export)
+        self.reference_model.output.connect(self.scoreboard.expected_fifo.analysis_export)

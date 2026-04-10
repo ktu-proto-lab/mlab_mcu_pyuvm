@@ -53,5 +53,5 @@ class UartAgent(uvm_agent):
         if not self.cfg.is_active:
             return
         self.driver.seq_item_port.connect(self.sequencer.seq_item_export)
-        self.driver.analysis_port.connect(self.transmit_analysis_port)
-        self.monitor.analysis_port.connect(self.receive_analysis_port)
+        self.transmit_analysis_port = self.driver.analysis_port
+        self.receive_analysis_port = self.monitor.analysis_port
