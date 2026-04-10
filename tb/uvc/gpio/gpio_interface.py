@@ -1,4 +1,5 @@
 from cocotb.handle import SimHandleBase
+from cocotb.triggers import ReadWrite, ReadOnly
 from decimal import Decimal
 from vif import McuVirtualInterface
 from uvc.system_interface import SystemInterface
@@ -24,31 +25,37 @@ class GpioInterface(SystemInterface):
         self.top_gpio_oe = vif.top_gpio_oe
         self.exit_pad_io = vif.exit_pad_io
 
-    def drive_input(self, value: int, mask: int = 0xFF) -> None:
+    async def drive_input(self, value: int, mask: int = 0xFF) -> None:
+        await ReadWrite()
         self.top_gpio_o.value = value
         self.top_gpio_oe.value = mask
 
-    def read_pins(self, mask: int = 0xFF) -> int:
+    async def read_pins(self, mask: int = 0xFF) -> int:
+        await ReadOnly()
         if not self.exit_pad_io.value.is_resolvable:
             return None
         return self.exit_pad_io.value & mask
 
-    def read_input(self, mask: int = 0xFF) -> int:
+    async def read_input(self, mask: int = 0xFF) -> int:
+        await ReadOnly()
         if not self.gpio_i.value.is_resolvable:
             return None
         return self.gpio_i.value.integer & mask
 
-    def read_output(self, mask: int = 0xFF) -> int:
+    async def read_output(self, mask: int = 0xFF) -> int:
+        await ReadOnly()
         if not self.gpio_o.value.is_resolvable:
             return None
         return self.gpio_o.value.integer & mask
 
-    def read_output_enable(self) -> int:
+    async def read_output_enable(self) -> int:
+        await ReadOnly()
         if not self.gpio_oe.value.is_resolvable:
             return None
         return self.gpio_oe.value.integer
 
-    def read_enabled_output(self, mask: int = 0xFF) -> int:
+    async def read_enabled_output(self, mask: int = 0xFF) -> int:
+        await ReadOnly()
         o_value = self.read_output()
         oe_value = self.read_output_enable()
         if o_value is None or oe_value is None:

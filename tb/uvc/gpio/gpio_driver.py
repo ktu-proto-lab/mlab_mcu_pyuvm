@@ -33,7 +33,7 @@ class GpioDriver(uvm_driver):
             return
         while True:
             txn: GpioTransaction = await self.seq_item_port.get_next_item()
-            self.cfg.vif.drive_input(txn.value, self.cfg.mask)
+            await self.cfg.vif.drive_input(txn.value, self.cfg.mask)
             self.logger.debug(f"{hex(txn.value)}")
             self.analysis_port.write(txn)
             await self.cfg.vif.system_clock_cycles(1000)

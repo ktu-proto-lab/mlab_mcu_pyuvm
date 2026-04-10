@@ -37,7 +37,7 @@ class GpioMonitor(uvm_monitor):
         while True:
             await RisingEdge(self.cfg.vif.system_clock)
             await ReadOnly()
-            curr_value: int = self.cfg.vif.read_pins(self.cfg.mask)
+            curr_value: int = await self.cfg.vif.read_pins(self.cfg.mask)
             if curr_value is None:
                 continue
             if curr_value != prev_value:
