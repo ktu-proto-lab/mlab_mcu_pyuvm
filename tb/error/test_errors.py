@@ -16,3 +16,7 @@ class UartAsciiError(TestError):
     """ Exception for ASCII related errors where a byte value is not in rage of 0 and 127"""
     def __init__(self, reason: str, parent=None):
         super().__init__(reason, parent)
+        
+class CliMemCmdUnknown(TestError):
+    def __init__(self, reason, parent=None):
+        super().__init__(reason, parent)

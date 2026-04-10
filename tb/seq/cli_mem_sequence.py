@@ -1,4 +1,5 @@
 from seq.mcu_virtual_sequence import McuVirtualSequence
+from seq.cli_mem_transaction import CliMemTransaction
 
 class CliMemSequence(McuVirtualSequence):
     
@@ -11,25 +12,19 @@ class CliMemSequence(McuVirtualSequence):
     async def body(self):
         await super().body()
         await self.ack()
-        # TODO (feat): these strings are CliMemTransaction (sequence items)
-        await self.send_uart_string("mem read 0x80000006")
-        await self.receive_uart_string()
-        await self.ready()
-        await self.send_uart_string("mem write 0x80001990 0xffffffff")
-        await self.receive_uart_string()
-        await self.ready()
-        await self.send_uart_string("mem read 0x80001990")
-        await self.receive_uart_string()
-        await self.ready()
-        await self.send_uart_string("mem cksum 0x80000000 0xff")
-        await self.receive_uart_string()
-        await self.ready()
-        await self.send_uart_string("mem cksum 0x80000000 0x798")
-        await self.receive_uart_string()
-        await self.ready()
-        await self.send_uart_string("mem cmd <arg1> <arg2>")
-        await self.receive_uart_string()
-        await self.ready()
-        await self.send_uart_string("mem dump 0x80000300 0x3")
-        await self.receive_uart_string()
-        await self.ready()
+        for _ in range(10):
+            self.sequencer.logger.debug("forming request")
+            req: CliMemTransaction = CliMemTransaction.create("req")
+            self.sequencer.logger.debug("request formed")
+            # await self.start_item(req)
+            self.sequencer.logger.debug("randomizing request")
+            req.randomize()
+            self.sequencer.logger.debug("randomized cli mem transaction")
+            # await self.finish_item(req)
+            self.sequencer.logger.debug(f"sending via uart randomized command string '{req}'")
+            await self.send_uart_string(req.to_string())
+            self.sequencer.logger.debug(f"{req} sent, receiving response")
+            await self.receive_uart_string()
+            self.sequencer.logger.debug("waiting for mcu to be ready")
+            await self.ready()
+            self.sequencer.logger.debug("request item finished")

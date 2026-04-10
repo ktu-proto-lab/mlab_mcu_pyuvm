@@ -1,1 +1,1 @@
-from .test_errors import ConfigError, UartAsciiError
+from .test_errors import ConfigError, UartAsciiError, CliMemCmdUnknown 
