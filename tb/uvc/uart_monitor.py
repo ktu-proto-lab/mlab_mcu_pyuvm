@@ -59,6 +59,9 @@ class UartMonitor(uvm_monitor):
                 await bit_time()
             # clear stop bit frame
             await bit_time(factor=0.5)
-            self.logger.debug(f"received {byte}")
             
+            if byte.is_idle_byte():
+                continue
+            
+            self.logger.debug(f"received {byte}")
             self.ap.write(byte)

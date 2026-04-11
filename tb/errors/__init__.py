@@ -1,1 +1,1 @@
-from .errors import Error, ConfigError, VirtualInterfaceError
+from .errors import Error, ConfigError, VirtualInterfaceError, AsciiError

@@ -8,3 +8,5 @@ class Config(uvm_object):
         super().__init__(name)
         self.active: bool = True
         self.uart: UartConfig = UartConfig.create("uart")
+        self.trace: bool = True
+        self.tracer_file_path = "sim_build/tracer.log"

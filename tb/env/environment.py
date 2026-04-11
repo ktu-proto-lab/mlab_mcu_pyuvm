@@ -5,6 +5,7 @@ from uvc import UartAgent
 
 from env.config import Config
 from env.virtual_sequencer import VirtualSequencer
+from env.tracer import Tracer
 
 class Environment(uvm_env):
     def __init__(self, name="Environment", parent=None):
@@ -12,6 +13,7 @@ class Environment(uvm_env):
         self.cfg: Config = None
         self.uart: UartAgent = None
         self.vseqr: VirtualSequencer = None
+        self.tracer: Tracer = None
         
     def build_phase(self):
         super().build_phase()
@@ -34,6 +36,10 @@ class Environment(uvm_env):
         
         self.vseqr = VirtualSequencer.create("vseqr", self)
         
+        if self.cfg.trace:
+            ConfigDB().set(self, "tracer", "cfg", self.cfg)
+            self.tracer = Tracer.create("tracer", self)
+        
     def connect_phase(self):
         super().connect_phase()
 
@@ -43,3 +49,6 @@ class Environment(uvm_env):
         if self.cfg.uart.active:
             self.vseqr = self.uart.seqr
             self.logger.debug("connected uart sequencer to virtual sequencer")
+            
+            self.uart.drv.ap.connect(self.tracer.uart_drv_fifo.analysis_export)
+            self.uart.mon.ap.connect(self.tracer.uart_mon_fifo.analysis_export)
