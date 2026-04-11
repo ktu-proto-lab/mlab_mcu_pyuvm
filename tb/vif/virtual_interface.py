@@ -6,8 +6,8 @@ from decimal import Decimal
 from numbers import Real
 from typing import cast
 
-class McuVirtualInterface:
-    def __init__(self, name="McuVirtualInterface", parent=None):
+class VirtualInterface:
+    def __init__(self):
         # TODO (feat): add logger and print name and the parent
         self.clock: SimHandleBase = None
         self.clock_units: str = 'ns'
@@ -34,7 +34,7 @@ class McuVirtualInterface:
         self.scl_o: SimHandleBase = None
         self.scl_oe: SimHandleBase = None
 
-    def wire(self, dut: SimHandleBase):
+    def wire_to_dut(self, dut: SimHandleBase):
         # TODO (feat): check if dut contains expected signals
         self.clock = cast(SimHandleBase, dut.clk)
         self.reset = cast(SimHandleBase, dut.rst)
@@ -55,7 +55,7 @@ class McuVirtualInterface:
         self.scl_o = cast(SimHandleBase, dut.scl_o)
         self.scl_oe = cast(SimHandleBase, dut.scl_oe_o)
         
-    def initialize(self):
+    def init_signal_values(self):
         self.clock.value = 0
         self.reset.value = 0
         self.gpio_i.value = 0
@@ -74,24 +74,3 @@ class McuVirtualInterface:
         self.scl_i = 0
         self.scl_o = 0
         self.scl_oe = 0
-
-    def release_clock(self):
-        cocotb.start_soon(Clock(self.clock, self.clock_period, self.clock_units).start())
-
-    async def reset_system(self):
-        await RisingEdge(self.clock)
-        self.reset.value = 0
-        await ClockCycles(self.clock, self.reset_duration)
-        self.reset.value = 1
-
-    async def reset_done(self):
-        await RisingEdge(self.reset)
-
-    async def clock_cycle(self):
-        await ClockCycles(signal=self.clock, num_cycles=1, rising=True)
-
-    async def clock_cycles(self, cycle_count: int):
-        await ClockCycles(signal=self.clock, num_cycles=cycle_count, rising=True)
-
-    async def read_only(self):
-        await ReadOnly()

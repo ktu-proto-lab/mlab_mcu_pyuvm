@@ -10,3 +10,6 @@ __pycache__/
 # Vim specific files
 *.swp
 *.swo
+
+tb_old/
+sw/test_old/
