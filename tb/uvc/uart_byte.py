@@ -11,9 +11,9 @@ class UartByte(uvm_sequence_item):
         return hex(self.val)
     
     def is_idle_byte(self) -> bool:
-        return self.byte == 0xff
+        return self.val == 0xff
     
     def to_ascii(self) -> chr:
-        if self.byte < 0 or self.byte > 127:
+        if self.val < 0 or self.val > 127:
             raise AsciiError(f"byte {self.hex_value()} can not be converted to ascii character")
-        return chr(self.byte)
+        return chr(self.val)

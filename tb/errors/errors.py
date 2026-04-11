@@ -13,3 +13,10 @@ class VirtualInterfaceError(Error):
 class AsciiError(Error):
     """ Exception for ASCII related errors where a byte value is not in rage of 0 and 127"""
     pass
+
+class SequenceError(Error):
+    """ Exception related with sequences """
+    pass
+
+class CommandUnknownError(Error):
+    pass

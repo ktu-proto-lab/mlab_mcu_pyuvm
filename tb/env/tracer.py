@@ -6,6 +6,7 @@ from uvc import UartByte
 
 from env.config import Config
 
+# watch -n 0.1 'tail -n 10 sim/sim_build/tracer.log;' 
 class Tracer(uvm_component):
     def __init__(self, name="Tracer", parent=None):
         super().__init__(name, parent)

@@ -37,7 +37,7 @@ class UartMonitor(uvm_monitor):
         await super().run_phase()
         
         async def bit_time(factor: float = 1.0):
-            await Timer(self.vif.uart_bit_time_ns * factor, self.vif.clock_units, 'round')
+            await Timer(self.vif.uart_bit_time_ns * factor, self.vif.clock_units, round_mode='round')
 
         await RisingEdge(self.vif.reset)
         

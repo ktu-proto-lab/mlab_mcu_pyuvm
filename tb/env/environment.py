@@ -37,6 +37,7 @@ class Environment(uvm_env):
         self.vseqr = VirtualSequencer.create("vseqr", self)
         
         if self.cfg.trace:
+            # TODO: just disable piping to the file, tracer will be used by other components
             ConfigDB().set(self, "tracer", "cfg", self.cfg)
             self.tracer = Tracer.create("tracer", self)
         
@@ -47,7 +48,7 @@ class Environment(uvm_env):
             return
         
         if self.cfg.uart.active:
-            self.vseqr = self.uart.seqr
+            self.vseqr.uart = self.uart.seqr
             self.logger.debug("connected uart sequencer to virtual sequencer")
             
             self.uart.drv.ap.connect(self.tracer.uart_drv_fifo.analysis_export)

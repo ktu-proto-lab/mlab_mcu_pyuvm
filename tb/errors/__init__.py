@@ -1,1 +1,1 @@
-from .errors import Error, ConfigError, VirtualInterfaceError, AsciiError
+from .errors import Error, ConfigError, VirtualInterfaceError, AsciiError, SequenceError, CommandUnknownError
