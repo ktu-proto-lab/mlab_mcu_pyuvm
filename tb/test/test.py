@@ -4,7 +4,9 @@ import logging
 import os
 from cocotb.clock import Clock
 from cocotb.triggers import ReadOnly, ReadWrite, ClockCycles
-from pyuvm import uvm_test, uvm_report_object
+from pyuvm import uvm_test, uvm_report_object, ConfigDB
+
+from env import Config, Environment
 from vif import VirtualInterface
 
 @pyuvm.test()
@@ -15,13 +17,20 @@ class Test(uvm_test):
         uvm_report_object.set_default_logging_level(log_level)
         super().__init__(name, parent)
         self.vif: VirtualInterface = None
+        self.cfg: Config = None
+        self.env: Environment = None
 
     def build_phase(self):
         super().build_phase()
+        
         self.vif = VirtualInterface()
         self.vif.wire_to_dut(dut=cocotb.top)
         self.logger.debug("virtual interface wired to the dut")
         
+        self.cfg = Config.create("cfg")
+        self.cfg.uart.vif = self.vif
+        ConfigDB().set(self, "env", "cfg", self.cfg)
+        self.env = Environment.create("env", self)
 
     def connect_phase(self):
         super().connect_phase()
@@ -49,6 +58,8 @@ class Test(uvm_test):
         self.vif.reset.value = 1
         await ReadOnly()
         assert self.vif.reset.value == 1, "expected reset high"
+        # TODO: remove
+        await ClockCycles(self.vif.clock, 30_000)
         self.drop_objection()
 
     def extract_phase(self):
