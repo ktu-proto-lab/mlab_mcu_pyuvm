@@ -28,7 +28,10 @@ class Test(uvm_test):
         self.logger.debug("virtual interface wired to the dut")
         
         self.cfg = Config.create("cfg")
+        self.cfg.vif = self.vif
+        self.cfg.gpio.vif = self.vif
         self.cfg.uart.vif = self.vif
+        
         ConfigDB().set(self, "env", "cfg", self.cfg)
         self.env = Environment.create("env", self)
 

@@ -36,15 +36,13 @@ class UartDriver(uvm_driver):
         await Timer(self.vif.uart_bit_time_ns, self.vif.clock_units, round_mode='round')
 
     async def run_phase(self):
-        super().run_phase()
+        await super().run_phase()
 
         while True:
             byte: UartByte = await self.seq_item_port.get_next_item()
 
             if not isinstance(byte, UartByte):
                 raise TypeError(f"uart driver only drives uart byte sequence items, expected UartByte, got {type(byte).__name__}")
-
-            self.logger.debug(f"transmitting byte '{byte}'")
 
             await ReadWrite()
             self.vif.uart_rx_en.value = 1
@@ -63,7 +61,6 @@ class UartDriver(uvm_driver):
             # stop bit
             self.vif.uart_rx.value = 1
             await self.bit_time()
-            self.logger.debug(f"transmitted '{byte}'")
 
             await ReadWrite()
             self.vif.uart_rx_en.value = 0
