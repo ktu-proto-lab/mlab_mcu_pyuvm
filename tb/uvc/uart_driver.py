@@ -13,30 +13,30 @@ class UartDriver(uvm_driver):
         self.cfg: UartConfig = None
         self.vif: VirtualInterface = None
         self.ap: uvm_analysis_port = None
-        
+
     def build_phase(self):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
             raise ConfigError("no configuration provided for uart driver")
-        
+
         self.cfg = ConfigDB().get(self, "", "cfg")
-        
+
         if self.cfg.vif is None:
             raise VirtualInterfaceError("no provided virtual interface for uart driver")
-        
+
         self.vif = self.cfg.vif
-        
+
         if not isinstance(self.vif, VirtualInterface):
             raise TypeError(f"unknown virtual interface provided for uart driver: expected VirtualInterface, got {type(self.vif).__name__}")
-        
+
         self.ap = uvm_analysis_port.create("ap", self)
-        
+
+    async def bit_time(self):
+        await Timer(self.vif.uart_bit_time_ns, self.vif.clock_units, round_mode='round')
+
     async def run_phase(self):
         super().run_phase()
-        
-        async def bit_time():
-            await Timer(self.vif.uart_bit_time_ns, self.vif.clock_units, round_mode='round')
 
         while True:
             byte: UartByte = await self.seq_item_port.get_next_item()
@@ -45,27 +45,30 @@ class UartDriver(uvm_driver):
                 raise TypeError(f"uart driver only drives uart byte sequence items, expected UartByte, got {type(byte).__name__}")
 
             self.logger.debug(f"transmitting byte '{byte}'")
-            
+
             await ReadWrite()
             self.vif.uart_rx_en.value = 1
             self.vif.uart_rx.value = 1
-            
+
+            # wait for the monitor to sample the start bit to avoid false start detection
+            await self.bit_time()
+
             # start bit
             self.vif.uart_rx.value = 0
-            await bit_time()
+            await self.bit_time()
             for i in range(8):
                 bit = (byte.val >> i) & 1
                 self.vif.uart_rx.value = bit
-                await bit_time()
+                await self.bit_time()
             # stop bit
             self.vif.uart_rx.value = 1
-            await bit_time()
+            await self.bit_time()
             self.logger.debug(f"transmitted '{byte}'")
-            
+
             await ReadWrite()
             self.vif.uart_rx_en.value = 0
 
 
             self.ap.write(byte)
-            
+
             self.seq_item_port.item_done()

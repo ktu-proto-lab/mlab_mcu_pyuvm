@@ -35,9 +35,8 @@ class CommandSequence(VirtualSequence):
     async def send_uart_string(self, string: str):
         uart_string_sequence: UartStringSequence = UartStringSequence.create("uart_string_sequence")
         uart_string_sequence.set_string(string)
-        self.sequencer.logger.info(f"sending {uart_string_sequence}")
         await uart_string_sequence.start(self.sequencer.uart)
-        self.sequencer.logger.info(f"sent {uart_string_sequence}")
+
 
 
     async def body(self):
