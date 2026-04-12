@@ -3,18 +3,18 @@ from pyuvm import uvm_env, ConfigDB
 from errors import ConfigError
 from uvc import GpioAgent, UartAgent
 
-from env.config import Config
-from env.virtual_sequencer import VirtualSequencer
-from env.tracer import Tracer
+from env.mcu_config import McuConfig
+from env.mcu_virtual_sequencer import McuVirtualSequencer
+from env.mcu_tracer import McuTracer
 
-class Environment(uvm_env):
+class McuEnv(uvm_env):
     def __init__(self, name="Environment", parent=None):
         super().__init__(name, parent)
         self.cfg: Config = None
         self.uart: UartAgent = None
         self.gpio: GpioAgent = None
-        self.virtual_sequencer: VirtualSequencer = None
-        self.tracer: Tracer = None
+        self.virtual_sequencer: McuVirtualSequencer = None
+        self.tracer: McuTracer = None
 
     def build_phase(self):
         super().build_phase()
@@ -24,7 +24,7 @@ class Environment(uvm_env):
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
-        if not isinstance(self.cfg, Config):
+        if not isinstance(self.cfg, McuConfig):
             raise TypeError(f"unknown configuration provided for environment: expected Config, got {type(self.cfg)}")
 
         if not self.cfg.active:
@@ -37,12 +37,12 @@ class Environment(uvm_env):
         ConfigDB().set(self, "uart", "cfg", self.cfg.uart)
         self.uart = UartAgent.create("uart", self)
 
-        self.virtual_sequencer = VirtualSequencer.create("virtual_sequencer", self)
+        self.virtual_sequencer = McuVirtualSequencer.create("virtual_sequencer", self)
 
         if self.cfg.trace:
             # TODO: just disable piping to the file, tracer will be used by other components
             ConfigDB().set(self, "tracer", "cfg", self.cfg)
-            self.tracer = Tracer.create("tracer", self)
+            self.tracer = McuTracer.create("tracer", self)
 
     def connect_phase(self):
         super().connect_phase()

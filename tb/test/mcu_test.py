@@ -6,11 +6,11 @@ from cocotb.clock import Clock
 from cocotb.triggers import ReadOnly, ReadWrite, ClockCycles
 from pyuvm import uvm_test, uvm_report_object, ConfigDB
 
-from env import Config, Environment
+from env import McuConfig, McuEnv
 from vif import VirtualInterface
 
 @pyuvm.test()
-class Test(uvm_test):
+class McuTest(uvm_test):
     def __init__(self, name="Test", parent=None):
         level: str = os.getenv(key="PYUVM_LOG_LEVEL", default="INFO").upper()
         log_level = getattr(logging, level, logging.INFO)
@@ -18,22 +18,22 @@ class Test(uvm_test):
         super().__init__(name, parent)
         self.vif: VirtualInterface = None
         self.cfg: Config = None
-        self.env: Environment = None
+        self.env: McuEnv = None
 
     def build_phase(self):
         super().build_phase()
-        
+
         self.vif = VirtualInterface()
         self.vif.wire_to_dut(dut=cocotb.top)
         self.logger.debug("virtual interface wired to the dut")
-        
-        self.cfg = Config.create("cfg")
+
+        self.cfg = McuConfig.create("cfg")
         self.cfg.vif = self.vif
         self.cfg.gpio.vif = self.vif
         self.cfg.uart.vif = self.vif
-        
+
         ConfigDB().set(self, "env", "cfg", self.cfg)
-        self.env = Environment.create("env", self)
+        self.env = McuEnv.create("env", self)
 
     def connect_phase(self):
         super().connect_phase()

@@ -1,14 +1,14 @@
 from cocotb.triggers import Event
 from pyuvm import uvm_subscriber, ConfigDB
-from config import Config
 from errors import ConfigError
 from uvc import GpioPad
-from env.mcu_state import McuStateEnum
+from env.mcu_config import McuConfig
+from env.mcu_state_enum import McuStateEnum
 
 class McuStateObserver(uvm_subscriber):
     def __init__(self, name="StateProbe", parent=None):
         super().__init__(name, parent)
-        self.cfg: Config = None
+        self.cfg: McuConfig = None
         self.ready: Event = None
         self.busy: Event = None
         self.halt: Event = None
@@ -21,14 +21,14 @@ class McuStateObserver(uvm_subscriber):
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
-        if not isinstance(self.cfg, Config):
+        if not isinstance(self.cfg, McuConfig):
             raise TypeError(f"wrong configuration provided for the state probe, expected Config, got {type(self.cfg).__name__}")
 
         self.ready = Event("ready")
         self.busy = Event("busy")
         self.halt = Event("halt")
 
-    def write(self, gpio_pad: GpioPad)
+    def write(self, gpio_pad: GpioPad):
         curr_state = gpio_pad.state & ~gpio_pad.uart_mask
 
         if curr_state & McuStateEnum.READY.value:

@@ -4,10 +4,10 @@ from pyuvm import uvm_component, uvm_tlm_analysis_fifo, ConfigDB, uvm_analysis_p
 from errors import ConfigError, AsciiError
 from uvc import UartByte, GpioPad
 
-from env.config import Config
+from env.mcu_config import McuConfig
 
 # watch -n 0.1 'tail -n 10 sim/sim_build/tracer.log;'
-class Tracer(uvm_component):
+class McuTracer(uvm_component):
     def __init__(self, name="Tracer", parent=None):
         super().__init__(name, parent)
         self.cfg: Config = None

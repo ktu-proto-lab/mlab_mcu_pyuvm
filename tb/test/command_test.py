@@ -1,10 +1,10 @@
 import pyuvm
 from pyuvm import uvm_tlm_analysis_fifo
 from seq import CommandSequence
-from test.test import Test
+from test import McuTest
 
 @pyuvm.test()
-class CommandTest(Test):
+class CommandTest(McuTest):
     def __init__(self, name="CommandTest", parent=None):
         super().__init__(name, parent)
         self.uart_receive_fifo: uvm_tlm_analysis_fifo = None
