@@ -123,7 +123,7 @@ ifeq ($(SIMULATOR),verilator)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "entering $(VERILATOR_NAME) container shell"; \
 	docker compose run --rm verilator \
-		/bin/bash -c "source /home/mcu/uvm/script/logger.sh && logger SUCCESS 'you are inside $(VERILATOR_NAME) container' && source /home/mcu/uvm/.venv/bin/activate && exec bash"
+		/bin/bash -c "source /home/mcu/uvm/script/logger.sh && logger SUCCESS 'you are inside $(VERILATOR_NAME) container' && source /home/mcu/uvm/.venv/bin/activate && cd /home/mcu/uvm/sim && exec bash"
 else ifeq ($(SIMULATOR),xcelium)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "entering $(XCELIUM_NAME) container shell"; \

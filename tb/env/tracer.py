@@ -13,8 +13,11 @@ class Tracer(uvm_component):
         self.cfg: Config = None
         self.file = None
         self.gpio_pad_fifo: uvm_tlm_analysis_fifo = None
+        self.gpio_pad_ap: uvm_analysis_port = None
         self.uart_rx_fifo: uvm_tlm_analysis_fifo = None
         self.uart_tx_fifo: uvm_tlm_analysis_fifo = None
+        self.uart_rx_ap: uvm_analysis_port = None
+        self.uart_tx_ap: uvm_analysis_port = None
 
     def build_phase(self):
         super().build_phase()
@@ -27,19 +30,24 @@ class Tracer(uvm_component):
         self.file = open(self.cfg.tracer_file_path, "w")
 
         self.gpio_pad_fifo = uvm_tlm_analysis_fifo.create("gpio_pad_fifo", self)
+        self.gpio_pad_ap = uvm_analysis_port.create("gpio_pad_ap", self)
 
         self.uart_rx_fifo = uvm_tlm_analysis_fifo.create("uart_rx_fifo", self)
         self.uart_tx_fifo = uvm_tlm_analysis_fifo.create("uart_tx_fifo", self)
+        self.uart_rx_ap = uvm_analysis_port.create("uart_rx_ap", self)
+        self.uart_tx_ap = uvm_analysis_port.create("uart_tx_ap", self)
+
 
     async def run_phase(self):
         await super().run_phase()
 
-        cocotb.start_soon(self.gpio_pad_state_trace(self.gpio_pad_fifo, prefix="[]"))
+        cocotb.start_soon(self.gpio_pad_state_trace(self.gpio_pad_fifo, self.gpio_pad_ap, prefix="[]"))
 
-        cocotb.start_soon(self.uart_byte_stream_trace(self.uart_rx_fifo, prefix=">"))
-        cocotb.start_soon(self.uart_byte_stream_trace(self.uart_tx_fifo, prefix="<"))
+        cocotb.start_soon(self.uart_byte_stream_trace(self.uart_rx_fifo, self.uart_rx_ap, prefix=">"))
 
-    async def uart_byte_stream_trace(self, fifo: uvm_tlm_analysis_fifo, prefix: str = ""):
+        cocotb.start_soon(self.uart_byte_stream_trace(self.uart_tx_fifo, self.uart_tx_ap, prefix="<"))
+
+    async def uart_byte_stream_trace(self, fifo: uvm_tlm_analysis_fifo, ap: uvm_analysis_port, prefix: str = ""):
         buffer = ""
 
         while True:
@@ -58,11 +66,12 @@ class Tracer(uvm_component):
                 if buffer != "":
                     self.file.write(f"{prefix} {buffer}\n")
                     self.file.flush()
+                    ap.write(buffer)
                     buffer = ""
             else:
                 buffer += char
 
-    async def gpio_pad_state_trace(self, fifo: uvm_tlm_analysis_fifo, prefix: str = ""):
+    async def gpio_pad_state_trace(self, fifo: uvm_tlm_analysis_fifo, ap: uvm_analysis_port, prefix: str = ""):
 
         prev_state: int = None
         while True:
@@ -77,6 +86,7 @@ class Tracer(uvm_component):
             if prev_state != curr_state:
                 self.file.write(f"{prefix} {hex(curr_state)}\n")
                 self.file.flush()
+                ap.write(gpio_pad)
                 prev_state = curr_state
 
     def final_phase(self):
