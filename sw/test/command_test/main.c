@@ -8,6 +8,7 @@
 #include "sys/int.h"
 #include "sys/time.h"
 #include "sys/err.h"
+#include "sys/state.h"
 
 uart_handle_t uart;
 gpio_handle_t gpio;
@@ -37,13 +38,9 @@ int main() {
     char buffer[256];
     do {
         uart_tx_enable(&uart);
-        // signal ready
-        gpio.regs->out |= GPIO_PIN_2;
-        gpio.regs->oe |= GPIO_PIN_2;
+        system_state_set(&gpio, SYSTEM_STATE_READY);
         string_receive(buffer, sizeof(buffer));
-        // signal busy
-        gpio.regs->out &= ~GPIO_PIN_2;
-        gpio.regs->oe &= ~GPIO_PIN_2;
+        system_state_set(&gpio, SYSTEM_STATE_BUSY);
         time_delay_microseconds(5, cpu_freq_mhz);
         system_error_t e = cli_exec((char *)buffer);
         if (e != SYSTEM_ERROR_NONE) {
