@@ -9,7 +9,7 @@ function main {
 
     # Configure pane layout
     SIM_PANE=$(tmux new-session -d -P -F "#{pane_id}" -s "$SESSION_NAME" -e "PROJECT_ROOT=$PROJECT_ROOT")
-    GENERAL_PANE=$(tmux split-window -v -p 20 -P -F "#{pane_id}")
+    TERMINAL_PANE=$(tmux split-window -v -p 20 -P -F "#{pane_id}")
     TRACER_PANE=$(tmux split-window -h -p 10 -P -F "#{pane_id}")
 
     # Allow to use mouse and provide quick session kill key bind
@@ -19,7 +19,9 @@ function main {
     tmux set-option -t "$SESSION_NAME" pane-border-status top
     tmux set-option -p -t "$SIM_PANE" @pane_title "sim"
     tmux set-option -p -t "$TRACER_PANE" @pane_title "tracer"
-    tmux set-option -p -t "$GENERAL_PANE" @pane_title "terminal"
+    tmux set-option -p -t "$TERMINAL_PANE" @pane_title "terminal"
+
+    tmux select-pane -t "$TERMINAL_PANE"
 
     # Start session
     if [ -n "${TMUX:-}" ]; then
