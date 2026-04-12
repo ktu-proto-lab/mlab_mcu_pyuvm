@@ -4,7 +4,6 @@ bool string_receive(char *buffer, uint32_t lenght) {
     bool string_terminated = false;
     uint32_t count = 0;
 
-    uart_rx_enable(&uart);
     while(count < lenght - 1) {
         uart_receive(&uart, (uint8_t *)&buffer[count], sizeof(uint8_t));
         if (buffer[count] == '\n') {
@@ -13,7 +12,6 @@ bool string_receive(char *buffer, uint32_t lenght) {
         }
         count++;
     }
-    uart_rx_disable(&uart);
 
     return string_terminated;
 }

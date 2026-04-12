@@ -38,17 +38,14 @@ int main() {
     char buffer[256];
     while (1) {
         system_state_set(&gpio, SYSTEM_STATE_READY);
-
+        uart_rx_enable(&uart);
         string_receive(buffer, sizeof(buffer));
-
+        uart_rx_disable(&uart);
         system_state_set(&gpio, SYSTEM_STATE_BUSY);
-
         system_error_t e = cli_exec(buffer);
-
         if (e != SYSTEM_ERROR_NONE) {
             system_error_print(e);
         }
-
         clear_buffer(buffer, sizeof(buffer));
     }
     // uart_tx_enable(&uart);
