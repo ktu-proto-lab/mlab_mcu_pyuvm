@@ -33,13 +33,20 @@ int main() {
     gpio.regs->aux  |= UART_GPIO_TX_PIN;
     gpio.regs->oe   |= UART_GPIO_TX_PIN;
     gpio.regs->oe   |= SYSTEM_STATE_MASK;
+
     uart_tx_enable(&uart);
-    uart_transmit(&uart, "bbp\n", 4);
+    // BUG: trying to enable rx like this stalls the test
+    // uart_rx_enable(&uart);
+
+    // BUG: smaller than 3 chars wide stalls the test, removing does too
+    uart_transmit(&uart, "ack\n", 4);
     char buffer[256];
     while (1) {
         system_state_set(&gpio, SYSTEM_STATE_READY);
+        // BUG: removing uart_rx/tx_enable stalls test
         uart_rx_enable(&uart);
         string_receive(buffer, sizeof(buffer));
+        // BUG: removing with rx enable together
         uart_rx_disable(&uart);
         system_state_set(&gpio, SYSTEM_STATE_BUSY);
         system_error_t e = cli_exec(buffer);
@@ -48,23 +55,6 @@ int main() {
         }
         clear_buffer(buffer, sizeof(buffer));
     }
-    // uart_tx_enable(&uart);
-    // uart_transmit(&uart, (uint8_t *)"ack", sizeof("ack"));
-    // uart_tx_disable(&uart);
-    // do {
-    //     system_state_set(&gpio, SYSTEM_STATE_READY);
-    //     string_receive(buffer, sizeof(buffer));
-    //     system_state_set(&gpio, SYSTEM_STATE_BUSY);
-    //     // time_delay_microseconds(5, cpu_freq_mhz);
-    //     uart_tx_enable(&uart);
-    //     system_error_t e = cli_exec((char *)buffer);
-    //     if (e != SYSTEM_ERROR_NONE) {
-    //         system_error_print(e);
-    //     }
-    //     uart_tx_disable(&uart);
-    //     // TODO (feat): track count for faster cleanup
-    //     clear_buffer(buffer, sizeof(buffer));
-    // } while(1);
 }
 
 // heads up for mr. Zozin
