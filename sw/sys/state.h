@@ -13,10 +13,7 @@ typedef enum {
 } system_state_t;
 
 inline void system_state_set(gpio_handle_t *gpio, system_state_t state) {
-    uint32_t out = (gpio->regs->out & ~SYSTEM_STATE_MASK) | state;
-    uint32_t oe = (gpio->regs->oe & ~SYSTEM_STATE_MASK) | state;
-    gpio->regs->out = out;
-    gpio->regs->oe = oe;
+    gpio->regs->out = (gpio->regs->out & ~SYSTEM_STATE_MASK) | state;
 }
 
 #endif

@@ -30,8 +30,9 @@ int main() {
     uart.config.parity_mode = 0;
     uart.config.parity_lock = 0;
     uart_init(&uart);
-    gpio.regs->aux |= UART_GPIO_TX_PIN;
-    gpio.regs->oe  |= UART_GPIO_TX_PIN;
+    gpio.regs->aux  |= UART_GPIO_TX_PIN;
+    gpio.regs->oe   |= UART_GPIO_TX_PIN;
+    gpio.regs->oe   |= SYSTEM_STATE_MASK;
     uart_tx_enable(&uart);
     uart_transmit(&uart, (uint8_t *)"ack", sizeof("ack"));
     uart_tx_disable(&uart);
