@@ -54,7 +54,7 @@ class VirtualInterface:
         self.scl_i = cast(SimHandleBase, dut.scl_i)
         self.scl_o = cast(SimHandleBase, dut.scl_o)
         self.scl_oe = cast(SimHandleBase, dut.scl_oe_o)
-        
+
     def init_signal_values(self):
         self.clock.value = 0
         self.reset.value = 0

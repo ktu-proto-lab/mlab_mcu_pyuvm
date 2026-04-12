@@ -6,9 +6,6 @@ class UartStringSequence(uvm_sequence):
         super().__init__(name)
         self.string = string
 
-    def set_string(self, string):
-        self.string = f"{string}\0"
-
     async def body(self):
         byte: UartByte = None
         for char in self.string:

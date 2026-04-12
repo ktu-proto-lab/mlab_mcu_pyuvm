@@ -13,6 +13,7 @@ class McuStateObserver(uvm_subscriber):
         self.cfg: McuConfig = None
         self.event_pool: McuEventPool = None
         self._no_pool_warned = False
+        self.prev_state = None
 
     def build_phase(self):
         super().build_phase()
@@ -32,6 +33,7 @@ class McuStateObserver(uvm_subscriber):
             self.logger.warning("state observer is active, yet no event pool provided")
             self._no_pool_warned = True
             return
+
         if self.event_pool is None and self._no_pool_warned:
             return
 
@@ -40,17 +42,26 @@ class McuStateObserver(uvm_subscriber):
 
         curr_state = gpio_pad.state & ~gpio_pad.uart_mask
 
-        if curr_state & McuStateEnum.READY.value:
+        curr_state &= (McuStateEnum.READY.value | McuStateEnum.BUSY.value | McuStateEnum.HALT.value)
+
+        if curr_state == 0:
+            return
+
+        if curr_state == self.prev_state:
+            return
+
+        self.logger.debug(f"mcu state gpio pad pin values 0b{(curr_state >> 5) & 0b111:03b}")
+
+        if curr_state & McuStateEnum.READY.value and not self.event_pool.mcu_ready.is_set():
+            self.logger.debug("mcu state ready event set")
             self.event_pool.mcu_ready.set()
-        else:
-            self.event_pool.mcu_ready.clear()
 
-        if curr_state & McuStateEnum.BUSY.value:
+        if curr_state & McuStateEnum.BUSY.value and not self.event_pool.mcu_busy.is_set():
+            self.logger.debug("mcu state busy event set")
             self.event_pool.mcu_busy.set()
-        else:
-            self.event_pool.mcu_busy.clear()
 
-        if curr_state & McuStateEnum.HALT.value:
+        if curr_state & McuStateEnum.HALT.value and not self.event_pool.mcu_halt.is_set():
+            self.logger.debug("mcu state halt event set")
             self.event_pool.mcu_halt.set()
-        else:
-            self.event_pool.mcu_halt.clear()
+
+        self.prev_state = curr_state

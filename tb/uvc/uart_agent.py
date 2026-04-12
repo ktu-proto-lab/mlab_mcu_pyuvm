@@ -33,11 +33,11 @@ class UartAgent(uvm_agent):
         ConfigDB().set(self, "*", "cfg", self.cfg)
 
         # BUG: I think missmatching names gives a bug, don't know it yet
-        self.driver = UartDriver.create("drv", self)
+        self.driver = UartDriver.create("driver", self)
 
-        self.monitor = UartMonitor.create("mon", self)
+        self.monitor = UartMonitor.create("monitor", self)
 
-        self.sequencer = UartSequencer.create("seqr", self)
+        self.sequencer = UartSequencer.create("sequencer", self)
 
     def connect_phase(self):
         super().connect_phase()

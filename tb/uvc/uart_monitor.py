@@ -60,7 +60,7 @@ class UartMonitor(uvm_monitor):
             await self.bit_time(factor=0.5)
 
             if not byte.is_idle_byte():
-                self.logger.debug(f"uart tx: {byte}")
+                self.logger.debug(f"tx: {byte}")
                 self.tx_ap.write(byte)
 
     async def monitor_rx(self):
@@ -83,7 +83,7 @@ class UartMonitor(uvm_monitor):
             await self.bit_time(factor=0.5)
 
             if not byte.is_idle_byte():
-                self.logger.debug(f"uart rx: {byte}")
+                self.logger.debug(f"rx: {byte}")
                 self.rx_ap.write(byte)
 
     async def run_phase(self):

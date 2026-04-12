@@ -34,25 +34,40 @@ int main() {
     gpio.regs->oe   |= UART_GPIO_TX_PIN;
     gpio.regs->oe   |= SYSTEM_STATE_MASK;
     uart_tx_enable(&uart);
-    uart_transmit(&uart, (uint8_t *)"ack", sizeof("ack"));
-    uart_tx_disable(&uart);
+    uart_transmit(&uart, "bbp\n", 4);
     char buffer[256];
-    do {
-        uart_tx_enable(&uart);
+    while (1) {
         system_state_set(&gpio, SYSTEM_STATE_READY);
+
         string_receive(buffer, sizeof(buffer));
+
         system_state_set(&gpio, SYSTEM_STATE_BUSY);
-        time_delay_microseconds(5, cpu_freq_mhz);
-        system_error_t e = cli_exec((char *)buffer);
+
+        system_error_t e = cli_exec(buffer);
+
         if (e != SYSTEM_ERROR_NONE) {
             system_error_print(e);
         }
-        // BUG: this takes time and, it needs to say that it is busy, set gpio_pin_8 for example
-        // TODO (feat): track count for faster cleanup
+
         clear_buffer(buffer, sizeof(buffer));
-        printf("ready\n");
-        uart_tx_disable(&uart);
-    } while(1);
+    }
+    // uart_tx_enable(&uart);
+    // uart_transmit(&uart, (uint8_t *)"ack", sizeof("ack"));
+    // uart_tx_disable(&uart);
+    // do {
+    //     system_state_set(&gpio, SYSTEM_STATE_READY);
+    //     string_receive(buffer, sizeof(buffer));
+    //     system_state_set(&gpio, SYSTEM_STATE_BUSY);
+    //     // time_delay_microseconds(5, cpu_freq_mhz);
+    //     uart_tx_enable(&uart);
+    //     system_error_t e = cli_exec((char *)buffer);
+    //     if (e != SYSTEM_ERROR_NONE) {
+    //         system_error_print(e);
+    //     }
+    //     uart_tx_disable(&uart);
+    //     // TODO (feat): track count for faster cleanup
+    //     clear_buffer(buffer, sizeof(buffer));
+    // } while(1);
 }
 
 // heads up for mr. Zozin
