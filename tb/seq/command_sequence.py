@@ -1,11 +1,11 @@
 from pyuvm import uvm_tlm_analysis_fifo
 
-from seq.virtual_sequence import VirtualSequence
+from seq.mcu_virtual_sequence import McuVirtualSequence
 from seq.command import Command
 from seq.uart_string_sequence import UartStringSequence
 from uvc import UartByte
 
-class CommandSequence(VirtualSequence):
+class CommandSequence(McuVirtualSequence):
     def __init__(self, name="CommandSequence"):
         super().__init__(name)
         self.uart_receive_fifo: uvm_tlm_analysis_fifo = None

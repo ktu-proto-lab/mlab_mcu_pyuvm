@@ -11,7 +11,7 @@ from env.mcu_state_observer import McuStateObserver
 class McuEnv(uvm_env):
     def __init__(self, name="Environment", parent=None):
         super().__init__(name, parent)
-        self.cfg: Config = None
+        self.cfg: McuConfig = None
         self.uart: UartAgent = None
         self.gpio: GpioAgent = None
         self.virtual_sequencer: McuVirtualSequencer = None
@@ -40,6 +40,7 @@ class McuEnv(uvm_env):
         self.uart = UartAgent.create("uart", self)
 
         self.virtual_sequencer = McuVirtualSequencer.create("virtual_sequencer", self)
+        self.virtual_sequencer.event_pool = self.cfg.event_pool
 
         if self.cfg.trace:
             # TODO: just disable piping to the file, tracer will be used by other components
