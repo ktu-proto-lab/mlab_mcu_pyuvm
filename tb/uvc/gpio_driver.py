@@ -10,17 +10,17 @@ class GpioDriver(uvm_driver):
         super().__init__(name, parent)
         self.cfg: GpioConfig = None
         self.vif: VirtualInterface = None
-        
+
     def build_phase(self):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
             raise ConfigError("no configuration provided for the gpio driver")
-        
+
         self.cfg = ConfigDB().get(self, "", "cfg")
-        
+
         self.vif = self.cfg.vif
-    
+
     async def run_phase(self):
         await super().run_phase()
 
@@ -28,12 +28,12 @@ class GpioDriver(uvm_driver):
 
         while True:
             req: GpioPad = await self.seq_item_port.get_next_item()
-            
+
             if not isinstance(req, GpioPad):
                 raise TypeError(f"unknown sequence item provided, expeced GpioPins, got {type(req).__name__}")
-            
+
             await ReadWrite()
-            self.vif.top_gpio_o.value = req.val
+            self.vif.top_gpio_o.value = req.state
             self.vif.top_gpio_oe.value = req.mask
-            
+
             self.seq_item_port.item_done()

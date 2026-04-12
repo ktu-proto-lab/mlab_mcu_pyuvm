@@ -9,8 +9,8 @@
 
 #define UART_BAUD_INTERVAL(cpu_freq_mhz, baudrate) ((cpu_freq_mhz * 1000000) / (baudrate))
 
-#define UART_GPIO_TX_PIN GPIO_PIN_1
 #define UART_GPIO_RX_PIN GPIO_PIN_0
+#define UART_GPIO_TX_PIN GPIO_PIN_1
 
 typedef struct {
     uint32_t baud_rate;

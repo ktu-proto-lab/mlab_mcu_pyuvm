@@ -37,13 +37,20 @@ int main() {
     char buffer[256];
     do {
         uart_tx_enable(&uart);
+        // signal ready
+        gpio.regs->out |= GPIO_PIN_2;
+        gpio.regs->oe |= GPIO_PIN_2;
         string_receive(buffer, sizeof(buffer));
+        // signal busy
+        gpio.regs->out &= ~GPIO_PIN_2;
+        gpio.regs->oe &= ~GPIO_PIN_2;
         time_delay_microseconds(5, cpu_freq_mhz);
         system_error_t e = cli_exec((char *)buffer);
         if (e != SYSTEM_ERROR_NONE) {
             system_error_print(e);
         }
         // BUG: this takes time and, it needs to say that it is busy, set gpio_pin_8 for example
+        // TODO (feat): track count for faster cleanup
         clear_buffer(buffer, sizeof(buffer));
         printf("ready\n");
         uart_tx_disable(&uart);
