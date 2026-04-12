@@ -11,7 +11,7 @@ Actions:
   image      : build the Docker/Podman image for the simulator
                options: [purge] to delete the image
   venv       : initialize venv and install requirements inside the container
-  run        : enter the simulator container shell 
+  run        : enter the simulator container shell
 
 Examples:
   make image xcelium
@@ -123,7 +123,7 @@ ifeq ($(SIMULATOR),verilator)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "entering $(VERILATOR_NAME) container shell"; \
 	docker compose run --rm verilator \
-		/bin/bash -c "source /home/mcu/uvm/script/logger.sh && logger SUCCESS 'you are inside $(VERILATOR_NAME) container'; exec bash"
+		/bin/bash -c "source /home/mcu/uvm/script/logger.sh && logger SUCCESS 'you are inside $(VERILATOR_NAME) container' && source /home/mcu/uvm/.venv/bin/activate && exec bash"
 else ifeq ($(SIMULATOR),xcelium)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "entering $(XCELIUM_NAME) container shell"; \
@@ -162,5 +162,3 @@ else
 	logger ERROR "option '$(VENV_ACTION_OPTION)' not valid, use 'make help' to display usage"; \
 	exit 1
 endif
-
-
