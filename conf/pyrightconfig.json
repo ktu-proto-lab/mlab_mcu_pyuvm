@@ -1,0 +1,5 @@
+// if container is used to setup virtual environment, you need local venv to get autocomplete
+{
+    "venvPath": ".",
+    "venv": "venv",
+}

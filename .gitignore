@@ -11,5 +11,9 @@ __pycache__/
 *.swp
 *.swo
 
+# TODO: remove when done
 tb_old/
 sw/test_old/
+
+# custom config files in root directory, editor, interpreter configs etc.
+/pyrightconfig.json

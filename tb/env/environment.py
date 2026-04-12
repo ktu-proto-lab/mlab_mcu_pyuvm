@@ -53,7 +53,7 @@ class Environment(uvm_env):
         if self.cfg.gpio.active:
             self.virtual_sequencer.gpio = self.gpio.sequencer
             self.logger.debug("connected gpio sequencer to virtual sequencer")
-            
+
             self.gpio.monitor.ap.connect(self.tracer.gpio_pad_fifo.analysis_export)
             self.logger.debug("connected gpio pad to the tracer")
 
