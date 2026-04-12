@@ -6,6 +6,7 @@ from uvc import GpioAgent, UartAgent
 from env.mcu_config import McuConfig
 from env.mcu_virtual_sequencer import McuVirtualSequencer
 from env.mcu_tracer import McuTracer
+from env.mcu_state_observer import McuStateObserver
 
 class McuEnv(uvm_env):
     def __init__(self, name="Environment", parent=None):
@@ -15,6 +16,7 @@ class McuEnv(uvm_env):
         self.gpio: GpioAgent = None
         self.virtual_sequencer: McuVirtualSequencer = None
         self.tracer: McuTracer = None
+        self.state_observer: McuStateObserver = None
 
     def build_phase(self):
         super().build_phase()
@@ -44,6 +46,9 @@ class McuEnv(uvm_env):
             ConfigDB().set(self, "tracer", "cfg", self.cfg)
             self.tracer = McuTracer.create("tracer", self)
 
+        ConfigDB().set(self, "state_observer", "cfg", self.cfg)
+        self.state_observer = McuStateObserver.create("state_observer", self)
+
     def connect_phase(self):
         super().connect_phase()
 
@@ -56,6 +61,9 @@ class McuEnv(uvm_env):
 
             self.gpio.monitor.ap.connect(self.tracer.gpio_pad_fifo.analysis_export)
             self.logger.debug("connected gpio pad to the tracer")
+
+            self.gpio.monitor.ap.connect(self.state_observer.analysis_export)
+            self.logger.debug("connected gpio pad to the state observer")
 
         if self.cfg.uart.active:
             self.virtual_sequencer.uart = self.uart.sequencer

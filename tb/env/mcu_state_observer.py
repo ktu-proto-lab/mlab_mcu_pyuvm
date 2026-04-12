@@ -6,7 +6,7 @@ from env.mcu_config import McuConfig
 from env.mcu_state_enum import McuStateEnum
 
 class McuStateObserver(uvm_subscriber):
-    def __init__(self, name="StateProbe", parent=None):
+    def __init__(self, name="McuStateObserver", parent=None):
         super().__init__(name, parent)
         self.cfg: McuConfig = None
         self.ready: Event = None
