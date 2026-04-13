@@ -10,14 +10,20 @@ Simulators:
 Actions:
   image      : build the Docker/Podman image for the simulator
                options: [purge] to delete the image
+
   venv       : initialize venv and install requirements inside the container
+
   run        : enter the simulator container shell
+
+  patch      : apply or referse compatibility patches of root project
 
 Examples:
   make image xcelium
   make image verilator purge
   make venv verilator
   make run xcelium
+  make patch apply
+  make patch reverse
 -------------------------------------------------------------------------------
 endef
 export HELP_USAGE

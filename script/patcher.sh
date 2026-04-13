@@ -54,26 +54,41 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
+
 cd "$PATCHER_PROJECT_ROOT"
+
 eeprom_original_file="./tb/misc/24CS512.sv"
 rtl_files_original_file="./sim/rtl/files.f"
+link_ld_original_file="./sw/ibex/common/link.ld"
+
 if $PATCHER_APPLY_PATCHES; then
     # EEPROM compatibility with cocotb (to work on Verilator)
     apply_patch "$eeprom_original_file"  ./uvm/patch/eeprom.patch
     logger INFO \
         "EEPROM compatibility patch with cocotb to work on Verilator patch applied on '$eeprom_original_file'"
+
     # Avoiding relative paths to RTL source files (to work on XCelium)
     apply_patch "$rtl_files_original_file" ./uvm/patch/rtl_files.patch
     logger INFO \
         "avoiding relative paths to RTL source files (to work on XCelium) patch applied on '$rtl_files_original_file'"
+    apply_patch "$link_ld_original_file" ./uvm/patch/link_ld.patch
+
+    # Use linker variables to avoid writing to the valid memory using CLI commands
+    logger INFO \
+        "add runtime variables of the imem and dmem size with linker patch applied on '$link_ld_original_file'"
+
     logger SUCCESS "patches applied"
 elif $PATCHER_REVERSE_PATCHES; then
     reverse_patch "$eeprom_original_file"  ./uvm/patch/eeprom.patch
-    logger INFO \
-        "EEPROM compatibility patch with cocotb to work on Verilator patch reversed on '$eeprom_original_file'"
+    logger WARNING "reversed patch on: '$eeprom_original_file'"
+
     reverse_patch "$rtl_files_original_file" ./uvm/patch/rtl_files.patch
-    logger INFO \
-        "avoiding relative paths to RTL source files (to work on XCelium) patch reversed on '$rtl_files_original_file'"
+    logger WARNING "reversed patch on: '$rtl_files_original_file'"
+
+    reverse_patch "$link_ld_original_file" ./uvm/patch/link_ld.patch
+    logger WARNING "reversed patch on: '$link_ld_original_file'"
+
     logger SUCCESS "returned to previous state"
 fi
+
 cd "$PATCHER_CALL_PATH"

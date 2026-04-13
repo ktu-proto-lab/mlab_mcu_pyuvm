@@ -1,0 +1,32 @@
+--- link.ld	2026-04-05 12:19:00.490261072 +0300
++++ link.ld	2026-04-13 18:13:52.176706992 +0300
+@@ -82,3 +82,29 @@
+         _stack_bottom = _stack_start - _min_stack;
+     } > ram
+ }
++
++/* ==================================================================== */
++/* PATCH_04 BEGIN                                                       */
++/*                                                                      */
++/* REASON:  need runtime variables from the C code to know the exact    */
++/*          size of imem and dmem to not accidentelly write to valid    */
++/*          memory values using cli.                                    */
++/*                                                                      */
++/* AUTHOR:  Manfredas Lamsargis                                         */
++/*                                                                      */
++/* DATE:    13.04.26                                                    */
++/* ==================================================================== */
++
++__imem_start = ADDR(.vectors);
++__imem_end   = ADDR(.rodata) + SIZEOF(.rodata);
++__imem_size  = __imem_end - __imem_start;
++
++__dmem_start    = ADDR(.data);
++__dmem_end      = ADDR(.stack) + SIZEOF(.stack);
++__dmem_size_ram = __dmem_end - __dmem_start;
++
++__dmem_size_bin = SIZEOF(.data);
++
++/* ==================================================================== */
++/* PATCH_04 END                                                         */
++/* ==================================================================== */

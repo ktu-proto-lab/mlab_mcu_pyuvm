@@ -19,6 +19,10 @@ static void clear_buffer(char *buffer, uint32_t size) {
     }
 }
 
+extern char __imem_size;
+extern char __dmem_size_ram;
+extern char __dmem_size_bin;
+
 int main() {
     gpio_init(&gpio);
     const uint32_t cpu_freq_mhz = 80;
@@ -40,6 +44,15 @@ int main() {
 
     // BUG: smaller than 3 chars wide stalls the test, removing does too
     uart_transmit(&uart, "ack\n", 4);
+
+    size_t imem_bytes     = (size_t)&__imem_size;
+    size_t dmem_ram_bytes = (size_t)&__dmem_size_ram;
+    size_t dmem_bin_bytes = (size_t)&__dmem_size_bin;
+
+    printf("imem: %u\n", imem_bytes);
+    printf("dmem ram: %u\n", dmem_ram_bytes);
+    printf("dmem bin: %u\n", dmem_bin_bytes);
+
     char buffer[256];
     while (1) {
         system_state_set(&gpio, SYSTEM_STATE_READY);
