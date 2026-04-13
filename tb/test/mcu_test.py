@@ -29,8 +29,8 @@ class McuTest(uvm_test):
 
         self.cfg = McuConfig.create("cfg")
         self.cfg.vif = self.vif
-        self.cfg.gpio.vif = self.vif
-        self.cfg.uart.vif = self.vif
+        self.cfg.gpio_cfg.vif = self.vif
+        self.cfg.uart_cfg.vif = self.vif
 
         ConfigDB().set(self, "env", "cfg", self.cfg)
         self.env = McuEnv.create("env", self)

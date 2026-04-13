@@ -1,5 +1,5 @@
 from pyuvm import uvm_object
-from errors import MemoryInvalidAddrError
+from errors import MemoryInvalidAddrError, ConfigError
 
 class McuMemoryMirror(uvm_object):
     WORD_SIZE_BYTES: int = 4
@@ -8,16 +8,20 @@ class McuMemoryMirror(uvm_object):
     IMEM_BASE_ADDR: int = 0x80000000
     DMEM_BASE_ADDR: int = 0x90000000
     DMEM_FILE_NAME: str = "data_hex.mem"
-    IMEM_FILE_NAME: str = "inst_hex.mem"
+    IMEM_FILE_NAME: str = "instr_hex.mem"
 
     def __init__(self, name='McuMemoryMirror'):
         super().__init__(name)
-        self.imem = {}
-        self.dmem = {}
+        self.source_filepath: string = None
+        self.imem: dict = None
+        self.dmem: dict = None
 
-    def upload(self, path: str):
-        self.imem = self.parse_mem_file(path + self.IMEM_FILE_NAME, self.IMEM_BASE_ADDR)
-        self.dmem = self.parse_mem_file(path + self.DMEM_FILE_NAME, self.DMEM_BASE_ADDR)
+    def upload_source_binaries(self):
+        if self.source_filepath is None:
+            raise ConfigError("source filepath must be set to upload binaries to mcu memory mirror")
+
+        self.imem = self.parse_mem_file(self.source_filepath + self.IMEM_FILE_NAME, self.IMEM_BASE_ADDR)
+        self.dmem = self.parse_mem_file(self.source_filepath + self.DMEM_FILE_NAME, self.DMEM_BASE_ADDR)
 
     def parse_mem_file(self, filepath: str, base_addr: int) -> dict:
         mem = {}

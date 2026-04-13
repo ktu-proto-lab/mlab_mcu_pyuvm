@@ -10,7 +10,7 @@ from env.mcu_config import McuConfig
 class McuTracer(uvm_component):
     def __init__(self, name="Tracer", parent=None):
         super().__init__(name, parent)
-        self.cfg: Config = None
+        self.cfg: McuConfig = None
         self.file = None
         self.gpio_pad_fifo: uvm_tlm_analysis_fifo = None
         self.gpio_pad_ap: uvm_analysis_port = None
@@ -27,7 +27,7 @@ class McuTracer(uvm_component):
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
-        self.file = open(self.cfg.tracer_file_path, "w")
+        self.file = open(self.cfg.tracer_log_filepath, "w")
 
         self.gpio_pad_fifo = uvm_tlm_analysis_fifo.create("gpio_pad_fifo", self)
         self.gpio_pad_ap = uvm_analysis_port.create("gpio_pad_ap", self)
