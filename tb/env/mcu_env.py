@@ -96,7 +96,7 @@ class McuEnv(uvm_env):
             self.tracer.uart_tx_ap.connect(self.scoreboard.actual_fifo.analysis_export)
             self.logger.debug("connected tracer uart tx pot with scoreboard actual fifo")
 
-            self.tracer.uart_tx_ap.connect(self.ref_model.request_fifo.analysis_export)
+            self.tracer.uart_rx_ap.connect(self.ref_model.request_fifo.analysis_export)
 
             self.ref_model.ap.connect(self.scoreboard.expected_fifo.analysis_export)
             self.logger.debug("connected reference model expected request result port to scoreboard expected fifo")
