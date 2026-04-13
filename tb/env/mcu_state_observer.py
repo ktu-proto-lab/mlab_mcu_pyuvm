@@ -42,7 +42,7 @@ class McuStateObserver(uvm_subscriber):
 
         curr_state = gpio_pad.state & ~gpio_pad.uart_mask
 
-        curr_state &= (McuStateEnum.READY.value | McuStateEnum.BUSY.value | McuStateEnum.HALT.value)
+        curr_state &= (McuStateEnum.READY.value | McuStateEnum.BUSY.value | McuStateEnum.DEBUG.value)
 
         if curr_state == 0:
             return
@@ -60,8 +60,8 @@ class McuStateObserver(uvm_subscriber):
             self.logger.debug("mcu state busy event set")
             self.event_pool.mcu_busy.set()
 
-        if curr_state & McuStateEnum.HALT.value and not self.event_pool.mcu_halt.is_set():
+        if curr_state & McuStateEnum.DEBUG.value and not self.event_pool.mcu_debug.is_set():
             self.logger.debug("mcu state halt event set")
-            self.event_pool.mcu_halt.set()
+            self.event_pool.mcu_debug.set()
 
         self.prev_state = curr_state
