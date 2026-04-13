@@ -1,6 +1,9 @@
 class Error(Exception):
     """ Base exception for verification errors """
-    pass       
+    pass
+
+class NotImplementedError(Error):
+    pass
 
 class ConfigError(Error):
     """ Exception for configurational errors """
@@ -19,4 +22,7 @@ class SequenceError(Error):
     pass
 
 class CommandUnknownError(Error):
+    pass
+
+class MemoryInvalidAddrError(Error):
     pass
