@@ -65,7 +65,11 @@ class McuTracer(uvm_component):
             if char == '\n' or char == '\0':
                 self.file.write(f"{prefix} {buffer}\n")
                 self.file.flush()
-                ap.write(buffer)
+                # TODO: maybe make a filter or a prefix for certain commands?
+                # this filtering is done for the scoreboard, but this feels very implicit
+                # maybe provide some filter in configuration itself?
+                if buffer != "ack":
+                    ap.write(buffer)
                 buffer = ""
             else:
                 buffer += char
