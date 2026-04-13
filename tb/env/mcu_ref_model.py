@@ -9,7 +9,7 @@ class McuRefModel(uvm_component):
         super().__init__(name, parent)
         self.cfg: McuConfig = None
         self.memory: McuMemoryMirror = None
-        self.req_fifo: uvm_tlm_analysis_fifo = None
+        self.request_fifo: uvm_tlm_analysis_fifo = None
         self.ap: uvm_analysis_port = None
 
     def build_phase(self):
@@ -32,17 +32,20 @@ class McuRefModel(uvm_component):
         self.memory.upload_source_binaries()
         self.logger.debug(f"created memory mirror from '{self.memory.source_filepath}'")
 
-        self.req_fifo = uvm_tlm_analysis_fifo.create("req_fifo")
-        self.ap = uvm_analysis_port.create("ap")
+        self.request_fifo = uvm_tlm_analysis_fifo.create("req_fifo", self)
+        self.ap = uvm_analysis_port.create("ap", self)
+
+        self.logger.debug("mcu reference model build phase done")
 
     async def run_phase(self):
         await super().run_phase()
 
         while True:
-            req = await self.req_fifo.get()
-            self.logger.debug(f"req: {req}")
+            req = await self.request_fifo.get()
+            self.logger.debug(f"req: '{req}'")
 
             # TODO: process request and form predicted response
             rsp = "to be impemented"
 
             self.ap.write(rsp)
+            self.logger.info(f"rsp: '{rsp}'")

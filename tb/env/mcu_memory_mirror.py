@@ -1,4 +1,5 @@
 from pyuvm import uvm_object
+from pyuvm.s13_uvm_component import uvm_component
 from errors import MemoryInvalidAddrError, ConfigError
 
 class McuMemoryMirror(uvm_object):
@@ -10,7 +11,7 @@ class McuMemoryMirror(uvm_object):
     DMEM_FILE_NAME: str = "data_hex.mem"
     IMEM_FILE_NAME: str = "instr_hex.mem"
 
-    def __init__(self, name='McuMemoryMirror'):
+    def __init__(self, name="McuMemoryMirror"):
         super().__init__(name)
         self.source_filepath: string = None
         self.imem: dict = None

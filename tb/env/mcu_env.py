@@ -8,6 +8,7 @@ from env.mcu_virtual_sequencer import McuVirtualSequencer
 from env.mcu_tracer import McuTracer
 from env.mcu_state_observer import McuStateObserver
 from env.mcu_scoreboard import McuScoreboard
+from env.mcu_ref_model import McuRefModel
 
 class McuEnv(uvm_env):
     def __init__(self, name="Environment", parent=None):
@@ -19,6 +20,7 @@ class McuEnv(uvm_env):
         self.tracer: McuTracer = None
         self.state_observer: McuStateObserver = None
         self.scoreboard: McuScoreboard = None
+        self.ref_model: McuRefModel = None
 
     def build_phase(self):
         super().build_phase()
@@ -51,9 +53,17 @@ class McuEnv(uvm_env):
 
         ConfigDB().set(self, "state_observer", "cfg", self.cfg)
         self.state_observer = McuStateObserver.create("state_observer", self)
+        self.logger.debug("state observer created")
 
         ConfigDB().set(self, "scoreboard", "cfg", self.cfg)
         self.scoreboard = McuScoreboard.create("scoreboard", self)
+        self.logger.debug("scoreboard created")
+
+        ConfigDB().set(self, "ref_model", "cfg", self.cfg)
+        self.ref_model = McuRefModel.create("ref_model", self)
+        self.logger.debug("reference model created")
+
+
 
     def connect_phase(self):
         super().connect_phase()
@@ -81,7 +91,12 @@ class McuEnv(uvm_env):
 
         if self.scoreboard.is_active:
             self.tracer.uart_rx_ap.connect(self.scoreboard.request_fifo.analysis_export)
-            self.logger.debug("connected tracer uart rx port with scoreboard req fifo")
+            self.logger.debug("connected tracer uart rx port with scoreboard request fifo")
 
             self.tracer.uart_tx_ap.connect(self.scoreboard.actual_fifo.analysis_export)
-            self.logger.debug("connected tracer uart tx pot with scoreboard rsp fifo")
+            self.logger.debug("connected tracer uart tx pot with scoreboard actual fifo")
+
+            self.tracer.uart_tx_ap.connect(self.ref_model.request_fifo.analysis_export)
+
+            self.ref_model.ap.connect(self.scoreboard.expected_fifo.analysis_export)
+            self.logger.debug("connected reference model expected request result port to scoreboard expected fifo")
