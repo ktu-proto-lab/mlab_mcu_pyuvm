@@ -63,11 +63,10 @@ class McuTracer(uvm_component):
                 continue
 
             if char == '\n' or char == '\0':
-                if buffer != "":
-                    self.file.write(f"{prefix} {buffer}\n")
-                    self.file.flush()
-                    ap.write(buffer)
-                    buffer = ""
+                self.file.write(f"{prefix} {buffer}\n")
+                self.file.flush()
+                ap.write(buffer)
+                buffer = ""
             else:
                 buffer += char
 
