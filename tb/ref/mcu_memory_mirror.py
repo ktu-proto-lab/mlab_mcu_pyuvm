@@ -1,5 +1,4 @@
 from pyuvm import uvm_object
-from pyuvm.s13_uvm_component import uvm_component
 from errors import MemoryInvalidAddrError, ConfigError
 
 class McuMemoryMirror(uvm_object):

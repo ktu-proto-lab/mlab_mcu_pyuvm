@@ -3,12 +3,12 @@ from pyuvm import uvm_env, ConfigDB
 from errors import ConfigError
 from uvc import GpioAgent, UartAgent
 
+from ref import McuRefModel
 from env.mcu_config import McuConfig
 from env.mcu_virtual_sequencer import McuVirtualSequencer
 from env.mcu_tracer import McuTracer
 from env.mcu_state_observer import McuStateObserver
 from env.mcu_scoreboard import McuScoreboard
-from env.mcu_ref_model import McuRefModel
 
 class McuEnv(uvm_env):
     def __init__(self, name="Environment", parent=None):

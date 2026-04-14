@@ -5,5 +5,3 @@ from .mcu_tracer import McuTracer
 from .mcu_state_enum import McuStateEnum
 from .mcu_state_observer import McuStateObserver
 from .mcu_event_pool import McuEventPool
-from .mcu_memory_mirror import McuMemoryMirror
-from .mcu_ref_model import McuRefModel

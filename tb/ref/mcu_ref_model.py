@@ -1,7 +1,7 @@
 from pyuvm import uvm_component, uvm_analysis_port, uvm_tlm_analysis_fifo, ConfigDB
-from env.mcu_config import McuConfig
-from env.mcu_memory_mirror import McuMemoryMirror
+from env import McuConfig
 from errors import ConfigError, NotImplementedError
+from ref.mcu_memory_mirror import McuMemoryMirror
 
 # Maybe this needs to be a component too.
 class McuRefModel(uvm_component):
@@ -41,11 +41,14 @@ class McuRefModel(uvm_component):
         await super().run_phase()
 
         while True:
-            req = await self.request_fifo.get()
-            self.logger.debug(f"req: '{req}'")
+            req: str = await self.request_fifo.get()
+            self.logger.debug(f"req: '{type(req).__name__}'")
 
             # TODO: process request and form predicted response
             rsp = "to be impemented"
 
             self.ap.write(rsp)
             self.logger.info(f"rsp: '{rsp}'")
+
+    def predict(req: str) -> str:
+        raise NotImplementedError()

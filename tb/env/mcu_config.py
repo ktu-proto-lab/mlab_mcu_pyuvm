@@ -3,7 +3,6 @@ from pyuvm import uvm_object
 from uvc import GpioConfig, UartConfig
 from vif import McuVirtualInterface
 from env.mcu_event_pool import McuEventPool
-from env.mcu_memory_mirror import McuMemoryMirror
 
 class McuConfig(uvm_object):
     def __init__(self, name='Config'):
