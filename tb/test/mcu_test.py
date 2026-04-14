@@ -7,7 +7,7 @@ from cocotb.triggers import ReadOnly, ReadWrite, ClockCycles
 from pyuvm import uvm_test, uvm_report_object, ConfigDB
 
 from env import McuConfig, McuEnv
-from vif import VirtualInterface
+from vif import McuVirtualInterface
 
 @pyuvm.test()
 class McuTest(uvm_test):
@@ -16,14 +16,14 @@ class McuTest(uvm_test):
         log_level = getattr(logging, level, logging.INFO)
         uvm_report_object.set_default_logging_level(log_level)
         super().__init__(name, parent)
-        self.vif: VirtualInterface = None
+        self.vif: McuVirtualInterface = None
         self.cfg: Config = None
         self.env: McuEnv = None
 
     def build_phase(self):
         super().build_phase()
 
-        self.vif = VirtualInterface()
+        self.vif = McuVirtualInterface()
         self.vif.wire_to_dut(dut=cocotb.top)
         self.logger.debug("virtual interface wired to the dut")
 

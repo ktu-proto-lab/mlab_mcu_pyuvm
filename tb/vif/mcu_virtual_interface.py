@@ -6,7 +6,7 @@ from decimal import Decimal
 from numbers import Real
 from typing import cast
 
-class VirtualInterface:
+class McuVirtualInterface:
     def __init__(self):
         # TODO (feat): add logger and print name and the parent
         self.clock: SimHandleBase = None

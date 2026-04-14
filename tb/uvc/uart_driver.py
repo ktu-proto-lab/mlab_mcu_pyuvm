@@ -2,7 +2,7 @@ from cocotb.triggers import ReadWrite, Timer
 from pyuvm import uvm_driver, uvm_analysis_port, ConfigDB
 
 from errors import ConfigError, VirtualInterfaceError
-from vif import VirtualInterface
+from vif import McuVirtualInterface
 
 from uvc.uart_config import UartConfig
 from uvc.uart_byte import UartByte
@@ -11,7 +11,7 @@ class UartDriver(uvm_driver):
     def __init__(self, name="UartDriver", parent=None):
         super().__init__(name, parent)
         self.cfg: UartConfig = None
-        self.vif: VirtualInterface = None
+        self.vif: McuVirtualInterface = None
         self.ap: uvm_analysis_port = None
 
     def build_phase(self):
@@ -27,7 +27,7 @@ class UartDriver(uvm_driver):
 
         self.vif = self.cfg.vif
 
-        if not isinstance(self.vif, VirtualInterface):
+        if not isinstance(self.vif, McuVirtualInterface):
             raise TypeError(f"unknown virtual interface provided for uart driver: expected VirtualInterface, got {type(self.vif).__name__}")
 
         self.ap = uvm_analysis_port.create("ap", self)

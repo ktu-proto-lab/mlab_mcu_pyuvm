@@ -3,7 +3,7 @@ from cocotb.triggers import RisingEdge, ReadOnly, FallingEdge, Timer
 from pyuvm import uvm_monitor, uvm_analysis_port, ConfigDB
 
 from errors import ConfigError, VirtualInterfaceError
-from vif import VirtualInterface
+from vif import McuVirtualInterface
 
 from uvc.uart_byte import UartByte
 from uvc.uart_config import UartConfig
@@ -12,7 +12,7 @@ class UartMonitor(uvm_monitor):
     def __init__(self, name="UartMonitor", parent=None):
         super().__init__(name, parent)
         self.cfg: UartConfig = None
-        self.vif: VirtualInterface = None
+        self.vif: McuVirtualInterface = None
         self.tx_ap: uvm_analysis_port = None
         self.rx_ap: uvm_analysis_port = None
 
@@ -29,7 +29,7 @@ class UartMonitor(uvm_monitor):
 
         self.vif = self.cfg.vif
 
-        if not isinstance(self.vif, VirtualInterface):
+        if not isinstance(self.vif, McuVirtualInterface):
             raise TypeError(f"unknown virtual interface provided for uart monitor: expected VirtualInterface, got {type(self.vif).__name__}")
 
         self.tx_ap = uvm_analysis_port.create("tx_ap", self)

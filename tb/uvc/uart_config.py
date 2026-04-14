@@ -1,6 +1,6 @@
 from pyuvm import uvm_object
 
-from vif import VirtualInterface
+from vif import McuVirtualInterface
 
 class UartConfig(uvm_object):
     def __init__(self, name="UartConfig"):
@@ -8,4 +8,4 @@ class UartConfig(uvm_object):
         self.active: bool = True
         # TODO: monitoring-only option
         # self.is_passive: bool = False
-        self.vif: VirtualInterface = None
+        self.vif: McuVirtualInterface = None

@@ -1,7 +1,7 @@
 from cocotb.triggers import RisingEdge, ReadWrite
 from pyuvm import  ConfigDB, uvm_driver
 from errors import ConfigError
-from vif import VirtualInterface
+from vif import McuVirtualInterface
 from uvc.gpio_config import GpioConfig
 from uvc.gpio_pad import GpioPad
 
@@ -9,7 +9,7 @@ class GpioDriver(uvm_driver):
     def __init__(self, name="GpioDriver", parent=None):
         super().__init__(name, parent)
         self.cfg: GpioConfig = None
-        self.vif: VirtualInterface = None
+        self.vif: McuVirtualInterface = None
 
     def build_phase(self):
         super().build_phase()

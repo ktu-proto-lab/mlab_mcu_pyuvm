@@ -1,7 +1,7 @@
 from pyuvm import uvm_object
 
 from uvc import GpioConfig, UartConfig
-from vif import VirtualInterface
+from vif import McuVirtualInterface
 from env.mcu_event_pool import McuEventPool
 from env.mcu_memory_mirror import McuMemoryMirror
 
@@ -9,7 +9,7 @@ class McuConfig(uvm_object):
     def __init__(self, name='Config'):
         super().__init__(name)
         self.env_enable: bool = True
-        self.vif: VirtualInterface = None
+        self.vif: McuVirtualInterface = None
         self.uart_cfg: UartConfig = UartConfig.create("uart_cfg")
         self.gpio_cfg: GpioConfig = GpioConfig.create("gpio_cfg")
         self.tracer_log_enable: bool = True

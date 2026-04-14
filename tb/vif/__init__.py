@@ -1,1 +1,1 @@
-from .virtual_interface import VirtualInterface
+from .mcu_virtual_interface import McuVirtualInterface
