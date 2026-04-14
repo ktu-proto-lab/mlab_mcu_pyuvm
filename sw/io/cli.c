@@ -125,12 +125,24 @@ static system_error_t cli_mem_size_handler(int argc, char **argv) {
     }
     const char *type = argv[2];
     size_t size_bytes;
-    if (string_compare(type, "text") == 0) {
+    if (string_compare(type, "imem") == 0) {
+        size_bytes = SYSTEM_MEMORY_IMEM_SIZE;
+    } else if (string_compare(type, "dmem") == 0) {
+        size_bytes = SYSTEM_MEMORY_DMEM_SIZE;
+    } else if (string_compare(type, "instr") == 0) {
+        size_bytes = SYSTEM_MEMORY_PROGRAM_INSTR_SIZE_BYTES;
+    } else if (string_compare(type, "ram") == 0) {
+        size_bytes = SYSTEM_MEMORY_PROGRAM_RAM_SIZE_BYTES;
+    } else if (string_compare(type, "bin") == 0) {
+        size_bytes = SYSTEM_MEMORY_PROGRAM_BIN_SIZE_BYTES;
+    } else if (string_compare(type, "text") == 0) {
         size_bytes = SYSTEM_MEMORY_PROGRAM_TEXT_SIZE_BYTES;
     } else if (string_compare(type, "data") == 0) {
         size_bytes = SYSTEM_MEMORY_PROGRAM_DATA_SIZE_BYTES;
     } else if (string_compare(type, "bss") == 0) {
         size_bytes = SYSTEM_MEMORY_PROGRAM_BSS_SIZE_BYTES;
+    } else if (string_compare(type, "stack") == 0) {
+        size_bytes = SYSTEM_MEMORY_PROGRAM_STACK_SIZE_BYTES;
     } else {
         return SYSTEM_ERROR_CLI_CMD_MEM_SIZE_UNKNOWN_ARG;
     }

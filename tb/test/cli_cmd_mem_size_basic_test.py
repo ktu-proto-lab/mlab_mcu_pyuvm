@@ -1,5 +1,5 @@
 import pyuvm
-from seq import CmdMemSizeBasicSequence
+from seq import CliCmdMemSizeBasicSeq
 from test import McuTest
 
 @pyuvm.test()
@@ -10,6 +10,6 @@ class CliCmdMemSizeBasicTest(McuTest):
     async def run_phase(self):
         self.raise_objection()
         await super().run_phase()
-        seq = CmdMemSizeBasicSequence.create("seq")
+        seq = CliCmdMemSizeBasicSeq.create("seq")
         await seq.start(self.env.virtual_sequencer)
         self.drop_objection()

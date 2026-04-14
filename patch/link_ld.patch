@@ -1,6 +1,6 @@
---- link.ld	2026-04-05 12:19:00.490261072 +0300
-+++ link.ld	2026-04-13 18:13:52.176706992 +0300
-@@ -82,3 +82,29 @@
+--- link.ld	2026-04-14 17:06:31.145859809 +0300
++++ link_patch4.ld	2026-04-14 17:06:24.606021579 +0300
+@@ -82,3 +82,36 @@
          _stack_bottom = _stack_start - _min_stack;
      } > ram
  }
@@ -14,18 +14,25 @@
 +/*                                                                      */
 +/* AUTHOR:  Manfredas Lamsargis                                         */
 +/*                                                                      */
-+/* DATE:    13.04.26                                                    */
++/* DATE:    14.04.26                                                    */
 +/* ==================================================================== */
 +
-+__imem_start = ADDR(.vectors);
-+__imem_end   = ADDR(.rodata) + SIZEOF(.rodata);
-+__imem_size  = __imem_end - __imem_start;
++/* --- Program Instruction Segment (IMEM) --- */
++__prog_instr_start = ADDR(.vectors);
++__prog_instr_end   = ADDR(.rodata) + SIZEOF(.rodata);
++__prog_instr_size  = __prog_instr_end - __prog_instr_start;
 +
-+__dmem_start    = ADDR(.data);
-+__dmem_end      = ADDR(.stack) + SIZEOF(.stack);
-+__dmem_size_ram = __dmem_end - __dmem_start;
++/* --- Program Data Segment (DMEM) --- */
++__prog_data_start    = ADDR(.data);
++__prog_data_end      = ADDR(.stack) + SIZEOF(.stack);
++__prog_data_ram_size = __prog_data_end - __prog_data_start;
++__prog_data_bin_size = SIZEOF(.data);
 +
-+__dmem_size_bin = SIZEOF(.data);
++/* --- Memory Segments --- */
++__size_text     = SIZEOF(.text);
++__size_data     = SIZEOF(.data);
++__size_bss      = SIZEOF(.bss);
++__size_stack    = SIZEOF(.stack);
 +
 +/* ==================================================================== */
 +/* PATCH_04 END                                                         */

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 readonly PATCHER_CALL_PATH="$(pwd)"
 readonly PATCHER_PROJECT_ROOT="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/../.."
