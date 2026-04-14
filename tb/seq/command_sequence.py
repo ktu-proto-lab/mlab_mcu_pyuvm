@@ -1,5 +1,3 @@
-from pyuvm import uvm_tlm_analysis_fifo
-
 from seq.mcu_virtual_sequence import McuVirtualSequence
 from seq.command import Command
 from seq.uart_string_sequence import UartStringSequence

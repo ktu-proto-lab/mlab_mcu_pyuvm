@@ -119,19 +119,40 @@ static system_error_t cli_mem_cksum_handler(int argc, char **argv) {
     return SYSTEM_ERROR_NONE;
 }
 
+static system_error_t cli_mem_size_handler(int argc, char **argv) {
+    if (argc != CLI_CMD_MEM_SIZE_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_MEM_SIZE_INVALID_ARG_COUNT;
+    }
+    const char *type = argv[2];
+    size_t size_bytes;
+    if (string_compare(type, "text") == 0) {
+        size_bytes = SYSTEM_MEMORY_PROGRAM_TEXT_SIZE_BYTES;
+    } else if (string_compare(type, "data") == 0) {
+        size_bytes = SYSTEM_MEMORY_PROGRAM_DATA_SIZE_BYTES;
+    } else if (string_compare(type, "bss") == 0) {
+        size_bytes = SYSTEM_MEMORY_PROGRAM_BSS_SIZE_BYTES;
+    } else {
+        return SYSTEM_ERROR_CLI_CMD_MEM_SIZE_UNKNOWN_ARG;
+    }
+    printf("%u\n", size_bytes);
+    return SYSTEM_ERROR_NONE;
+}
+
 static system_error_t cli_mem_handler(int argc, char **argv) {
     if (argc < CLI_CMD_MEM_MIN_ARG_COUNT || argc > CLI_CMD_MEM_MAX_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT;
     }
-    const char *subcommand = argv[1];
-    if (string_compare(subcommand, "read") == 0) {
+    const char *subcmd = argv[1];
+    if (string_compare(subcmd, "read") == 0) {
         return cli_mem_read_handler(argc, argv);
-    } else if (string_compare(subcommand, "write") == 0) {
+    } else if (string_compare(subcmd, "write") == 0) {
         return cli_mem_write_handler(argc, argv);
-    } else if (string_compare(subcommand, "dump") == 0) {
+    } else if (string_compare(subcmd, "dump") == 0) {
         return cli_mem_dump_handler(argc, argv);
-    } else if (string_compare(subcommand, "cksum") == 0) {
+    } else if (string_compare(subcmd, "cksum") == 0) {
         return cli_mem_cksum_handler(argc, argv);
+    } else if (string_compare(subcmd, "size") == 0) {
+        return cli_mem_size_handler(argc, argv);
     } else {
         return SYSTEM_ERROR_CLI_CMD_MEM_SUBCMD_NOT_FOUND;
     }

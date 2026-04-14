@@ -18,6 +18,8 @@
 #define CLI_CMD_MEM_DUMP_ARG_COUNT 4UL
 // mem checksum <addr> <word_count>
 #define CLI_CMD_MEM_CHECKSUM_ARG_COUNT 4UL
+// mem size <text|data|bss>
+#define CLI_CMD_MEM_SIZE_ARG_COUNT 3UL
 
 // echo "string"
 #define CLI_CMD_ECHO_ARG_COUNT 2UL

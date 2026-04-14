@@ -6,7 +6,7 @@ from env import McuVirtualSequencer
 class McuVirtualSequence(uvm_sequence):
     _no_event_pool_warned = False
 
-    def __init__(self, name="VirtualSequence"):
+    def __init__(self, name="McuVirtualSequence"):
         super().__init__(name)
         self.sequencer: McuVirtualSequencer = None
 

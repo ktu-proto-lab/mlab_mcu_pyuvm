@@ -1,15 +1,15 @@
 import pyuvm
-from seq import CommandSequence
+from seq import CmdMemSizeBasicSequence
 from test import McuTest
 
 @pyuvm.test()
-class CommandTest(McuTest):
-    def __init__(self, name="CommandTest", parent=None):
+class CliCmdMemSizeBasicTest(McuTest):
+    def __init__(self, name="CliCmdMemSizeBasicTest", parent=None):
         super().__init__(name, parent)
 
     async def run_phase(self):
         self.raise_objection()
         await super().run_phase()
-        seq: CommandSequence = CommandSequence.create("sequence")
+        seq = CmdMemSizeBasicSequence.create("seq")
         await seq.start(self.env.virtual_sequencer)
         self.drop_objection()

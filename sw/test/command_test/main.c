@@ -40,7 +40,7 @@ int main() {
     // uart_rx_enable(&uart);
 
     // BUG: smaller than 3 chars wide stalls the test, removing does too
-    uart_transmit(&uart, "ack\n", 4);
+    uart_transmit(&uart, (uint8_t *)"ack\n", 4);
 
     printf("imem: %u\n", SYSTEM_MEMORY_PROGRAM_TEXT_SIZE_BYTES);
     printf("dmem ram: %u\n", SYSTEM_MEMORY_PROGRAM_DATA_SIZE_BYTES);
