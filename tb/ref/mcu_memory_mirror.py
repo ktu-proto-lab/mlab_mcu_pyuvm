@@ -64,6 +64,7 @@ class McuMemoryMirror(uvm_object):
         )
 
 
+    # TODO: return previous value that was stored inside the memory
     def write(self, addr: int, val: int, bytes: int = 0x4) -> None:
         if self.IMEM_BASE_ADDR <= addr and (addr + bytes) <= (self.IMEM_BASE_ADDR + self.IMEM_SIZE_BYTES):
             for byte in range(bytes):
@@ -85,7 +86,7 @@ class McuMemoryMirror(uvm_object):
             cksum ^= self.read(addr + word * self.WORD_SIZE_BYTES)
         return cksum
 
-    def dump(self, addr: int, wcnt: int):
+    def dump(self, addr: int, wcnt: int) -> list[int]:
         vals = []
         for word in range(wcnt):
             word_addr = addr + word * self.WORD_SIZE_BYTES

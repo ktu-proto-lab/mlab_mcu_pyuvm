@@ -15,12 +15,12 @@ class CliCmdMemSizeBasicSeq(McuVirtualSequence):
             self.sequencer.logger.debug("waiting mcu ready state event")
             await self.sequencer.event_pool.mcu_ready.wait()
             self.sequencer.event_pool.mcu_ready.clear()
-            self.sequencer.logger.info(f"mcu is ready, driving basic '{header}' sequence")
+            self.sequencer.logger.debug(f"mcu is ready, driving basic '{header}' sequence")
             seq = UartStringSequence.create("seq")
             cmd = f"{header} {arg}"
             seq.string = f"{cmd}\n"
             await seq.start(self.sequencer.uart)
-            self.sequencer.logger.info(f"drove '{cmd}'")
+            self.sequencer.logger.debug(f"req: '{cmd}'")
             self.sequencer.logger.debug("waiting for mcu busy state event")
             await self.sequencer.event_pool.mcu_busy.wait()
             self.sequencer.event_pool.mcu_busy.clear()

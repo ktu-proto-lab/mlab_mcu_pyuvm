@@ -26,3 +26,6 @@ class CommandUnknownError(Error):
 
 class MemoryInvalidAddrError(Error):
     pass
+
+class McuCliWrongCmdStringError(Error):
+    pass

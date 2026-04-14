@@ -2,6 +2,7 @@ from pyuvm import uvm_component, uvm_analysis_port, uvm_tlm_analysis_fifo, Confi
 from env import McuConfig
 from errors import ConfigError, NotImplementedError
 from ref.mcu_memory_mirror import McuMemoryMirror
+from ref.mcu_cli_interpreter import McuCliInterpreter
 
 # Maybe this needs to be a component too.
 class McuRefModel(uvm_component):
@@ -9,6 +10,7 @@ class McuRefModel(uvm_component):
         super().__init__(name, parent)
         self.cfg: McuConfig = None
         self.memory: McuMemoryMirror = None
+        self.cli: McuCliInterpreter = None
         self.request_fifo: uvm_tlm_analysis_fifo = None
         self.ap: uvm_analysis_port = None
 
@@ -32,6 +34,10 @@ class McuRefModel(uvm_component):
         self.memory.upload_source_binaries()
         self.logger.debug(f"created memory mirror from '{self.memory.source_filepath}'")
 
+        self.cli = McuCliInterpreter.create("cli")
+        self.cli.memory = self.memory
+        self.logger.debug("created cli and assigned memory mirror")
+
         self.request_fifo = uvm_tlm_analysis_fifo.create("req_fifo", self)
         self.ap = uvm_analysis_port.create("ap", self)
 
@@ -42,13 +48,12 @@ class McuRefModel(uvm_component):
 
         while True:
             req: str = await self.request_fifo.get()
-            self.logger.debug(f"req: '{type(req).__name__}'")
+            self.logger.info(f"req: '{req}'")
 
-            # TODO: process request and form predicted response
-            rsp = "to be impemented"
+            rsp: str = self.predict(req)
 
             self.ap.write(rsp)
             self.logger.info(f"rsp: '{rsp}'")
 
-    def predict(req: str) -> str:
-        raise NotImplementedError()
+    def predict(self, req: str) -> str:
+        return self.cli.execute(req)
