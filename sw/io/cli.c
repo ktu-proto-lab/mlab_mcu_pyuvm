@@ -22,9 +22,9 @@ static system_error_t cli_mem_read_handler(int argc, char **argv) {
     }
     uint32_t addr;
     if (!string_hex_to_uint(argv[2], &addr)) {
-       return SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ADDR_HEX_FORMAT; 
+       return SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ADDR_HEX_FORMAT;
     }
-    if (!SYS_MEM_ADDR_VALID(addr)) {
+    if (!SYSTEM_MEMORY_ADDR_VALID(addr)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ADDR;
     }
     uint32_t value = *((volatile uint32_t *)addr);
@@ -40,7 +40,7 @@ static system_error_t cli_mem_write_handler(int argc, char **argv) {
     if (!string_hex_to_uint(argv[2], &addr)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_WRITE_INVALID_ADDR_HEX_COUNT;
     }
-    if (!SYS_MEM_ADDR_VALID(addr)) {
+    if (!SYSTEM_MEMORY_ADDR_VALID(addr)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_WRITE_INVALID_ADDR;
     }
     uint32_t new_value;
@@ -61,20 +61,20 @@ static system_error_t cli_mem_dump_handler(int argc, char **argv) {
     if (!string_hex_to_uint(argv[2], &addr)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_ADDR_HEX_FORMAT;
     }
-    if (!SYS_MEM_ADDR_VALID(addr)) {
+    if (!SYSTEM_MEMORY_ADDR_VALID(addr)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_ADDR;
     }
     uint32_t word_count;
     if (!string_hex_to_uint(argv[3], &word_count)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_WORD_COUNT_HEX_FORMAT;
     }
-    if (!SYS_MEM_ADDR_VALID(addr + (word_count * SYS_MEM_WORD_SIZE_BYTES) - SYS_MEM_WORD_SIZE_BYTES)) {
+    if (!SYSTEM_MEMORY_ADDR_VALID(addr + (word_count * SYSTEM_MEMORY_WORD_SIZE_BYTES) - SYSTEM_MEMORY_WORD_SIZE_BYTES)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_WORD_COUNT_EXCEED_MEMORY;
     }
     volatile uint32_t *start = (uint32_t *)addr;
     const uint32_t *end = (uint32_t *)addr + word_count;
     if (start >= end) {
-       return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_START_ADDR_EXCEEDS_END_ADDR; 
+       return SYSTEM_ERROR_CLI_CMD_MEM_DUMP_START_ADDR_EXCEEDS_END_ADDR;
     }
     while(start < end) {
         uint32_t value = *start;
@@ -94,14 +94,14 @@ static system_error_t cli_mem_cksum_handler(int argc, char **argv) {
     if (!string_hex_to_uint(argv[2], &addr)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_ADDR_HEX_FORMAT;
     }
-    if (!SYS_MEM_ADDR_VALID(addr)) {
+    if (!SYSTEM_MEMORY_ADDR_VALID(addr)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_ADDR;
     }
     uint32_t word_count;
     if (!string_hex_to_uint(argv[3], &word_count)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_WORD_COUNT_HEX_FORMAT;
     }
-    if (!SYS_MEM_ADDR_VALID(addr + (word_count * SYS_MEM_WORD_SIZE_BYTES) - SYS_MEM_WORD_SIZE_BYTES)) {
+    if (!SYSTEM_MEMORY_ADDR_VALID(addr + (word_count * SYSTEM_MEMORY_WORD_SIZE_BYTES) - SYSTEM_MEMORY_WORD_SIZE_BYTES)) {
         return SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_WORD_COUNT_EXCEED_MEMORY;
     }
     volatile uint32_t *start = (volatile uint32_t *)addr;

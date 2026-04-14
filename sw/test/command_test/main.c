@@ -9,6 +9,7 @@
 #include "sys/time.h"
 #include "sys/err.h"
 #include "sys/state.h"
+#include "sys/mem.h"
 
 uart_handle_t uart;
 gpio_handle_t gpio;
@@ -18,10 +19,6 @@ static void clear_buffer(char *buffer, uint32_t size) {
         buffer[i] = 0;
     }
 }
-
-extern char __imem_size;
-extern char __dmem_size_ram;
-extern char __dmem_size_bin;
 
 int main() {
     gpio_init(&gpio);
@@ -45,13 +42,9 @@ int main() {
     // BUG: smaller than 3 chars wide stalls the test, removing does too
     uart_transmit(&uart, "ack\n", 4);
 
-    size_t imem_bytes     = (size_t)&__imem_size;
-    size_t dmem_ram_bytes = (size_t)&__dmem_size_ram;
-    size_t dmem_bin_bytes = (size_t)&__dmem_size_bin;
-
-    printf("imem: %u\n", imem_bytes);
-    printf("dmem ram: %u\n", dmem_ram_bytes);
-    printf("dmem bin: %u\n", dmem_bin_bytes);
+    printf("imem: %u\n", SYSTEM_MEMORY_PROGRAM_TEXT_SIZE_BYTES);
+    printf("dmem ram: %u\n", SYSTEM_MEMORY_PROGRAM_DATA_SIZE_BYTES);
+    printf("dmem bin: %u\n", SYSTEM_MEMORY_PROGRAM_BSS_SIZE_BYTES);
 
     char buffer[256];
     while (1) {
