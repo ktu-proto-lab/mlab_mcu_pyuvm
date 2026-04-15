@@ -5,7 +5,7 @@ bool string_receive(char *buffer, uint32_t lenght) {
     uint32_t count = 0;
 
     while(count < lenght - 1) {
-        uart_receive(&uart, (uint8_t *)&buffer[count], sizeof(uint8_t));
+        uart_receive(&g_uart, (uint8_t *)&buffer[count], sizeof(uint8_t));
         if (buffer[count] == '\n' || buffer[count] == '\0') {
             buffer[count] = '\0';
             string_terminated = true;

@@ -31,13 +31,13 @@ int main() {
 
     char buffer[256];
     while (1) {
-        system_state_set(&gpio, SYSTEM_STATE_READY);
+        system_state_set(&g_gpio, SYSTEM_STATE_READY);
         // BUG: removing uart_rx/tx_enable stalls test
-        uart_rx_enable(&uart);
+        uart_rx_enable(&g_uart);
         string_receive(buffer, sizeof(buffer));
         // BUG: removing with rx enable together
-        uart_rx_disable(&uart);
-        system_state_set(&gpio, SYSTEM_STATE_BUSY);
+        uart_rx_disable(&g_uart);
+        system_state_set(&g_gpio, SYSTEM_STATE_BUSY);
         system_error_t e = cli_exec(buffer);
         if (e != SYSTEM_ERROR_NONE) {
             system_error_print(e);

@@ -79,9 +79,8 @@ class McuTest(uvm_test):
         super().report_phase()
 
         if self.env.scoreboard.is_active and not self.env.scoreboard.passed:
-            self.logger.critical("test failed")
             self.passed = False
 
     def final_phase(self):
         super().final_phase()
-        assert self.passed, f"test {self.get_name()} failed"
+        assert self.passed, f"test failed"

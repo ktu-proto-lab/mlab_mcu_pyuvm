@@ -1,13 +1,12 @@
-#include "hal/uart.h"
 #include "io/printf.h"
 
 #include <stddef.h>
 
-extern uart_handle_t uart;
+#include "sys/glob.h"
 
 static void put_char(const char character) {
     // NOTE: interruptable transmit leads to corrupted printf because of the deallocated stack
-    uart_transmit(&uart, (uint8_t *)&character, sizeof(uint8_t));
+    uart_transmit(&g_uart, (uint8_t *)&character, sizeof(uint8_t));
 }
 
 static void print_number(int number, int base, int sign) {
