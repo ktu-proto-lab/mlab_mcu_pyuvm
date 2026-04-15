@@ -15,6 +15,7 @@ C_SOURCES += \
     $(PROJECT_ROOT)/uvm/sw/io/printf.c \
     $(PROJECT_ROOT)/uvm/sw/lib/string.c \
     $(PROJECT_ROOT)/uvm/sw/sys/err.c \
+    $(PROJECT_ROOT)/uvm/sw/sys/glob.c \
     $(PROJECT_ROOT)/uvm/sw/sys/time.c
 
 # used by the common.mk, do not touch, legacy compatibility
