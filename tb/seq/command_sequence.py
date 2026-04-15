@@ -25,3 +25,6 @@ class CommandSequence(McuVirtualSequence):
             await self.sequencer.event_pool.mcu_busy.wait()
             self.sequencer.event_pool.mcu_busy.clear()
             self.sequencer.logger.debug("awaited mcu busy state event")
+
+        await self.sequencer.event_pool.mcu_ready.wait()
+        self.sequencer.event_pool.mcu_ready.clear()

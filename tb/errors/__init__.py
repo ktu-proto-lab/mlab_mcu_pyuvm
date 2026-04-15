@@ -1,1 +1,1 @@
-from .errors import TestError, ConfigTestError, VirtualInterfaceTestError, AsciiTestError, SequenceTestError, CommandUnknownTestError, MemoryInvalidAddrTestError, NotImplementedTestError, McuCliWrongCmdStringTestError, McuCliCmdNotExacutableTestError, McuCliTestError
+from .errors import McuTestError, ConfigTestError, VirtualInterfaceTestError, AsciiTestError, SequenceTestError, CommandUnknownTestError, MemoryInvalidAddrTestError, NotImplementedTestError, McuCliWrongCmdStringTestError, McuCliCmdNotExacutableTestError, McuCliTestError

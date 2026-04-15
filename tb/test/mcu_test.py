@@ -19,6 +19,8 @@ class McuTest(uvm_test):
         self.vif: McuVirtualInterface = None
         self.cfg: McuConfig = None
         self.env: McuEnv = None
+        self.passed: bool = True
+
 
     def build_phase(self):
         super().build_phase()
@@ -76,5 +78,10 @@ class McuTest(uvm_test):
     def report_phase(self):
         super().report_phase()
 
+        if self.env.scoreboard.is_active and not self.env.scoreboard.passed:
+            self.logger.critical("test failed")
+            self.passed = False
+
     def final_phase(self):
         super().final_phase()
+        assert self.passed, f"test {self.get_name()} failed"

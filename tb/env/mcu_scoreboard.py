@@ -13,6 +13,7 @@ class McuScoreboard(uvm_component):
         self.expected_fifo: uvm_tlm_analysis_fifo = None
         self.successes: list[McuTransaction]  = []
         self.failures: list[McuTransaction]   = []
+        self.passed: bool = True
 
     def build_phase(self):
         super().build_phase()
@@ -83,6 +84,9 @@ class McuScoreboard(uvm_component):
         self.logger.info(f"| Failures:  {len(self.failures)} |")
         self.logger.info("------------------")
 
-        for failure in self.failures:
+        if len(self.failures) > 0:
             self.logger.error("Failures:")
+            self.passed = False
+
+        for failure in self.failures:
             self.logger.error(failure)

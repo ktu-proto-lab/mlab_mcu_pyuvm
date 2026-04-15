@@ -1,6 +1,6 @@
 from pyuvm import uvm_component, uvm_analysis_port, uvm_tlm_analysis_fifo, ConfigDB
 from env import McuConfig
-from errors import ConfigTestError, NotImplementedTestError, McuCliTestError
+from errors import ConfigTestError, NotImplementedTestError, McuCliTestError, McuTestError
 from ref.mcu_memory_mirror import McuMemoryMirror
 from ref.mcu_cli_interpreter import McuCliInterpreter
 from ref.mcu_transaction import McuTransaction
@@ -63,6 +63,6 @@ class McuRefModel(uvm_component):
             return self.cli.execute(req)
 
         # do not stop whole simulation just because cli throws an error
-        except McuCliTestError as e:
+        except McuTestError as e:
             self.logger.error(f"cli error '{e}'")
             return "mcu cli error"
