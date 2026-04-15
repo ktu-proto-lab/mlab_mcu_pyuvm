@@ -45,51 +45,71 @@ class McuMemoryMirror(uvm_object):
 
         return mem
 
+    def imem_addr_valid(self, addr: int, bytes: int) -> bool:
+        return self.IMEM_BASE_ADDR <= addr and (addr + bytes) <= (self.IMEM_BASE_ADDR + self.IMEM_SIZE_BYTES)
+
+    def dmem_addr_valid(self, addr: int, bytes: int) -> bool:
+        return self.DMEM_BASE_ADDR <= (addr + bytes) and (addr + bytes) <= (self.DMEM_BASE_ADDR + self.DMEM_SIZE_BYTES)
+
+    def addr_valid(self, addr: int, bytes: int) -> bool:
+        return self.imem_addr_valid(addr, bytes) or self.dmem_addr_valid(addr, bytes)
 
     def read(self, addr: int, bytes: int = 0x4) -> int:
-        if self.IMEM_BASE_ADDR <= (addr + bytes) and (addr + bytes) <= (self.IMEM_BASE_ADDR + self.IMEM_SIZE_BYTES):
-            value: int = 0x0
-            for byte in range(bytes):
-                value += self.imem[addr + byte] << (byte * 8)
-            return value
+        if not self.addr_valid(addr, bytes):
+            raise MemoryInvalidAddrError(
+                f"invalid memory read address, needs to be in dmem or imem address space, addr={hex(addr)}, bytes={hex(bytes)}"
+            )
 
-        if self.DMEM_BASE_ADDR <= (addr + bytes) and (addr + bytes) <= (self.DMEM_BASE_ADDR + self.DMEM_SIZE_BYTES):
-            value: int = 0x0
-            for byte in range(bytes):
-                value += self.dmem[addr + byte] << (byte * 8)
-            return value
+        mem = None
 
-        raise MemoryInvalidAddrError(
-            f"invalid memory address, needs to be in dmem or imem address space, addr={hex(addr)}, bytes={hex(bytes)}"
-        )
+        if self.imem_addr_valid(addr, bytes):
+            mem = self.imem
 
+        elif self.dmem_addr_valid(addr, bytes):
+            mem = self.dmem
 
-    # TODO: return previous value that was stored inside the memory
+        value: int = 0x0
+
+        for byte in range(bytes):
+            value += mem[addr + byte] << (byte * 8)
+
+        return value
+
     def write(self, addr: int, val: int, bytes: int = 0x4) -> None:
-        if self.IMEM_BASE_ADDR <= addr and (addr + bytes) <= (self.IMEM_BASE_ADDR + self.IMEM_SIZE_BYTES):
-            for byte in range(bytes):
-                self.imem[addr + byte] = (val >> (byte * 8)) & 0xFF
-            return
+        if not self.addr_valid(addr, bytes):
+            raise MemoryInvalidAddrError(
+                f"invalid memory write address, needs to be in dmem or imem address space, addr={hex(addr)}, bytes={hex(bytes)}"
+            )
 
-        if self.DMEM_BASE_ADDR <= addr and (addr + bytes) <= (self.DMEM_BASE_ADDR + self.DMEM_SIZE_BYTES):
-            for byte in range(bytes):
-                self.dmem[addr + byte] = (val >> (byte * 8)) & 0xFF
-            return
+        mem = None
 
-        raise MemoryInvalidAddrError(
-            f"invalid memory address, needs to be in dmem or imem address space, addr={hex(addr)}, bytes={hex(bytes)}"
-        )
+        if self.imem_addr_valid(addr, bytes):
+            mem = self.imem
+
+        elif self.dmem_addr_valid(addr, bytes):
+            mem = self.dmem
+
+        prev_val: int = self.read(addr, bytes)
+
+        for byte in range(bytes):
+            mem[addr + byte] = (val >> (byte * 8)) & 0xFF
+
+        return prev_val
 
     def cksum(self, addr: int, wcnt: int) -> int:
         cksum: int = 0x0
+
         for word in range(wcnt):
             cksum ^= self.read(addr + word * self.WORD_SIZE_BYTES)
+
         return cksum
 
     def dump(self, addr: int, wcnt: int) -> list[int]:
         vals = []
+
         for word in range(wcnt):
             word_addr = addr + word * self.WORD_SIZE_BYTES
             word_val = self.read(word_addr)
             vals.append(word_val)
+
         return vals

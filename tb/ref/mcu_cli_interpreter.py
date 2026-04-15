@@ -59,8 +59,8 @@ class McuCliInterpreter(uvm_object):
     def mem_write(self, addr: str, val: str) -> str:
         addr: int = int(addr, base=16)
         val: int = int(val, base=16)
-        self.memory.write(addr, val)
-        return "TODO"
+        prev_val: int = self.memory.write(addr, val)
+        return hex(prev_val)
 
     def mem_cksum(self, addr: str, wcnt: str) -> str:
         addr: int = int(addr, base=16)
