@@ -10,7 +10,7 @@ class CommandSequence(McuVirtualSequence):
     async def body(self):
         await super().body()
 
-        for _ in range(100):
+        for _ in range(10):
             self.sequencer.logger.debug("waiting mcu ready state event")
             await self.sequencer.event_pool.mcu_ready.wait()
             # TODO: clear events at a certain stage to avoid clearing before others are waiting for it

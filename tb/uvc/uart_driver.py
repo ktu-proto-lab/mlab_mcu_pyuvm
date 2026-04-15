@@ -1,7 +1,7 @@
 from cocotb.triggers import ReadWrite, Timer
 from pyuvm import uvm_driver, uvm_analysis_port, ConfigDB
 
-from errors import ConfigError, VirtualInterfaceError
+from errors import ConfigTestError, VirtualInterfaceTestError
 from vif import McuVirtualInterface
 
 from uvc.uart_config import UartConfig
@@ -18,12 +18,12 @@ class UartDriver(uvm_driver):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError("no configuration provided for uart driver")
+            raise ConfigTestError("no configuration provided for uart driver")
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
         if self.cfg.vif is None:
-            raise VirtualInterfaceError("no provided virtual interface for uart driver")
+            raise VirtualInterfaceTestError("no provided virtual interface for uart driver")
 
         self.vif = self.cfg.vif
 

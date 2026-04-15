@@ -1,6 +1,6 @@
 from cocotb.triggers import RisingEdge, ReadWrite
 from pyuvm import  ConfigDB, uvm_driver
-from errors import ConfigError
+from errors import ConfigTestError
 from vif import McuVirtualInterface
 from uvc.gpio_config import GpioConfig
 from uvc.gpio_pad import GpioPad
@@ -15,7 +15,7 @@ class GpioDriver(uvm_driver):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError("no configuration provided for the gpio driver")
+            raise ConfigTestError("no configuration provided for the gpio driver")
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 

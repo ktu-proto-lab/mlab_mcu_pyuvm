@@ -1,6 +1,7 @@
 from pyuvm import uvm_component, ConfigDB, uvm_tlm_analysis_fifo
-from errors import ConfigError
+from errors import ConfigTestError
 from env.mcu_config import McuConfig
+from ref.mcu_transaction import McuTransaction
 
 class McuScoreboard(uvm_component):
     def __init__(self, name="McuScoreboard", parent=None):
@@ -10,19 +11,21 @@ class McuScoreboard(uvm_component):
         self.request_fifo: uvm_tlm_analysis_fifo = None
         self.actual_fifo: uvm_tlm_analysis_fifo = None
         self.expected_fifo: uvm_tlm_analysis_fifo = None
+        self.successes: list[McuTransaction]  = []
+        self.failures: list[McuTransaction]   = []
 
     def build_phase(self):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError(
+            raise ConfigTestError(
                 "no configuration provided for mcu scoreboard"
             )
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
         if not isinstance(self.cfg, McuConfig):
-            raise ConfigError(
+            raise ConfigTestError(
                 f"provided configuration is not expected McuConfig type, provided {type(self.cfg).__name__}"
             )
 
@@ -43,13 +46,43 @@ class McuScoreboard(uvm_component):
             return
 
         while True:
+
+            scb_txn: McuTransaction = McuTransaction.create("actual_txn")
+
             self.logger.debug("waiting request")
-            request = await self.request_fifo.get()
+            scb_txn.request: str = await self.request_fifo.get()
 
             self.logger.debug("waiting expected response")
-            expected = await self.expected_fifo.get()
+            ref_txn: McuTransaction = await self.expected_fifo.get()
+
+            if ref_txn.request != scb_txn.request:
+                self.logger.error(
+                    f"reference and scoreboard components have different requests, scoreboard got: '{scb_txn.request}', reference model got: '{ref_txn.request}'"
+                )
+
+            # continue checking, do not stop simulation
+            scb_txn.expected = ref_txn.expected
 
             self.logger.debug("waiting actual response")
-            actual = await self.actual_fifo.get()
+            scb_txn.actual: str = await self.actual_fifo.get()
 
-            # TODO: check expected from reference model with actual
+            if scb_txn.expected == scb_txn.actual and scb_txn.request == ref_txn.request:
+                self.logger.info(f"success ({scb_txn})")
+                self.successes.append(scb_txn)
+            else:
+                self.logger.error(f"failure ({scb_txn})")
+                self.failures.append(scb_txn)
+
+    def check_phase(self):
+        super().check_phase()
+
+        # TODO: write to file
+        self.logger.info("--- SCOREBOARD ---")
+        self.logger.info(f"| Total transactions: {len(self.failures) + len(self.successes)} |")
+        self.logger.info(f"| Successes: {len(self.successes)} |")
+        self.logger.info(f"| Failures:  {len(self.failures)} |")
+        self.logger.info("------------------")
+
+        for failure in self.failures:
+            self.logger.error("Failures:")
+            self.logger.error(failure)

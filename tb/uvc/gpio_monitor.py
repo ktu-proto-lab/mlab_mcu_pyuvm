@@ -1,6 +1,6 @@
 from cocotb.triggers import RisingEdge, ReadOnly
 from pyuvm import uvm_monitor, uvm_analysis_port, ConfigDB
-from errors import ConfigError
+from errors import ConfigTestError
 from uvc.gpio_config import GpioConfig
 from uvc.gpio_pad import GpioPad
 
@@ -14,7 +14,7 @@ class GpioMonitor(uvm_monitor):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError("no provided configuration for gpio monitor")
+            raise ConfigTestError("no provided configuration for gpio monitor")
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 

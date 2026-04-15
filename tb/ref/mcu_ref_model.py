@@ -1,8 +1,9 @@
 from pyuvm import uvm_component, uvm_analysis_port, uvm_tlm_analysis_fifo, ConfigDB
 from env import McuConfig
-from errors import ConfigError, NotImplementedError
+from errors import ConfigTestError, NotImplementedTestError, McuCliTestError
 from ref.mcu_memory_mirror import McuMemoryMirror
 from ref.mcu_cli_interpreter import McuCliInterpreter
+from ref.mcu_transaction import McuTransaction
 
 # Maybe this needs to be a component too.
 class McuRefModel(uvm_component):
@@ -18,14 +19,14 @@ class McuRefModel(uvm_component):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError(
+            raise ConfigTestError(
                 "no configuration provided for mcu reference model"
             )
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
         if not isinstance(self.cfg, McuConfig):
-            raise ConfigError(
+            raise ConfigTestError(
                 f"expected assigned configuration to be McuConfig, actual is {type(self.cfg).__name__}"
             )
 
@@ -47,13 +48,21 @@ class McuRefModel(uvm_component):
         await super().run_phase()
 
         while True:
-            req: str = await self.request_fifo.get()
-            self.logger.info(f"req: '{req}'")
+            txn: McuTransaction = McuTransaction.create("txn")
 
-            rsp: str = self.predict(req)
+            txn.request: str = await self.request_fifo.get()
+            self.logger.debug(f"request = '{txn.request}'")
 
-            self.ap.write(rsp)
-            self.logger.info(f"rsp: '{rsp}'")
+            txn.expected: str = self.predict(txn.request)
+            self.logger.debug(f"expected = '{txn.actual}'")
+
+            self.ap.write(txn)
 
     def predict(self, req: str) -> str:
-        return self.cli.execute(req)
+        try:
+            return self.cli.execute(req)
+
+        # do not stop whole simulation just because cli throws an error
+        except McuCliTestError as e:
+            self.logger.error(f"cli error '{e}'")
+            return "mcu cli error"

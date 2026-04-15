@@ -1,6 +1,6 @@
 from pyuvm import uvm_agent, uvm_object, ConfigDB, uvm_analysis_port
 
-from errors import ConfigError
+from errors import ConfigTestError
 
 from uvc.uart_driver import UartDriver
 from uvc.uart_monitor import UartMonitor
@@ -19,7 +19,7 @@ class UartAgent(uvm_agent):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError("cfguration not given to uart agent")
+            raise ConfigTestError("cfguration not given to uart agent")
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 

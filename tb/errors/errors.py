@@ -1,31 +1,38 @@
-class Error(Exception):
+class TestError(Exception):
     """ Base exception for verification errors """
     pass
 
-class NotImplementedError(Error):
+class NotImplementedTestError(TestError):
     pass
 
-class ConfigError(Error):
+class ConfigTestError(TestError):
     """ Exception for configurational errors """
     pass
 
-class VirtualInterfaceError(Error):
+class VirtualInterfaceTestError(TestError):
     """ Exception for not assigned virtual interfaces or other """
     pass
 
-class AsciiError(Error):
+class AsciiTestError(TestError):
     """ Exception for ASCII related errors where a byte value is not in rage of 0 and 127"""
     pass
 
-class SequenceError(Error):
+class SequenceTestError(TestError):
     """ Exception related with sequences """
     pass
 
-class CommandUnknownError(Error):
+class CommandUnknownTestError(TestError):
     pass
 
-class MemoryInvalidAddrError(Error):
+class MemoryInvalidAddrTestError(TestError):
     pass
 
-class McuCliWrongCmdStringError(Error):
+class McuCliTestError(TestError):
+    """ Base exception for mcu cli related errors """
+    pass
+
+class McuCliWrongCmdStringTestError(McuCliTestError):
+    pass
+
+class McuCliCmdNotExacutableTestError(McuCliTestError):
     pass

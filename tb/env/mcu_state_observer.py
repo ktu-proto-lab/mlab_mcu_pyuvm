@@ -1,7 +1,7 @@
 from cocotb.runner import Type
 from cocotb.triggers import Event
 from pyuvm import uvm_subscriber, ConfigDB
-from errors import ConfigError
+from errors import ConfigTestError
 from uvc import GpioPad
 from env.mcu_config import McuConfig
 from env.mcu_state_enum import McuStateEnum
@@ -19,7 +19,7 @@ class McuStateObserver(uvm_subscriber):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError("no configuration provided for the state probe")
+            raise ConfigTestError("no configuration provided for the state probe")
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 

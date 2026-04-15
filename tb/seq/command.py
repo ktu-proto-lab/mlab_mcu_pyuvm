@@ -4,7 +4,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning, module="vsc")
 import vsc
 from enum import Enum
 from pyuvm import uvm_sequence_item
-from errors import CommandUnknownError
+from errors import CommandUnknownTestError
 
 class CommandEnum(Enum):
     read = 1
@@ -56,11 +56,11 @@ class Command(uvm_sequence_item):
     @vsc.constraint
     def c_cmd_equal_dist(self):
         vsc.dist(self.cmd,[
-            vsc.weight(CommandEnum.read, 0),
-            vsc.weight(CommandEnum.write, 100),
-            vsc.weight(CommandEnum.cksum, 0),
-            vsc.weight(CommandEnum.dump, 0),
-            vsc.weight(CommandEnum.test, 0)
+            vsc.weight(CommandEnum.read, 30),
+            vsc.weight(CommandEnum.write, 20),
+            vsc.weight(CommandEnum.cksum, 20),
+            vsc.weight(CommandEnum.dump, 20),
+            vsc.weight(CommandEnum.test, 10)
         ])
 
     def to_string(self) -> str:
@@ -74,7 +74,7 @@ class Command(uvm_sequence_item):
             return f"mem dump {hex(self.addr)} {hex(self.word_count)}"
         if self.cmd == CommandEnum.test:
             return "mem test"
-        raise CommandUnknownError(f"unhandled command {self.cmd}")
+        raise CommandUnknownTestError(f"unhandled command {self.cmd}")
 
 
     def __str__(self):

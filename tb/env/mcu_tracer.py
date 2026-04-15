@@ -1,7 +1,7 @@
 import cocotb
 from pyuvm import uvm_component, uvm_tlm_analysis_fifo, ConfigDB, uvm_analysis_port
 
-from errors import ConfigError, AsciiError
+from errors import ConfigTestError, AsciiTestError
 from uvc import UartByte, GpioPad
 
 from env.mcu_config import McuConfig
@@ -23,7 +23,7 @@ class McuTracer(uvm_component):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError("no configuration provided for tracer")
+            raise ConfigTestError("no configuration provided for tracer")
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
@@ -58,7 +58,7 @@ class McuTracer(uvm_component):
 
             try:
                 char = byte.to_ascii()
-            except AsciiError:
+            except AsciiTestError:
                 self.logger.error(f"received non ascii byte {byte.hex_value()}")
                 continue
 

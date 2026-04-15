@@ -1,6 +1,6 @@
 from pyuvm import uvm_sequence_item
 
-from errors import AsciiError
+from errors import AsciiTestError
 
 class UartByte(uvm_sequence_item):
     def __init__(self, name="UartByte", byte: int = 0x00):
@@ -18,5 +18,5 @@ class UartByte(uvm_sequence_item):
 
     def to_ascii(self) -> chr:
         if self.val < 0 or self.val > 127:
-            raise AsciiError(f"byte {self.hex_value()} can not be converted to ascii character")
+            raise AsciiTestError(f"byte {self.hex_value()} can not be converted to ascii character")
         return chr(self.val)

@@ -1,5 +1,5 @@
 from pyuvm import uvm_object
-from errors import MemoryInvalidAddrError, ConfigError
+from errors import MemoryInvalidAddrTestError, ConfigTestError
 from env.mcu_memory_config import McuMemoryConfig
 
 class McuMemoryMirror(uvm_object):
@@ -11,12 +11,12 @@ class McuMemoryMirror(uvm_object):
 
     def upload_source_binaries(self):
         if self.cfg is None:
-            raise ConfigError(
+            raise ConfigTestError(
                 "memory configuration must be set to upload binaries to mcu memory mirror"
             )
 
         if not isinstance(self.cfg, McuMemoryConfig):
-            raise ConfigError(
+            raise ConfigTestError(
                 f"memory configuration expected to be McuMemoryConfig, actual is {type(self.cfg).__name__}"
             )
 
@@ -56,7 +56,7 @@ class McuMemoryMirror(uvm_object):
 
     def read(self, addr: int, bytes: int = 0x4) -> int:
         if not self.addr_valid(addr, bytes):
-            raise MemoryInvalidAddrError(
+            raise MemoryInvalidAddrTestError(
                 f"invalid memory read address, needs to be in dmem or imem address space, addr={hex(addr)}, bytes={hex(bytes)}"
             )
 
@@ -77,7 +77,7 @@ class McuMemoryMirror(uvm_object):
 
     def write(self, addr: int, val: int, bytes: int = 0x4) -> None:
         if not self.addr_valid(addr, bytes):
-            raise MemoryInvalidAddrError(
+            raise MemoryInvalidAddrTestError(
                 f"invalid memory write address, needs to be in dmem or imem address space, addr={hex(addr)}, bytes={hex(bytes)}"
             )
 

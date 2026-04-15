@@ -1,6 +1,6 @@
 import shlex
 from pyuvm import uvm_object
-from errors import NotImplementedError, ConfigError, McuCliWrongCmdStringError
+from errors import NotImplementedTestError, ConfigTestError, McuCliWrongCmdStringTestError, McuCliCmdNotExacutableTestError
 from ref.mcu_memory_mirror import McuMemoryMirror
 
 class McuCliInterpreter(uvm_object):
@@ -18,13 +18,13 @@ class McuCliInterpreter(uvm_object):
 
     def execute(self, req: str) -> str:
         if not req:
-            raise McuCliWrongCmdStringError()
+            raise McuCliWrongCmdStringTestError()
 
         if not self.memory:
-            raise ConfigError("memory mirror is required")
+            raise ConfigTestError("memory mirror is required")
 
         if not isinstance(self.memory, McuMemoryMirror):
-            raise ConfigError(
+            raise ConfigTestError(
                 f"memory mirror must be McuMemoryMirror type, actual {type(self.memory).__name__}"
             )
 
@@ -44,9 +44,9 @@ class McuCliInterpreter(uvm_object):
         if cmd in self.commands:
             return self.commands[cmd](*args)
 
-        return "[  ERROR]: TODO"
-
-
+        raise McuCliCmdNotExacutableTestError(
+            f"given request can not be executed by the interpreter '{req}'"
+        )
 
     def echo(self, string: str) -> str:
         return string
@@ -74,14 +74,32 @@ class McuCliInterpreter(uvm_object):
         vals: list[int] = self.memory.dump(addr, wcnt)
         string = ""
         for val in vals:
-            string += f" {hex(val)}"
+            string += f"{hex(val)} "
         return string
 
     def mem_size(self, type: str) -> str:
         if type == "imem":
-            return str(self.memory.IMEM_SIZE_BYTES)
-
+            return str(self.memory.cfg.imem_size_bytes)
         if type == "dmem":
-            return str(self.memory.DMEM_SIZE_BYTES)
-        # TODO: implement the rest, maybe use gcc compiler to extract the values of linker variables
-        return "TODO"
+            return str(self.memory.cfg.dmem_size_bytes)
+        if type == "instr":
+            return str(self.memory.cfg.instr_size_bytes)
+        if type == "ram":
+            return str(self.memory.cfg.ram_size_bytes)
+        if type == "bin":
+            return str(self.memory.cfg.bin_size_bytes)
+        if type == "text":
+            return str(self.memory.cfg.text_size_bytes)
+        if type == "data":
+            return str(self.memory.cfg.data_size_bytes)
+        if type == "bss":
+            return str(self.memory.cfg.bss_size_bytes)
+        if type == "stack":
+            return str(self.memory.cfg.stack_size_bytes)
+
+        SYSTEM_ERROR_CLI_CMD_MEM_SIZE_UNKNOWN_ARG = 127
+
+        return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_SIZE_UNKNOWN_ARG)
+
+    def system_error_print(self, error: int) -> str:
+        return f"[  ERROR]: {error}"

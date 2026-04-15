@@ -1,6 +1,6 @@
 from pyuvm import uvm_sequence
 
-from errors import SequenceError
+from errors import SequenceTestError
 from env import McuVirtualSequencer
 
 class McuVirtualSequence(uvm_sequence):
@@ -14,7 +14,7 @@ class McuVirtualSequence(uvm_sequence):
         await super().body()
 
         if self.sequencer is None:
-            raise SequenceError("no provided sequencer")
+            raise SequenceTestError("no provided sequencer")
 
         if not isinstance(self.sequencer, McuVirtualSequencer):
             raise TypeError(f"virtual sequence expects sequencer to be VirtualSequencer type, but is provided with {type(self.sequencer).__name__}")

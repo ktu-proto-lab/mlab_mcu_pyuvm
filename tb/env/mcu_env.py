@@ -1,6 +1,6 @@
 from pyuvm import uvm_env, ConfigDB
 
-from errors import ConfigError
+from errors import ConfigTestError
 from uvc import GpioAgent, UartAgent
 
 from ref import McuRefModel
@@ -26,7 +26,7 @@ class McuEnv(uvm_env):
         super().build_phase()
 
         if not ConfigDB().exists(self, "", "cfg"):
-            raise ConfigError("no configuration provided for the environment")
+            raise ConfigTestError("no configuration provided for the environment")
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
