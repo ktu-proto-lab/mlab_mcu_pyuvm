@@ -2,6 +2,7 @@ from pyuvm import uvm_object
 
 from uvc import GpioConfig, UartConfig
 from vif import McuVirtualInterface
+from env.mcu_memory_config import McuMemoryConfig
 from env.mcu_event_pool import McuEventPool
 
 class McuConfig(uvm_object):
@@ -16,3 +17,4 @@ class McuConfig(uvm_object):
         self.event_pool = McuEventPool.create("event_pool")
         self.scoreboard_enable: bool = True
         self.mem_path: str = None
+        self.mem_cfg: McuMemoryConfig = McuMemoryConfig.create("mem_cfg")
