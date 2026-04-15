@@ -1,27 +1,27 @@
 from pyuvm import uvm_object
 from errors import MemoryInvalidAddrError, ConfigError
+from env.mcu_memory_config import McuMemoryConfig
 
 class McuMemoryMirror(uvm_object):
-    WORD_SIZE_BYTES: int = 4
-    IMEM_SIZE_BYTES: int = 8192
-    DMEM_SIZE_BYTES: int = 4096
-    IMEM_BASE_ADDR: int = 0x80000000
-    DMEM_BASE_ADDR: int = 0x90000000
-    DMEM_FILE_NAME: str = "data_hex.mem"
-    IMEM_FILE_NAME: str = "instr_hex.mem"
-
     def __init__(self, name="McuMemoryMirror"):
         super().__init__(name)
-        self.source_filepath: string = None
+        self.cfg: McuMemoryConfig = None
         self.imem: dict = None
         self.dmem: dict = None
 
     def upload_source_binaries(self):
-        if self.source_filepath is None:
-            raise ConfigError("source filepath must be set to upload binaries to mcu memory mirror")
+        if self.cfg is None:
+            raise ConfigError(
+                "memory configuration must be set to upload binaries to mcu memory mirror"
+            )
 
-        self.imem = self.parse_mem_file(self.source_filepath + self.IMEM_FILE_NAME, self.IMEM_BASE_ADDR)
-        self.dmem = self.parse_mem_file(self.source_filepath + self.DMEM_FILE_NAME, self.DMEM_BASE_ADDR)
+        if not isinstance(self.cfg, McuMemoryConfig):
+            raise ConfigError(
+                f"memory configuration expected to be McuMemoryConfig, actual is {type(self.cfg).__name__}"
+            )
+
+        self.imem = self.parse_mem_file(self.cfg.source_build_dir_path + self.cfg.imem_file_name, self.cfg.imem_base_addr)
+        self.dmem = self.parse_mem_file(self.cfg.source_build_dir_path + self.cfg.dmem_file_name, self.cfg.dmem_base_addr)
 
     def parse_mem_file(self, filepath: str, base_addr: int) -> dict:
         mem = {}
@@ -41,15 +41,15 @@ class McuMemoryMirror(uvm_object):
                     mem[addr + 1] = (word >> 8)  & 0xFF
                     mem[addr + 2] = (word >> 16) & 0xFF
                     mem[addr + 3] = (word >> 24) & 0xFF
-                    addr += self.WORD_SIZE_BYTES
+                    addr += self.cfg.word_size_bytes
 
         return mem
 
     def imem_addr_valid(self, addr: int, bytes: int) -> bool:
-        return self.IMEM_BASE_ADDR <= addr and (addr + bytes) <= (self.IMEM_BASE_ADDR + self.IMEM_SIZE_BYTES)
+        return self.cfg.imem_base_addr <= addr and (addr + bytes) <= (self.cfg.imem_base_addr + self.cfg.imem_size_bytes)
 
     def dmem_addr_valid(self, addr: int, bytes: int) -> bool:
-        return self.DMEM_BASE_ADDR <= (addr + bytes) and (addr + bytes) <= (self.DMEM_BASE_ADDR + self.DMEM_SIZE_BYTES)
+        return self.cfg.dmem_base_addr <= (addr + bytes) and (addr + bytes) <= (self.cfg.dmem_base_addr + self.cfg.dmem_size_bytes)
 
     def addr_valid(self, addr: int, bytes: int) -> bool:
         return self.imem_addr_valid(addr, bytes) or self.dmem_addr_valid(addr, bytes)
@@ -100,7 +100,7 @@ class McuMemoryMirror(uvm_object):
         cksum: int = 0x0
 
         for word in range(wcnt):
-            cksum ^= self.read(addr + word * self.WORD_SIZE_BYTES)
+            cksum ^= self.read(addr + word * self.cfg.word_size_bytes)
 
         return cksum
 
@@ -108,7 +108,7 @@ class McuMemoryMirror(uvm_object):
         vals = []
 
         for word in range(wcnt):
-            word_addr = addr + word * self.WORD_SIZE_BYTES
+            word_addr = addr + word * self.cfg.word_size_bytes
             word_val = self.read(word_addr)
             vals.append(word_val)
 

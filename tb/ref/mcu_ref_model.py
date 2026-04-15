@@ -30,9 +30,9 @@ class McuRefModel(uvm_component):
             )
 
         self.memory = McuMemoryMirror.create("memory")
-        self.memory.source_filepath = self.cfg.mem_path
+        self.memory.cfg = self.cfg.mem_cfg
         self.memory.upload_source_binaries()
-        self.logger.debug(f"created memory mirror from '{self.memory.source_filepath}'")
+        self.logger.debug(f"created memory mirror from '{self.memory.cfg.source_build_dir_path}'")
 
         self.cli = McuCliInterpreter.create("cli")
         self.cli.memory = self.memory

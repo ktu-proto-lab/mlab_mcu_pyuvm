@@ -33,7 +33,7 @@ class McuTest(uvm_test):
         self.cfg.uart_cfg.vif = self.vif
 
         # all defines are from the sim/makefile
-        self.cfg.mem_path: str = f"{os.getenv("MCU_TEST_SW_DIR")}/"
+        self.cfg.mem_cfg.source_build_dir_path: str = f"{os.getenv("MCU_TEST_SW_DIR")}/"
         self.cfg.mem_cfg.set(filepath=f"{os.getenv("MCU_TEST_ENV_SW_MEM_SIZE_FILEPATH")}")
 
         ConfigDB().set(self, "env", "cfg", self.cfg)

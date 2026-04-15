@@ -10,9 +10,10 @@ class McuMemoryConfig(uvm_object):
         self.dmem_size_bytes: int = 4096
         self.imem_base_addr: int = 0x80000000
         self.dmem_base_addr: int = 0x90000000
+        self.source_build_dir_path: str = None
         self.imem_file_name: str = "instr_hex.mem"
         self.dmem_file_name: str = "data_hex.mem"
-        self.source_filepath: str = None
+        self.env_sizes_source_filepath: str = None
         self.instr_size_bytes: int = None
         self.ram_size_bytes: int = None
         self.bin_size_bytes: int = None
@@ -28,10 +29,10 @@ class McuMemoryConfig(uvm_object):
         if not os.path.exists(filepath):
             raise FileNotFoundError(f"size export file not found: {filepath}")
 
-        self.source_filepath = filepath
+        self.env_sizes_source_filepath = filepath
 
         # NOTE: this parser is very primitive intentionally for failure if some small detail of the env file changes.
-        with open(self.source_filepath, "r") as file:
+        with open(self.env_sizes_source_filepath, "r") as file:
 
             # /path/to/source_file.elf:
             # section              size         addr
