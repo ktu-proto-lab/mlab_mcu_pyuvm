@@ -1,5 +1,6 @@
 .venv/
 venv/
+env/
 src/tb/results.xml
 build/
 __pycache__/

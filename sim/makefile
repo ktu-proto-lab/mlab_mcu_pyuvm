@@ -155,10 +155,20 @@ build_sw:
 		cp $(SW_IMEM1_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM1_HEX); \
 		cp $(SW_IMEM2_HEX_FILE_PATH) $(SW_PAYLOAD_IMEM2_HEX); \
 		cp $(SW_DMEM_HEX_FILE_PATH) $(SW_PAYLOAD_DMEM_HEX); \
-		logger INFO "binaries moved to payload directory '$(SW_PAYLOAD_DIR)'"
+		logger SUCCESS "binaries moved to payload directory '$(SW_PAYLOAD_DIR)'"
 
 # load software before the simulation to prevent old software running on mcu with a different test
 CUSTOM_COMPILE_DEPS += build_sw
+
+.PHONY: set_sw_env
+set_sw_env:
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	mkdir -p $(PROJECT_ROOT)/uvm/env; \
+	. $(PROJECT_ROOT)/uvm/script/sw_mem_size.sh; \
+	logger SUCCESS "software memory sizes extracted to '$(MCU_TEST_ENV_SW_MEM_SIZE_FILEPATH)'"
+
+# used in mcu_test.py to configure memory mirror depending of the built test software in build_sw recipie
+CUSTOM_COMPILE_DEPS += set_sw_env
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Compilation Arguments
@@ -266,5 +276,7 @@ endif
 # ----------------------------------------------------------------------------------------------------------------------
 # Custom
 # ----------------------------------------------------------------------------------------------------------------------
-# used by the mcu_test.py
-export MCU_TEST_SW_DIR = $(SW_DIR)
+# used by the McuTest in mcu_test.py and script/size.sh
+export MCU_TEST_SW_DIR = $(SW_DIR)/build
+export MCU_TEST_NAME = $(TEST)
+export MCU_TEST_ENV_SW_MEM_SIZE_FILEPATH = $(PROJECT_ROOT)/uvm/env/sw_mem_size.env
