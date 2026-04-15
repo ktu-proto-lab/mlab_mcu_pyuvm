@@ -15,5 +15,4 @@ class McuConfig(uvm_object):
         self.tracer_log_filepath: str = "sim_build/tracer.log"
         self.event_pool = McuEventPool.create("event_pool")
         self.scoreboard_enable: bool = True
-        # TODO: change to dynamic by test name
-        self.mem_path: str = f"/home/mcu/uvm/sw/test/command_test/build/"
+        self.mem_path: str = None

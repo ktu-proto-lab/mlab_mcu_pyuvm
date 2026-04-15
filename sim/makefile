@@ -46,7 +46,7 @@ Test:
 Options:
   WAVES=1                   : capture waves in waveform 'dump.vcd' file
   GUI=1                     : open SimVision GUI (only when SIM=xcelium)
-  LOG=TRACE|DEBUG|...       : set logging level (default: INFO)
+  LOG=DEBUG|INFO|ERROR...   : set logging level (default: INFO)
 
 Requirements:
   1. TEST or TB must be defined.
@@ -55,7 +55,7 @@ Requirements:
 Examples:
   make TEST=simple_gpio_test WAVES=1
   make SIM=xcelium TB=uart_tb GUI=1
-  make TEST=uart_simple_test LOG=DEBUG
+  make TEST=uart_simple_test LOG=WARNING
 -------------------------------------------------------------------------------
 endef
 export HELP_USAGE
@@ -262,3 +262,9 @@ else ifeq ($(MAKECMDGOALS),help)
 else
 include $(shell cocotb-config --makefiles)/Makefile.sim
 endif
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Custom
+# ----------------------------------------------------------------------------------------------------------------------
+# used by the mcu_test.py
+export MCU_TEST_SW_DIR = $(SW_DIR)

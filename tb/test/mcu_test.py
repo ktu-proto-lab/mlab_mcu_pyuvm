@@ -17,7 +17,7 @@ class McuTest(uvm_test):
         uvm_report_object.set_default_logging_level(log_level)
         super().__init__(name, parent)
         self.vif: McuVirtualInterface = None
-        self.cfg: Config = None
+        self.cfg: McuConfig = None
         self.env: McuEnv = None
 
     def build_phase(self):
@@ -31,6 +31,9 @@ class McuTest(uvm_test):
         self.cfg.vif = self.vif
         self.cfg.gpio_cfg.vif = self.vif
         self.cfg.uart_cfg.vif = self.vif
+
+        # 'MCU_TEST_SW_DIR' is defined in the sim/makefile
+        self.cfg.mem_path: str = f"{os.getenv("MCU_TEST_SW_DIR")}/build/"
 
         ConfigDB().set(self, "env", "cfg", self.cfg)
         self.env = McuEnv.create("env", self)
@@ -61,8 +64,6 @@ class McuTest(uvm_test):
         self.vif.reset.value = 1
         await ReadOnly()
         assert self.vif.reset.value == 1, "expected reset high"
-        # TODO: remove
-        await ClockCycles(self.vif.clock, 30_000)
         self.drop_objection()
 
     def extract_phase(self):

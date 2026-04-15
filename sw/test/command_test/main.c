@@ -42,10 +42,6 @@ int main() {
     // BUG: smaller than 3 chars wide stalls the test, removing does too
     uart_transmit(&uart, (uint8_t *)"ack\n", 4);
 
-    printf("imem: %u\n", SYSTEM_MEMORY_PROGRAM_TEXT_SIZE_BYTES);
-    printf("dmem ram: %u\n", SYSTEM_MEMORY_PROGRAM_DATA_SIZE_BYTES);
-    printf("dmem bin: %u\n", SYSTEM_MEMORY_PROGRAM_BSS_SIZE_BYTES);
-
     char buffer[256];
     while (1) {
         system_state_set(&gpio, SYSTEM_STATE_READY);
