@@ -7,12 +7,12 @@ RUN dnf install -y \
         gcc gcc-c++ make patch automake autoconf bison flex \
         gcc-riscv64-linux-gnu \
         findutils which \
-        python3.11 python3.11-devel python3.11-pip \
+        python3.12 python3.12-devel python3.12-pip \
         libX11 libXext libXft libXrender \
         glibc.i686 glibc-devel.i686 && \
     dnf clean all
 
-RUN alternatives --set python3 /usr/bin/python3.11
+RUN alternatives --set python3 /usr/bin/python3.12
 
 WORKDIR /home/mcu/uvm
 
