@@ -2,6 +2,7 @@ from cocotb.triggers import RisingEdge, ReadOnly
 from pyuvm import uvm_monitor, uvm_analysis_port, ConfigDB
 from errors import ConfigTestError
 
+from env.mcu_simulator import McuSimulatorEnum
 from uvc.gpio_config import GpioConfig
 from uvc.gpio_pad import GpioPad
 
@@ -34,9 +35,10 @@ class GpioMonitor(uvm_monitor):
             await RisingEdge(self.vif.clock)
             await ReadOnly()
 
-            # FIX (XCELIUM): x and z states
-            if not self.vif.exit_pad_io.value.is_resolvable:
-                continue
+            if self.cfg.simulator == McuSimulatorEnum.XCELIUM:
+                # FIX (XCELIUM): x and z states
+                if not self.vif.exit_pad_io.value.is_resolvable:
+                    continue
 
             curr_pin_state: int = self.vif.exit_pad_io.value
 
