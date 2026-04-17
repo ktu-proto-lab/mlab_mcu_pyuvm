@@ -2,8 +2,9 @@ from cocotb.runner import Type
 from cocotb.triggers import Event
 from pyuvm import uvm_subscriber, ConfigDB
 from errors import ConfigTestError
-from uvc import GpioPad
-from env.mcu_config import McuConfig
+
+from uvc.gpio_pad import GpioPad
+from cfg.config import Config
 from env.mcu_state_enum import McuStateEnum
 from env.mcu_event_pool import McuEventPool
 from env.mcu_simulator import McuSimulatorEnum
@@ -11,7 +12,7 @@ from env.mcu_simulator import McuSimulatorEnum
 class McuStateObserver(uvm_subscriber):
     def __init__(self, name="McuStateObserver", parent=None):
         super().__init__(name, parent)
-        self.cfg: McuConfig = None
+        self.cfg: Config = None
         self.event_pool: McuEventPool = None
         self._no_pool_warned = False
         self.prev_state = None
@@ -24,7 +25,7 @@ class McuStateObserver(uvm_subscriber):
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
-        if not isinstance(self.cfg, McuConfig):
+        if not isinstance(self.cfg, Config):
             raise TypeError(f"wrong configuration provided for the state probe, expected Config, got {type(self.cfg).__name__}")
 
         self.event_pool = self.cfg.event_pool
@@ -45,8 +46,8 @@ class McuStateObserver(uvm_subscriber):
             # FIX (XCELIUM): because xcelium is 4 state simulator, ignore x and z states
             if not gpio_pad.state.is_resolvable:
                 return
-            
-        
+
+
         curr_state = gpio_pad.state & ~gpio_pad.uart_mask
 
         curr_state &= (McuStateEnum.READY.value | McuStateEnum.BUSY.value | McuStateEnum.DEBUG.value)

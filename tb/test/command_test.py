@@ -1,6 +1,7 @@
 import pyuvm
-from seq import CommandSequence
-from test import McuTest
+
+from seq.command_sequence import CommandSequence
+from test.mcu_test import McuTest
 
 @pyuvm.test()
 class CommandTest(McuTest):

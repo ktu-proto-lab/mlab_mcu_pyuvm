@@ -1,5 +1,6 @@
 from pyuvm import uvm_agent, ConfigDB
 from errors import ConfigTestError
+
 from uvc.gpio_config import GpioConfig
 from uvc.gpio_driver import GpioDriver
 from uvc.gpio_monitor import GpioMonitor
@@ -21,10 +22,8 @@ class GpioAgent(uvm_agent):
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
-        if not self.cfg.active:
+        if not self.cfg.gpio_cfg.active:
             return
-
-        ConfigDB().set(self, "*", "cfg", self.cfg)
 
         self.driver = GpioDriver.create("driver", self)
 
@@ -35,7 +34,7 @@ class GpioAgent(uvm_agent):
     def connect_phase(self):
         super().connect_phase()
 
-        if not self.cfg.active:
+        if not self.cfg.gpio_cfg.active:
             return
 
         self.driver.seq_item_port.connect(self.sequencer.seq_item_export)

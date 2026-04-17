@@ -3,8 +3,8 @@ from cocotb.triggers import RisingEdge, ReadOnly, FallingEdge, Timer
 from pyuvm import uvm_monitor, uvm_analysis_port, ConfigDB
 
 from errors import ConfigTestError, VirtualInterfaceTestError
-from vif import McuVirtualInterface
 
+from vif.mcu_virtual_interface import McuVirtualInterface
 from uvc.uart_byte import UartByte
 from uvc.uart_config import UartConfig
 

@@ -1,6 +1,7 @@
 import pyuvm
-from seq import CliCmdMemSizeBasicSeq
-from test import McuTest
+
+from seq.cli_cmd_mem_size_basic_seq import CliCmdMemSizeBasicSeq
+from test.mcu_test import McuTest
 
 @pyuvm.test()
 class CliCmdMemSizeBasicTest(McuTest):

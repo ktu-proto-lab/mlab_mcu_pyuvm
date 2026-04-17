@@ -2,15 +2,16 @@ import cocotb
 from pyuvm import uvm_component, uvm_tlm_analysis_fifo, ConfigDB, uvm_analysis_port
 
 from errors import ConfigTestError, AsciiTestError
-from uvc import UartByte, GpioPad
 
-from env.mcu_config import McuConfig
+from uvc.gpio_pad import GpioPad
+from uvc.uart_byte import UartByte
+from cfg.config import Config
 
 # watch -n 0.1 'tail -n 10 sim/sim_build/tracer.log;'
 class McuTracer(uvm_component):
     def __init__(self, name="Tracer", parent=None):
         super().__init__(name, parent)
-        self.cfg: McuConfig = None
+        self.cfg: Config = None
         self.file = None
         self.gpio_pad_fifo: uvm_tlm_analysis_fifo = None
         self.gpio_pad_ap: uvm_analysis_port = None

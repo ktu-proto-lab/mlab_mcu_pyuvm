@@ -1,7 +1,7 @@
 from seq.mcu_virtual_sequence import McuVirtualSequence
 from seq.command import Command
 from seq.uart_string_sequence import UartStringSequence
-from uvc import UartByte
+from uvc.uart_byte import UartByte
 
 class CommandSequence(McuVirtualSequence):
     def __init__(self, name="CommandSequence"):

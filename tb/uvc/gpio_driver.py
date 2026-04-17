@@ -1,7 +1,9 @@
 from cocotb.triggers import RisingEdge, ReadWrite
 from pyuvm import  ConfigDB, uvm_driver
+
 from errors import ConfigTestError
-from vif import McuVirtualInterface
+
+from vif.mcu_virtual_interface import McuVirtualInterface
 from uvc.gpio_config import GpioConfig
 from uvc.gpio_pad import GpioPad
 

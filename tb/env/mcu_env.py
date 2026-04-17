@@ -1,10 +1,11 @@
 from pyuvm import uvm_env, ConfigDB
 
 from errors import ConfigTestError
-from uvc import GpioAgent, UartAgent
 
-from ref import McuRefModel
-from env.mcu_config import McuConfig
+from cfg.config import Config
+from ref.mcu_ref_model import McuRefModel
+from uvc.gpio_agent import GpioAgent
+from uvc.uart_agent import UartAgent
 from env.mcu_virtual_sequencer import McuVirtualSequencer
 from env.mcu_tracer import McuTracer
 from env.mcu_state_observer import McuStateObserver
@@ -13,7 +14,7 @@ from env.mcu_scoreboard import McuScoreboard
 class McuEnv(uvm_env):
     def __init__(self, name="Environment", parent=None):
         super().__init__(name, parent)
-        self.cfg: McuConfig = None
+        self.cfg: Config = None
         self.uart: UartAgent = None
         self.gpio: GpioAgent = None
         self.virtual_sequencer: McuVirtualSequencer = None
@@ -30,17 +31,15 @@ class McuEnv(uvm_env):
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
-        if not isinstance(self.cfg, McuConfig):
+        if not isinstance(self.cfg, Config):
             raise TypeError(f"unknown configuration provided for environment: expected Config, got {type(self.cfg)}")
 
         if not self.cfg.env_enable:
             self.logger.info("environment is not active")
             return
 
-        ConfigDB().set(self, "gpio", "cfg", self.cfg.gpio_cfg)
         self.gpio = GpioAgent.create("gpio", self)
 
-        ConfigDB().set(self, "uart", "cfg", self.cfg.uart_cfg)
         self.uart = UartAgent.create("uart", self)
 
         self.virtual_sequencer = McuVirtualSequencer.create("virtual_sequencer", self)
@@ -48,18 +47,14 @@ class McuEnv(uvm_env):
 
         if self.cfg.tracer_log_enable:
             # TODO: just disable piping to the file, tracer will be used by other components
-            ConfigDB().set(self, "tracer", "cfg", self.cfg)
             self.tracer = McuTracer.create("tracer", self)
 
-        ConfigDB().set(self, "state_observer", "cfg", self.cfg)
         self.state_observer = McuStateObserver.create("state_observer", self)
         self.logger.debug("state observer created")
 
-        ConfigDB().set(self, "scoreboard", "cfg", self.cfg)
         self.scoreboard = McuScoreboard.create("scoreboard", self)
         self.logger.debug("scoreboard created")
 
-        ConfigDB().set(self, "ref_model", "cfg", self.cfg)
         self.ref_model = McuRefModel.create("ref_model", self)
         self.logger.debug("reference model created")
 

@@ -1,5 +1,6 @@
 from pyuvm import uvm_sequence
-from uvc import UartByte
+
+from uvc.uart_byte import UartByte
 
 class UartStringSequence(uvm_sequence):
     def __init__(self, name="UartStringSequence", string=""):

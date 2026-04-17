@@ -2,15 +2,16 @@ from cocotb.triggers import ReadWrite, Timer
 from pyuvm import uvm_driver, uvm_analysis_port, ConfigDB
 
 from errors import ConfigTestError, VirtualInterfaceTestError
-from vif import McuVirtualInterface
 
-from uvc.uart_config import UartConfig
+from vif.mcu_virtual_interface import McuVirtualInterface
+from env.mcu_simulator import McuSimulatorEnum
+from cfg.config import Config
 from uvc.uart_byte import UartByte
 
 class UartDriver(uvm_driver):
     def __init__(self, name="UartDriver", parent=None):
         super().__init__(name, parent)
-        self.cfg: UartConfig = None
+        self.cfg: Config = None
         self.vif: McuVirtualInterface = None
         self.ap: uvm_analysis_port = None
 
@@ -44,9 +45,10 @@ class UartDriver(uvm_driver):
             if not isinstance(byte, UartByte):
                 raise TypeError(f"uart driver only drives uart byte sequence items, expected UartByte, got {type(byte).__name__}")
 
-            # FIX (xcelium): 0.00s violation
-            await Timer(1, units='ps')
-            
+            if self.cfg.simulator == McuSimulatorEnum.XCELIUM:
+                # FIX (xcelium): 0.00s violation for read-write
+                await Timer(1, units='ps')
+
             await ReadWrite()
             self.vif.uart_rx_en.value = 1
             self.vif.uart_rx.value = 1

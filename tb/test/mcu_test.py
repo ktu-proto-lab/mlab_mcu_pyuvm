@@ -6,8 +6,10 @@ from cocotb.clock import Clock
 from cocotb.triggers import ReadOnly, ReadWrite, ClockCycles, Timer
 from pyuvm import uvm_test, uvm_report_object, ConfigDB
 
-from env import McuConfig, McuEnv, McuSimulatorEnum
-from vif import McuVirtualInterface
+from cfg.config import Config
+from vif.mcu_virtual_interface import McuVirtualInterface
+from env.mcu_env import McuEnv
+from env.mcu_simulator import McuSimulatorEnum
 
 @pyuvm.test()
 class McuTest(uvm_test):
@@ -17,7 +19,7 @@ class McuTest(uvm_test):
         uvm_report_object.set_default_logging_level(log_level)
         super().__init__(name, parent)
         self.vif: McuVirtualInterface = None
-        self.cfg: McuConfig = None
+        self.cfg: Config = None
         self.env: McuEnv = None
         self.passed: bool = True
 
@@ -29,7 +31,7 @@ class McuTest(uvm_test):
         self.vif.wire_to_dut(dut=cocotb.top)
         self.logger.debug("virtual interface wired to the dut")
 
-        self.cfg = McuConfig.create("cfg")
+        self.cfg = Config.create("cfg")
         self.cfg.vif = self.vif
         self.cfg.gpio_cfg.vif = self.vif
         self.cfg.uart_cfg.vif = self.vif
@@ -37,14 +39,16 @@ class McuTest(uvm_test):
         # all defines are from the sim/makefile
         self.cfg.mem_cfg.source_build_dir_path: str = f"{os.getenv("MCU_TEST_SW_DIR")}/"
         self.cfg.mem_cfg.set(filepath=f"{os.getenv("MCU_TEST_ENV_SW_MEM_SIZE_FILEPATH")}")
-        
+
         simulator = f"{os.getenv("MCU_TEST_ENV_SIM")}"
         if simulator == "verilator":
             self.cfg.simulator = McuSimulatorEnum.VERILATOR
         elif simulator == "xcelium":
             self.cfg.simulator = McuSimulatorEnum.XCELIUM
 
-        ConfigDB().set(self, "env", "cfg", self.cfg)
+        # set configuration globally for all
+        ConfigDB().set(self, "*", "cfg", self.cfg)
+
         self.env = McuEnv.create("env", self)
 
     def connect_phase(self):
@@ -67,11 +71,11 @@ class McuTest(uvm_test):
         self.logger.info(f"system reset for {self.vif.reset_duration} clock cycles")
         await ReadOnly()
         assert self.vif.reset.value == 0, "expected reset low"
-        
+
         if self.cfg.simulator is McuSimulatorEnum.XCELIUM:
             # bypass xcelium's 0.00ns rule
             await Timer(1, units='ps')
-            
+
         await ReadWrite()
         self.vif.reset.value = 0
         await ClockCycles(self.vif.clock, self.vif.reset_duration)

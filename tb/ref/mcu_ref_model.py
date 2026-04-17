@@ -1,6 +1,7 @@
 from pyuvm import uvm_component, uvm_analysis_port, uvm_tlm_analysis_fifo, ConfigDB
-from env import McuConfig
 from errors import ConfigTestError, NotImplementedTestError, McuCliTestError, McuTestError
+
+from cfg.config import Config
 from ref.mcu_memory_mirror import McuMemoryMirror
 from ref.mcu_cli_interpreter import McuCliInterpreter
 from ref.mcu_transaction import McuTransaction
@@ -9,7 +10,7 @@ from ref.mcu_transaction import McuTransaction
 class McuRefModel(uvm_component):
     def __init__(self, name="McuRefModel", parent=None):
         super().__init__(name, parent)
-        self.cfg: McuConfig = None
+        self.cfg: Config = None
         self.memory: McuMemoryMirror = None
         self.cli: McuCliInterpreter = None
         self.request_fifo: uvm_tlm_analysis_fifo = None
@@ -25,9 +26,9 @@ class McuRefModel(uvm_component):
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
-        if not isinstance(self.cfg, McuConfig):
+        if not isinstance(self.cfg, Config):
             raise ConfigTestError(
-                f"expected assigned configuration to be McuConfig, actual is {type(self.cfg).__name__}"
+                f"expected assigned configuration to be Config, actual is {type(self.cfg).__name__}"
             )
 
         self.memory = McuMemoryMirror.create("memory")

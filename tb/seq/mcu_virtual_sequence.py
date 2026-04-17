@@ -1,7 +1,8 @@
 from pyuvm import uvm_sequence
 
 from errors import SequenceTestError
-from env import McuVirtualSequencer
+
+from env.mcu_virtual_sequencer import McuVirtualSequencer
 
 class McuVirtualSequence(uvm_sequence):
     _no_event_pool_warned = False

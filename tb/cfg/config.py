@@ -1,12 +1,13 @@
 from pyuvm import uvm_object
 
-from uvc import GpioConfig, UartConfig
-from vif import McuVirtualInterface
+from vif.mcu_virtual_interface import McuVirtualInterface
+from uvc.gpio_config import GpioConfig
+from uvc.uart_config import UartConfig
 from env.mcu_memory_config import McuMemoryConfig
 from env.mcu_event_pool import McuEventPool
 from env.mcu_simulator import McuSimulatorEnum
 
-class McuConfig(uvm_object):
+class Config(uvm_object):
     def __init__(self, name='Config'):
         super().__init__(name)
         self.env_enable: bool = True

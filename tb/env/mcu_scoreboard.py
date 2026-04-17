@@ -1,13 +1,14 @@
 from pyuvm import uvm_component, ConfigDB, uvm_tlm_analysis_fifo
 from errors import ConfigTestError
-from env.mcu_config import McuConfig
+
+from cfg.config import Config
 from ref.mcu_transaction import McuTransaction
 
 class McuScoreboard(uvm_component):
     def __init__(self, name="McuScoreboard", parent=None):
         super().__init__(name, parent)
         self.is_active: bool = None
-        self.cfg: McuConfig = None
+        self.cfg: Config = None
         self.request_fifo: uvm_tlm_analysis_fifo = None
         self.actual_fifo: uvm_tlm_analysis_fifo = None
         self.expected_fifo: uvm_tlm_analysis_fifo = None
@@ -25,9 +26,9 @@ class McuScoreboard(uvm_component):
 
         self.cfg = ConfigDB().get(self, "", "cfg")
 
-        if not isinstance(self.cfg, McuConfig):
+        if not isinstance(self.cfg, Config):
             raise ConfigTestError(
-                f"provided configuration is not expected McuConfig type, provided {type(self.cfg).__name__}"
+                f"provided configuration is not expected Config type, provided {type(self.cfg).__name__}"
             )
 
         self.is_active = self.cfg.scoreboard_enable

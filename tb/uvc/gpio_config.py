@@ -1,5 +1,6 @@
 from pyuvm import uvm_object
-from vif import McuVirtualInterface
+
+from vif.mcu_virtual_interface import McuVirtualInterface
 
 class GpioConfig(uvm_object):
     def __init__(self, name="GpioConfig"):
