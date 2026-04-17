@@ -4,6 +4,7 @@ from uvc import GpioConfig, UartConfig
 from vif import McuVirtualInterface
 from env.mcu_memory_config import McuMemoryConfig
 from env.mcu_event_pool import McuEventPool
+from env.mcu_simulator import McuSimulatorEnum
 
 class McuConfig(uvm_object):
     def __init__(self, name='Config'):
@@ -18,3 +19,4 @@ class McuConfig(uvm_object):
         self.scoreboard_enable: bool = True
         self.mem_path: str = None
         self.mem_cfg: McuMemoryConfig = McuMemoryConfig.create("mem_cfg")
+        self.simulator: McuSimulatorEnum = None

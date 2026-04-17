@@ -44,6 +44,9 @@ class UartDriver(uvm_driver):
             if not isinstance(byte, UartByte):
                 raise TypeError(f"uart driver only drives uart byte sequence items, expected UartByte, got {type(byte).__name__}")
 
+            # FIX (xcelium): 0.00s violation
+            await Timer(1, units='ps')
+            
             await ReadWrite()
             self.vif.uart_rx_en.value = 1
             self.vif.uart_rx.value = 1

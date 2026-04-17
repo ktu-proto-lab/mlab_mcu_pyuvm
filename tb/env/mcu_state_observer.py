@@ -6,6 +6,7 @@ from uvc import GpioPad
 from env.mcu_config import McuConfig
 from env.mcu_state_enum import McuStateEnum
 from env.mcu_event_pool import McuEventPool
+from env.mcu_simulator import McuSimulatorEnum
 
 class McuStateObserver(uvm_subscriber):
     def __init__(self, name="McuStateObserver", parent=None):
@@ -40,6 +41,12 @@ class McuStateObserver(uvm_subscriber):
         if not isinstance(self.event_pool, McuEventPool):
             raise TypeError(f"state observer expects McuEventPool, but got {type(self.event_pool).__name__}")
 
+        if self.cfg.simulator == McuSimulatorEnum.XCELIUM:
+            # FIX (XCELIUM): because xcelium is 4 state simulator, ignore x and z states
+            if not gpio_pad.state.is_resolvable:
+                return
+            
+        
         curr_state = gpio_pad.state & ~gpio_pad.uart_mask
 
         curr_state &= (McuStateEnum.READY.value | McuStateEnum.BUSY.value | McuStateEnum.DEBUG.value)

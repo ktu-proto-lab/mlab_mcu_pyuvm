@@ -3,10 +3,10 @@ import pyuvm
 import logging
 import os
 from cocotb.clock import Clock
-from cocotb.triggers import ReadOnly, ReadWrite, ClockCycles
+from cocotb.triggers import ReadOnly, ReadWrite, ClockCycles, Timer
 from pyuvm import uvm_test, uvm_report_object, ConfigDB
 
-from env import McuConfig, McuEnv
+from env import McuConfig, McuEnv, McuSimulatorEnum
 from vif import McuVirtualInterface
 
 @pyuvm.test()
@@ -37,6 +37,12 @@ class McuTest(uvm_test):
         # all defines are from the sim/makefile
         self.cfg.mem_cfg.source_build_dir_path: str = f"{os.getenv("MCU_TEST_SW_DIR")}/"
         self.cfg.mem_cfg.set(filepath=f"{os.getenv("MCU_TEST_ENV_SW_MEM_SIZE_FILEPATH")}")
+        
+        simulator = f"{os.getenv("MCU_TEST_ENV_SIM")}"
+        if simulator == "verilator":
+            self.cfg.simulator = McuSimulatorEnum.VERILATOR
+        elif simulator == "xcelium":
+            self.cfg.simulator = McuSimulatorEnum.XCELIUM
 
         ConfigDB().set(self, "env", "cfg", self.cfg)
         self.env = McuEnv.create("env", self)
@@ -61,6 +67,11 @@ class McuTest(uvm_test):
         self.logger.info(f"system reset for {self.vif.reset_duration} clock cycles")
         await ReadOnly()
         assert self.vif.reset.value == 0, "expected reset low"
+        
+        if self.cfg.simulator is McuSimulatorEnum.XCELIUM:
+            # bypass xcelium's 0.00ns rule
+            await Timer(1, units='ps')
+            
         await ReadWrite()
         self.vif.reset.value = 0
         await ClockCycles(self.vif.clock, self.vif.reset_duration)

@@ -33,6 +33,10 @@ class GpioMonitor(uvm_monitor):
             await RisingEdge(self.vif.clock)
             await ReadOnly()
 
+            # FIX (XCELIUM): x and z states
+            if not self.vif.exit_pad_io.value.is_resolvable:
+                continue
+            
             curr_pin_state: int = self.vif.exit_pad_io.value
 
             if curr_pin_state != prev_pin_state:

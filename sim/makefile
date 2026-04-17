@@ -231,6 +231,8 @@ ifeq ($(SIM), verilator)
 endif
 
 ifeq ($(SIM), xcelium)
+	EXTRA_ARGS += -access +rwc
+
 	ifeq ($(GUI),1)
 		# SimVision reads wavefiles to show on GUI
 		WAVES := 1
@@ -238,7 +240,7 @@ ifeq ($(SIM), xcelium)
 	endif
 
 	ifeq ($(WAVES),1)
-		EXTRA_ARGS += -access +rw
+		# TODO: maybe this does the option
 	endif
 endif
 
@@ -280,3 +282,6 @@ endif
 export MCU_TEST_SW_DIR = $(SW_DIR)/build
 export MCU_TEST_NAME = $(TEST)
 export MCU_TEST_ENV_SW_MEM_SIZE_FILEPATH = $(PROJECT_ROOT)/uvm/env/sw_mem_size.env
+
+# used in pyuvm tests for simulator-specific behavior handlin
+export MCU_TEST_ENV_SIM = $(SIM)
