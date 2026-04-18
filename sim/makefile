@@ -4,7 +4,7 @@ SHELL := /bin/bash
 PROJECT_ROOT = $(abspath ../..)
 export PROJECT_ROOT
 
-# TODO: BUILD=cli_cmd_mem_simple_test for building specific software, this can also support defines, for example: DEBUG
+# TODO: clean recipie for both xcelium and verilator (remove waveform files, results)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Options
@@ -241,7 +241,7 @@ ifeq ($(SIM), xcelium)
 
 	ifeq ($(WAVES),1)
 		# Dump waves in xcelium's native shm format and run
-		EXTRA_ARGS += -input "@database -open waves -into waves.shm -default; probe -create -shm -all -depth all; run; exit"
+		EXTRA_ARGS += -input $(PROJECT_ROOT)/uvm/sim/xcelium/waves.tcl
 	endif
 endif
 
