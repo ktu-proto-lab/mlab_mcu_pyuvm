@@ -37,5 +37,5 @@ class GpioDriver(uvm_driver):
             await ReadWrite()
             self.vif.top_gpio_o.value = req.state
             self.vif.top_gpio_oe.value = req.mask
-
+            self.logger.debug(f"req: {req}")
             self.seq_item_port.item_done()

@@ -45,5 +45,6 @@ class GpioMonitor(uvm_monitor):
             if curr_pin_state != prev_pin_state:
                 txn: GpioPad = GpioPad.create("txn")
                 txn.state = curr_pin_state
+                self.logger.debug(f"{txn}")
                 self.ap.write(txn)
                 prev_pin_state = curr_pin_state

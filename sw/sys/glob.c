@@ -1,7 +1,7 @@
 #include "glob.h"
 
-uart_handle_t g_uart;
-gpio_handle_t g_gpio;
+volatile uart_handle_t g_uart;
+volatile gpio_handle_t g_gpio;
 
 const uint32_t g_cpu_freq_mhz = 80;
 const uint32_t g_uart_baud_rate = 115200;

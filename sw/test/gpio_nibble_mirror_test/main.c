@@ -1,18 +1,14 @@
 #include "hal/gpio.h"
-#include "soc/gpio_regs.h"
 #include "sys/int.h"
-
-volatile gpio_handle_t gpio;
+#include "sys/glob.h"
 
 int main() {
-    gpio_init(&gpio);
-
-    gpio.regs->oe = 0xF0;
-    gpio.regs->ptrig = 0x0F;
-    gpio.regs->ints = 0x0F;
-    gpio.regs->inte = 0x0F;
-    gpio.regs->ctrl = GPIO_CTRL_ENA_INT;
-
+    gpio_init(&g_gpio);
+    g_gpio.regs->oe = 0xF0;
+    g_gpio.regs->ptrig = 0x0F;
+    g_gpio.regs->inte = 0x0F;
+    g_gpio.regs->ctrl = GPIO_CTRL_ENA_INT;
+    // g_gpio.regs->out = SYSTEM_STATE_DEBUG;
     while(1);
 }
 
@@ -20,7 +16,6 @@ void gpio_irq_callback(volatile gpio_handle_t *gpio) {
     uint32_t current_inputs = (gpio->regs->in & 0x0F);
     gpio->regs->out = current_inputs << 4;
     gpio->regs->ptrig = (~current_inputs) & 0x0F;
-    gpio->regs->ints = 0x0F;
 }
 
 #define SYS_INT_IMPL

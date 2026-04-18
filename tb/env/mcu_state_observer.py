@@ -69,7 +69,7 @@ class McuStateObserver(uvm_subscriber):
             self.event_pool.mcu_busy.set()
 
         if curr_state & McuStateEnum.DEBUG.value and not self.event_pool.mcu_debug.is_set():
-            self.logger.debug("mcu state halt event set")
+            self.logger.debug("mcu state debug event set")
             self.event_pool.mcu_debug.set()
 
         self.prev_state = curr_state

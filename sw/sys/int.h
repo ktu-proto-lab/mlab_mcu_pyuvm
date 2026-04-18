@@ -18,16 +18,15 @@ void __attribute__((interrupt)) DEFAULT_IRQHandler(void);
 
 #include "hal/gpio.h"
 #include "hal/uart.h"
+#include "sys/glob.h"
 
 #ifdef SYS_INT_GPIO_IRQ_HANDLER_ENABLE
-    extern volatile gpio_handle_t g_gpio;
     void GPIO_IRQHandler(void) { gpio_irq_handler(&g_gpio); }
 #else
     void __attribute__((weak)) GPIO_IRQHandler(void) {}
 #endif
 
 #ifdef SYS_INT_UART_IRQ_HANDLER_ENABLE
-    extern volatile uart_handle_t g_uart;
     void UART_RX_NOT_EMPTY_IRQHandler(void) { uart_rx_not_empty_irq_handler(&g_uart); }
     void UART_TX_NOT_FULL_IRQHandler(void) { uart_tx_not_full_irq_handler(&g_uart); }
 #else

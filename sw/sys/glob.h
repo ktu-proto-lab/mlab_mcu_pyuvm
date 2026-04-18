@@ -5,8 +5,8 @@
 #include "hal/uart.h"
 #include "sys/state.h"
 
-extern gpio_handle_t g_gpio;
-extern uart_handle_t g_uart;
+extern volatile gpio_handle_t g_gpio;
+extern volatile uart_handle_t g_uart;
 extern const uint32_t g_cpu_freq_mhz;
 extern const uint32_t g_uart_baud_rate;
 
