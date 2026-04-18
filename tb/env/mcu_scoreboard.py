@@ -78,6 +78,9 @@ class McuScoreboard(uvm_component):
     def check_phase(self):
         super().check_phase()
 
+        if not self.is_active:
+            return
+
         # TODO: write to file
         self.logger.info("--- SCOREBOARD ---")
         self.logger.info(f"| Total transactions: {len(self.failures) + len(self.successes)} |")
