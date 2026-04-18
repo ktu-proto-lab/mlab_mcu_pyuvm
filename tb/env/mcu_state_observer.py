@@ -42,12 +42,6 @@ class McuStateObserver(uvm_subscriber):
         if not isinstance(self.event_pool, McuEventPool):
             raise TypeError(f"state observer expects McuEventPool, but got {type(self.event_pool).__name__}")
 
-        if self.cfg.simulator == McuSimulatorEnum.XCELIUM:
-            # FIX (XCELIUM): because xcelium is 4 state simulator, ignore x and z states
-            if not gpio_pad.state.is_resolvable:
-                return
-
-
         curr_state = gpio_pad.state & ~gpio_pad.uart_mask
 
         curr_state &= (McuStateEnum.READY.value | McuStateEnum.BUSY.value | McuStateEnum.DEBUG.value)
