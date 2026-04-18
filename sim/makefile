@@ -240,7 +240,8 @@ ifeq ($(SIM), xcelium)
 	endif
 
 	ifeq ($(WAVES),1)
-		# TODO: maybe this does the option
+		# Dump waves in xcelium's native shm format and run
+		EXTRA_ARGS += -input "@database -open waves -into waves.shm -default; probe -create -shm -all -depth all; run; exit"
 	endif
 endif
 
