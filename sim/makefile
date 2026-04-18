@@ -234,7 +234,7 @@ ifeq ($(SIM), xcelium)
 	endif
 
 	ifeq ($(WAVES),1)
-		EXTRA_ARGS += -access +rw
+		EXTRA_ARGS += -input "@database -open waves -into waves.shm -default; probe -create -shm -all -depth all; run; exit"
 	endif
 endif
 
@@ -266,3 +266,5 @@ all: check_venv
 else
 include $(shell cocotb-config --makefiles)/Makefile.sim
 endif
+
+
