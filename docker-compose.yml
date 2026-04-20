@@ -1,37 +1,42 @@
 services:
-  verilator:
-    build:
-      context: .
-      dockerfile: sim/verilator/dockerfile
-      args:
-        USER_UID: ${HOST_UID:-1000}
-        USER_GID: ${HOST_GID:-1000}
-    image: mlab-mcu-uvm-verilator-${USER:-latest}:latest
-    container_name: mlab-mcu-uvm-verilator-container
-    hostname: container-verilator
-    stdin_open: true
-    tty: true
-    environment:
-      - PYTHONDONTWRITEBYTECODE=1
-    volumes:
-      - ..:/home/mcu
+    verilator:
+        build:
+            context: .
+            dockerfile: sim/verilator/dockerfile
+            args:
+                USER_UID: ${HOST_UID:-1000}
+                USER_GID: ${HOST_GID:-1000}
+        image: mlab-mcu-uvm-verilator-${USER:-latest}:latest
+        container_name: mlab-mcu-uvm-verilator-container
+        hostname: container-verilator
+        stdin_open: true
+        tty: true
+        environment:
+            - PYTHONDONTWRITEBYTECODE=1
+            - DISPLAY=${DISPLAY}
+            - NO_AT_BRIDGE=1
+        volumes:
+            - ..:/home/mcu
+            - /tmp/.X11-unix:/tmp/.X11-unix:rw
+            - ~/.Xauthority:/home/user/.Xauthority:ro
+        network_mode: host
 
-  xcelium:
-    build:
-      context: .
-      dockerfile: sim/xcelium/dockerfile
-    image: mlab-mcu-uvm-xcelium-${USER:-latest}:latest
-    container_name: mlab-mcu-uvm-xcelium-container
-    hostname: container-xcelium
-    stdin_open: true
-    tty: true
-    environment:
-      - PYTHONDONTWRITEBYTECODE=1
-      - CDS_LIC_FILE=${CDS_LIC_FILE:-}
-      - PATH=${CADENCE_ROOT}/tools/bin/64bit:${CADENCE_ROOT}/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-    volumes:
-      - ..:/home/mcu:z
-      - /eda:/eda:ro
-    network_mode: none
-    user: "0:0"
-    working_dir: /home/mcu/uvm
+    xcelium:
+        build:
+            context: .
+            dockerfile: sim/xcelium/dockerfile
+        image: mlab-mcu-uvm-xcelium-${USER:-latest}:latest
+        container_name: mlab-mcu-uvm-xcelium-container
+        hostname: container-xcelium
+        stdin_open: true
+        tty: true
+        environment:
+            - PYTHONDONTWRITEBYTECODE=1
+            - CDS_LIC_FILE=${CDS_LIC_FILE:-}
+            - PATH=${CADENCE_ROOT}/tools/bin/64bit:${CADENCE_ROOT}/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        volumes:
+            - ..:/home/mcu:z
+            - /eda:/eda:ro
+        network_mode: none
+        user: "0:0"
+        working_dir: /home/mcu/uvm

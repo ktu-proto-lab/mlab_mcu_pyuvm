@@ -1,15 +1,18 @@
 \documentclass{ktuthesis}
 
 % TODO
-\title{Baigiamojo projekto pavadinimas}
-\author{Studentė Studentaitė}
-\supervisor{lekt. Vadovas Vadovauskas}
+\title{RISC-V architektūra pagrįstos sistemos verifikavimo karkasas}
+\author{Manfredas Lamsargis}
+\supervisor{dr. Šarūnas Packevičius}
 \reviewer{doc. Recenzentas Recenzaitis}
-\authorgenitive{Studentės Studentaitės}
+\authorgenitive{Manfredo Lamsargio}
 \addbibresource{bibliography.bib}
 
 \usepackage[hidelinks]{hyperref}
 \usepackage{lastpage}
+\usepackage{float}
+\usepackage{svg}
+
 
 \begin{document}
 \maketitle
@@ -80,6 +83,12 @@ DUT (angl. Device Under Test) -- testuojamas įrenginys.
 RTL (angl. Register Transfer Level) -- registrų perdavimo lygmuo.
 
 FPGA (angl. Fiel-Programmable Gate Array) -- programuojamoji ventilių matrica.
+
+EDA (angl. Electronic Design Automation) -- elektronikos projektavimo automatizavimas.
+
+VPI (angl. Verilog Procedural Interface) -- Verilog procedūrinė sąsaja.
+
+WSL (angl. Windows Subsystem for Linux) -- Windows posistemė Linux operacinei sistemai.
 
 
 \textbf{Terminai:}
@@ -287,19 +296,17 @@ Sistemos projektas – tai jūsų sistemos veikimo aprašymas. Tai dažniausiai 
 
 \subsubsection{Statinis sistemos vaizdas}
 
-Šiame punkte reikėtų detalizuoti sistemos struktūrą. Priklausomai nuo projekto tipo (rekomenduojame pasikonsultuoti su vadovu) turėtumėte aprašyti
-savo sistemą panaudodami UML diagramas:
-\begin{itemize}[label={--}]
-	\item Išdėstymo (angl. \textit{UML deployment diagram}) – nepakeičiama tuo atveju, jei sistema naudoja išorinius servisus ar yra paskirstyta
-	      per keletą įrenginių. Geriausia pradėti nuo šios diagramos, nes ji greičiausiai supažindina su bendra sistemos sudėtimi.
-	\item Komponentų (angl. \textit{UML component diagram}) – geriausiai tinka tuomet, kai naudojamas komponentinis sistemos kūrimo būdas ir sistema
-	      susideda iš komponentų teikiančių programavimo sąsają (API).
-	\item Paketų (angl. \textit{UML package diagram}) - labai naudinga tuomet, jei sistema sugrupuota paketais.
-	\item Klasių (angl. \textit{UML class diagram}) - geriausiai tinka atvaizduoti sistemos struktūros detales. Jei projekte klasių naudojama daug,
-	      rekomenduojama detalizuoti tik esmines klases, o likusią struktūrą pateikti paketų diagrama.
-	\item Aprašant statinį sistemos vaizdą taip pat turėtų būti pateikta ir duomenų bazės schema. Šiam tikslui gali būti naudojama esybių ryšių diagrama arba (geriausia)
-	      UML klasių diagrama. Jei naudojama ne reliacinė duomenų bazė, tuomet naudoti tokį duomenų bazės specifikavimo būdą, kurį siūlo kūrėjai arba bendruomenė.
-\end{itemize}
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_deployement_verilator.svg}
+	\caption{Darbo aplinkos su atviros prieigos įrankiu „Veripool Verilator“ diegimo diagrama}
+\end{figure}
+
+Labas vakaras?
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_deployement_xcelium.svg}
+	\caption{Darbo aplinkos su komerciniu EDA įrankiu „Cadence Xcelium“ diegimo diagrama}
+\end{figure}
 
 \subsubsection{Dinaminis sistemos vaizdas}
 
