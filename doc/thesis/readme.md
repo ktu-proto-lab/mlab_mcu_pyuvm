@@ -33,6 +33,12 @@ Go to:
 
 `Options > Configure TeXstudio... > Build > Default Compiler > XeLaTeX > OK`
 
+And:
+
+`Options > Configure TeXstudio... > Build > Default Bibliography Tool > Biber > OK`
+
+Press `F8` to run Biber to process `.bib` file.
+
 Press `F5` to build and view.
 
 #### Option 2
