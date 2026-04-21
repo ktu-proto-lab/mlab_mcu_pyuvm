@@ -297,8 +297,6 @@ sukurti – nebūtina.
 
 \subsection{Sistemos projektas}
 
-Sistemos projektas – tai jūsų sistemos veikimo aprašymas. Tai dažniausiai nagrinėjama dokumento vieta (be išvadų) darbo peržiūros ir gynimo metu.
-
 \subsubsection{Statinis sistemos vaizdas}
 
 % TODO: paklausti ar su italic pavadinimus ar su kabutėmis.
@@ -375,6 +373,15 @@ Pateiktoje UML diagramoje \pav{\ref{fig:uml_deplayement_xcelium}} yra pavaizduot
 \end{table}
 
 Abiejose konteinerizuotose darbo aplinkose kartu yra įdiegiami ir sukonfigūruojami bendri projekto darbo įrankiai \lent{\ref{tab:docker_dependencies}}. Konteineriai turi tiesioginę prieigą prie projekto failų. Kompiliatorius, skirtas C pirminiam programiniam tekstui \angl{source code}, naudoja pagrindinėje sistemoje esančius projekto poaplankio, skirto MCU C kodui. Kompiliatoriaus darinių failai yra prieinami ir iš pačios sistemos ir iš konteinerizuotų darbo aplinkų. Kartu yra suderinami ir įdiegiami įrankiai, kurie naudojami pačio projekto, kaip pataisos \angl{patch}, analizės, formatavimo ir kitos naudojamos programinės įrangos.
+
+% TODO: lt
+Pacio projekto struktura detalizuoja zemiau pateikta UML paketu diagrama \pav{\ref{fig:uml_package}}.
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_package.svg}
+	\caption{Verifikavimo karkaso UML paketu diagrama}
+	\label{fig:uml_package}
+\end{figure}
 
 \subsubsection{Dinaminis sistemos vaizdas}
 
