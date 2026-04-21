@@ -14,6 +14,11 @@
 \usepackage{svg}
 
 
+% Custom Macros
+\newcommand{\pav}[1]{(\textbf{pav. #1})}
+\newcommand{\angl}[1]{(angl. \textit{#1})}
+\newcommand{\lent}[1]{(\textbf{#1 lentelė})}
+
 \begin{document}
 \maketitle
 
@@ -296,17 +301,80 @@ Sistemos projektas – tai jūsų sistemos veikimo aprašymas. Tai dažniausiai 
 
 \subsubsection{Statinis sistemos vaizdas}
 
+% TODO: paklausti ar su italic pavadinimus ar su kabutėmis.
+Pasirinkta dirbti su dvejom skirtingom imituoklėm: atviros prieigos \textit{Veripool Verilator} ir komercine EDA „Cadence Xcelium“. Dėl esminių įrankių skirtumų privaloma palaikyti dvi atskiras sistemas, kurios leidžia dirbti su viena iš anksčiau išvardytų imituoklių ir sukonfigūruoja projekto naudojamus įrankius. „Veripool Verilator“ imituoklės darbo aplinka yra universali, nes kartu su ja yra naudojami kiti atviros prieigos įrankiai \pav{\ref{fig:uml_deplayement_verilator}}. „Cadence Xcelium“ imituoklės darbo aplinka yra pririšta prie „Rocky Linux“ operacinės sistemos \pav{\ref{fig:uml_deplayement_xcelium}}, nes šie EDA įrankiai yra komerciniai ir jų veikimui yra reikalinga licenzija bei užtikrina pilną palaikymą visiems EDA įrankiams tik ant „Red Hat Enterprise Linux“ operacinės sistemos \cite{cadence_supported_platforms} ir ja pagrįstų skirstinių, tokie kaip „Rocky Linux“ \cite{cadence_support_roadmap}. Būtent dėl šių priežasčių karkasas turi dvi atskiras darbo aplinkas, kurių valdymas yra per šakninį „GNU Make“ surinkimo sistemos (angl. \textit{build system}) skripto failą.
+
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_deployement_verilator.svg}
 	\caption{Darbo aplinkos su atviros prieigos įrankiu „Veripool Verilator“ diegimo diagrama}
+	\label{fig:uml_deplayement_verilator}
 \end{figure}
 
-Labas vakaras?
+\begin{table}[H]
+	\caption{\textit{Verilator} darbo aplinkos naudojami įrankiai}
+	\label{tab:docker_dependencies_verilator}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
+		\hline
+		\thead[l]{Įrankiai} & \thead[l]{Paskirtis} \\
+		\hline
+		\textit{Verilator v5.044} & Atvirosios prieigos aparatinės įrangos aprašymo kalbos (HDL) imituoklė \\
+		\hline
+		\textit{GTKWave Analyzer} & Skaitmeninių signalų laikinių diagramų \angl{waveforms} peržiūros įrankis. \\
+		\hline
+		\textit{GNU Build Essentials} & C++ kompiliatorius ir surinkimo įrankiai, reikalingi \textit{Verilator} modelių generavimui iš Verilog/SystemVerilog RTL MCU pradinio kodo. \\
+		\hline
+		\textit{Pagalbinės Verilator bibliotekos} & \textit{Verilator} veikimui ir leksinei analizei reikalingos bibliotekos. \\
+		\hline
+		\textit{GUI} & Vartotojo grafinei sąsajai naudojamos paslaugų programos \angl{utilities}, jog būtų galima atvaizduoti \textit{GTKWave} langus. \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+Aukščiau pateiktoje UML diegimo diagramoje \pav{\ref{fig:uml_deplayement_verilator}} yra detaliai atvaizduota „Veripool Verilator“ darbo aplinkos sistema ir jos diegimas. Naudojamas \textit{Docker} konteinerizavimo variklis, kuris leidžia beveik visiškai atskirti projekto darbo aplinką nuo pagrindinės \angl{host} operacinės sistemos. Tai reiškia, jog jei yra palaikomas \textit{Docker} variklis ant operacinės sistemos platformos, tokios kaip: \textit{Linux}, \textit{MacOS}, \textit{Windows} \cite{docker_docs}, visa projekto darbo aplinka ir įrankiai prieinami yra prienami konteineryje, nepriklausant nuo platformos operacinės sistemos ir jos specifinių konfigūracijų, nustatymų. Antras įrankis, kuris privalo būti įdiegtas pagrindinėje sistemoje yra \textit{GNU Make} surinkimo sistema, kuri valdo darbo aplinkos diegimo eigą. \textit{GNU Make} taip pat yra prieinamas įvairioms platformoms: \textit{Linux}, \textit{MacOS}, \textit{Windows}, \textit{BSD} \cite{gnu_make_supported_platforms}. Konteineris yra suglaudinta \angl{compressed} \textit{Ubuntu} operacinė sistema, kurioje yra įdiegiami visi reikalingi įrankiai naudojant \textit{APT} paketų tvarkytuvę \angl{package manager}. Konteinerio aprašą naudoja automatizuotas \textit{GNU Make} skriptas, kuris įdiegia ir sutvarko \textit{Verilator} imituoklei reikalingas priklausomybes \lent{\ref{tab:docker_dependencies_verilator}} ir projekto darbo eigai reikalingus įrankius ir priklausomybės \lent{\ref{tab:docker_dependencies}}.
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_deployement_xcelium.svg}
 	\caption{Darbo aplinkos su komerciniu EDA įrankiu „Cadence Xcelium“ diegimo diagrama}
+	\label{fig:uml_deplayement_xcelium}
 \end{figure}
+
+\begin{table}[H]
+	\caption{\textit{Xcelium} darbo aplinkos specifiniai paketai ir įrankiai}
+	\label{tab:docker_dependencies_xcelium}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4.5cm}|X|}
+		\hline
+		\thead[l]{Paketai / Įrankiai} & \thead[l]{Paskirtis} \\
+		\hline
+		% TODO (source):
+		\textit{GCC kompiliatorius ir surinkimo įrankiai} & Būtini „Xcelium“ imituoklei atliekant RTL transliaciją, DPI-C (angl. \textit{Direct Programming Interface}) kodo kompiliavimą ir simuliacijos momentinių kopijų (angl. \textit{snapshots}) generavimą. \\
+		\hline
+		\textit{X11 GUI bibliotekos} & Reikalingos „SimVision“ laikinių diagramų peržiūros programos, atvaizdavimui. \\
+		\hline
+		% TODO (source):
+		\textit{Suderinamumo bibliotekos} & C bibliotekos, užtikrinančios 32-bitų architektūros palaikymą 64-bitų sistemoje. Būtinos komercinių EDA įrankių licencijų valdymo posistemėms.. \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+Pateiktoje UML diagramoje \pav{\ref{fig:uml_deplayement_xcelium}} yra pavaizduota komercinės \textit{Cadence Xcelium} imituoklės darbo aplinkos sistema ir jos diegimas. Sistemos architektūra nemažai skiriasi nuo anksčiau aptartos \textit{Veripool Verilator} aplinkos \pav{\ref{fig:uml_deplayement_verilator}}. To priežastis yra ta, jog \textit{Cadence Xcelium} yra komercinė licencijuota EDA įranga ir licenzijos yra pririštos prie pačių įrankių vykdomųjų failų. Dėl šitos priežasties, konteineris įrengia \angl{mount} \textit{Cadence} EDA įrankių aplankalą, esantį pačiame serveryje, su tik skaitymo \angl{read-only} prieiga. Šiuo būdu, konteinerizuota \textit{Python 3} testavimo aplinka gali kreiptis per VPI sąsają tiesiai į pačio serverio \textit{Cadence Xcelium} vykdomąjį failą ir taip paleisti imituoklės procesą konteinerio viduje. Norint sėkmingai paleisti imituoklę konteinerizuotoje aplinkoje, reikia pateikti serveryje esančias licenzijas konteineriui per \texttt{CDS\_LIC\_FILE} serverio aplinkos kintamąjį \angl{environment variable}. Vietoje \textit{Docker} variklio, \textit{Rocky Linux} turi savo alternatyvą \textit{Podman}, kuri yra įtraukta į sistemos įrankius \cite{rocky_linux_podman_guide}, šis variklis yra naudojamas konteinerių kūrimui ir valdymui. Konteinerio aprašą taipogi naudoja tas pats automatizuotas \textit{GNU Make} skriptas, kuris įdiegia reikalingas priklausomybės \textit{Cadence Xcelium} ir \textit{SimVision} EDA įrankiams \lent{\ref{tab:docker_dependencies_xcelium}} bei perduoda licenzijas ir nurodo EDA įrankių fizinę vietą pačiame serveryje, taip pat sutvarko ir suderina pačio projekto eigai reikalingus įrankius ir priklausomybes \lent{\ref{tab:docker_dependencies}}.
+
+\begin{table}[H]
+	\caption{Bendri \textit{Verilator} ir \textit{Xcelium} konteinerių naudojami įrankiai}
+	\label{tab:docker_dependencies}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
+		\hline
+		\thead[l]{Įrankiai} & \thead[l]{Paskirtis} \\
+		\hline
+		\textit{GNU RISC-V Toolchain} & Kompiliatorius, skirtas ruošti C programinio kodo darinius RISC-V 32 ir 64 bitų architektūroms. \\
+		\hline
+		\textit{Python v3.12} & \textit{Python} skriptų vykdymas, UVM testavimo aplinkos valdymas. \\
+		\hline
+		\textit{Sisteminiai įrankiai} & Kodo eilučių skaičiavimo, failų struktūros atvaizdavimo, kodo pataisos ir kiti projekto naudojami įrankiai. \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+Abiejose konteinerizuotose darbo aplinkose kartu yra įdiegiami ir sukonfigūruojami bendri projekto darbo įrankiai \lent{\ref{tab:docker_dependencies}}. Konteineriai turi tiesioginę prieigą prie projekto failų. Kompiliatorius, skirtas C pirminiam programiniam tekstui \angl{source code}, naudoja pagrindinėje sistemoje esančius projekto poaplankio, skirto MCU C kodui. Kompiliatoriaus darinių failai yra prieinami ir iš pačios sistemos ir iš konteinerizuotų darbo aplinkų. Kartu yra suderinami ir įdiegiami įrankiai, kurie naudojami pačio projekto, kaip pataisos \angl{patch}, analizės, formatavimo ir kitos naudojamos programinės įrangos.
 
 \subsubsection{Dinaminis sistemos vaizdas}
 
