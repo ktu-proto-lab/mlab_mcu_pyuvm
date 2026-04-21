@@ -424,7 +424,7 @@ Abiejose konteinerizuotose darbo aplinkose kartu yra įdiegiami ir sukonfigūruo
  	
  	\item Bendrosios aplinkos \texttt{env} paketas skirtas laikyti testuojamosios aplinkos specifikas, toks kaip programos dydis, pavadinimas, parametrai ir pan. Nustatomas simuliacijos \texttt{sim} paketo ir yra naudojamas UVM testavimo stendo \texttt{tb} paketo.
  	
- 	\item RTL \texttt{rtl} paketas, kuriame yra aprašytas testuojamojo mikrovaldiklio modulis, jis susideda iš jau aprašytų modulių \texttt{mlab\_mcu} šakninio projekto \texttt{rtl} paketo.
+ 	\item RTL \texttt{rtl} paketas, kuriame yra aprašytas testuojamojo mikrovaldiklio modulis, jis susideda iš jau aprašytų modulių, esančių \texttt{mlab\_mcu} šakninio projekto \texttt{rtl} paketo.
  	
  	\item Skriptų \texttt{script} paketas kuriame yra automatizuotos eigos Bash kalba aprašyti pernaudojami \angl{reusable} scenarijai.
  	
@@ -435,8 +435,10 @@ Abiejose konteinerizuotose darbo aplinkose kartu yra įdiegiami ir sukonfigūruo
  	\item Konfigūracijos \texttt{conf} paketas, skirtas įvairiems konfigūraciniams failams, skirtų įvairių projekto aplinkų konfigūracijų taikymui.
  	
  	\item Imitacijos \texttt{sim} \angl{simulation} paketas, skirtas testų inicializavimui ir paleidimui \textit{Verilator} arba \textit{Xcelium} imituoklėse.
- 	
  \end{itemize}
+ 
+ 	% TODO (feat)
+ 	% class diagram of the UVM side (imagine, writing C++ instead of C).
 
 
 
