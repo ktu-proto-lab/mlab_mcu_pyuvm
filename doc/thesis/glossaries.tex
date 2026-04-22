@@ -1,6 +1,6 @@
 \newacronym[eng={Universal Verification Methodology}]{uvm}{UVM}{universali verifikavimo metodologija}
 
-\newacronym[eng={Reduced Instruction Set Computer}]{risc}{RISC}{sumažintas instrukcijų rinkinys}
+\newacronym[eng={Reduced Instruction Set Computer}]{risc}{RISC-V}{sumažintas instrukcijų rinkinys}
 
 \newacronym[eng={Constrained Random Verification}]{crv}{CRV}{apribota atsitiktinė verifikacija}
 
@@ -103,6 +103,24 @@
 	name={modulis},
 	eng={module},
 	description={Verilog/SystemVerilog kodo blokas, įgyvendinantis tam tikrą funkcionalumą. Moduliai gali būti įterpiami į kitus modulius, o aukštesnio lygio modulis gali bendrauti su žemesnio lygio moduliais naudodamas jų įvesties ir išvesties prievadus. Tai yra pagrindiniai skaitmeninės aparatinės įrangos projektavimo elementai, leidžiantys taikyti modulinę, pakartotinai naudojamą ir hierarchinę projektavimo metodiką \cite{chipverify}}
+}
+
+\newglossaryentry{verification}{
+	name={verifikacija},
+	eng={verification},
+	description={programinės arba aparatinės įrangos vertinimo procesas jos kūrimo metu, siekiant užtikrinti, kad ji atitiktų nustatytus reikalavimus ir projektavimo specifikacijas}
+}
+
+\newglossaryentry{simulation}{
+	name={imitacija},
+	eng={simulation},
+	description={dinaminis \gls{rtl} lygio projekto verifikavimo metodas, kai stebima, kaip \gls{hdl} kodu aprašyta sistema reaguoja į įvesties signalus laiko tėkmėje}
+}
+
+\newglossaryentry{open-source}{
+	name={atviros prieigos},
+	eng={open-source},
+	description={projektas arba programinė įranga, kurios šaltinį gali naudoti, peržiūrėti, keisti ir tobulinti savo laisva nuožiūra. Viešai prieinama, leidžia naudotojams išnagrinėti veikimo principus, taisyti klaidas ar pridėti naujų funkcionalumų.}
 }
 
 \makeglossaries
