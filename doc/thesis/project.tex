@@ -26,7 +26,7 @@
 
 % TODO (question)
 % Paklausti ar su italic pavadinimus ar su kabutėmis.
-Pasirinkta dirbti su dvejom skirtingom imituoklėm: atviros prieigos \textit{Veripool Verilator} ir komercine EDA „Cadence Xcelium“. Dėl esminių įrankių skirtumų privaloma palaikyti dvi atskiras sistemas, kurios leidžia dirbti su viena iš anksčiau išvardytų imituoklių ir sukonfigūruoja projekto naudojamus įrankius. „Veripool Verilator“ imituoklės darbo aplinka yra universali, nes kartu su ja yra naudojami kiti atviros prieigos įrankiai \pav{\ref{fig:uml_deplayement_verilator}}. „Cadence Xcelium“ imituoklės darbo aplinka yra pririšta prie „Rocky Linux“ operacinės sistemos \pav{\ref{fig:uml_deplayement_xcelium}}, nes šie EDA įrankiai yra komerciniai ir jų veikimui yra reikalinga licenzija bei užtikrina pilną palaikymą visiems EDA įrankiams tik ant „Red Hat Enterprise Linux“ operacinės sistemos \cite{cadence_supported_platforms} ir ja pagrįstų skirstinių, tokie kaip „Rocky Linux“ \cite{cadence_support_roadmap}. Būtent dėl šių priežasčių karkasas turi dvi atskiras darbo aplinkas, kurių valdymas yra per šakninį „GNU Make“ surinkimo sistemos (angl. \textit{build system}) skripto failą.
+Pasirinkta dirbti su dvejom skirtingom imituoklėm: atviros prieigos \textit{Veripool Verilator} ir komercine \gls{eda} „Cadence Xcelium“. Dėl esminių įrankių skirtumų privaloma palaikyti dvi atskiras sistemas, kurios leidžia dirbti su viena iš anksčiau išvardytų imituoklių ir sukonfigūruoja projekto naudojamus įrankius. „Veripool Verilator“ imituoklės darbo aplinka yra universali, nes kartu su ja yra naudojami kiti atviros prieigos įrankiai \pav{\ref{fig:uml_deplayement_verilator}}. „Cadence Xcelium“ imituoklės darbo aplinka yra pririšta prie „Rocky Linux“ operacinės sistemos \pav{\ref{fig:uml_deplayement_xcelium}}, nes šie \gls{eda} įrankiai yra komerciniai ir jų veikimui yra reikalinga licenzija bei užtikrina pilną palaikymą visiems \gls{eda} įrankiams tik ant „Red Hat Enterprise Linux“ operacinės sistemos \cite{cadence_supported_platforms} ir ja pagrįstų skirstinių, tokie kaip „Rocky Linux“ \cite{cadence_support_roadmap}. Būtent dėl šių priežasčių karkasas turi dvi atskiras darbo aplinkas, kurių valdymas yra per šakninį „GNU Make“ surinkimo sistemos (angl. \textit{build system}) skripto failą.
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_deployement_verilator.svg}
@@ -41,24 +41,24 @@ Pasirinkta dirbti su dvejom skirtingom imituoklėm: atviros prieigos \textit{Ver
 		\hline
 		\thead[l]{Įrankiai}                       & \thead[l]{Paskirtis}                                                                                                                        \\
 		\hline
-		\textit{Verilator v5.044}                 & Atvirosios prieigos aparatinės įrangos aprašymo kalbos (HDL) imituoklė                                                                      \\
+		\textit{Verilator v5.044}                 & Atvirosios prieigos aparatinės įrangos aprašymo kalbos \gls{hdl} imituoklė                                                                      \\
 		\hline
 		\textit{GTKWave Analyzer}                 & Skaitmeninių signalų laikinių diagramų \angl{waveforms} peržiūros įrankis.                                                                  \\
 		\hline
-		\textit{GNU Build Essentials}             & C++ kompiliatorius ir surinkimo įrankiai, reikalingi \textit{Verilator} modelių generavimui iš Verilog/SystemVerilog RTL MCU pradinio kodo. \\
+		\textit{GNU Build Essentials}             & C++ kompiliatorius ir surinkimo įrankiai, reikalingi \textit{Verilator} modelių generavimui iš Verilog/SystemVerilog \gls{rtl} \gls{mcu} pradinio kodo. \\
 		\hline
 		\textit{Pagalbinės Verilator bibliotekos} & \textit{Verilator} veikimui ir leksinei analizei reikalingos bibliotekos.                                                                   \\
 		\hline
-		\textit{GUI}                              & Vartotojo grafinei sąsajai naudojamos paslaugų programos \angl{utilities}, jog būtų galima atvaizduoti \textit{GTKWave} langus.             \\
+		\textit{\gls{gui}}                              & Vartotojo grafinei sąsajai naudojamos paslaugų programos \angl{utilities}, jog būtų galima atvaizduoti \textit{GTKWave} langus.             \\
 		\hline
 	\end{tabularx}
 \end{table}
 
-Aukščiau pateiktoje UML diegimo diagramoje \pav{\ref{fig:uml_deplayement_verilator}} yra detaliai atvaizduota „Veripool Verilator“ darbo aplinkos sistema ir jos diegimas. Naudojamas \textit{Docker} konteinerizavimo variklis, kuris leidžia beveik visiškai atskirti projekto darbo aplinką nuo pagrindinės \angl{host} operacinės sistemos. Tai reiškia, jog jei yra palaikomas \textit{Docker} variklis ant operacinės sistemos platformos, tokios kaip: \textit{Linux}, \textit{MacOS}, \textit{Windows} \cite{docker_docs}, visa projekto darbo aplinka ir įrankiai prieinami yra prienami konteineryje, nepriklausant nuo platformos operacinės sistemos ir jos specifinių konfigūracijų, nustatymų. Antras įrankis, kuris privalo būti įdiegtas pagrindinėje sistemoje yra \textit{GNU Make} surinkimo sistema, kuri valdo darbo aplinkos diegimo eigą. \textit{GNU Make} taip pat yra prieinamas įvairioms platformoms: \textit{Linux}, \textit{MacOS}, \textit{Windows}, \textit{BSD} \cite{gnu_make_supported_platforms}. Konteineris yra suglaudinta \angl{compressed} \textit{Ubuntu} operacinė sistema, kurioje yra įdiegiami visi reikalingi įrankiai naudojant \textit{APT} paketų tvarkytuvę \angl{package manager}. Konteinerio aprašą naudoja automatizuotas \textit{GNU Make} skriptas, kuris įdiegia ir sutvarko \textit{Verilator} imituoklei reikalingas priklausomybes \lent{\ref{tab:docker_dependencies_verilator}} ir projekto darbo eigai reikalingus įrankius ir priklausomybės \lent{\ref{tab:docker_dependencies}}.
+Aukščiau pateiktoje \gls{uml} diegimo diagramoje \pav{\ref{fig:uml_deplayement_verilator}} yra detaliai atvaizduota „Veripool Verilator“ darbo aplinkos sistema ir jos diegimas. Naudojamas \textit{Docker} konteinerizavimo variklis, kuris leidžia beveik visiškai atskirti projekto darbo aplinką nuo pagrindinės \angl{host} operacinės sistemos. Tai reiškia, jog jei yra palaikomas \textit{Docker} variklis ant operacinės sistemos platformos, tokios kaip: \textit{Linux}, \textit{MacOS}, \textit{Windows} \cite{docker_docs}, visa projekto darbo aplinka ir įrankiai prieinami yra prienami konteineryje, nepriklausant nuo platformos operacinės sistemos ir jos specifinių konfigūracijų, nustatymų. Antras įrankis, kuris privalo būti įdiegtas pagrindinėje sistemoje yra \textit{GNU Make} surinkimo sistema, kuri valdo darbo aplinkos diegimo eigą. \textit{GNU Make} taip pat yra prieinamas įvairioms platformoms: \textit{Linux}, \textit{MacOS}, \textit{Windows}, \textit{BSD} \cite{gnu_make_supported_platforms}. Konteineris yra suglaudinta \angl{compressed} \textit{Ubuntu} operacinė sistema, kurioje yra įdiegiami visi reikalingi įrankiai naudojant \textit{APT} paketų tvarkytuvę \angl{package manager}. Konteinerio aprašą naudoja automatizuotas \textit{GNU Make} skriptas, kuris įdiegia ir sutvarko \textit{Verilator} imituoklei reikalingas priklausomybes \lent{\ref{tab:docker_dependencies_verilator}} ir projekto darbo eigai reikalingus įrankius ir priklausomybės \lent{\ref{tab:docker_dependencies}}.
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_deployement_xcelium.svg}
-	\caption{Darbo aplinkos su komerciniu EDA įrankiu „Cadence Xcelium“ diegimo diagrama}
+	\caption{Darbo aplinkos su komerciniu \gls{eda} įrankiu „Cadence Xcelium“ diegimo diagrama}
 	\label{fig:uml_deplayement_xcelium}
 \end{figure}
 
@@ -70,17 +70,17 @@ Aukščiau pateiktoje UML diegimo diagramoje \pav{\ref{fig:uml_deplayement_veril
 		\thead[l]{Paketai / Įrankiai}                     & \thead[l]{Paskirtis}                                                                                                                                                                                   \\
 		\hline
 		% TODO (source)
-		\textit{GCC kompiliatorius ir surinkimo įrankiai} & Būtini „Xcelium“ imituoklei atliekant RTL transliaciją, DPI-C (angl. \textit{Direct Programming Interface}) kodo kompiliavimą ir simuliacijos momentinių kopijų (angl. \textit{snapshots}) generavimą. \\
+		\textit{GCC kompiliatorius ir surinkimo įrankiai} & Būtini „Xcelium“ imituoklei atliekant \gls{rtl} transliaciją, DPI-C (angl. \textit{Direct Programming Interface}) kodo kompiliavimą ir simuliacijos momentinių kopijų (angl. \textit{snapshots}) generavimą. \\
 		\hline
-		\textit{X11 GUI bibliotekos}                      & Reikalingos „SimVision“ laikinių diagramų peržiūros programos, atvaizdavimui.                                                                                                                          \\
+		\textit{X11 \gls{gui} bibliotekos}                      & Reikalingos „SimVision“ laikinių diagramų peržiūros programos, atvaizdavimui.                                                                                                                          \\
 		\hline
 		% TODO (source)
-		\textit{Suderinamumo bibliotekos}                 & C bibliotekos, užtikrinančios 32-bitų architektūros palaikymą 64-bitų sistemoje. Būtinos komercinių EDA įrankių licencijų valdymo posistemėms..                                                        \\
+		\textit{Suderinamumo bibliotekos}                 & C bibliotekos, užtikrinančios 32-bitų architektūros palaikymą 64-bitų sistemoje. Būtinos komercinių \gls{eda} įrankių licencijų valdymo posistemėms..                                                        \\
 		\hline
 	\end{tabularx}
 \end{table}
 
-Pateiktoje UML diagramoje \pav{\ref{fig:uml_deplayement_xcelium}} yra pavaizduota komercinės \textit{Cadence Xcelium} imituoklės darbo aplinkos sistema ir jos diegimas. Sistemos architektūra nemažai skiriasi nuo anksčiau aptartos \textit{Veripool Verilator} aplinkos \pav{\ref{fig:uml_deplayement_verilator}}. To priežastis yra ta, jog \textit{Cadence Xcelium} yra komercinė licencijuota EDA įranga ir licenzijos yra pririštos prie pačių įrankių vykdomųjų failų. Dėl šitos priežasties, konteineris įrengia \angl{mount} \textit{Cadence} EDA įrankių aplankalą, esantį pačiame serveryje, su tik skaitymo \angl{read-only} prieiga. Šiuo būdu, konteinerizuota \textit{Python 3} testavimo aplinka gali kreiptis per VPI sąsają tiesiai į pačio serverio \textit{Cadence Xcelium} vykdomąjį failą ir taip paleisti imituoklės procesą konteinerio viduje. Norint sėkmingai paleisti imituoklę konteinerizuotoje aplinkoje, reikia pateikti serveryje esančias licenzijas konteineriui per \texttt{CDS\_LIC\_FILE} serverio aplinkos kintamąjį \angl{environment variable}. Vietoje \textit{Docker} variklio, \textit{Rocky Linux} turi savo alternatyvą \textit{Podman}, kuri yra įtraukta į sistemos įrankius \cite{rocky_linux_podman_guide}, šis variklis yra naudojamas konteinerių kūrimui ir valdymui. Konteinerio aprašą taipogi naudoja tas pats automatizuotas \textit{GNU Make} skriptas, kuris įdiegia reikalingas priklausomybės \textit{Cadence Xcelium} ir \textit{SimVision} EDA įrankiams \lent{\ref{tab:docker_dependencies_xcelium}} bei perduoda licenzijas ir nurodo EDA įrankių fizinę vietą pačiame serveryje, taip pat sutvarko ir suderina pačio projekto eigai reikalingus įrankius ir priklausomybes \lent{\ref{tab:docker_dependencies}}.
+Pateiktoje \gls{uml} diagramoje \pav{\ref{fig:uml_deplayement_xcelium}} yra pavaizduota komercinės \textit{Cadence Xcelium} imituoklės darbo aplinkos sistema ir jos diegimas. Sistemos architektūra nemažai skiriasi nuo anksčiau aptartos \textit{Veripool Verilator} aplinkos \pav{\ref{fig:uml_deplayement_verilator}}. To priežastis yra ta, jog \textit{Cadence Xcelium} yra komercinė licencijuota \gls{eda} įranga ir licenzijos yra pririštos prie pačių įrankių vykdomųjų failų. Dėl šitos priežasties, konteineris įrengia \angl{mount} \textit{Cadence} \gls{eda} įrankių aplankalą, esantį pačiame serveryje, su tik skaitymo \angl{read-only} prieiga. Šiuo būdu, konteinerizuota \textit{Python 3} testavimo aplinka gali kreiptis per \gls{vpi} sąsają tiesiai į pačio serverio \textit{Cadence Xcelium} vykdomąjį failą ir taip paleisti imituoklės procesą konteinerio viduje. Norint sėkmingai paleisti imituoklę konteinerizuotoje aplinkoje, reikia pateikti serveryje esančias licenzijas konteineriui per \texttt{CDS\_LIC\_FILE} serverio aplinkos kintamąjį \angl{environment variable}. Vietoje \textit{Docker} variklio, \textit{Rocky Linux} turi savo alternatyvą \textit{Podman}, kuri yra įtraukta į sistemos įrankius \cite{rocky_linux_podman_guide}, šis variklis yra naudojamas konteinerių kūrimui ir valdymui. Konteinerio aprašą taipogi naudoja tas pats automatizuotas \textit{GNU Make} skriptas, kuris įdiegia reikalingas priklausomybės \textit{Cadence Xcelium} ir \textit{SimVision} \gls{eda} įrankiams \lent{\ref{tab:docker_dependencies_xcelium}} bei perduoda licenzijas ir nurodo \gls{eda} įrankių fizinę vietą pačiame serveryje, taip pat sutvarko ir suderina pačio projekto eigai reikalingus įrankius ir priklausomybes \lent{\ref{tab:docker_dependencies}}.
 
 \begin{table}[H]
 	\caption{Bendri \textit{Verilator} ir \textit{Xcelium} konteinerių naudojami įrankiai}
@@ -89,65 +89,65 @@ Pateiktoje UML diagramoje \pav{\ref{fig:uml_deplayement_xcelium}} yra pavaizduot
 		\hline
 		\thead[l]{Įrankiai}           & \thead[l]{Paskirtis}                                                                                        \\
 		\hline
-		\textit{GNU RISC-V Toolchain} & Kompiliatorius, skirtas ruošti C programinio kodo darinius RISC-V 32 ir 64 bitų architektūroms.             \\
+		\textit{GNU \gls{risc}-V Toolchain} & Kompiliatorius, skirtas ruošti C programinio kodo darinius \gls{risc}-V 32 ir 64 bitų architektūroms.             \\
 		\hline
-		\textit{Python v3.12}         & \textit{Python} skriptų vykdymas, UVM testavimo aplinkos valdymas.                                          \\
+		\textit{Python v3.12}         & \textit{Python} skriptų vykdymas, \gls{uvm} testavimo aplinkos valdymas.                                    \\
 		\hline
 		\textit{Sisteminiai įrankiai} & Kodo eilučių skaičiavimo, failų struktūros atvaizdavimo, kodo pataisos ir kiti projekto naudojami įrankiai. \\
 		\hline
 	\end{tabularx}
 \end{table}
 
-Abiejose konteinerizuotose darbo aplinkose kartu yra įdiegiami ir sukonfigūruojami bendri projekto darbo įrankiai \lent{\ref{tab:docker_dependencies}}. Konteineriai turi tiesioginę prieigą prie projekto failų. Kompiliatorius, skirtas C pirminiam programiniam tekstui \angl{source code}, naudoja pagrindinėje sistemoje esančius projekto poaplankio, skirto MCU C kodui. Kompiliatoriaus darinių failai yra prieinami ir iš pačios sistemos ir iš konteinerizuotų darbo aplinkų. Kartu yra suderinami ir įdiegiami įrankiai, kurie naudojami pačio projekto, kaip pataisos \angl{patch}, analizės, formatavimo ir kitos naudojamos programinės įrangos.
+Abiejose konteinerizuotose darbo aplinkose kartu yra įdiegiami ir sukonfigūruojami bendri projekto darbo įrankiai \lent{\ref{tab:docker_dependencies}}. Konteineriai turi tiesioginę prieigą prie projekto failų. Kompiliatorius, skirtas C pirminiam programiniam tekstui \angl{source code}, naudoja pagrindinėje sistemoje esančius projekto poaplankio, skirto \gls{mcu} C kodui. Kompiliatoriaus darinių failai yra prieinami ir iš pačios sistemos ir iš konteinerizuotų darbo aplinkų. Kartu yra suderinami ir įdiegiami įrankiai, kurie naudojami pačio projekto, kaip pataisos \angl{patch}, analizės, formatavimo ir kitos naudojamos programinės įrangos.
 
 \begin{figure}[H]
 	% TODO (refac)
 	\includesvg[width=11.22cm]{images/uml_package.svg}
-	\caption{Verifikavimo karkaso UML paketu diagrama}
+	\caption{Verifikavimo karkaso \gls{uml} paketu diagrama}
 	\label{fig:uml_package}
 \end{figure}
 
-Karkasas yra pritaikytas naudoti su jau parašyta sistema kaip verifikacijos įskiepis, kuris gali būti naudojamas keliuose MCU projektuose, kurie gali turėti skirtingas implementacijas, svarbu tik tai, jog pagrindiniai protokolai ir funkcionalumai būtų palaikomi. Tai yra padaryta specialiai, jog būtų galima šį karkasą naudoti tarp skirtingų projekto stadijų, kur MCU yra toliau modifikuojamas ir tikrinama, ar neregresavo anksčiau realizuoti funkcionalumai su naujais pakeitimais ar redagavimais. Pačio projekto struktūra detalizuoja UML paketų diagrama \pav{\ref{fig:uml_package}}.
+Karkasas yra pritaikytas naudoti su jau parašyta sistema kaip verifikacijos įskiepis, kuris gali būti naudojamas keliuose \gls{mcu} projektuose, kurie gali turėti skirtingas implementacijas, svarbu tik tai, jog pagrindiniai protokolai ir funkcionalumai būtų palaikomi. Tai yra padaryta specialiai, jog būtų galima šį karkasą naudoti tarp skirtingų projekto stadijų, kur \gls{mcu} yra toliau modifikuojamas ir tikrinama, ar neregresavo anksčiau realizuoti funkcionalumai su naujais pakeitimais ar redagavimais. Pačio projekto struktūra detalizuoja \gls{uml} paketų diagrama \pav{\ref{fig:uml_package}}.
 
 Projektas sudarytas iš šių esminių paketų:
 
 \begin{itemize}
-	\item Programinės įrangos paketas \texttt{sw} yra projekto programinė įranga, joje yra aprašyti pagrindiniai MCU programiniai funkcionalumai C programavimo kalba. Šis paketas savyje turi pirminius failus, kurie yra naudojami MCU programinės įrangos kompiliavimui ir darinių suformavimui, kurie yra įkeliami į mikrovaldiklio instrukcijų (\textit{IMEM}) ir duomenų (\textit{DMEM}) atmintis imitavimo pradžios metu. Taip pat turi ir savo viduje esančius paketus:
-	
-	\begin{itemize}
-		\item Bendrasis paketas \texttt{comm} \angl{common} vykdo bendrų programinių priemonių paskirtį. Laiko failus, kurie yra bendri tarp visų \texttt{sw} vidinių paketų.
-		\item Integruotos sistemos paketas \texttt{soc} \angl{System on Chip} turi C antraštinius \angl{header} programinius failus, kuriuose yra bazinės struktūros \angl{structs}, kurių pagalba yra valdomi mikrovaldiklio periferiniai įrenginiai. Apjungia programinę įrangą su aparatine įranga.
-		\item Aparatinės įrangos abstrakcijos sluoksnio paketas \texttt{hal} \angl{Hardware Abstraction Layer} turi C programinius aprašus, kurie suteikia prieigą funkciniam periferinių įrenginių manipuliavimui, kaip duomenų rašymas, skaitymas.
-		\item Bibliotekos paketas \texttt{lib} \angl{library} suteikia įvairiausius papildomus sisteminius funkcionalumus, kaip eilučių \angl{string} struktūras ir operacijas su jomis.
-		\item Sistemos paketas \texttt{sys} \angl{system} susideda iš programinių C failų, kurie apibrėžia pačios sistemos veikimą ir ypatumus, kaip visuotinius kintamuosius \angl{global variables}, sistemines klaidas, pertraukčių \angl{iterrupts} apdorojimo apibrėžtis ir pan.
-		\item Įvesties ir išvesties paketas \texttt{io} \angl{Input-Output} aprašo CLI funkcionalumą ir suteikia įvesčių bei išvesčių funkcionalumus.
-		\item  Testų paketas \texttt{test} aprašo individualius testinius C programinius scenarijus, kurie yra skirti UVM testavimo aplinkai ir yra keliami į imituoklės imituojamo mikrovaldiklio instrukcijų ir duomenų atmintis.
-	\end{itemize}
-	
-	\item Testavimo stendo \texttt{tb} paketas realizuoja projekto UVM verifikavimo klases ir charakteristikas. Naudojami UVM komponentai ir objektai aprašyti pagrindinius verifikacijos klases, kurios skirtos naudoti testų rašymui Python programavimo kalba. Viduje esantys paketai yra:
-	
-	\begin{itemize}
-		\item Etaloninio modelio \texttt{ref} \angl{reference model} paketas, kuris realizuoja mikrovaldiklio etaloninį modelį ir naudojamas gauti numatytus \angl{expected} rezultatus iš etaloninio modelio.
-		\item Aplinkos \texttt{env} \angl{environment} paketas, kuriame yra mikrovaldiklio testavimo aplinka, skirta naudoti ir konfigūruoti UVM testuose.
-		\item UVC \texttt{uvc} paketas, jame yra sudėti mikrovaldiklio periferinių įrenginių verifikavimo komponentai.
-		\item Virtualios sąsajos \texttt{vif} \angl{virtual interface} paketas suteikia sąsają su testuojamu mikrovaldiklio RTL viršutiniu \angl{top} moduliu \angl{module}, naudojamas verifikacijos komponentuose ir testuose.
-		\item Konfigūracijos \texttt{cfg} \angl{configuration} paketas skirtas testavimo aplinkos specifiniam konfigūravimui tarp testų.
-		\item Sekų \texttt{seq} \angl{sequence} paketas įgyvendina nepriklausomas sekas, kurių pagalba vykdomas mikrovaldiklio verifikavimas testuose.
-		\item Testų \texttt{test} paketas kuriame yra keliami UVM testai.
-	\end{itemize}
-	
-	\item Bendrosios aplinkos \texttt{env} paketas skirtas laikyti testuojamosios aplinkos specifikas, toks kaip programos dydis, pavadinimas, parametrai ir pan. Nustatomas simuliacijos \texttt{sim} paketo ir yra naudojamas UVM testavimo stendo \texttt{tb} paketo.
-	
-	\item RTL \texttt{rtl} paketas, kuriame yra aprašytas testuojamojo mikrovaldiklio modulis, jis susideda iš jau aprašytų modulių, esančių \texttt{mlab\_mcu} šakninio projekto \texttt{rtl} paketo.
-	
+	\item Programinės įrangos paketas \texttt{sw} yra projekto programinė įranga, joje yra aprašyti pagrindiniai \gls{mcu} programiniai funkcionalumai C programavimo kalba. Šis paketas savyje turi pirminius failus, kurie yra naudojami \gls{mcu} programinės įrangos kompiliavimui ir darinių suformavimui, kurie yra įkeliami į mikrovaldiklio instrukcijų (\textit{IMEM}) ir duomenų (\textit{DMEM}) atmintis imitavimo pradžios metu. Taip pat turi ir savo viduje esančius paketus:
+
+	      \begin{itemize}
+		      \item Bendrasis paketas \texttt{comm} \angl{common} vykdo bendrų programinių priemonių paskirtį. Laiko failus, kurie yra bendri tarp visų \texttt{sw} vidinių paketų.
+		      \item Integruotos sistemos paketas \texttt{soc} \angl{System on Chip} turi C antraštinius \angl{header} programinius failus, kuriuose yra bazinės struktūros \angl{structs}, kurių pagalba yra valdomi mikrovaldiklio periferiniai įrenginiai. Apjungia programinę įrangą su aparatine įranga.
+		      \item Aparatinės įrangos abstrakcijos sluoksnio paketas \texttt{hal} \angl{Hardware Abstraction Layer} turi C programinius aprašus, kurie suteikia prieigą funkciniam periferinių įrenginių manipuliavimui, kaip duomenų rašymas, skaitymas.
+		      \item Bibliotekos paketas \texttt{lib} \angl{library} suteikia įvairiausius papildomus sisteminius funkcionalumus, kaip eilučių \angl{string} struktūras ir operacijas su jomis.
+		      \item Sistemos paketas \texttt{sys} \angl{system} susideda iš programinių C failų, kurie apibrėžia pačios sistemos veikimą ir ypatumus, kaip visuotinius kintamuosius \angl{global variables}, sistemines klaidas, pertraukčių \angl{iterrupts} apdorojimo apibrėžtis ir pan.
+		      \item Įvesties ir išvesties paketas \texttt{io} \angl{Input-Output} aprašo \gls{cli} funkcionalumą ir suteikia įvesčių bei išvesčių funkcionalumus.
+		      \item  Testų paketas \texttt{test} aprašo individualius testinius C programinius scenarijus, kurie yra skirti \gls{uvm} testavimo aplinkai ir yra keliami į imituoklės imituojamo mikrovaldiklio instrukcijų ir duomenų atmintis.
+	      \end{itemize}
+
+	\item Testavimo stendo \texttt{tb} paketas realizuoja projekto \gls{uvm} verifikavimo klases ir charakteristikas. Naudojami \gls{uvm} komponentai ir objektai aprašyti pagrindinius verifikacijos klases, kurios skirtos naudoti testų rašymui Python programavimo kalba. Viduje esantys paketai yra:
+
+	      \begin{itemize}
+		      \item Etaloninio modelio \texttt{ref} \angl{reference model} paketas, kuris realizuoja mikrovaldiklio etaloninį modelį ir naudojamas gauti numatytus \angl{expected} rezultatus iš etaloninio modelio.
+		      \item Aplinkos \texttt{env} \angl{environment} paketas, kuriame yra mikrovaldiklio testavimo aplinka, skirta naudoti ir konfigūruoti \gls{uvm} testuose.
+		      \item \gls{uvc} \texttt{uvc} paketas, jame yra sudėti mikrovaldiklio periferinių įrenginių verifikavimo komponentai.
+		      \item Virtualios sąsajos \texttt{vif} \angl{virtual interface} paketas suteikia sąsają su testuojamu mikrovaldiklio \gls{rtl} viršutiniu \angl{top} moduliu \angl{module}, naudojamas verifikacijos komponentuose ir testuose.
+		      \item Konfigūracijos \texttt{cfg} \angl{configuration} paketas skirtas testavimo aplinkos specifiniam konfigūravimui tarp testų.
+		      \item Sekų \texttt{seq} \angl{sequence} paketas įgyvendina nepriklausomas sekas, kurių pagalba vykdomas mikrovaldiklio verifikavimas testuose.
+		      \item Testų \texttt{test} paketas kuriame yra keliami \gls{uvm} testai.
+	      \end{itemize}
+
+	\item Bendrosios aplinkos \texttt{env} paketas skirtas laikyti testuojamosios aplinkos specifikas, toks kaip programos dydis, pavadinimas, parametrai ir pan. Nustatomas simuliacijos \texttt{sim} paketo ir yra naudojamas \gls{uvm} testavimo stendo \texttt{tb} paketo.
+
+	\item \gls{rtl} \texttt{rtl} paketas, kuriame yra aprašytas testuojamojo mikrovaldiklio modulis, jis susideda iš jau aprašytų modulių, esančių \texttt{mlab\_mcu} šakninio projekto \texttt{rtl} paketo.
+
 	\item Skriptų \texttt{script} paketas kuriame yra automatizuotos eigos Bash kalba aprašyti pernaudojami \angl{reusable} scenarijai.
-	
+
 	\item Šakninio projekto \texttt{mlab\_mcu} \texttt{misc} paketas, kuriame yra duomenys ir aprašai, naudojami imitacijos vykdymo metu.
-	
+
 	\item Pataisos \texttt{patch} paketas suteikia pataisas šakniniam projektui, reikalingos tinkamam suderinamumui su verifikavimo karkasu.
-	
+
 	\item Konfigūracijos \texttt{conf} paketas, skirtas įvairiems konfigūraciniams failams, skirtų įvairių projekto aplinkų konfigūracijų taikymui.
-	
+
 	\item Imitacijos \texttt{sim} \angl{simulation} paketas, skirtas testų inicializavimui ir paleidimui \textit{Verilator} arba \textit{Xcelium} imituoklėse.
 \end{itemize}
 
@@ -157,4 +157,3 @@ Projektas sudarytas iš šių esminių paketų:
 
 
 \subsubsection{Dinaminis sistemos vaizdas}
-

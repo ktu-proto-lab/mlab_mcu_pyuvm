@@ -9,19 +9,15 @@
 
 \newacronymstyle{ktu-intext}
 {
-	\GlsUseAcrEntryDispStyle{long-short}
+	\GlsUseAcrEntryDispStyle{short-long}
 }
 {
-	\GlsUseAcrStyleDefs{long-short}
+	\GlsUseAcrStyleDefs{short-long}
 	\renewcommand*{\genacrfullformat}[2]{%
-		\glsentrylong{##1}##2\ifglshasfield{eng}{##1}%
-		{ (angl.\ \textit{\glsentryeng{##1}}, \glsentryshort{##1})}%
-		{ (\glsentryshort{##1})}%
+		\glsentryshort{##1}##2%
 	}
 	\renewcommand*{\Genacrfullformat}[2]{%
-		\Glsentrylong{##1}##2\ifglshasfield{eng}{##1}%
-		{ (angl.\ \textit{\glsentryeng{##1}}, \glsentryshort{##1})}%
-		{ (\glsentryshort{##1})}%
+		\Glsentryshort{##1}##2%
 	}
 }
 \setacronymstyle{ktu-intext}
