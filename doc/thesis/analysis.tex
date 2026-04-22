@@ -4,22 +4,85 @@
 
 \subsubsection{Sistemos apibrėžimas}
 
+% --- REQUIREMENT
+\noterequirement{
+Nurodykite ką sistema darys. Jeigu kuriamos tik atskiros dalys, papildomai nurodykite, kurios dalys kuriamos. Galima labai neišsiplėsti, nes detaliau sistema bus aprašoma sekančiuose skyreliuose. \\
+Pvz.: „Maisto perdavimo protokolas (Food Transfer Protocol) – tai sistema, kuri leis žmonėms neišeinant iš namų ne tik užsisakyti, bet ir tiesiogiai parsisiųsti maisto.“
+}
+
+% --- CONTENT
 \gls{risc} architektūros \glsdisp{microprocessor}{mikrovaldiklio} \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasas} -- tai testavimo aplinkos, jos valdymo ir automatizavimo, kuriamos ir testuojamos architektūros automatizuotas \glsdisp{verification}{verifikavimas} ir naujų testų rašymo bei jų \glsdisp{simulation}{imitavimo}, projekto \glsdisp{plugin}{įskiepis}, nepriklausomas nuo \glsdisp{host-operating-system}{pagrindinės operacinės sistemos}. \Glsdisp{framework}{Karkasas} atveria galimybę dirbti su skirtingais \glsdisp{simulator}{imitatoriais}: su \textit{Veripool Verilator} \glsdisp{simulator}{imituokle} suteikiama galimybė naudoti bet kokioje \glsdisp{host-operating-system}{pagrindinės operacinės sistemos} aplinkose ir su \textit{Cadence Xcelium} \glsdisp{simulator}{imituokle} dirbti licencijuotame serveryje, suteikiant pilną \glsdisp{container}{konteinerizuotą} aplinką, kurioje yra visi projekto \glsdisp{verification}{verifikavimui} reikalingi programiniai įrankiai. Automatizuoti \textit{GNU Make} ir \textit{Bash} skriptų scenarijai pasirūpina visu reikalingu projekto ir \glsdisp{verification}{verifikavimo} \glsdisp{plugin}{įskiepio} konfigūravimu ir valdymu. Aprašyti \textit{Python} \gls{uvm} komponentai ir \gls{uvc} naudojami \gls{soc} dizaino testavimui. Kartu, minėti paketai ir jų aprašyti komponentai gali būti pernaudojami rašant naujus \gls{soc} dizaino testus, kurie naudoja modernius \textit{Python} programavimo kalbos funkcionalumus, paketus, ir \glsdisp{open-source}{atviros prieigos} įrankius. \Glsdisp{framework}{Karkasas} yra \glsdisp{open-source}{atviros prieigos} alternatyva \textit{SystemVerilog} \gls{uvm} \glsdisp{verification}{verifikavimo} testų rašymui ir komercinių \gls{eda} įrankių \glsdisp{simulator}{imituoklių} naudojimui \glsdisp{verification}{verifikacijos} eigos procese.
 
 \subsubsection{Bendras veiklos tikslas}
 
-Bendras veiklos tikslas -- išsiaiškinti ar \glsdisp{open-source}{atviros prieigos} įrankius galima ir kaip integruoti į sudėtingesnio \gls{soc} dizaino \glsdisp{verification}{verifikavimo} eigos procesą, naudojant \textit{Python} \gls{uvm} implementaciją vietoje \textit{SystemVerilog}.
+% --- REQUIREMENT
+\noterequirement{
+Tai gali būti globalus įmonės ar abstraktus tikslas (gali būti ne vienas), kuris bus pasiektas sukūrus ir įdiegus sistemą. Iš esmės tai išplėstas darbo tikslas, kurį paminėjote dar įvade. Aprašant nebūtina pagrįsti tikslo – nereikia aprašinėti detalių kaip tikslo ar tikslų bus siekiama. Šiame punkte taip pat aprašykite kokia nauda (tiek komercinė, tiek nekomercinė) bus gaunama įvykdžius projektą. Nauda gali būti konkretus pelnas (pvz., uždirbsite kalną pinigų), nekomercinio projekto atveju – asmeninis populiarumas (pvz., išgarsėsite savo produktu ir panaudosite tai savo ateities produktų reklamai), nauda visuomenei. Galite paminėti ir apie produkto atsipirkimą (jei tai investicinis projektas, kurio finansinė nauda planuojama tik už kelerių metų). \\
+Pvz.: „Maisto perdavimo protokolas leis žmonėms patenkinti maistinius poreikius jiems neišeinant iš namų“. 
+}
+
+% --- CONTENT
+Pagrindiniai veiklos tikslai:
+\begin{enumerate}
+	\item Išsiaiškinti ar \glsdisp{open-source}{atviros prieigos} įrankius galima ir kaip integruoti į sudėtingesnio \gls{soc} dizaino \glsdisp{verification}{verifikavimo} eigos procesą, naudojant \textit{Python} \gls{uvm} implementaciją vietoje \textit{SystemVerilog} bei suteikti galimybę testų vykdymui naudoti skirtingas \glsdisp{simulator}{imituokles}.
+\end{enumerate}
 
 \subsubsection{Sistemos pagrįstumas}
 
+% --- REQUIREMENT
+\noterequirement{
+Aprašoma pagrindinė problema, kodėl reikia kurti sistemą (kitaip tariant, iš kur kilo toks poreikis) bei sistemos aktualumas (kodėl svarbu sukurti sistemą). \\
+Pvz.: „Egzistuoja daug naudotojų, kurie negali arba tiesiog nenori eiti į parduotuvę ar kavinę norėdami pavalgyti. Esamos sistemos (detali analizė pateikiama sekančiame skyrelyje) nesuteikia galimybės greitai ir pigiai patenkinti maistinius poreikius, todėl šios sistemos sukūrimas iš esmės išsprendžia greito ir saugaus maisto perdavimo problemas“. 
+}
+
 \subsubsection{Konkurencija rinkoje}
+
+\noterequirement{
+Panašių egzistuojančių ar šiuo metu dar tik kuriamų sistemų, produktų ar algoritmų apžvalga. Šios analizės tikslas – išanalizuoti kokiomis panašiomis savybėmis pasižymi analogai, kaip jūsų kuriamas sprendimas atrodo bendrame kontekste. \\
+Rekomenduojama analizei rasti bent 3 panašius sprendimus, juos išsamiau aprašyti, pateikti ekrano vaizdų (jei tai įmanoma), nuorodas į interneto puslapius, kuriuose galima rasti daugiau informacijos apie sprendimus (nuorodas įtraukti į literatūros sąrašą). \\
+Skyriuje taip pat naudinga pateikti lyginamosios analizės santrauką lentelės pavidalu (pavyzdys – 1 lentelė). Palyginimui svarbu pasirinkti kriterijus, pagal kuriuos įmanoma objektyviai palyginti jūsų kuriamą sprendimą su egzistuojančiais sprendimais. Taip rekomenduojama, kad (pagal poreikį) kriterijai būtų įvairūs – būtų palyginamos ne tik funkcionalumas, bet ir naudotojų kiekis, kaina, operacinė sistema ar kitos ypatybės (bent 6-8 kriterijai). \\
+Po lentele labai reikomenduojama aprašyti palyginimo kriterijus – ką jie reiškia, kodėl jie svarbūs, kodėl buvo pasirinkti. Tarp kriterijų turėtų būti bent vienas, pagal kurį jūsų sprendimas bent kažkuo išsiskiria tarp kitų rinkos žaidėjų. \\
+Tiesa, jei kuriamas darbas yra tiriamojo pobūdžio, šiame skyriuje vertėtų aprašyti detalią mokslinės literatūros apžvalgą. Apie tai plačiau galės papasakoti jūsų vadovas.  
+}
 
 \subsubsection{Prototipai ir pagalbinė informacija}
 
+\noterequirement{
+Programą ar sistemą galima kurti ir turint tam tikrą pagrindą, t.y. modifikuojant ar ištobulinant jau esamą produktą. Jei kuriate produktą nesinaudodami kitu produktu kaip pagrindu, taip ir parašykite. Jei naudojatės prototipais, detaliai aprašykite kuo jūsų sprendimas yra geresnis už prototipą. Čia taip pat galite abstrakčiai parašyti kokie informaciniai šaltiniai2 jums labiausiai padėjo kuriant produktą (pvz., naudojotės prototipų dokumentacija ar tiesiog pasikliovėte eksperto žiniomis, klausinėjote forumuose). \\
+„Šiuo metu labiausiai paplitęs yra failų perdavimo protokolas (FTP). Vienas labiausiai išvystytų protokolų yra Bittorent, tačiau egzistuoja ir daug kur kas mažiau paplitusių protokolų. Tai patikimi, rinkoje įsitvirtinę protokolai. Jų didžiausias trūkumas yra tas, kad jie gali perduoti tinklu tik duomenis, tačiau perduoti objektus (ypač maistą) yra neįmanoma. Savo darbe daugiausiai remsiuosi FTP protokolu, nes kuriamas produktas skiriamas parduotuvei, kuri persiunčia nupirktą maistą klientams, t.y. veikia kaip serveris kliento-serverio architektūroje. Bittorent labiau tiktų maisto dalybai socialiniuose tinkluose“. 
+}
+
 \subsubsection{Ištekliai, reikalingi sistemai sukurti}
+
+\noterequirement{
+Skyrelyje nurodykite techninių ir žmogiškųjų išteklių poreikį, kad sistema būtų sukurta. \\
+Pvz.: „Maisto perdavimo protokolui sukurti reikalingi 3 metai. Tiek laiko reikės aprašyti sistemos standartui ir realizuoti prototipams. Papildomai reikėtų
+10 metų, norint išpopuliarinti ir išvystyti pasaulinę protokolo infrastruktūrą. Pradinėse projekto fazėse reikės bent 10 žmonių (IT specialistų) komandos,
+tačiau projektui plečiantis turės didėti ir personalas“.
+}
 
 \subsection{Galimybių analizė}
 
+\noterequirement{
+Šiame skyrelyje analizuojamos galimos priemonės sistemai sukurti – labai panašiai kaip egzistuojančių sprendimų analizėje, tačiau aprašomi ne sprendimai, o kūrimo priemonės (karkasai, technologijos, protokolai ir kt.). Anglų kalboje ši analizė vadinama feasibility study. \\
+Jei tai įmanoma, skyriuje taip pat naudinga pateikti lyginamosios analizės santrauką lentelės pavidalu. Palyginimui reikia pasirinkti tokius kriterijus, kurie yra svarbūs sistemos kūrimui (bent 5 kriterijai). Net jei būna tokių situacijų, kuomet karkasą, technologiją, protokolą ar kt. tiksliai nusako įmonė / užsakovas, būtina paaiškinti kodėl pasirinktas toks sprendimas. \\
+Priklausomai nuo situacijos, verta paanalizuoti ir galimas problemas, susijusias su kuriamu sprendimu. Kartais sukurti galutinį produktą nepakanka finansų, žmogiškųjų resursų ar kitų išteklių. Kliūtys gali kilti tiek įmonės viduje (pvz., per smulki įmonė tokiam projektui realizuoti), tiek globalios (pvz., rinkoje per mažai paplitusi technika, kurią būtų galima naudoti su kuriama programine įranga ar naudotojai dar nėra pasiruošę priimti produkto). Tokiu atveju reiktų detaliai aprašyti visas kliūtis, dėl kurių neįmanoma iki galo realizuoti pradinės idėjos.  
+}
+
 \subsubsection{Techninės galimybės}
 
+\noterequirement{
+Skyrelyje nurodykite techninių ir žmogiškųjų išteklių poreikį, kad sistema būtų sukurta.
+
+Pvz.: „Maisto perdavimo protokolui sukurti reikalingi 3 metai. Tiek laiko reikės aprašyti sistemos standartui ir realizuoti prototipams. Papildomai reikėtų
+10 metų, norint išpopuliarinti ir išvystyti pasaulinę protokolo infrastruktūrą. Pradinėse projekto fazėse reikės bent 10 žmonių (IT specialistų) komandos,
+tačiau projektui plečiantis turės didėti ir personalas“.
+}
+
 \subsubsection{Vartotojų pasiruošimo analizė}
+\noterequirement{
+Jei tai produktas, kuris bus naudojamas įmonėje, tai įmonės vartotojų analizė. Jei ne – bent jau abstrakti tikslinės auditorijos (programos ar produkto vartotojų
+segmento) analizė. Šiame punkte reiktų aprašyti ar žmonės sugebės naudotis ta įranga, kokio išsilavinimo reikia norint ja naudotis. \\
+Pvz.: „Maisto perdavimo protokolas bus toks paprastas, kad juo galės naudotis tiek penkerių metų vaikas, tiek jo močiutė“.
+}
+
