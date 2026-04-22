@@ -1,0 +1,37 @@
+\newacronymstyle{ktu-intext}
+{
+	\GlsUseAcrEntryDispStyle{long-short}
+}
+{
+	\GlsUseAcrStyleDefs{long-short}
+	\renewcommand*{\genacrfullformat}[2]{%
+		\glsentrylong{##1}##2\ifglshasfield{useri}{##1}%
+		{ (angl.\ \textit{\glsentryuseri{##1}}, \glsentryshort{##1})}%
+		{ (\glsentryshort{##1})}%
+	}
+	\renewcommand*{\Genacrfullformat}[2]{%
+		\Glsentrylong{##1}##2\ifglshasfield{useri}{##1}%
+		{ (angl.\ \textit{\glsentryuseri{##1}}, \glsentryshort{##1})}%
+		{ (\glsentryshort{##1})}%
+	}
+}
+\setacronymstyle{ktu-intext}
+
+
+\newglossarystyle{ktu-style}{
+	\renewenvironment{theglossary}%
+	{\setlength{\parindent}{0pt}\setlength{\parskip}{0.5\baselineskip}}%
+	{}%
+	\renewcommand*{\glossaryheader}{}%
+	\renewcommand*{\glsgroupheading}[1]{}%
+	\renewcommand*{\glossentry}[2]{%
+		\glstarget{##1}{\glossentryname{##1}}%
+		\ifglshasfield{useri}{##1}%
+		{ (angl.\ \textit{\glsentryuseri{##1}})}%
+		{}%
+		\ -- \glossentrydesc{##1}.\par%
+	}
+	\renewcommand*{\subglossentry}[3]{}%
+	\renewcommand*{\glsgroupskip}{}%
+	\renewcommand*{\glsnamefont}[1]{##1}%
+}

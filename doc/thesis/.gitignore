@@ -15,3 +15,11 @@
 *.blg
 *.out
 svg-inkscape/
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
