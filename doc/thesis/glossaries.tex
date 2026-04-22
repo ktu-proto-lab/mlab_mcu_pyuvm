@@ -38,6 +38,8 @@
 
 \newacronym[eng={Process Design Kit}]{pdk}{PDK}{puslaidininkių projektavimo rinkinys}
 
+\newacronym[eng={Place and Rounte}]{pnr}{PnR}{išdėstymas ir sujungimas}
+
 
 \newglossaryentry{container}{
 	name={konteineris},
@@ -123,10 +125,28 @@
 	description={projektas arba programinė įranga, kurios šaltinį gali naudoti, peržiūrėti, keisti ir tobulinti savo laisva nuožiūra. Viešai prieinama, leidžia naudotojams išnagrinėti veikimo principus, taisyti klaidas ar pridėti naujų funkcionalumų.}
 }
 
+\newglossaryentry{regression-testing}{
+	name={regresijos testavimas},
+	eng={regression testing},
+	description={verifikuojamo dizaino kokybės užtikrinimo praktika, kai pakartotinai atliekami funkciniai ir nefunkciniai testai, siekiant užtikrinti, jog anksčiau sukurta, ir išbandyta aparatinė, ir programinė įranga toliau veiktų po dizaino pakeitimų. Ši praktika leidžia įsitikinti, jog neseniai atlikti pakeitimai neturėjo neigiamos įtakos esamam dizaino funkcionalumui}
+}
+
 \newglossaryentry{functional-coverage}{
 	name={funkcinis padengiamumas},
 	eng={functional coverage},
 	description={metrika, parodanti, kokios \gls{soc} dizaino funkcijos ar savybės buvo patikrintos testais, naudojama patikrinti \gls{crv} kokybę ir siekiant sužinoti, kokios testuojamojo dizaino (\gls{dut}) savybės buvo patikrintos regresijos testų rinkiniu \cite{chipverify}}
+}
+
+\newglossaryentry{signal-level-testbench}{
+	name={signalų lygio bandymų stendas},
+	eng={signal-level testbench},
+	description={\gls{hdl} aprašytos aparatinės įrangos \glsdisp{simulation}{imitacijos} aplinkos tipas, naudojamas \gls{dut} funkcionalumui patikrinti, valdant, stebint ir tikrinant konkrečius fizinių signalų perėjimus (pvz., išjungiant ir įjungiant išvadus, nustatant jungiamuosius laidus) jo įėjimuose ir išėjimuose. Imituojos tikroviškos sąlygas, siekiant nustatyti, ar projektas veikia teisingai išvadų lygiu \cite{dvd}}
+}
+
+\newglossaryentry{sythesis}{
+	name={sintezė},
+	eng={synthesis},
+	description={automatizuotas procesas, kurio metu aukšto lygio aparatinės įrangos \gls{hdl} kodas aprašytas Verilog/SystemVerilog, VHDL arba SystemC kalba yra konvertuojamas į konkrečiai technologijai pritaikytą, vartų lygio tinklo sąrašą. Šis procesas paverčia loginius duomenų judėjimo tarp registrų aprašymus į fizinį loginių vartų ir trigerių įgyvendinimą, optimizuojant laiką, energijos suvartojimą ir plotą \cite{dvd}}
 }
 
 \makeglossaries

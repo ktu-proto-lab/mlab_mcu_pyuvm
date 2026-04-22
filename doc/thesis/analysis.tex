@@ -39,7 +39,15 @@ Pvz.: „Egzistuoja daug naudotojų, kurie negali arba tiesiog nenori eiti į pa
 }
 
 % --- CONTENT
+Didėjant \gls{soc} dizaino projekto apimčiai ėmė sudėtingėti funkcionalumą \glsdisp{verification}{verifikuojančių} testų rašymas bei atsirado poreikis automatizuotam testų leidimui ir valdymui. Paprastam \gls{rtl} dizainui užtenka ir \glsdisp{signal-level-testbench}{signalų lygio testavimo stendų} aprašymų SystemVerilog kalba. Didėjant \gls{soc} dizaino architektūros apimčiai atsirado poreikis testuoti ne vien aparatinės įrangos funkcionalumą signalų, bet ir programiniame lygyje palaikomų protokolų. Pavyzdžiui: teksto eilučių siuntimas į ir iš \gls{dut}, komandų apdorojimo \gls{cli}, \gls{dut} būsenos testavimo. \noteblue{UVM sekos}
 
+Ėmė sudėtingėti patys testai, nemažai kodo pradėjo kartotis tarp skirtingą funkcionalumą \glsdisp{verification}{verifikuojančių} testų. Tai apriboja testo rašymo sudėtingumą, nes perteikiant aukštesnės abstrakcijos elgseną signalų lygyje, lygiagrečiame \gls{hdl} kode, tampa sudėtinga. Testų rašymo metu pradėta susidurti su problemom, kurios nėra susijusios su pačio testo specifika, o \gls{hdl} kodo prigimtimi ir elgsena. Tai pradėjo kenkti produktyviam pačių testų rašymui. \noteblue{UVM ir OOP}
+
+Archajiška sudėtingėjančių signalų lygio testų architektūra ir kodas pradėjo kelti rimtų problemų naujų žmonių, norinčių įsitraukti į dizaino kūrimą, apmokymui bei jau prie jo dirbančių darbuotojų žinios tapo vis labiau siauresnės berašant testus. Pradėjo kartotis problemos tarp skirtingų testų, kurių sprendimai -- unikalūs kiekvienam testui, priklausant nuo jo rašančio žmogaus. Atsirado poreikis aiškiam ir vieningam testų rašymo protokolui, tam, kad skirtingi darbuotojai galėtų dirbti su kitų kolegų parašytu testų kodu, kuris laikosi bendrų protokolo standartų, ir taisyklių. \noteblue{UVM}
+
+Plečiant dizainą dažnai sutrinka prieš tai puikiai veikusios sistemos dalys, atsirado poreikis \glsdisp{regression-testing}{regresiniams testams} ir jų automatizavimui. Atliekant dizaino \glsdisp{sythesis}{sintezę} ir \gls{pnr} pradėjo užtrukti vis daugiau laiko, klaidos dizaine aptikimas tapo vis ilgesnis. Šią problemą pradžioje išsprendė paprastų \textit{Bash} skriptų automatizacijos scenarijų rašymas, bet su laiku sistema pradėjo sudėtingėti ir jos pradinė paskirtis nebegalėjo aprėpti vis sudėtingėjančių reikalavimų. \noteblue{Make}
+
+Komercinių \gls{eda} įrankių naudojimas \gls{soc} \glsdisp{simulation}{imitacijoms} yra didelis finansinis įsipareigojimas, nes šių įrankių licenzijos kainuoja tūkstančius \cite{cadence}. Mažėsni \gls{rtl} dizainai tiesiog neišnaudoja unikalių tokių įrankių galimybių, dabartinis \glsdisp{verification}{verifikuojamos} \gls{soc} dizainas palyginamai dar yra ne toks sudėtingas ir būtų galima plėtoti ir su primityvesniais \glsdisp{open-source}{atviros prieigos} nemokamais \gls{eda} įrankiais. \noteblue{open source}
 
 
 \subsubsection{Konkurencija rinkoje}
