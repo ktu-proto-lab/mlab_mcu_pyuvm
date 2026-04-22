@@ -1,5 +1,3 @@
-\centersection{Santrumpų ir terminų žodynas}
-
 \newacronym[eng={Universal Verification Methodology}]{uvm}{UVM}{universali verifikavimo metodologija}
 
 \newacronym[eng={Reduced Instruction Set Computer}]{risc}{RISC}{sumažintas instrukcijų rinkinys}
@@ -20,6 +18,10 @@
 
 \newacronym[eng={Graphical User Interface}]{gui}{GUI}{grafinė vartotojo sąsaja}
 
+\newacronym[eng={Hardware Abstraction Layer}]{hal}{HAL}{aparatinės įrangos abstrakcijos sluoksnis}
+
+\newacronym[eng={System on Chip}]{soc}{SoC}{sistema luste}
+
 \newacronym[eng={Electronic Design Automation}]{eda}{EDA}{elektronikos projektavimo automatizavimas}
 
 \newacronym[eng={Verilog Procedural Interface}]{vpi}{VPI}{Verilog procedūrinė sąsaja}
@@ -36,8 +38,71 @@
 
 \newacronym[eng={Process Design Kit}]{pdk}{PDK}{puslaidininkių projektavimo rinkinys}
 
-\printglossary[title={Santrumpos:}, type=\acronymtype, style=ktu-style]
 
-\textbf{Terminai:}
+\newglossaryentry{container}{
+	name={konteineris},
+	eng={container},
+	description={procesas, imituojantis atskirą ir nepriklausomą vykdymo aplinką \cite{docker_docs}, kuriame įkeltas kodas, programinė įranga ir visos jos priklausomybės yra izoliuota nuo pagrindinės operacinės sistemos}
+}
 
-\clearpage
+\newglossaryentry{host-operating-system}{
+	name={pagrindinė operacinė sistema},
+	eng={host operating system},
+	description={pagrindinė programinė įranga, veikianti tiesiogiai kompiuterio aparatinėje įrangoje ir valdanti išteklius, pavyzdžiui, procesorių, atmintį ir saugyklą. Ji sudaro pagrindą virtualių mašinų ar konteinerių veikimui, leidžiant kelioms operacinėms sistemoms veikti vienu metu toje pačioje aparatinėje įrangoje}
+}
+
+\newglossaryentry{environment-variable}{
+	name={aplinkos kintamasis},
+	eng={environment variable},
+	description={vartotojo nustatoma reikšmė, kuri gali daryti įtaką kompiuteryje vykdomų procesų veikimui. Paprastai jie naudojami konfigūracijos duomenims saugoti, o programos ir skriptai gali prie jų prisijungti vykdymo metu}
+}
+
+\newglossaryentry{program-build}{
+	name={programinio kodo darinys},
+	eng={build},
+	description={proceso rezultatas, kurio metu šaltinio kodo failai paverčiami savarankiškais programinės įrangos artefaktais, dažniausiai juos galima paleisti aparatinėje įrangoje}
+}
+
+\newglossaryentry{patch}{
+	name={pataisa},
+	eng={patch},
+	description={papildoma programa, ištaisanti programos ar programinio failo esamą klaidą}
+}
+
+\newglossaryentry{plugin}{
+	name={įskiepis},
+	eng={plugin},
+	description={komponentas, įtaisytas į projektą ir papildantis jį naujomis galimybėmis, funkcionalumu \cite{kompiuterijoszodynas}}
+}
+
+\newglossaryentry{framework}{
+	name={karkasas},
+	eng={framework},
+	description={svarbiausių programų kūrimui reikalingų komponentų rinkinys. Juo pasinaudojant sumažėja ir paspartėja programuotojo darbas \cite{kompiuterijoszodynas}}
+}
+
+\newglossaryentry{simulator}{
+	name={imituoklė},
+	eng={simulator},
+	description={lygiagreti \gls{rtl} logikos imitacinė programinė įranga, skirta \gls{hdl} kalba aprašytų \gls{soc} dizainų vykdymui ir tikrinimui}
+}
+
+\newglossaryentry{microprocessor}{
+	name={mikrovaldiklis},
+	eng={microprocessor},
+	description={kompiuterio sistemai pritaikytas integruotas grandynas, kuris apima procesorių, atmintį ir įvesties/išvesties periferiją, dažnas sutinkamas sutrumpinimas -- \gls{mcu}}
+}
+
+\newglossaryentry{peripheral}{
+	name={periferija, periferinis įrenginys},
+	eng={peripheral, peripheral device},
+	description={bet koks įrenginys, prijungtas prie aparatinės įrangos, jog išplėstų jos palaikomą funkcionalumą}
+}
+
+\newglossaryentry{module}{
+	name={modulis},
+	eng={module},
+	description={Verilog/SystemVerilog kodo blokas, įgyvendinantis tam tikrą funkcionalumą. Moduliai gali būti įterpiami į kitus modulius, o aukštesnio lygio modulis gali bendrauti su žemesnio lygio moduliais naudodamas jų įvesties ir išvesties prievadus. Tai yra pagrindiniai skaitmeninės aparatinės įrangos projektavimo elementai, leidžiantys taikyti modulinę, pakartotinai naudojamą ir hierarchinę projektavimo metodiką \cite{chipverify}}
+}
+
+\makeglossaries

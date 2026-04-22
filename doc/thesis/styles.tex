@@ -39,3 +39,20 @@
 	\renewcommand*{\glsgroupskip}{}%
 	\renewcommand*{\glsnamefont}[1]{##1}%
 }
+
+\newglossarystyle{ktu-terms}{
+	\renewenvironment{theglossary}%
+	{\setlength{\parindent}{0pt}\setlength{\parskip}{0.5\baselineskip}}%
+	{}%
+	\renewcommand*{\glossaryheader}{}%
+	\renewcommand*{\glsgroupheading}[1]{}%
+	\renewcommand*{\glossentry}[2]{%
+		\glstarget{##1}{\textbf{\Glsentryname{##1}}}%
+		\ifglshasfield{eng}{##1}%
+		{ (angl.\ \textit{\glsentryeng{##1}})}%
+		{}%
+		\ -- \glossentrydesc{##1}.\par%
+	}
+	\renewcommand*{\subglossentry}[3]{}%
+	\renewcommand*{\glsgroupskip}{}%
+}
