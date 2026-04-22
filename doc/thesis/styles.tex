@@ -1,3 +1,12 @@
+\glsaddkey
+{eng}
+{\relax}
+{\glsentryeng}
+{\Glsentryeng}
+{\glseng}
+{\Glseng}
+{\GLSeng}
+
 \newacronymstyle{ktu-intext}
 {
 	\GlsUseAcrEntryDispStyle{long-short}
@@ -5,18 +14,17 @@
 {
 	\GlsUseAcrStyleDefs{long-short}
 	\renewcommand*{\genacrfullformat}[2]{%
-		\glsentrylong{##1}##2\ifglshasfield{useri}{##1}%
-		{ (angl.\ \textit{\glsentryuseri{##1}}, \glsentryshort{##1})}%
+		\glsentrylong{##1}##2\ifglshasfield{eng}{##1}%
+		{ (angl.\ \textit{\glsentryeng{##1}}, \glsentryshort{##1})}%
 		{ (\glsentryshort{##1})}%
 	}
 	\renewcommand*{\Genacrfullformat}[2]{%
-		\Glsentrylong{##1}##2\ifglshasfield{useri}{##1}%
-		{ (angl.\ \textit{\glsentryuseri{##1}}, \glsentryshort{##1})}%
+		\Glsentrylong{##1}##2\ifglshasfield{eng}{##1}%
+		{ (angl.\ \textit{\glsentryeng{##1}}, \glsentryshort{##1})}%
 		{ (\glsentryshort{##1})}%
 	}
 }
 \setacronymstyle{ktu-intext}
-
 
 \newglossarystyle{ktu-style}{
 	\renewenvironment{theglossary}%
@@ -26,8 +34,8 @@
 	\renewcommand*{\glsgroupheading}[1]{}%
 	\renewcommand*{\glossentry}[2]{%
 		\glstarget{##1}{\glossentryname{##1}}%
-		\ifglshasfield{useri}{##1}%
-		{ (angl.\ \textit{\glsentryuseri{##1}})}%
+		\ifglshasfield{eng}{##1}%
+		{ (angl.\ \textit{\glsentryeng{##1}})}%
 		{}%
 		\ -- \glossentrydesc{##1}.\par%
 	}
