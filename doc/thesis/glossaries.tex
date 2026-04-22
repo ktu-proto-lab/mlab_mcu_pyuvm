@@ -38,7 +38,7 @@
 
 \newacronym[eng={Process Design Kit}]{pdk}{PDK}{puslaidininkių projektavimo rinkinys}
 
-\newacronym[eng={Place and Rounte}]{pnr}{PnR}{išdėstymas ir sujungimas}
+\newacronym[eng={Place and Rounte}]{pnr}{PnR}{išdėstymas ir trasavimas}
 
 
 \newglossaryentry{container}{
@@ -120,9 +120,9 @@
 }
 
 \newglossaryentry{open-source}{
-	name={atviros prieigos},
-	eng={open-source},
-	description={projektas arba programinė įranga, kurios šaltinį gali naudoti, peržiūrėti, keisti ir tobulinti savo laisva nuožiūra. Viešai prieinama, leidžia naudotojams išnagrinėti veikimo principus, taisyti klaidas ar pridėti naujų funkcionalumų.}
+	name={atviros prieigos kodas, įrankiai},
+	eng={open-source code, tools},
+	description={projektas arba programinė įranga, kurios pirminį programos tekstą \angl{source code} galima laisvai naudoti, peržiūrėti, keisti ir tobulinti. Viešas preinamumas leidžia naudotojams išnagrinėti veikimo principus, taisyti klaidas ar pridėti naujų funkcionalumų}
 }
 
 \newglossaryentry{regression-testing}{
@@ -135,6 +135,12 @@
 	name={funkcinis padengiamumas},
 	eng={functional coverage},
 	description={metrika, parodanti, kokios \gls{soc} dizaino funkcijos ar savybės buvo patikrintos testais, naudojama patikrinti \gls{crv} kokybę ir siekiant sužinoti, kokios testuojamojo dizaino (\gls{dut}) savybės buvo patikrintos regresijos testų rinkiniu \cite{chipverify}}
+}
+
+\newglossaryentry{place-and-route}{
+	name={komponentų išdėstymas ir trasavimas},
+	eng={place and route},
+	description={spausdintinių plokščių, integrinių grandynų ir loginių matricų projektavimo etapas, kuris susideda iš dviejų dalių: komponentų išdėstymo ir trasavimo, dar dažnai minimas \gls{pnr} sutrumpinimu. Pirmasis etapas -- komponentų išdėstymas -- apima sprendimą, kur išdėstyti visus elektroninius komponentus, grandines ir loginius elementus paprastai ribotoje erdvėje. Antras etapas -- trasavimas -- nustato tikslus visų laidų, reikalingų išdėstytų komponentų sujungimui ir jų išdėstymas}
 }
 
 \newglossaryentry{signal-level-testbench}{
