@@ -52,6 +52,7 @@ Komercinių \gls{eda} įrankių naudojimas \gls{soc} \glsdisp{simulation}{imitac
 
 \subsubsection{Konkurencija rinkoje}
 
+% --- REQUIREMENT
 \noterequirement{
 Panašių egzistuojančių ar šiuo metu dar tik kuriamų sistemų, produktų ar algoritmų apžvalga. Šios analizės tikslas – išanalizuoti kokiomis panašiomis savybėmis pasižymi analogai, kaip jūsų kuriamas sprendimas atrodo bendrame kontekste. \\
 Rekomenduojama analizei rasti bent 3 panašius sprendimus, juos išsamiau aprašyti, pateikti ekrano vaizdų (jei tai įmanoma), nuorodas į interneto puslapius, kuriuose galima rasti daugiau informacijos apie sprendimus (nuorodas įtraukti į literatūros sąrašą). \\
@@ -59,6 +60,29 @@ Skyriuje taip pat naudinga pateikti lyginamosios analizės santrauką lentelės 
 Po lentele labai reikomenduojama aprašyti palyginimo kriterijus – ką jie reiškia, kodėl jie svarbūs, kodėl buvo pasirinkti. Tarp kriterijų turėtų būti bent vienas, pagal kurį jūsų sprendimas bent kažkuo išsiskiria tarp kitų rinkos žaidėjų. \\
 Tiesa, jei kuriamas darbas yra tiriamojo pobūdžio, šiame skyriuje vertėtų aprašyti detalią mokslinės literatūros apžvalgą. Apie tai plačiau galės papasakoti jūsų vadovas.  
 }
+
+% --- CONTEINT
+
+\textbf{\textit{Cadence}}
+
+\textit{Cadence} yra standartų organizacijos \textit{Accellera}, atsakingos už \gls{uvm} kūrimą ir formavimą, narė. Tai reiškia, jog \textit{Cadence} įrankiai atitinka naujausią standarto versiją. \textit{Cadence} narystė standartų organizacijoje taip pat reiškia išsamią paramą ir suderinamumą su standartu. Tai leidžia atlikti \glsdisp{verification}{verifikacijos} procesų eigą sklandžiai ir be trikdžių, naudodami pramonės standartus atitinkančius \textit{Cadence} įrankius. 
+
+\textit{Cadence Xcelium Logic Simulator} \glsdisp{simulator}{imituoklė} užtikrina vieną geriausių savo rinkoje našumą SystemVerilog, VHDL, SystemC, \gls{uvm}, mišriojo signalo, mažos galios ir X-propagacijos srityse. \Glsdisp{simulator}{Imituoklė} naudoja srities specifinių programų rinkinį, įskaitant mišriojo signalo, mašininio mokymosi pagrįstą testų suspaudimą ir funkcinį saugumą, leidžiančius projektavimo komandoms anksti užbaigti \gls{ip} ir \gls{soc} projektų patikrinimą.
+
+\textit{Cadence Verisium Manager} automatizuoja sudėtingų \glsdisp{verification}{verifikacijos} projektų valdymą nuo planavimo iki jo baigimo. \textit{Verisium Manager} glaudžiai integruojasi su \textit{Cadence} dirbtinio intelekto valdomu \glsdisp{verification}{verifikacijos} platforma, pasinaudodamas dideliais duomenimis ir dirbtiniu intelektu, pagreitinamas dizaino \glsdisp{verification}{verifikavimas}, atliekamas automatinis klaidų taisymas \cite{cadence}.
+
+\textbf{\textit{Synopsis}}
+
+\textit{Synopsys} padeda pereiti prie apriboto atsitiktinumo verifikacijos (angl. constrained-random verification) bei funkcinio padengiamumo (angl. functional coverage). Naudojant \gls{uvm} standartą, užtikrinamas geresnis įrankių suderinamumas ir verifikacijos komponentų pernaudojamumas kas leidžia atlikti daugiau testavimų parašant mažiau kodo. \textit{Synopsys} naudoja savo \gls{vcs} įrankį su \textit{Native Testbench (NTB)} technologija, kuri turi integruotą palaikymą pilniems SystemVerilog testavimo stendams. Suteikiama galimybė integruoti iš anksto paruoštus SystemVerilog \gls{vip} blokus iš \textit{Synopsys} bibliotekos. Tai drastiškai pagreitina \glsdisp{verification}{verifikacijos} aplinkos kūrimą. Kartu \textit{Synopsys} specialistai siūlo tiesioginę pagalbą inžinierių komandoms \glsdisp{verification}{verifikacijos} klausimais \cite{synopsis}.
+
+\textbf{\textit{Siemens}}
+
+\textit{Siemens EDA} siūlo \textit{Questa Advanced Simulator} įrankį, kuris yra trečiasis pagrindinis pramoninio standarto komercinis \glsdisp{simulator}{imitatorius} rinkoje. \textit{Questa} išsiskiria itin stipriu \gls{uvm} standarto palaikymu ir ypač dideliu dėmesiu \gls{cdv} metodikai. Šis \gls{eda} įrankis yra giliai integruotas su \textit{Verification Academy} -- didžiausia pasaulyje atvira žinių baze, skirta būtent \gls{uvm} metodologijos taikymui ir sklaidai. \textit{Questa} platforma taip pat siūlo pažangius automatizuoto testavimo ir klaidų paieškos įrankius. Kaip ir \textit{Cadence} ar \textit{Synopsys} atveju, tai yra itin brangus komercinis sprendimas, pririšantis \glsdisp{digital-design}{skaitmeninio projektavimo} projektus prie SystemVerilog kalbos ir vieno tiekėjo \cite{siemens}.
+
+\textbf{\textit{Aldec}}
+
+\textit{Aldec} yra dar vienas komercinių \gls{eda} įrankių kūrėjas. Kompanijos įrankis \textit{Riviera-PRO} yra plačiai naudojamas \gls{fpga} ir \gls{asic} \glsdisp{verification}{verifikacijoje}. Ši \glsdisp{simulator}{imituoklė} pasižymi labai geru \textit{VHDL}, Verilog, SystemVerilog, SystemC  \gls{hdl} kalbų mišriu palaikymu. Viena iš unikalių \textit{Riviera-PRO} savybių yra grafinis \gls{uvm} hierarchijos atvaizdavimo įrankis, kuris vizualiai atvaizduoja \gls{uvm} komponentų medį, jų prievadus bei sąsajas. Tai labai palengvina naujų darbuotojų integraciją į \glsdisp{digital-design}{skaitmeninį} projektą. Nors šis įrankis yra pigesnė alternatyva, jis vis tiek reikalauja mokamų licencijų ir neužtikrina atviros prieigos universalumo, kurio reikia lanksčioms akademinėms ar \glsdisp{open-source}{atvirojo kodo} bendruomenėms \cite{aldec}.
+
 
 \subsubsection{Prototipai ir pagalbinė informacija}
 
