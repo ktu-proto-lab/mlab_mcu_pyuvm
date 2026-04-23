@@ -151,6 +151,30 @@ Projektas sudarytas iš šių esminių paketų:
 	\item Imitacijos \texttt{sim} \angl{simulation} paketas, skirtas testų inicializavimui ir paleidimui \textit{Verilator} arba \textit{Xcelium} \glsdisp{simulator}{imituoklėse}.
 \end{itemize}
 
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_package_tb.svg}
+	\caption{\gls{uvm} testų \texttt{tb} su vidinėmis klasėmis paketų diagrama}
+	\label{fig:uml_package_tb}
+\end{figure}
+
+\gls{uvm} testavimo paketas \texttt{tb} \pav{\ref{fig:uml_package_tb}}. Detalesnis jo vidinių paketų paskirčių aprašymas:
+
+\begin{itemize}
+	\item \glsdisp{golden-reference}{Etaloninio modelio} \texttt{ref} paketas -- \gls{uvm} komponentai ir objektai, kurie yra skirti tikrinti \gls{dut} elgseną transakcijų lygyje, juos naudoja \texttt{env} paketo \texttt{McuScoreboar} \gls{uvm} komponentas. 
+	\item Aplinkos \texttt{env} paketas -- \gls{uvm} aplinkos komponentai, \texttt{McuEnv} yra konfigūruojamas globalia konfigūracija, komponentas pasirūpina visų vidinių komponentų sujungimu ir konfigūravimu ir yra pernaudojamas komponentas tarp visų testų.
+	\item Testų \texttt{test} paketas -- visi aprašyti \gls{dut} testai, kuriuose naudojamos nepriklausomos sekos, visi testai paveldi iš bazinio \texttt{McuTest}.
+	\item \gls{uvc} komponentų \texttt{uvc} paketas -- \gls{uart} ir \gls{gpio} \glsdisp{peripheral}{periferinių įrenginių}: įtaiso tvarkyklės \texttt{Driver}, monitoriai \texttt{Monitor}, sekų valdytojai \texttt{Sequencer} ir sąsajos \texttt{Interface}. Konfigūruojami agentai \texttt{Agent} yra naudojami kaip tarpininkai tarp \gls{dut} \glsdisp{peripheral}{periferijų} ir testinės \gls{mcu} aplinkos \texttt{McuEnv}.
+	\item Virtualios \gls{mcu} sąsajos \texttt{vif} paketas -- tarpininkas tarp imituojamo \gls{dut} ir \textit{PyUVM}, per šią sąsają agentų komponentai komunikuoja su pačiu \gls{dut}.
+	\item Nepriklausomų sekų ir jų elementų \texttt{seq} paketas -- tarp testų naudojamos sekos, kurie gali būti atsitiktiniai arba ranka aprašyti scenarijai, kurie perduoda transakcijas iš sekų \texttt{Sequence} per virtualų sekų valdytoją \texttt{McuVirtualSequencer}, kuris nukreipia į atitinkamą \glsdisp{peripheral}{periferijos} \gls{uvc} sekos valdytoją.
+	\item Klaidų \texttt{errors} paketas -- su \glsdisp{verification}{verifikavimo} susijusių klaidų hierarchiją, kuri leidžia lengviau valdyti ir atrinkti įvairias testavimo metu iškilusias klaidas.
+\end{itemize}
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uvm_class_tb_full.svg}
+	\caption{\gls{uvm} testų paketo \texttt{tb} pilna \gls{uml} klasių diagrama}
+	\label{fig:uml_class_tb_full}
+\end{figure}
+
 % TODO (feat)
 % class diagram of the UVM side (imagine, writing C++ instead of C).
 

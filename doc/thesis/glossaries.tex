@@ -54,6 +54,10 @@
 
 \newacronym[eng={Continuous Intergration}]{ci}{CI}{nuolatinė integracija}
 
+\newacronym[eng={Universal Asynchronous Transmitter-Receiver}]{uart}{UART}{Universalus Asinchroninis Imtuvas-Siųstuvas}
+
+\newacronym[eng={General Purpose Input/Output}]{gpio}{GPIO}{bendrosios paskirties įvesties/išvesties prievadas}
+
 \newglossaryentry{container}{
 	name={konteineris},
 	eng={container},
@@ -178,5 +182,11 @@
 	name={Priklausomybė nuo vieno tiekėjo},
 	eng={vendor lock-in},
 	description={programinės ar aparatūrinės įrangos srityse klientas tampa priklausomas nuo konkretaus tiekėjo produktų ir paslaugų ir negali pereiti prie konkurento be didelių išlaidų, techninių sunkumų ar veiklos sutrikimų. Ši priklausomybė, dažnai susijusi su patentuota technologija ar duomenimis, riboja lankstumą, didina ilgalaikes išlaidas ir verčia pasikliauti vieno tiekėjo patikimumu}
+}
+
+\newglossaryentry{golden-reference}{
+	name={Etaloninis modelis},
+	eng={golden reference model},
+	description={\gls{uvm} komponentas, skirtas numatomai elgsenai prognozuoti ir patikrinti \gls{dut} teisingumui. Komponentas veikia aukštesniu abstrakcijos lygiu nei pats \gls{dut}, naudojamas, kad simuliacijos metu būtų galima patikrinit transakcijų lygio rezultatus ir nustatyti funkcinius gedimus}
 }
 \makeglossaries
