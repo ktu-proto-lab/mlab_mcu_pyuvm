@@ -81,7 +81,7 @@ class McuScoreboard(uvm_component):
         if not self.is_active:
             return
 
-        # TODO: write to file
+        # TODO: write to file, move to report phase
         self.logger.info("--- SCOREBOARD ---")
         self.logger.info(f"| Total transactions: {len(self.failures) + len(self.successes)} |")
         self.logger.info(f"| Successes: {len(self.successes)} |")
