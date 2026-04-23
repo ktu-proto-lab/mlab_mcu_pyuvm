@@ -1,28 +1,81 @@
 \section{Projektas}
 
+\noterequirement{Aprašoma detali sistemos specifikacija (20 – 40 lapų). Apibrėžiama kuriamo produkto vizija (koncepcija). Skyriaus struktūra ir pavadinimas priklauso nuo baigiamojo darbo specializacijos ir pačios temos specifikos, bet turi turėti funkcinių ir nefunkcinių reikalavimų skyrius.}
+
 \subsection{Reikalavimų specifikacija}
 
 \subsubsection{Komercinė specifikacija}
 
+\noterequirement{Šiame skyrelyje nurodykite projekto užsakovą, projekto vykdytojus, aprašykite produkto naudotojus, detalizuokite projekto realizacijos laiko ir kainos apribojimus. Čia taip pat galima nurodyti verslo procesus ar logiką (pvz., UML veiklos diagramomis), jei šie yra netipiniai ar reikalaujantys papildomo paaiškinimo. 
+Pvz.: „Maisto perdavimu protokolas yra užsakytas Jungtinių Tautų, jį kuria 10 IT specialistų. Pagrindiniai maisto perdavimo protokolo naudotojai – Afrikos vaikai ir jų tėvai, tačiau sistema aktyviai naudosis ir paprasti namų naudotojai visame pasaulyje“.}
+
 \subsubsection{Sistemos funkcijos}
 
+\noterequirement{Čia būtų išvardinamos visos sistemos funkcijos (aprašomi funkciniai reikalavimai), pavaizduotos UML panaudojimo atvejų (PA) diagrama. Po kiekvienos iliustracijos turi būti papildomi kiekvienos funkcijos detalūs žodiniai aprašymai. Esminius PA vertėtų specifikuoti veiklos diagramomis arba PA specifikacijos lentele: atvejo pavadinimas, tikslas, aprašymas, prieš sąlyga, po sąlyga, susiję panaudojimo atvejai (include, extend), aktorius ir kt.}
+
 \subsubsection{Vartotojo sąsajos specifikacija}
+\noterequirement{Naudotojo sąsajos specifikacijoje turi būti nurodomi reikalavimai naudotojo sąsajos vaizdai. Čia nereikia ir negalima dėti jau egzistuojančios programos screenshot‘ų! Šiame etape tik nusakoma, kokia turi būti naudotojo sąsaja (rekomenduojame Balsamiq, Axure RP, Figma ir panašius įrankius), tačiau galutinis sąsajos vaizdas nurodomas tik vėlesniuose skyriuose. Jei pradinėje kūrimo fazėje buvo naudojami naudotojo sąsajos eskizai ar prototipai, juos reikia dėti būtent į šį skyrelį}
 
 \subsubsection{Realizacijai keliami reikalavimai}
 
+\noterequirement{Realizacijai gali būti keliami tokie nefunkciniai reikalavimai: reikalavimai sistemos išvaizdai, reikalavimai panaudojamumui, reikalavimai vykdymo charakteristikoms, reikalavimai veikimo sąlygoms, reikalavimai sistemos priežiūrai, reikalavimai saugumui, kultūriniai-politiniai reikalavimai, teisiniai reikalavimai. Jie išvardinami ir aprašomi šiame skyrelyje. Pavyzdžiui: 
+	
+	Maisto perdavimo protokolas privalo būti saugus (neautentifikuoti kaimynai negali sužinoti kokį maistą siunčiasi naudotojas) 
+	
+	Maistas, suskaidytas paketais, turi pasiekti naudotoją nepagedęs 
+	
+	Maisto perdavimo protokolas turėtų palaikyti lietuviškos virtuvės produktus 
+	
+	Šiame punkte gali būti išvardinti (jeigu nustatyti) tokio tipo apribojimai: apribojimai sprendimui, diegimo aplinka, bendradarbiaujančios sistemos, komerciniai specializuoti programų paketai, numatoma darbo vietos aplinka, sistemos kūrimo terminai, sistemos kūrimo biudžetas. Jei reikalinga specifinė duomenų kontrolė (kokia informacija turi būti tikrinama įvedimo ar sistemos veikimo metu), ji taip pat aprašoma šiame skyrelyje. 
+	
+	Galbūt kai kuriems iš jūsų pravers ir nefunkcinių reikalavimų hierarchija.}
+
 \subsubsection{Techninė specifikacija}
+
+% --- REQUIREMENT
+\noterequirement{Skyrelyje aprašykite techninę ir papildomą programinę įrangą, reikalingą sistemai. Nurodykite minimalius įrangos parametrus. Šis skyrelis, priklausomai nuo situacijos, gali būti formuluojamas kaip sąrašas, ką užsakovams reikės turėti, jeigu norės naudotis sistema, arba kokios aplinkos reikalauja užsakovas. 
+	
+Pvz.: „Maisto perdavimo protokolui realizuoti būtinas interneto ryšys, 1 kilolitro maisto ir gėrimų perdavimo linija, specializuotas šaldytuvas, namų kompiuteris“. }
+
+% --- CONTENT
+
 
 \subsection{Projektavimo metodai}
 
 \subsubsection{Projektavimo valdymas ir eiga}
 
+\noterequirement{Šiame punkte nurodykite, kokį programinės įrangos kūrimo modelį (ar modelius) naudojote kurdami savo sistemą. Tai gali būti krioklio, iteracinis, SCRUM ar kitas modelis. Galite nurodyti kaip suskirstėte darbus ir kokiu eiliškumu juos atlikote.}
+
+Buvo taikomas iteracinis programinės įrangos kūrimo modelis. Mažiau populiari projekto specifika ir problematika bei asmeninės patirties stoka vertė rinktis iteracine filosofija pagrįstu projekto kūrimo valdymo. Naujos implementacijos iš pat pradžių yra demonstracinės, kur nesirūpinama pačios sistemos stabilumu ir palaikymo, o tiesiog paprastu reikalavimo funkcionalumo įgyvendinimui. Atlikus implementaciją, sistemos dalis yra paliekama ir keliaujama prie kitų reikalavimų implementavimo. Galiausiai, kai pasiekiama tam tikra sistemos ar jos dalies reikalavimų pilnas realizavimas, grįžtama prie implementuotų dalių ir įvertinama ar priimtas sprendimas yra tinkamas, ar jį reikia keisti. Jei matoma, jog dabartinė realizacija yra nelanksti arba nebuvo numatytas tam tikras architektūrinis sprendimas, yra grįžtama prie pradinių reikalavimų. Atlikus papildomą paiešką susijusią su reikalavimų problematika, ieškoma jau atliktų panašių implementacijų \glsdisp{open-source}{atviros prieigos} projektuose, jei įmanoma jų rasti. Galiausiai, reikalavimai yra pataisomi, atsižvelgiant į naujas iškilusias prieš tai nenumatytas problemas ir yra toliau tęsiamas darbas. Toks kūrimo modelis reikalauja didelio kiekio kodo rašymo, implementacijos turi būti įgyvendinamos kuo greičiau, jog būtų patikrinta ar projekto reikalavimai įgyvendinta išsikeltus problemų sprendimus, jei taip, implementacija yra perrašoma, jog būtų patikima ir lengviau plečiama bei palaikoma. Šiuo metu jau yra parašytos 4 veikiančios projekto versijos, kiekviena iš jų pakankamai drastiškai skiriasi, bet iš kiekvienos versijos yra daug kodo, kuris buvo transformuojamas ir pritaikomas naujai, labiau išgrynintai projekto vizijai ir reikalavimams.
+
+% TODO (diagram)
+
 \subsubsection{Projektavimo technologija}
 
+\noterequirement{Šiame punkte nurodykite, kokią naudojote projektavimo technologiją, standartus ir programinius įrankius projekto kūrimui. Aprašykite kokia ar kokiomis notacijomis (formaliais tekstiniais ir grafiniais žymėjimo / aprašymo standartais) naudojotės kurdami sistemos projektą.}
+
 \subsubsection{Programavimo kalbos, derinimo, automatizavimo priemonės, operacinės sistemos}
+\noterequirement{Šiame punkte, tiesiog, aprašykite, kokią programinę įrangą (nurodant versijas) naudojote kurdami savo baigiamąjį darbą. Tiesa, rašyti kokią programinę įrangą naudojote šiai ataskaitai sukurti – nebūtina. }
 
 \subsection{Sistemos projektas}
+\noterequirement{Sistemos projektas – tai jūsų sistemos veikimo aprašymas. Tai dažniausiai nagrinėjama dokumento vieta (be išvadų) darbo peržiūros ir gynimo metu.}
 
 \subsubsection{Statinis sistemos vaizdas}
+
+\noterequirement{Šiame punkte reikėtų detalizuoti sistemos struktūrą. Priklausomai nuo projekto tipo turėtumėte aprašyti savo sistemą panaudodami UML diagramas: 
+	
+	Diegimo (UML deployment diagram) – nepakeičiama tuo atveju, jei sistema naudoja išorinius servisus ar yra paskirstyta per keletą įrenginių. Geriausia pradėti nuo šios diagramos, nes ji greičiausiai supažindina su bendra sistemos sudėtimi. 
+	
+	Komponentų (UML component diagram) – geriausiai tinka tuomet, kai naudojamas komponentinis sistemos kūrimo būdas ir sistema susideda iš komponentų teikiančių programavimo sąsają (API). 
+	
+	Paketų (UML package diagram) – labai naudinga tuomet, jei sistema sugrupuota paketais. 
+	
+	Klasių (UML class diagram) – geriausiai tinka atvaizduoti sistemos struktūros detales. Jei projekte klasių naudojama daug, rekomenduojama detalizuoti tik esmines klases, o likusią struktūrą pateikti paketų diagrama. 
+	
+	Aprašant statinį sistemos vaizdą taip pat turėtų būti pateikta ir duomenų bazės schema. Šiam tikslui gali būti naudojama UML klasių diagrama ar jūsų naudojamų įrankių sugeneruotas duomenų bazės vaizdas. Jei naudojama ne reliacinė duomenų bazė, tuomet naudoti tokį duomenų bazės specifikavimo būdą, kurį siūlo kūrėjai arba bendruomenė. 
+	
+	Ne visas sistemas galima lengvai aprašyti UML notacija (pvz. esant funkcinėms kalboms vietoj klasių diagramų rekomenduojame naudoti komponentų ar paketų diagramas). Esant dar sudėtingesniems atvejams galima pasirinkti ir kitą notaciją ar diagramas, tačiau dėl to pasitarkite su vadovu.
+}
 
 % TODO (question)
 % Paklausti ar su italic pavadinimus ar su kabutėmis.
