@@ -57,6 +57,23 @@ Buvo taikomas iteracinis programinės įrangos kūrimo modelis. Mažiau populiar
 \subsubsection{Programavimo kalbos, derinimo, automatizavimo priemonės, operacinės sistemos}
 \noterequirement{Šiame punkte, tiesiog, aprašykite, kokią programinę įrangą (nurodant versijas) naudojote kurdami savo baigiamąjį darbą. Tiesa, rašyti kokią programinę įrangą naudojote šiai ataskaitai sukurti – nebūtina. }
 
+\begin{table}[H]
+	\caption{Projekte naudojamos programavimo kalbos}
+	\label{tab:programming-languages}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
+		\hline
+		\thead[l]{Programavimo kalba} & \thead{Pasirinkimo priežastis} \\ \hline
+		\textit{Python} & Populiariausia programavimo kalba \cite{language-ratings-2026}, milžiniškas bibliotekų paketų pasirinkimas ir palaikoma beveik visose platformose. Projekte bus naudojama rašyti \gls{uvm} \gls{crv} testus. \\ \hline
+		\textit{C} & Žemiausio lygio kalba po asemblerio, beveik visų \gls{soc} dizainų suteikiama programinė įranga yra parašyta šia kalba, yra be galo daug kompiliatorių, kurie yra skirti įvairiausioms architektūrom, kartu ir \gls{risc}, kuriuo yra paremtas projekto \gls{mcu}. Ši programavimo kalba bus naudojama aprašyti \gls{dut} programinę įrangą. \\ \hline
+		\textit{Bash} & Plačiausiai palaikoma scenarijų rašymo kalba Unix tipo operacinėse sistemose. Kalba bus naudojama rašyti automatizavimo scenarijus. \\ \hline
+		\textit{GNU Make} & Projektų kompiliavimo, surinkimo ir automatizavimo scenarijų rašymo kalba, skirta didžiuliems projektams, \glsdisp{open-source}{atviros prieigos}, ilgalaikis šios rinkos standartas. Projekte bus naudojamas sudėtingiems automatinių valdomų scenarijams aprašyti. \\ \hline
+		\textit{SystemVerilog} & Kalba pririšta prie testuojamos sistemos projekto \gls{rtl} kalbos. Bus skirta \gls{soc} dizaino \gls{dut} modulio aprašymui. \\ \hline
+		\textit{Dockerfile} & Skirta \textit{Docker} atvaizdų kūrimui. Ji susideda iš nuoseklių nurodymų, kurie nurodo, kaip surinkti konteinerio \glsdisp{docker-image}{atvaizdą}. \\ \hline
+		\textit{YAML} & \textit{Docker Compose} naudoja YAML failą \texttt{docker-compose.yml}, kuriame apibrėžiamos paslaugos, tinklai ir taisyklės. Šiuo vienu failu galima valdyti keletą konteinerių vienu metu, kas yra labai aktualu šiam projektui. \\ \hline
+		 
+	\end{tabularx}
+\end{table}
+
 \subsection{Sistemos projektas}
 \noterequirement{Sistemos projektas – tai jūsų sistemos veikimo aprašymas. Tai dažniausiai nagrinėjama dokumento vieta (be išvadų) darbo peržiūros ir gynimo metu.}
 
