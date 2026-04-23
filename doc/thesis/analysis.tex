@@ -83,6 +83,38 @@ Tiesa, jei kuriamas darbas yra tiriamojo pobūdžio, šiame skyriuje vertėtų a
 
 \textit{Aldec} yra dar vienas komercinių \gls{eda} įrankių kūrėjas. Kompanijos įrankis \textit{Riviera-PRO} yra plačiai naudojamas \gls{fpga} ir \gls{asic} \glsdisp{verification}{verifikacijoje}. Ši \glsdisp{simulator}{imituoklė} pasižymi labai geru \textit{VHDL}, Verilog, SystemVerilog, SystemC  \gls{hdl} kalbų mišriu palaikymu. Viena iš unikalių \textit{Riviera-PRO} savybių yra grafinis \gls{uvm} hierarchijos atvaizdavimo įrankis, kuris vizualiai atvaizduoja \gls{uvm} komponentų medį, jų prievadus bei sąsajas. Tai labai palengvina naujų darbuotojų integraciją į \glsdisp{digital-design}{skaitmeninį} projektą. Nors šis įrankis yra pigesnė alternatyva, jis vis tiek reikalauja mokamų licencijų ir neužtikrina atviros prieigos universalumo, kurio reikia lanksčioms akademinėms ar \glsdisp{open-source}{atvirojo kodo} bendruomenėms \cite{aldec}.
 
+\begin{table}[H]
+	\centering
+	\caption{Rinkoje esančių komercinių verifikacijos įrankių ir kuriamo karkaso palyginimas}
+	\label{tab:konkurentu_palyginimas}
+	\begin{tabularx}{\linewidth}{|X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}
+		\hline
+			\thead[l]{Kriterijai} & \thead{Cadence} & \thead{Synopsis} & \thead{Siemens} & \thead{Aldec} & \thead{Karkasas}\\
+			\hline
+			\textbf{Komerciniai licencijuoti įrankiai} & Taip & Taip & Taip & Taip & Palaikomi abu \\ \hline
+			\textbf{Pagrindinės testų rašymo kalbos} & \gls{v/sv} & \gls{v/sv} & \gls{v/sv} & VHDL, \gls{v/sv} & Python \\ \hline
+			\textbf{UVM palaikymas} & Taip & Taip & Taip & Taip & Per PyUVM \\ \hline
+			\textbf{Skirtingų imituoklių palaikymas} & Ne & Ne & Ne & Ne & Taip\footnotemark[1] \\ \hline
+			\textbf{DI integracija klaidų paieškai} & Taip & Taip & Taip & Iš dalies & Ne \\ \hline
+			\textbf{Prieiga akademinei bendruomenei} & Licencija\footnotemark[2] & Programa\footnotemark[3] & Programa\footnotemark[4] & Nemokama\footnotemark[5] & Laisva\footnotemark[6] \\ \hline
+			\textbf{\gls{gui}} & Taip & Taip & Taip & Taip & Ne \\ \hline
+			\textbf{OS palaikymas} & Linux (RHEL/CentOS) &	Linux (RHEL/CentOS) & Linux (RHEL/CentOS)	& Windows, Linux & Windows, Linux, macOS \\ \hline
+			\textbf{\glsdisp{vendor-lockin}{Priklausomybė nuo įrankių tiekėjo}}\footnotemark[7] & Taip & Taip & Taip & Taip & Ne \\ \hline
+			\textbf{\gls{ci} kaštai\footnotemark[8]} & Aukšti & Aukšti & Aukšti & Aukšti & Lankstūs \\ \hline
+		\end{tabularx}
+\end{table}
+\footnotetext[1]{Palaikoma, jei imituoklė palaiko VPI, VHPI ar FLI sąsajas \cite{cocotb}.}
+\footnotetext[2]{Reikia gauti akademinę licenciją \cite{cadence}.}
+\footnotetext[3]{Prieinama per akademinę \textit{Synopsys Academic \& Research Alliances (SARA)} programą \cite{synopsis}.}
+\footnotetext[4]{Prieinama per akademinę \textit{EDA Higher Education Software Program} programą \cite{siemens}.}
+\footnotetext[5]{Suteikia prieigą prie nemokamos \textit{Active-HDL Student Edition} įrangos versijos \cite{aldec}.}
+\footnotetext[6]{Licencijuotas pagal patikslintą \glsdisp{open-source}{atviros prieigos} BSD licenciją.}
+\footnotetext[7]{Naudojant komercinį įrankį, testai dažnai pripildomi tiekėjo specifinių makrokomandų ir bibliotekų \gls{vip}.}
+\footnotetext[8]{Regresinių testų automatizavimas debesijoje su komerciniais įrankiais reikalauja specialių debesijos licencijų, kuriamas karkasas atveria galimybes naudotis \textit{GitLab} \gls{ci} ar \textit{GitHub Actions} paslaugomis arba išplėsti palaikymą, naudojant \textit{Jenkins} \gls{ci} įrankį.}
+
+Kadangi tikslios komercinių \gls{eda} įrankių kainos yra griežtai saugomos komercinės paslaptys ir viešai neskelbiamos (jos priklauso nuo derybų, įmonės dydžio ir perkamo licencijų kiekio), tikslaus kainų palyginimo atlikti neišeis. Remiantis šios rinkos analizės duomenimis, \gls{eda} programinės įrangos sprendimai yra brangūs -- metinės licencijų išlaidos svyruoja nuo 50,000 iki 500,000 JAV dolerių už vieną darbo vietą, priklausomai nuo pačio projekto apimties ir jo naudojamų įrankių sudėtingumo \cite{eda-market-report}.
+
+
 
 \subsubsection{Prototipai ir pagalbinė informacija}
 
