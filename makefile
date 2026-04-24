@@ -127,6 +127,8 @@ endif
 run:
 ifeq ($(SIMULATOR),verilator)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	XHOST_INFO="$$(xhost +local: 2>&1)"; \
+	logger INFO "$$XHOST_INFO used for GTKWave"; \
 	logger INFO "entering $(VERILATOR_NAME) container shell"; \
 	docker compose run --rm verilator \
 		/bin/bash -c "source /home/mcu/uvm/script/logger.sh && logger SUCCESS 'you are inside $(VERILATOR_NAME) container' && source /home/mcu/uvm/.venv/bin/activate && cd /home/mcu/uvm/sim && exec bash"
