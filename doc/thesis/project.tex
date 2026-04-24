@@ -58,7 +58,7 @@ Buvo taikomas iteracinis programinės įrangos kūrimo modelis. Mažiau populiar
 \noterequirement{Šiame punkte, tiesiog, aprašykite, kokią programinę įrangą (nurodant versijas) naudojote kurdami savo baigiamąjį darbą. Tiesa, rašyti kokią programinę įrangą naudojote šiai ataskaitai sukurti – nebūtina. }
 
 \begin{table}[H]
-	\caption{Projekte naudojamos programavimo kalbos}
+	\caption{Projekte naudojamos programavimo kalbos.}
 	\label{tab:programming-languages}
 	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
 		\hline
@@ -71,6 +71,45 @@ Buvo taikomas iteracinis programinės įrangos kūrimo modelis. Mažiau populiar
 		\textit{Dockerfile} & Skirta \textit{Docker} atvaizdų kūrimui. Ji susideda iš nuoseklių nurodymų, kurie nurodo, kaip surinkti konteinerio \glsdisp{docker-image}{atvaizdą}. \\ \hline
 		\textit{YAML} & \textit{Docker Compose} naudoja YAML failą \texttt{docker-compose.yml}, kuriame apibrėžiamos paslaugos, tinklai ir taisyklės. Šiuo vienu failu galima valdyti keletą konteinerių vienu metu, kas yra labai aktualu šiam projektui. \\ \hline
 		 
+	\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+	\caption{Atviros prieigos įrankių konteinerio naudojama programinė įranga, įdiegta per \texttt{apt} paketų tvarkytuvę.}
+	\label{tab:project-software-ubuntu}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|>{\raggedright\arraybackslash}X|}
+		\hline
+		\thead[l]{Programinė įranga} & \thead{Paketo pavadinimas} & \thead{Paskirtis} \\ \hline
+		GTKWave Analyzer v3.3.116 & \texttt{gtkwave}  & Laikinių diagramų peržiūra. \\ \hline
+		pip v26.0.1 & \texttt{python3-pip}  & Python paketų tvarkytuvė. \\ \hline
+		Python v3.12.3 & \texttt{python3}  & Python interpretatorius, bibliotekos. \\ \hline
+		Python Virtual Environment v3.12.3 & \texttt{python3-venv} & Python virtuali aplinka. \\ \hline
+		GNU Make v4.3 & \texttt{make} & Projekto surinkimo sistema. \\ \hline
+		GNU patch v2.7.6 & \texttt{patch} & Kodo pataisa. \\ \hline
+		Count Lines of Code v1.98 & \texttt{cloc}  & Eilučių skaičiavimas. \\ \hline
+		tree v2.1.1 & \texttt{tree} & Failų ir aplankalų išdėstymo atvaizdavimas terminale. \\ \hline
+		X11 utilities v7.7 & \texttt{x11-utils} & GUI įranga, reikalinga GTKWave atvaizdavimui. \\ \hline
+		GNU GCC RISC-V Compiler v13.2.0& \texttt{gcc-riscv64-unknown-elf} & C kompiliatorius \gls{dut} programinės įrangos susirinkimui. \\ \hline
+	\end{tabularx}
+\end{table}
+
+% TODO (add)
+\begin{table}[H]
+	\caption{\textit{Cadence} licencijuoto serverio konteinerio programinė įranga, įdiegta per \texttt{dnf} paketų tvarkytuvę.}
+	\label{tab:project-software-rockylinux}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|>{\raggedright\arraybackslash}X|}
+		\hline
+		\thead[l]{Programinė įranga} & \thead{Paketo pavadinimas} & \thead{Paskirtis} \\ \hline
+	\end{tabularx}
+\end{table}
+
+% TODO (add)
+\begin{table}[H]
+	\caption{Projekto dokumentavimo įranga.}
+	\label{tab:project-software-docs}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|>{\raggedright\arraybackslash}X|}
+		\hline
+		\thead[l]{Programinė įranga} & \thead{Paketo pavadinimas} & \thead{Paskirtis} \\ \hline
 	\end{tabularx}
 \end{table}
 
