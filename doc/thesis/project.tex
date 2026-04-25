@@ -326,6 +326,67 @@ Virtualios sąsajos paskirtis yra sujungti signalus \gls{dut}, tai yra paprasči
 	\item \texttt{UartByte}: vieno baito UART periferijos transakcija, verčiasi į \gls{ascii} simbolius, nes UART sekos beveik visada susidaro iš teksto.
 \end{itemize}
 
-GPIO ir UART periferijų posistemių klasės savo struktūrą yra beveik identiškos, tai yra būtent todėl, nes kodas yra parašytas naudojant \textit{PyUVM} biblioteką, kuri beveik pilnai realizuoja \gls{uvm} standartą\footnote{\textit{PyUVM} beveik pilnai realizuoja IEEE 1800.2 standartą, bet yra tam tikrų funkcijų, bei kai kurių klasių, kaip UVM Memory, kurios nėra realizuotos, užtat galima jas replikuoti naudojant \gls{oop} metodiką su \textit{Python} klasėm \cite{pyuvm}.}.
+GPIO ir UART periferijų posistemių klasės savo struktūrą yra beveik identiškos, tai yra būtent todėl, nes kodas yra parašytas naudojant \textit{PyUVM} biblioteką, kuri beveik pilnai realizuoja \gls{uvm} standartą\footnote{\textit{PyUVM} beveik pilnai realizuoja IEEE 1800.2 standartą, bet yra tam tikrų funkcijų, bei kai kurių klasių, kaip UVM Memory, kurios nėra realizuotos, užtat galima jas replikuoti naudojant \gls{oop} metodiką su \textit{Python} klasėm \cite{pyuvm}.}. Šie UVC komponentai yra sukuriami ir valdomi UVM aplinkos \texttt{McuEnv} komponento, o agentų sekų valdytojai sujungiami su virtualiu sekų valdytoju \texttt{McuVirtualSequencer} \pav{\ref{fig:uml_class_tb_env_uvc}}.
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_class_tb_env_uvc.svg}
+	\caption{UVC agentų kompozicija su UVM MCU aplinka ir virtualiu sekų valdytoju}
+	\label{fig:uml_class_tb_env_uvc}
+\end{figure}
+
+Agentai nėra tiesiogiai prieinami per testą, šie komponentai konfigūruojami ir valdomi pačios aplinkos, norint manipuliuoti agentų elgsena, teste keičiama numatytoji konfigūraciją \texttt{Config}.
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_class_tb_env.svg}
+	\caption{UVM testavimo aplinkos komponentų UML klasių diagrama}
+	\label{fig:uml_class_tb_env}
+\end{figure}
+
+Pačioje UVM aplinkoje vyksta automatizuotas testavimas \pav{\ref{fig:uml_class_tb_env}}.
+
+\begin{itemize}
+	\item \texttt{McuEnv}: pagrindinis komponentas, kuris sukuria, sukonfigūruoja ir sujungia visus testavimo aplinkos komponentus.
+	\item \texttt{McuVirtualSequencer}: virtualus sekų valdytojas, kuris savyje turi kitus sekų valdytojus, per šį komponentą galima leisti keletą sekų vienu metu.
+	\item \texttt{McuTracer}: transakcijų sekiklis, jis klausosi monitorių skelbiamų transakcijų ir valdo jų pakavimą. Pavyzdžiui siunčiamus ir gaunamus \gls{uart} periferijos baitus sekiklis supakuoja jau į skaitomą tekstą ir transliuoja per savo analizės portą, kai pasiekiamas \texttt{\textbackslash 0} arba \texttt{\textbackslash n} simbolis, žymintis, jog užklausa arba atsakymas yra baigti.
+	\item \texttt{McuStateObserver}: MCU būsenos stebėtojas, jo paskirtis -- priklausant nuo protokolo, transliuoti imituojamo \glsdisp{microprocessor}{mikrovaldiklio} būsenos pasikeitimus per \textit{Cocotb} įvykį \texttt{Event}.
+	\item \texttt{McuScoreboard}: transakcijų tikrintojas, kuris klausosi sekiklio transliuojamų užklausos ir atsakymo transakcijų ir tikrina gautus realius atsakymus iš imituojamo \gls{dut} su etaloninio modelio \texttt{McuRefModel} tikimais atsakymais. Testo pranešimo etape \texttt{report\_phase()} tikrintojas išspausdina neteisingai DUT įvykdytas transakcijas.
+	\item \texttt{McuRefModel}: imituojamo DUT etaloninis modelis, jo paskirtis -- vykdyti aprašytą protokolą. Etaloninis modelis gauna užklausas iš tikrintojo ir jas įvykdo pagal protokolą, pvz.: gavus užklausą \texttt{mem size stack} modelis praleidžia pro savo \gls{cli} \texttt{McuCliInterpreter}, kuris įvykdo komandą ir grąžina rezultatą.
+	\item \texttt{McuMemoryMirror}: \gls{uvm} \gls{ral} atminties realizacija, komponentas savyje turi \gls{imem} ir \gls{dmem} atminties reikšmes ir per jį galima skaityti, rašyti reikšmes, iš esmės -- atvaizdas į realią imituojamą DUT atmintį.
+	\item \texttt{McuCliInterpreter}: \gls{cli} protokolo interpretatorius, kuris apdoroja \gls{cli} protokolo komandas.
+\end{itemize}
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_class_tb_cfg.svg}
+	\caption{UVM testavimo aplinkos konfigūracijos UML klasių diagrama}
+	\label{fig:uml_class_tb_cfg}
+\end{figure}
+
+Testavimo aplinkos konfigūracijos UVM objektu testai gali manipuliuoti ir konfigūruoti testinės aplinkos elgsena \pav{\ref{fig:uml_class_tb_cfg}}. Prieš leidžiant testą vykdomoje fazėje, testas prijungia virtualią MCU ir periferijų sąsajas. Prijungus, jei reikia, pakeičiamos numatytosios nuostatos. \texttt{Config} objektas, per konfigūracijų duomenų bazę \texttt{ConfigDB} perduodamas testavimo aplinka, o joje, perduodama į visus likusius UVM hierarchijos komponentus.
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_class_tb_test.svg}
+	\caption{UVM testų hierarchijos UML klasių diagrama}
+	\label{fig:uml_class_tb_test}
+\end{figure}
+
+Testai, pagal UVM, tik sukonfigūruoja testavimo aplinką ir vykdymo (\texttt{run\_phase()}) prijungia virtualias sekas prie virtualaus sekų vykdytojo \texttt{McuVirtualSequencer}. Bazinė klasė sutvarko visas konfigūracijas ir prijungia sąsajas, o paveldinčios klasės jau rūpinasi tik sekomis ir, jei reikia, nustato konfigūracijas, kurios tenkina testo specifikas.
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_class_tb_seq.svg}
+	\caption{UVM sekų UML klasių diagrama}
+	\label{fig:uml_class_tb_seq}
+\end{figure}
+
+Sekos yra UVM objektai, jos turi savo kamieną, kuriame nurodoma, kokie sekų elementai yra sukuriami ir perduodami virtualių sekų valdytojui \pav{\ref{fig:uml_class_tb_seq}}. Sekos yra unikalios tuo, jog jos yra kompozicinės, tai reiškia, jog sekoje gali glūdėti kitos sekos. Tokios sekos yra vadinamos virtualiomis. Bazinė virtuali seka yra \texttt{McuVirtualSequence}, ją paveldinčios sekos yra kompozicinės, \texttt{CliMemCmdSequence}, kuri inkorporuoja \texttt{UartStringSequence} seką. Šis būdas suteikia labai daug lankstumo, o bazinė virtuali seka sukuria abstrakciją, kuri leidžia nesirūpinti vidinių sekų kompozicija. Šios sekos yra jungiamos prie virtualaus sekų valdytojo \texttt{McuVirtualSequencer} testų metu \pav{\ref{fig:uml_class_tb_test}}.
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_class_tb_errors.svg}
+	\caption{UVM sekų UML klasių diagrama}
+	\label{fig:uml_class_tb_errors}
+\end{figure}
+
+Klaidos yra naudojamos aiškesniam klaidų dokumentavimui, visos jos paveldi bazinį \texttt{McuTestError}, kuri yra išvestinė \textit{Python} \texttt{Exception} klasė. Pasirinkta tokia sistema, jog būtų galima atrinkti klaidas ir jas valdyti, kai kuriems testams neaktualu, jog kažkokia klaida įvyko, ypač, jei testai netikrina šio specifinio funkcionalumo, kas labai praverčia testams, kurie yra parašyti tik patikrinti bazinį \gls{dut} funkcionalumą.
+
+
 
 \subsubsection{Dinaminis sistemos vaizdas}
