@@ -86,10 +86,7 @@
 % If anyone knows how to make this dynamic, make a PR
 \setlength{\cfttabnumwidth}{5.3em}
 % Remove indentation from LoT
-\setlength{\cfttabindent}{0pt}
-
-% add section number to table caption number
-\counterwithin{table}{section}  
+\setlength{\cfttabindent}{0pt} 
 
 % --- ToC ---
 \renewcommand{\cfttoctitlefont}{\hfil\bfseries\selectfont}
@@ -124,9 +121,6 @@
 \setlength{\cftfigindent}{0pt}
 % setup figure captions
 \captionsetup[figure]{labelsep=space, font=small, labelfont=bf, skip=0pt, justification=centering}
-
-% add section number to figure caption number
-\counterwithin{figure}{section}  
 
 
 % --- BIBLIOGRAPHY ---
