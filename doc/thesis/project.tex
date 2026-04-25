@@ -387,6 +387,17 @@ Sekos yra UVM objektai, jos turi savo kamieną, kuriame nurodoma, kokie sekų el
 
 Klaidos yra naudojamos aiškesniam klaidų dokumentavimui, visos jos paveldi bazinį \texttt{McuTestError}, kuri yra išvestinė \textit{Python} \texttt{Exception} klasė. Pasirinkta tokia sistema, jog būtų galima atrinkti klaidas ir jas valdyti, kai kuriems testams neaktualu, jog kažkokia klaida įvyko, ypač, jei testai netikrina šio specifinio funkcionalumo, kas labai praverčia testams, kurie yra parašyti tik patikrinti bazinį \gls{dut} funkcionalumą.
 
+Žemiau pateikta UML komponentų diagrama abstrakčiai aiškina, kaip UVM komponentai tarpusavyje komunikuoja ir kokias sąsajas teikia arba naudoja \pav{\ref{fig:uml_component_tb}}.
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_component_tb.svg}
+	\caption{UVM testo UML komponentų diagrama}
+	\label{fig:uml_component_tb}
+\end{figure}
+
+UVM testo ir jo aplinkos komponentai tarpusavyje komunikuoja per \gls{tlm}. Agentų monitoriai siunčia reikšmių elementus per savo \gls{tlm} analizės portus, o \texttt{McuTracer} transakcijų sekiklis kaupia reikšmių elementus savo eilėse, kaip elementai susideda į pilną transakciją, sekiklis juos transliuoja per savo portus. Prie sekiklio \gls{tlm} portų yra prijungtas \texttt{McuScoreboard} tikrintojas, kuris klausosi transliuojamų užklausų ir atsakymų. Etaloninio modelio komponentas \texttt{McuRefModel} prijungtas prie sekiklio užklausos porto. Apdorojęs užklausą pagal apibrėžtą protokolą, etaloninio modelio komponentas transliuoja tikimosi atsakymo, kurio klausosi tikrintojas. Būsenos stebėtojas \texttt{McuStateObserver} klausosi sekiklio portų ir pasikeitus mikrovaldiklio būsenai, informuoja įvykių telkinį \texttt{McuEventPool}.
+
+UVM testas prijungia prie testavimo aplinkos konfigūracijos virtualią mikrovaldiklio sąsają, bei periferijų \gls{gpio} ir \gls{uart} sąsajas, kurias naudoja minėtų periferijų agentai. Testas vykdymo metu sukurtą virtualios sekos komponentą sujungia su virtualiu sekų valdytojų. Tam, jog sekos žinotų, kada sekos apdorojimas pasibaigė, jos yra prijungtos prie įvykių telkinio, jog perėjus \gls{dut} į laukiamą būseną, būtų pradedama vykdyti sekanti seka.
 
 
 \subsubsection{Dinaminis sistemos vaizdas}
