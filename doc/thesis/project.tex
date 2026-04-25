@@ -278,16 +278,25 @@ Projektas sudarytas iš šių esminių paketų:
 	\item Klaidų \texttt{errors} paketas -- su \glsdisp{verification}{verifikavimo} susijusių klaidų hierarchiją, kuri leidžia lengviau valdyti ir atrinkti įvairias testavimo metu iškilusias klaidas.
 \end{itemize}
 
-Bendram vaizdui, žemiau yra pateikta pilna \glsdisp{verification}{verifikacijos} \gls{uvm} objektų ir komponentų, \textit{PyVSC} atsitiktinių klasių ir pačių \textit{Python} \gls{uml} klasių diagrama \pav{\ref{fig:uml_class_tb_full}}.
+Bendram vaizdui, prieduose yra pateikta pilna \glsdisp{verification}{verifikacijos} \gls{uvm} objektų ir komponentų, \textit{PyVSC} atsitiktinių klasių ir pačių \textit{Python} \gls{uml} klasių diagrama \pav{\ref{fig:uml_class_tb_full}}. Žemiau yra detaliai aptariama ir atvaizduojama sistemos vidinės klasės, ryšiai tarp jų ir paskirtis.
 
 \begin{figure}[H]
-	\includesvg[width=11.22cm]{images/uvm_class_tb_full.svg}
-	\caption{\gls{uvm} testų paketo \texttt{tb} pilna \gls{uml} klasių diagrama}
-	\label{fig:uml_class_tb_full}
+	\includesvg[width=11.22cm]{images/uml_class_tb_uvc_gpio.svg}
+	\caption{\gls{gpio} \gls{uvc} klasių diagrama}
+	\label{fig:uml_class_tb_uvc_gpio}
 \end{figure}
 
-% TODO (feat)
-% class diagram of the UVM side (imagine, writing C++ instead of C).
+\gls{uvc} klasės, atsakingos už \gls{gpio} \glsdisp{peripheral}{periferiją} \pav{\ref{fig:uml_class_tb_uvc_gpio}}:
+
+\begin{itemize}
+	\item \texttt{GpioInterface}: sąsaja su virtualia \gls{dut} \gls{mcu} sąsaja, veikia kaip tarpininkas tarp \gls{gpio} tvarkytuvės \texttt{GpioDriver} ir monitoriaus \texttt{GpioDriver}. Sąsaja sujungia naudojamus signalus \gls{gpio} periferijos (klasės laukai) ir bazines operacijas (klasės metodai), tokie, kaip reikšmių nuskaitymas ir įrašymas (\texttt{drive\_input()}, \texttt{read\_pins()}).
+	\item \texttt{GpioDriver}: periferijos tvarkytuvė, kuri rašo reikšmes į \gls{gpio} periferiją. Gaunami sekų elementai \texttt{GpioPad} iš \texttt{GpioSequencer} komponento vykdymo fazės metu (\texttt{run\_phase()}) yra nusiunčiami signalų lygyje, per aprašytą periferijos \texttt{GpioInterface} sąsają į \gls{dut}. Perdavus pateiktos sekos elemento signalus į \gls{dut}, tvarkyklė informuoja sekų valdytoją \texttt{GpioSequencer}, jog elementas įvykdytas per \textit{PyUVM} suteiktą metodą \texttt{item\_done()} ir laukia naujo elemento iš sekų valdytojo.
+	\item \texttt{GpioMonitor}: skaito \gls{gpio} periferijos \glsdisp{pad}{išvadų} reikšmes vykdymo metu. Kiekvieno kylančio \glsdisp{clock}{sinchroninio signalo} fronto metu monitorius nuskaito kontaktinių taškų reikšmes ir, jei yra pasikeitusios -- sukuria naują \texttt{GpioPad} elementą ir jį transliuoja per savo analizės portą \texttt{ap}.
+	\item \texttt{GpioSequencer}: GPIO periferijos sekos elementų valdytojas. Gaunami sekų elementai iš išorinių komponentų, dažniausiai pačio testo sekų, yra komponento perduodami į tvarkytuvę \texttt{GpioDriver}.
+	\item \texttt{GpioPad}: \gls{uvm} sekos elementas, kuris yra naudojamas transliuoti, rašyti, skaityti \gls{gpio} periferijos \glsdisp{pad}{išvadų} reikšmes. Tai yra \gls{tlm} transakcijos elementas, skirtas \gls{gpio} periferijai.
+	\item \texttt{GpioAgent}: \gls{uvm} komponentas, kuris sujungia visus komponentus, reikalingus \gls{gpio} transakcijoms valdyti. Sukuria \texttt{GpioDriver}, \texttt{GpioMonitor}, \texttt{GpioSequencer} \gls{uvm} komponentų egzempliorius, sujungia sekų valdytoją \texttt{GpioSequencer} su tvarkytuve \texttt{GpioDriver}, atveria monitoriaus portą išoriniams komponentams ir perduoda iš \gls{uvm} aplinkos \texttt{GpioEnv} gautą konfigūraciją \texttt{GpioConfig} sukurtiems egzemplioriams.
+	\item \texttt{GpioConfig}: konfigūracijos \gls{uvm} objektas, kuriame yra surašyti konfigūraciniai duomenys, tokie kaip komponentų įjungimas išjungimas (pvz. įjungtas tik monitorius, tvarkyklė nevykdo sekų tvarkyklės siunčiamus elementus), numatytoji kaukės reikšmė. Visi \gls{gpio} periferijos \gls{uvm} komponentai dalinasi ta pačia konfigūracija, per ją, komponentai taip pat naudojasi pateikta \texttt{GpioInterface} sąsaja.
+\end{itemize}
 
 
 

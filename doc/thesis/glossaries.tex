@@ -60,6 +60,10 @@
 
 \newacronym[eng={Transaction Level Modeling}]{tlm}{TLM}{transakcijų lygio modeliavimas}
 
+\newacronym[eng={Serial Peripheral Interface}]{spi}{SPI}{serijinė periferinė sąsaja}
+
+\newacronym[eng={Inter-Integrated Circuit}]{i2c}{I2C}{sinchroninis dviejų laidų nuosekliojo ryšio protokolas}
+
 \newglossaryentry{container}{
 	name={konteineris},
 	eng={container},
@@ -196,6 +200,18 @@
 	name={Konteinerio atvaizdas},
 	eng={container image},
 	description={vykdomasis failas, naudojamas konteineriui sukurti. Šiame konteinerių atvaizde yra visos bibliotekos, priklausomybės, specifinės konfigūracijos ir failai, reikalingi konteineriui veikti \cite{docker_docs}}
+}
+
+\newglossaryentry{pad}{
+	name={Išvadas, išvadai},
+	eng={pad},
+	description={veikia kaip mikrovaldiklio arba integrinio grandyno \gls{soc} „vartai“, leidžiantys sąveikauti su išoriniais komponentais, todėl kontaktas gali veikti kaip įvestis (pvz., jutiklio rodmenų nuskaitymas), išvestis (pvz., šviesos diodo valdymas) arba būti naudojamas specializuotiems ryšio protokolams kaip \gls{spi}, \gls{i2c}}
+}
+
+\newglossaryentry{clock}{
+	name={sinchronizacijos signalas},
+	eng={system clock},
+	description={signalas, reikalingas \gls{soc} sinchronizacijai}
 }
 
 \makeglossaries

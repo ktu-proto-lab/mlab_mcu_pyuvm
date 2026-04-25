@@ -1,8 +1,22 @@
 \centersection{Priedai}
 
 \appendix
-\renewcommand{\thesection}{\arabic{section}}
+% section numbering "Priedas 1", "Priedas 2"
+\renewcommand{\thesection}{Priedas \arabic{section}}
+% a dot after the section number in the main text (Priedas 1.)
+\sectiondot{section}
+% remove bold formatting from the appendix section titles in the ToC
+\addtocontents{toc}{\protect\renewcommand{\protect\cftsecfont}{\normalfont}}
+% remove bold formatting from the page numbers in the ToC
+\addtocontents{toc}{\protect\renewcommand{\protect\cftsecpagefont}{\normalfont}}
+% increase the spacing for the section numbers in the ToC 
+%    so the word "Priedas 1. " fits without overlapping the title text
+\addtocontents{toc}{\protect\setlength{\protect\cftsecnumwidth}{6em}}
 
-\section{Priedo pavadinimas}
+\section{Pilna \gls{uvm} \glsdisp{verification}{verifikacijos} posistemės \gls{uml} klasių diagrama}
 
-\section{Antras priedas}
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uvm_class_tb_full.svg}
+	\caption{\gls{uvm} testų paketo \texttt{tb} pilna \gls{uml} klasių diagrama}
+	\label{fig:uml_class_tb_full}
+\end{figure}
