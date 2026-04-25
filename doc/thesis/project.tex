@@ -280,13 +280,23 @@ Projektas sudarytas iš šių esminių paketų:
 
 Bendram vaizdui, prieduose yra pateikta pilna \glsdisp{verification}{verifikacijos} \gls{uvm} objektų ir komponentų, \textit{PyVSC} atsitiktinių klasių ir pačių \textit{Python} \gls{uml} klasių diagrama \pav{\ref{fig:uml_class_tb_full}}. Žemiau yra detaliai aptariama ir atvaizduojama sistemos vidinės klasės, ryšiai tarp jų ir paskirtis.
 
+\gls{dut} virtuali \gls{mcu} sąsaja yra \textit{Python} klasė, kuri naudoja \textit{Cocotb} bibliotekos \texttt{SimHandleBase} \glsdisp{handler}{doroklę}, jog sujungtų imituojamo \gls{mcu} modulio signalus ir padarytų prieinamus \textit{PyUVM} komponentams ir objektams \pav{\ref{fig:uml_component_vif}}.
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_component_vif.svg}
+	\caption{MCU virtualios sąsajos sujungimo su imituojamu MCU \textit{SystemVerilog} moduliu per \textit{Cocotb} sąsają UML komponentų diagrama}
+	\label{fig:uml_component_vif}
+\end{figure}
+
+Virtualios sąsajos paskirtis yra sujungti signalus \gls{dut}, tai yra paprasčiausia sąsaja, vadinama virtualia, nes tai yra kilusi iš \textit{SystemVerilog}, nes ji veikia kaip nuoroda (arba identifikatorius) į fizinę, statinę \textit{SystemVerilog} sąsają. Tai būtina, nes UVM komponentai yra dinaminės klasės, kurios negali tiesiogiai kurti statinių sąsajų egzempliorių. Tai leidžia klasėms, tokioms kaip tvarkyklėms, monitoriams, dinamiškai nurodyti įvairius fizinių sąsajų egzempliorius ir jais valdyti \cite{easier-uvm}. Šiuo atveju, \texttt{McuVirtualInterface} yra paprasta \textit{Python} klasė, kuri naudoja \textit{Cocotb} \texttt{SimHandleBase} \glsdisp{handler}{doroklė}, kuri veikia kaip sąsaja su imituojamu \gls{dut} \texttt{mcu} \glsdisp{module}{moduliu}, parašytu \textit{SystemVerilog}. Dėka \gls{vpi} sąsajos, \textit{Cocotb} komunikuoja su \glsdisp{simulator}{imituokle}, kaip \textit{Verilator}, šitaip suteikdama galimybę skaityti ir rašyti reikšmes į MCU prievadus. Šią virtualią sąsają sukuria bazinis \texttt{McuTest} testo klasė, kuri vėliau prijungia virtualią sąsają su periferijų sąsajom: \texttt{GpioInterface} \pav{\ref{fig:uml_class_tb_uvc_gpio}}, \texttt{UartInterface} \pav{\ref{fig:uml_class_tb_uvc_uart}}, šitaip suteikdama prieigą UVC komponentams komunikuoti su DUT.
+
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_class_tb_uvc_gpio.svg}
-	\caption{\gls{gpio} \gls{uvc} klasių diagrama}
+	\caption{GPIO UVC UML klasių diagrama}
 	\label{fig:uml_class_tb_uvc_gpio}
 \end{figure}
 
-\gls{uvc} klasės, atsakingos už \gls{gpio} \glsdisp{peripheral}{periferiją} \pav{\ref{fig:uml_class_tb_uvc_gpio}}:
+\gls{uvc} klasės ir komponentai, atsakingi už \gls{gpio} \glsdisp{peripheral}{periferiją} \pav{\ref{fig:uml_class_tb_uvc_gpio}}:
 
 \begin{itemize}
 	\item \texttt{GpioInterface}: sąsaja su virtualia \gls{dut} \gls{mcu} sąsaja, veikia kaip tarpininkas tarp \gls{gpio} tvarkytuvės \texttt{GpioDriver} ir monitoriaus \texttt{GpioDriver}. Sąsaja sujungia naudojamus signalus \gls{gpio} periferijos (klasės laukai) ir bazines operacijas (klasės metodai), tokie, kaip reikšmių nuskaitymas ir įrašymas (\texttt{drive\_input()}, \texttt{read\_pins()}).
@@ -298,6 +308,24 @@ Bendram vaizdui, prieduose yra pateikta pilna \glsdisp{verification}{verifikacij
 	\item \texttt{GpioConfig}: konfigūracijos \gls{uvm} objektas, kuriame yra surašyti konfigūraciniai duomenys, tokie kaip komponentų įjungimas išjungimas (pvz. įjungtas tik monitorius, tvarkyklė nevykdo sekų tvarkyklės siunčiamus elementus), numatytoji kaukės reikšmė. Visi \gls{gpio} periferijos \gls{uvm} komponentai dalinasi ta pačia konfigūracija, per ją, komponentai taip pat naudojasi pateikta \texttt{GpioInterface} sąsaja.
 \end{itemize}
 
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_class_tb_uvc_uart.svg}
+	\caption{UART UVC UML klasių diagrama}
+	\label{fig:uml_class_tb_uvc_uart}
+\end{figure}
 
+\gls{uvc} klasės ir komponentai, atsakingi už \gls{uart} \glsdisp{peripheral}{periferiją} \pav{\ref{fig:uml_class_tb_uvc_uart}}, struktūra yra identiška GPIO UVC \pav{\ref{fig:uml_class_tb_uvc_gpio}}, tad čia pabrėžiami tik skirtumai ir kertiniai funkcionalumai, jog būtų išvengta pasikartojimo:
+
+\begin{itemize}
+	\item \texttt{UartInterface}: UART periferijos sąsaja, per \texttt{map()} metodą yra prijungiama prie \texttt{McuVirtualInterface} MCU virtualios sąsajos. Suteikia valdymą dvejoms UART linijoms \texttt{rx} ir \texttt{tx}, taip pat metodus, kurių pagalba tvarkyklės ir monitoriaus UVM komponentai gali skaityti ir rašyti į vieną ar kitą UART liniją po baitą.
+	\item \texttt{UartDriver}: tvarkyklė, rašo gaunamus baitus iš sekų valdyto \texttt{UartSequencer} per UART sąsajos \texttt{rx} liniją \texttt{UartByte} sekos elemento \texttt{state} lauko reikšmę.
+	\item \texttt{UartMonitor}: skaito gaunamus baitus iš UART sąsajos \texttt{tx} ir siunčiamus baitus per UART \texttt{rx} linijas, gavus baitą, suformuoja \texttt{UartByte} elementą ir transliuoja per savo analizės portą \texttt{ap}.
+	\item \texttt{UartSequencer}: gautą sekos elementą perduoda UART tvarkyklei \texttt{UartDriver}.
+	\item \texttt{UartAgent}: sukuria ir sujungia visus komponentus, perduoda konfigūraciją.
+	\item \texttt{UartConfig}: UART periferijos agento konfigūracija, kol kas turinti tik įjungimo ir išjungimo pasirinkimą \texttt{active}.
+	\item \texttt{UartByte}: vieno baito UART periferijos transakcija, verčiasi į \gls{ascii} simbolius, nes UART sekos beveik visada susidaro iš teksto.
+\end{itemize}
+
+GPIO ir UART periferijų posistemių klasės savo struktūrą yra beveik identiškos, tai yra būtent todėl, nes kodas yra parašytas naudojant \textit{PyUVM} biblioteką, kuri beveik pilnai realizuoja \gls{uvm} standartą\footnote{\textit{PyUVM} beveik pilnai realizuoja IEEE 1800.2 standartą, bet yra tam tikrų funkcijų, bei kai kurių klasių, kaip UVM Memory, kurios nėra realizuotos, užtat galima jas replikuoti naudojant \gls{oop} metodiką su \textit{Python} klasėm \cite{pyuvm}.}.
 
 \subsubsection{Dinaminis sistemos vaizdas}
