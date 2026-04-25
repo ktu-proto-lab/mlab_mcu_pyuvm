@@ -19,6 +19,11 @@ class GpioMonitor(uvm_monitor):
             raise ConfigTestError("no provided configuration for gpio monitor")
 
         self.cfg = ConfigDB().get(self, "", "cfg")
+        
+        if not isinstance(self.cfg, GpioConfig):
+            raise ConfigTestError(
+                f"invalid configuration type for gpio monitor, expected GpioConfig, got {type(self.cfg).__name__}"
+            )
 
         self.vif = self.cfg.vif
 
