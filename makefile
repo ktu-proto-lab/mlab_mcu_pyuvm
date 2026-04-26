@@ -71,6 +71,7 @@ else
 endif
 
 # make image <verilator|xcelium> [purge]
+# TODO: check if podman has rootless permissions before building or purging images, and provide instructions to the user if not
 SIMULATOR := $(word 1, $(ARGS))
 IMAGE_ACTION_OPTION := $(word 2, $(ARGS))
 IMAGE_ACTION_OPTION_PURGE := purge
