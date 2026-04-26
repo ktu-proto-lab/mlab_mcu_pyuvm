@@ -3,3 +3,57 @@
 \newcommand{\lent}[1]{(\textbf{#1 lentelė})}
 \newcommand{\noterequirement}[1]{\todo[inline, color=lightgray!40]{#1}}
 \newcommand{\noteblue}[1]{\todo[color=blue!20]{#1}}
+
+% ==========================================
+% USE CASE TABLE
+% ==========================================
+\makeatletter
+\define@key{usecase}{name}{\def\ucName{#1}}
+\define@key{usecase}{goal}{\def\ucGoal{#1}}
+\define@key{usecase}{description}{\def\ucDesc{#1}}
+\define@key{usecase}{conditionbefore}{\def\ucCondBefore{#1}}
+\define@key{usecase}{actors}{\def\ucActors{#1}}
+\define@key{usecase}{extend}{\def\ucExtend{#1}}
+\define@key{usecase}{include}{\def\ucInclude{#1}}
+\define@key{usecase}{specialize}{\def\ucSpecialize{#1}}
+\define@key{usecase}{conditionafter}{\def\ucCondAfter{#1}}
+\define@key{usecase}{caption}{\def\ucCaption{#1}}
+\define@key{usecase}{label}{\def\ucLabel{#1}}
+\makeatother
+
+\newcommand{\usecase}[1]{
+	\def\ucName{-}
+	\def\ucGoal{-}
+	\def\ucDesc{-}
+	\def\ucCondBefore{-}
+	\def\ucActors{-}
+	\def\ucExtend{-}
+	\def\ucInclude{-}
+	\def\ucSpecialize{-}
+	\def\ucCondAfter{-}
+	\def\ucCaption{Panaudojimo atvejo specifikacija}
+	\def\ucLabel{}
+	
+	\setkeys{usecase}{#1}
+	
+	\begin{table}[H]
+		\centering
+		\expandafter\caption\expandafter{\ucCaption}
+		\ifx\ucLabel\empty\else\label{\ucLabel}\fi
+		
+		\renewcommand{\arraystretch}{1.4}
+		\noindent
+		\begin{tabularx}{\textwidth}{|p{4.5cm}|p{3.5cm}|X|}
+			\hline
+			\multicolumn{3}{|p{\dimexpr\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{\textbf{PA.} \ucName} \\ \hline
+			\multicolumn{3}{|p{\dimexpr\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{\textbf{Tikslas.} \ucGoal} \\ \hline
+			\multicolumn{3}{|p{\dimexpr\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{\textbf{Aprašymas.} \ucDesc} \\ \hline
+			\multicolumn{2}{|l|}{\textbf{Prieš sąlyga}} & \ucCondBefore \\ \hline
+			\multicolumn{2}{|l|}{\textbf{Aktoriai}} & \ucActors \\ \hline
+			\multirow{3}{4.5cm}{\textbf{Susiję panaudojimo atvejai}} & \textbf{Išplečiantys PA} & \ucExtend \\ \cline{2-3}
+			& \textbf{Apimami PA} & \ucInclude \\ \cline{2-3}
+			& \textbf{Specializuojami PA} & \ucSpecialize \\ \hline
+			\multicolumn{2}{|l|}{\textbf{Po sąlyga}} & \ucCondAfter \\ \hline
+		\end{tabularx}
+	\end{table}
+}

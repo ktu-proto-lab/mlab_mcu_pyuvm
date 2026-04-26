@@ -13,6 +13,28 @@ Pvz.: „Maisto perdavimu protokolas yra užsakytas Jungtinių Tautų, jį kuria
 
 \noterequirement{Čia būtų išvardinamos visos sistemos funkcijos (aprašomi funkciniai reikalavimai), pavaizduotos UML panaudojimo atvejų (PA) diagrama. Po kiekvienos iliustracijos turi būti papildomi kiekvienos funkcijos detalūs žodiniai aprašymai. Esminius PA vertėtų specifikuoti veiklos diagramomis arba PA specifikacijos lentele: atvejo pavadinimas, tikslas, aprašymas, prieš sąlyga, po sąlyga, susiję panaudojimo atvejai (include, extend), aktorius ir kt.}
 
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_use_case_cli.svg}
+	\caption{MCU CLI UML panaudojimo atvejų diagrama}
+	\label{fig:uml_use_case_cli}
+\end{figure}
+
+\usecase{
+	caption = {Panaudojimo atvejo „echo“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:echo},
+	name = {CLI \texttt{echo} komanda},
+	goal = {Grąžinti atgal pateiktą teksto eilutę},
+	description = {
+	Per CLI terminalą yra įrašoma komanda formatu \texttt{echo "<string>"}. Gautas tekstas tarp \texttt{""} kabučių yra grąžinamas atgal. Turi būti spausdinami visi ASCII simboliai tarp kabučių išskyrus pačias pradedančias ir užbaigiančias tekstą \texttt{"} kabutes. Pabaigoje teksto eilutės turi būti pridedamas \texttt{\textbackslash n} naujos eilutės ASCII simbolis, žymėdamas atkartojamos teksto eilutės pabaigą.\newline
+	Pavyzdys: \newline
+	\texttt{echo "testing string ? oo ' 728--"}\newline
+	\texttt{testing string ? oo ' 728--}
+	},
+	conditionbefore = {Nėra išspausdinto teksto terminale.},
+	actors = {tester},
+	conditionafter = {Yra atkartotas atspausdintas komandos tekstas terminalo naujoje eilutėje.}
+}
+
 \subsubsection{Vartotojo sąsajos specifikacija}
 \noterequirement{Naudotojo sąsajos specifikacijoje turi būti nurodomi reikalavimai naudotojo sąsajos vaizdai. Čia nereikia ir negalima dėti jau egzistuojančios programos screenshot‘ų! Šiame etape tik nusakoma, kokia turi būti naudotojo sąsaja (rekomenduojame Balsamiq, Axure RP, Figma ir panašius įrankius), tačiau galutinis sąsajos vaizdas nurodomas tik vėlesniuose skyriuose. Jei pradinėje kūrimo fazėje buvo naudojami naudotojo sąsajos eskizai ar prototipai, juos reikia dėti būtent į šį skyrelį}
 
