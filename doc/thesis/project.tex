@@ -43,7 +43,7 @@ $
 		\usebox{\cligreetcodebox}
 	},
 	conditionbefore = {Terminalinė aplinka yra tuščia},
-	actors = {tester},
+	actors = {user},
 	conditionafter = {Yra pateiktas trumpas informacinis tekstas apie MCU CLI programinę įrangą.}
 }
 
@@ -68,7 +68,7 @@ testing string ? oo ' 728--
 	\usebox{\clicmdechocodebox}
 	},
 	conditionbefore = {Nėra išspausdinto teksto terminale.},
-	actors = {tester},
+	actors = {user},
 	conditionafter = {Yra atkartotas atspausdintas komandos tekstas terminalo naujoje eilutėje.}
 }
 
@@ -98,7 +98,7 @@ $ help
 		\usebox{\clicmdhelpcodebox}
 	},
 	conditionbefore = {Nėra pateiktos sutrumpintos atmintinės terminale.},
-	actors = {tester},
+	actors = {user},
 	conditionafter = {Pateikta sutrumpinta CLI atmintinė ASCII simboliais terminale.}
 }
 
@@ -152,16 +152,51 @@ Buvo taikomas iteracinis programinės įrangos kūrimo modelis. Mažiau populiar
 	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
 		\hline
 		\thead[l]{Programavimo kalba} & \thead{Pasirinkimo priežastis} \\ \hline
-		\textit{Python} & Populiariausia programavimo kalba \cite{language-ratings-2026}, milžiniškas bibliotekų paketų pasirinkimas ir palaikoma beveik visose platformose. Projekte bus naudojama rašyti \gls{uvm} \gls{crv} testus. \\ \hline
-		\textit{C} & Žemiausio lygio kalba po asemblerio, beveik visų \gls{soc} dizainų suteikiama programinė įranga yra parašyta šia kalba, yra be galo daug kompiliatorių, kurie yra skirti įvairiausioms architektūrom, kartu ir \gls{risc}, kuriuo yra paremtas projekto \gls{mcu}. Ši programavimo kalba bus naudojama aprašyti \gls{dut} programinę įrangą. \\ \hline
-		\textit{Bash} & Plačiausiai palaikoma scenarijų rašymo kalba Unix tipo operacinėse sistemose. Kalba bus naudojama rašyti automatizavimo scenarijus. \\ \hline
-		\textit{GNU Make} & Projektų kompiliavimo, surinkimo ir automatizavimo scenarijų rašymo kalba, skirta didžiuliems projektams, \glsdisp{open-source}{atviros prieigos}, ilgalaikis šios rinkos standartas. Projekte bus naudojamas sudėtingiems automatinių valdomų scenarijams aprašyti. \\ \hline
-		\textit{SystemVerilog} & Kalba pririšta prie testuojamos sistemos projekto \gls{rtl} kalbos. Bus skirta \gls{soc} dizaino \gls{dut} modulio aprašymui. \\ \hline
-		\textit{Dockerfile} & Skirta \textit{Docker} atvaizdų kūrimui. Ji susideda iš nuoseklių nurodymų, kurie nurodo, kaip surinkti konteinerio \glsdisp{docker-image}{atvaizdą}. \\ \hline
-		\textit{YAML} & \textit{Docker Compose} naudoja YAML failą \texttt{docker-compose.yml}, kuriame apibrėžiamos paslaugos, tinklai ir taisyklės. Šiuo vienu failu galima valdyti keletą konteinerių vienu metu, kas yra labai aktualu šiam projektui. \\ \hline
-		 
+		Python & Populiariausia programavimo kalba \cite{language-ratings-2026}, milžiniškas bibliotekų paketų pasirinkimas ir palaikoma beveik visose platformose. Projekte bus naudojama rašyti \gls{uvm} \gls{crv} testus. \\ \hline
+		C & Žemiausio lygio kalba po asemblerio, beveik visų \gls{soc} dizainų suteikiama programinė įranga yra parašyta šia kalba, yra be galo daug kompiliatorių, kurie yra skirti įvairiausioms architektūrom, kartu ir \gls{risc}, kuriuo yra paremtas projekto \gls{mcu}. Ši programavimo kalba bus naudojama aprašyti \gls{dut} programinę įrangą. \\ \hline
+		Bash & Plačiausiai palaikoma scenarijų rašymo kalba Unix tipo operacinėse sistemose. Kalba bus naudojama rašyti automatizavimo scenarijus. \\ \hline
+		GNU Make & Projektų kompiliavimo, surinkimo ir automatizavimo scenarijų rašymo kalba, skirta didžiuliems projektams, \glsdisp{open-source}{atviros prieigos}, ilgalaikis šios rinkos standartas. Projekte bus naudojamas sudėtingiems automatinių valdomų scenarijams aprašyti. \\ \hline
+		SystemVerilog & Kalba pririšta prie testuojamos sistemos projekto \gls{rtl} kalbos. Bus skirta \gls{soc} dizaino \gls{dut} modulio aprašymui. \\ \hline
+		Dockerfile & Skirta \textit{Docker} atvaizdų kūrimui. Ji susideda iš nuoseklių nurodymų, kurie nurodo, kaip surinkti konteinerio \glsdisp{docker-image}{atvaizdą}. \\ \hline
+		YAML & \textit{Docker Compose} naudoja YAML failą \texttt{docker-compose.yml}, kuriame apibrėžiamos paslaugos, tinklai ir taisyklės. Šiuo vienu failu galima valdyti keletą konteinerių vienu metu, kas yra labai aktualu šiam projektui. \\ \hline	 
 	\end{tabularx}
 \end{table}
+
+Prie projekte naudotų kalbų \lent{\ref{tab:programming-languages}} buvo naudojama \textit{Markdown} ir \textit{LaTeX} projekto dokumentavimui\footnote[1]{Projekto kodo eilučių skaičiavime, dokumentavimo kalbomis aprašyti failai nėra įtraukiami.}.
+
+\begin{table}[H]
+	\caption{Projekto palaikomos \glsdisp{host-operating-system}{pagrindinės operacinės sistemos}}
+	\label{tab:project-os}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
+		\hline
+		\thead[l]{Operacinė sistema} & \thead{Pastabos} \\ \hline
+		GNU Linux\footnotemark[2] & Atviros prieigos Unix pagrindo operacinė sistema. \\ \hline
+		Kubuntu v25.04 & Ubuntu/Debian paremta Linux distribucija. \\ \hline
+		Debian 13 & Linux distribucija. \\ \hline
+		\label{rockylinux}Rocky Linux 8.1\footnotemark[3] & Red Hat Linux paremta distribucija. \\ \hline
+		MacOS & Apple kompanijos palaikoma Unix pagrindo operacinė sistema. \\ \hline
+		Windows 10/11 & Microsoft kompanijos palaikoma operacinė sistema. \\ \hline
+		Windows Subsystem for Linux & Microsoft Windows Linux posistemė (rekomenduotina), palaikoma ant Windows 10/11. \\ \hline
+	\end{tabularx}
+\end{table}
+\footnotetext[2]{Kadangi šios OS distribucijų yra labai daug, negarantuotas veikimas ant jų visų.}
+\footnotetext[3]{Projektas užtikrina darbą ir su įdiegtais \textit{Cadence} \gls{eda} įrankiais Rocky Linux operacinėje sistemoje.}
+
+Teoriškai, projektas su atviros prieigos įrankiais turėtų veikti bet kokioje operacinėje sistemoje ir architektūroje tol, kol pagrindinėje OS yra įdiegti \textit{GNU Make} ir \textit{Docker} \lent{\ref{tab:project-software-host}} įrankiai.
+
+\begin{table}[H]
+	\caption{\glsdisp{host-operating-system}{Pagrindinės operacinės sistemos} programinė įranga}
+	\label{tab:project-software-host}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
+		\hline
+		\thead[l]{Programinė įranga} & \thead{Paskirtis} \\ \hline
+		GNU Make v4.4 & Projekto valdymui ir automatizavimui. \\ \hline
+		Docker v29.4.0 & Konteinerių atvaizdų sukūrimui ir paleidimui. \\ \hline
+		tmux v3.5\label{tab:col:project-software-host-tmux} & Terminalo langų ir sesijų valdymo įrankis (neprivaloma). \\ \hline
+	\end{tabularx}
+\end{table}
+
+Reikia tik dvejų programinių įrankių pagrindinėje operacinėje sistemoje \lent{\ref{tab:project-software-host}}, jog būtų galima paleisti ir valdyti projektą. \hyperref[tab:col:project-software-host-tmux]{Trečiasis įrankis} nėra privalomas ir tik rekomenduojamas, jis tik palengvina darbą, suteikdamas terminalinės aplinkos keleto langų ir sesijų prieigą, palengvina projekto naudotojo darbą.
 
 \begin{table}[H]
 	\caption{Atviros prieigos įrankių konteinerio naudojama programinė įranga, įdiegta per \texttt{apt} paketų tvarkytuvę.}
@@ -177,28 +212,66 @@ Buvo taikomas iteracinis programinės įrangos kūrimo modelis. Mažiau populiar
 		GNU patch v2.7.6 & \texttt{patch} & Kodo pataisa. \\ \hline
 		Count Lines of Code v1.98 & \texttt{cloc}  & Eilučių skaičiavimas. \\ \hline
 		tree v2.1.1 & \texttt{tree} & Failų ir aplankalų išdėstymo atvaizdavimas terminale. \\ \hline
-		X11 utilities v7.7 & \texttt{x11-utils} & GUI įranga, reikalinga GTKWave atvaizdavimui. \\ \hline
+		X11 utilities v1.8.7 & \texttt{x11-utils} & GUI įranga, reikalinga GTKWave atvaizdavimui. \\ \hline
 		GNU GCC RISC-V Compiler v13.2.0& \texttt{gcc-riscv64-unknown-elf} & C kompiliatorius \gls{dut} programinės įrangos susirinkimui. \\ \hline
 	\end{tabularx}
 \end{table}
 
-% TODO (add)
 \begin{table}[H]
 	\caption{\textit{Cadence} licencijuoto serverio konteinerio programinė įranga, įdiegta per \texttt{dnf} paketų tvarkytuvę.}
 	\label{tab:project-software-rockylinux}
 	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|>{\raggedright\arraybackslash}X|}
 		\hline
 		\thead[l]{Programinė įranga} & \thead{Paketo pavadinimas} & \thead{Paskirtis} \\ \hline
+		Rocky Linux release 8.10 (Green Obsidian) & \texttt{rockylinux} & Konteinerio operacinė sistema. \\ \hline
+		Python v3.12.12 & \texttt{python3.12 python3.12-devel} & Python interpretatorius ir bibliotekos. \\ \hline
+		GCC RISC-V v12.1.1 20220507 (Red Hat Cross 12.1.1-2) & \texttt{gcc-riscv64-linux-gnu} & RISC-V kompiliatorius MCU programinei įrangai surinkti. \\ \hline
+		GNU libc v2.28 & \texttt{glibc.i686 glibc-devel.i686} & C bibliotekos \textit{Xcelium} sintezuoti \gls{v/sv} kodą. \\ \hline
+		X11 utilities v1.6.8 & \texttt{libX11 libXext libXft libXrender} & GUI įranga, reikalinga \textit{Cadence} \textit{SimVision}. \\ \hline
+		GNU patch v2.7.6 & \texttt{patch} & Kodo pataisa. \\ \hline
 	\end{tabularx}
 \end{table}
 
-% TODO (add)
+Projektas užtikrina darbą su komerciniais \textit{Cadence} EDA įrankiais \lent{\ref{tab:project-software-rockylinux}} tik su \hyperref[rockylinux]{Rocky Linux 8.1} pagrindine operacine sistema.
+
+
+\begin{table}[H]
+	\caption{Projekto \textit{Python} virtualios aplinkos naudojami paketai.}
+	\label{tab:project-software-python-packages}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{5cm}|X|}
+		\hline
+		\thead[l]{Paketas} & \thead{Paskirtis} \\ \hline
+		\texttt{cocotb==1.9.2} & Skaitmeninės aparatinės įrangos\gls{dut}verifikavimo (testavimo) karkasas, leidžiantis rašyti testus \textit{Python} kalba. \\ \hline
+		\texttt{cocotb-coverage==1.2.0} & \textit{cocotb} plėtinys, skirtas testavimo aprėpties duomenims rinkti ir analizuoti. \\ \hline
+		\texttt{constrainedrandom==1.1.2} & Biblioteka, skirta\gls{crv}kintamųjų ir stimulų generavimui. \\ \hline
+		\texttt{pytest==8.3.5} & Testavimo karkasas, skirtas \textit{cocotb} ir kitų testų paleidimui, valdymui ir ataskaitų generavimui. \\ \hline
+		\texttt{pyucis-viewer==0.0.4.*} & Įrankis, skirtas\gls{ucis}formato aprėpties ataskaitoms peržiūrėti. \\ \hline
+		\texttt{pyuvm==3.0.0} & UVM realizacija \textit{Python} kalboje, skirta struktūrizuotų testų rašymui. \\ \hline
+		\texttt{pyvsc==0.9.4.*} & Biblioteka, skirta\gls{vsc}modeliavimui. \\ \hline
+	\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+	\caption{Projekto eigos valdymo įranga.}
+	\label{tab:project-management-software}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
+		\hline
+		\thead[l]{Programinė įranga} & \thead{Paskirtis} \\ \hline
+		\href{https://kanboard.org/}{Kanboard} & Vizuali „Kanban“ projekto darbų valdymo programa. \\ \hline
+		\href{https://github.com/}{GitHub} & Projekto kodui viešinti ir saugoti. \\ \hline
+		\href{https://git-scm.com/}{Git} & Projekto kodo versijavimui ir valdymui. \\ \hline
+	\end{tabularx}
+\end{table}
+
 \begin{table}[H]
 	\caption{Projekto dokumentavimo įranga.}
 	\label{tab:project-software-docs}
-	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|>{\raggedright\arraybackslash}X|}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{8cm}|X|}
 		\hline
-		\thead[l]{Programinė įranga} & \thead{Paketo pavadinimas} & \thead{Paskirtis} \\ \hline
+		\thead[l]{Programinė įranga} & \thead{Paskirtis} \\ \hline
+		TeX Live 2025 & Ataskaitai aprašyti. \\ \hline
+		CATIA | Magic Systems of Systems Architect 2024x & UML diagramų braižymui. \\ \hline
+		Microsoft Power Point & Pristatymų skaidrėms ir diagramų braižymui. \\ \hline
 	\end{tabularx}
 \end{table}
 
