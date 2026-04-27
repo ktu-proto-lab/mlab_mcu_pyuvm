@@ -13,6 +13,7 @@ Pvz.: „Maisto perdavimo protokolas (Food Transfer Protocol) – tai sistema, k
 % --- CONTENT
 \gls{risc} architektūros \glsdisp{microprocessor}{mikrovaldiklio} \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasas} -- tai testavimo aplinkos, jos valdymo ir automatizavimo, kuriamos ir testuojamos architektūros automatizuotas \glsdisp{verification}{verifikavimas} ir naujų testų rašymo bei jų \glsdisp{simulation}{imitavimo}, projekto \glsdisp{plugin}{įskiepis}, nepriklausomas nuo \glsdisp{host-operating-system}{pagrindinės operacinės sistemos}. \Glsdisp{framework}{Karkasas} atveria galimybę dirbti su skirtingais \glsdisp{simulator}{imitatoriais}: su \textit{Veripool Verilator} \glsdisp{simulator}{imituokle} suteikiama galimybė naudoti bet kokioje \glsdisp{host-operating-system}{pagrindinės operacinės sistemos} aplinkose ir su \textit{Cadence Xcelium} \glsdisp{simulator}{imituokle} dirbti licencijuotame serveryje, suteikiant pilną \glsdisp{container}{konteinerizuotą} aplinką, kurioje yra visi projekto \glsdisp{verification}{verifikavimui} reikalingi programiniai įrankiai. Automatizuoti \textit{GNU Make} ir \textit{Bash} skriptų scenarijai pasirūpina visu reikalingu projekto ir \glsdisp{verification}{verifikavimo} \glsdisp{plugin}{įskiepio} konfigūravimu ir valdymu. Aprašyti \textit{Python} \gls{uvm} komponentai ir \gls{uvc} naudojami \gls{soc} dizaino testavimui. Kartu, minėti paketai ir jų aprašyti komponentai gali būti pernaudojami rašant naujus \gls{soc} dizaino testus, kurie naudoja modernius \textit{Python} programavimo kalbos funkcionalumus, paketus, ir \glsdisp{open-source}{atviros prieigos} įrankius. \Glsdisp{framework}{Karkasas} yra \glsdisp{open-source}{atviros prieigos} alternatyva \textit{SystemVerilog} \gls{uvm} \glsdisp{verification}{verifikavimo} testų rašymui ir komercinių \gls{eda} įrankių \glsdisp{simulator}{imituoklių} naudojimui \glsdisp{verification}{verifikacijos} eigos procese.
 
+\newpage
 \subsubsection{Bendras veiklos tikslas}
 
 % --- REQUIREMENT
@@ -30,6 +31,7 @@ Pagrindiniai veiklos tikslai:
 	\item Dokumentuoti kūrimo procesą ir jo sprendimus, jog būtų galima prisidėti prie \glsdisp{open-source}{atviros prieigos} įrankių pritaikymo tiek pačiame projekte, tiek skatinti, ir suteikti žinias juos taikyti kituose sudėtingesniuose \gls{soc} dizaino akademiniuose projektuose.
 \end{enumerate}
 
+\newpage
 \subsubsection{Sistemos pagrįstumas}
 
 % --- REQUIREMENT
@@ -39,17 +41,35 @@ Pvz.: „Egzistuoja daug naudotojų, kurie negali arba tiesiog nenori eiti į pa
 }
 
 % --- CONTENT
-Didėjant \gls{soc} dizaino projekto apimčiai ėmė sudėtingėti funkcionalumą \glsdisp{verification}{verifikuojančių} testų rašymas bei atsirado poreikis automatizuotam testų leidimui ir valdymui. Paprastam \gls{rtl} dizainui užtenka ir \glsdisp{signal-level-testbench}{signalų lygio testavimo stendų} aprašymų SystemVerilog kalba. Didėjant \gls{soc} dizaino architektūros apimčiai atsirado poreikis testuoti ne vien aparatinės įrangos funkcionalumą signalų, bet ir programiniame lygyje palaikomų protokolų. Pavyzdžiui: teksto eilučių siuntimas į ir iš \gls{dut}, komandų apdorojimo \gls{cli}, \gls{dut} būsenos testavimo. \noteblue{UVM sekos}
+Didėjant \gls{soc} dizaino projekto apimčiai \lent{\ref{fig:mlab_mcu_architecture}} ėmė sudėtingėti funkcionalumą \glsdisp{verification}{verifikuojančių} testų rašymas bei atsirado poreikis automatizuotam testų leidimui ir valdymui. Paprastam \gls{rtl} dizainui užtenka ir \glsdisp{signal-level-testbench}{signalų lygio testavimo stendų} aprašymų SystemVerilog kalba. Didėjant \gls{soc} dizaino architektūros apimčiai atsirado poreikis testuoti ne vien aparatinės įrangos funkcionalumą signalų, bet ir programiniame lygyje palaikomų protokolų. Pavyzdžiui: teksto eilučių siuntimas į ir iš \gls{dut}, komandų apdorojimo \gls{cli}, \gls{dut} būsenos testavimo.
 
-Ėmė sudėtingėti patys testai, nemažai kodo pradėjo kartotis tarp skirtingą funkcionalumą \glsdisp{verification}{verifikuojančių} testų. Tai apriboja testo rašymo sudėtingumą, nes perteikiant aukštesnės abstrakcijos elgseną signalų lygyje, lygiagrečiame \gls{hdl} kode, tampa sudėtinga. Testų rašymo metu pradėta susidurti su problemom, kurios nėra susijusios su pačio testo specifika, o \gls{hdl} kodo prigimtimi ir elgsena. Tai pradėjo kenkti produktyviam pačių testų rašymui. \noteblue{UVM ir OOP}
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/mlab_mcu_architecture.png}
+	\caption{Testuojamo SoC dizaino architektūra}
+	\label{fig:mlab_mcu_architecture}
+\end{figure}
 
-Archajiška sudėtingėjančių signalų lygio testų architektūra ir kodas pradėjo kelti rimtų problemų naujų žmonių, norinčių įsitraukti į dizaino kūrimą, apmokymui bei jau prie jo dirbančių darbuotojų žinios tapo vis labiau siauresnės berašant testus. Pradėjo kartotis problemos tarp skirtingų testų, kurių sprendimai -- unikalūs kiekvienam testui, priklausant nuo jo rašančio žmogaus. Atsirado poreikis aiškiam ir vieningam testų rašymo protokolui, tam, kad skirtingi darbuotojai galėtų dirbti su kitų kolegų parašytu testų kodu, kuris laikosi bendrų protokolo standartų, ir taisyklių. \noteblue{UVM}
+Ėmė sudėtingėti patys testai, nemažai kodo pradėjo kartotis tarp skirtingą funkcionalumą \glsdisp{verification}{verifikuojančių} testų \lent{\ref{fig:mlab_mcu_testbench}}. Tai apsunkina testo rašymą, nes perteikiant aukštesnės abstrakcijos elgseną signalų lygyje, lygiagrečiame \gls{hdl} kode, tampa sudėtinga. Testų rašymo metu pradėta susidurti su problemom, kurios nėra susijusios su pačio testo specifika, o \gls{hdl} kodo prigimtimi ir elgsena. Tai pradėjo kenkti produktyviam pačių testų rašymui.
 
-Plečiant dizainą dažnai sutrinka prieš tai puikiai veikusios sistemos dalys, atsirado poreikis \glsdisp{regression-testing}{regresiniams testams} ir jų automatizavimui. Atliekant dizaino \glsdisp{sythesis}{sintezę} ir \glsdisp{place-and-route}{PnR} pradėjo užtrukti vis daugiau laiko, klaidos dizaine aptikimas tapo vis ilgesnis. Šią problemą pradžioje išsprendė paprastų \textit{Bash} skriptų automatizacijos scenarijų rašymas, bet su laiku sistema pradėjo sudėtingėti ir jos pradinė paskirtis nebegalėjo aprėpti vis sudėtingėjančių reikalavimų. \noteblue{Make}
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/mlab_mcu_testbench.png}
+	\caption{SoC dizaino signalų lygio testavimo stendo struktūra}
+	\label{fig:mlab_mcu_testbench}
+\end{figure}
 
-Komercinių \gls{eda} įrankių naudojimas \gls{soc} \glsdisp{simulation}{imitacijoms} yra didelis finansinis įsipareigojimas, nes šių įrankių licenzijos kainuoja tūkstančius \cite{cadence}. Mažėsni \gls{rtl} dizainai tiesiog neišnaudoja unikalių tokių įrankių galimybių, dabartinis \glsdisp{verification}{verifikuojamos} \gls{soc} dizainas palyginamai dar yra ne toks sudėtingas ir būtų galima plėtoti ir su primityvesniais \glsdisp{open-source}{atviros prieigos} nemokamais \gls{eda} įrankiais. \noteblue{open source}
+Archajiška signalų lygio testų architektūra ir kodas pradėjo kelti rimtų problemų naujų žmonių, norinčių įsitraukti į dizaino kūrimą, apmokymui bei jau prie jo dirbančių darbuotojų žinios tapo vis labiau siauresnės berašant testus. Pradėjo kartotis problemos tarp skirtingų testų, kurių sprendimai -- unikalūs kiekvienam testui, priklausant nuo jo rašančio žmogaus. Atsirado poreikis aiškiam ir vieningam testų rašymo protokolui, tam, kad skirtingi darbuotojai galėtų dirbti su kitų kolegų parašytu testų kodu, kuris laikosi bendrų protokolo standartų, ir taisyklių.
 
+Plečiant dizainą dažnai sutrinka prieš tai puikiai veikusios sistemos dalys, atsirado poreikis \glsdisp{regression-testing}{regresiniams testams} ir jų automatizavimui. Atliekant dizaino \glsdisp{sythesis}{sintezę} ir \glsdisp{place-and-route}{PnR} pradėjo užtrukti vis daugiau laiko, klaidos dizaine aptikimas tapo vis ilgesnis. Šią problemą pradžioje išsprendė paprastų \textit{Bash} skriptų automatizacijos scenarijų rašymas, bet su laiku sistema pradėjo sudėtingėti ir jos pradinė paskirtis nebegalėjo aprėpti vis sudėtingėjančių reikalavimų.
 
+Komercinių \gls{eda} įrankių naudojimas \lent{\ref{fig:modern-soc-design-verification-workflow}} \gls{soc} \glsdisp{simulation}{imitacijoms} yra didelis finansinis įsipareigojimas, nes šių įrankių licenzijos kainuoja tūkstančius \cite{cadence}. Mažėsni \gls{rtl} dizainai tiesiog neišnaudoja unikalių tokių įrankių galimybių, dabartinis \glsdisp{verification}{verifikuojamos} \gls{soc} dizainas palyginamai dar yra ne toks sudėtingas ir būtų galima plėtoti ir su primityvesniais \glsdisp{open-source}{atviros prieigos} nemokamais \gls{eda} įrankiais.
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/modern_soc_design_verification_flow.png}
+	\caption{Modernaus SoC dizaino verifikavimo eiga, naudojant EDA įrankius}
+	\label{fig:modern-soc-design-verification-workflow}
+\end{figure}
+
+\newpage
 \subsubsection{Konkurencija rinkoje}
 
 % --- REQUIREMENT
