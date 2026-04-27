@@ -9,7 +9,7 @@
 \noterequirement{Šiame skyrelyje nurodykite projekto užsakovą, projekto vykdytojus, aprašykite produkto naudotojus, detalizuokite projekto realizacijos laiko ir kainos apribojimus. Čia taip pat galima nurodyti verslo procesus ar logiką (pvz., UML veiklos diagramomis), jei šie yra netipiniai ar reikalaujantys papildomo paaiškinimo. 
 Pvz.: „Maisto perdavimu protokolas yra užsakytas Jungtinių Tautų, jį kuria 10 IT specialistų. Pagrindiniai maisto perdavimo protokolo naudotojai – Afrikos vaikai ir jų tėvai, tačiau sistema aktyviai naudosis ir paprasti namų naudotojai visame pasaulyje“.}
 
-\newpage
+
 
 \subsubsection{Sistemos funkcijos}
 
@@ -110,7 +110,7 @@ $ help
 	\label{fig:uml_use_case_mlab_mcu_uvm}
 \end{figure}
 
-\newpage
+
 \subsubsection{Vartotojo sąsajos specifikacija}
 \noterequirement{Naudotojo sąsajos specifikacijoje turi būti nurodomi reikalavimai naudotojo sąsajos vaizdai. Čia nereikia ir negalima dėti jau egzistuojančios programos screenshot‘ų! Šiame etape tik nusakoma, kokia turi būti naudotojo sąsaja (rekomenduojame Balsamiq, Axure RP, Figma ir panašius įrankius), tačiau galutinis sąsajos vaizdas nurodomas tik vėlesniuose skyriuose. Jei pradinėje kūrimo fazėje buvo naudojami naudotojo sąsajos eskizai ar prototipai, juos reikia dėti būtent į šį skyrelį}
 
@@ -140,7 +140,7 @@ Naudojant atviros prieigos įrankius, reikalinga operacinė sistema, kuri gali p
 
 Naudojant komercinius \textit{Cadence} EDA įrankius yra reikalinga Red Hat Linux pagrįsta operacinė sistema, kuri turi įdiegtus ir licencijuotus \textit{Cadence} EDA programinę įrangą, kurios versija yra 2024 arba naujesnė. Turi būti įdiegtas \textit{Podman} arba \textit{Docker} variklis bei \textit{GNU Make} programinė įranga. Apie 32GB operatyviosios atminties ir bent 7GB laisvos atminties kietąjame diske ir serverinio tipo procesorių bei prieiga prie interneto.
 
-\newpage
+
 \subsection{Projektavimo metodai}
 
 \subsubsection{Projektavimo valdymas ir eiga}
@@ -155,7 +155,7 @@ Naudojant komercinius \textit{Cadence} EDA įrankius yra reikalinga Red Hat Linu
 
 Buvo taikomas iteracinis programinės įrangos kūrimo modelis \lent{\ref{fig:uml_state_project_workflow}}. Mažiau populiari projekto specifika ir problematika bei asmeninės patirties stoka vertė rinktis iteracine filosofija pagrįstu projekto kūrimo valdymo. Naujos implementacijos iš pat pradžių yra demonstracinės, kur nesirūpinama pačios sistemos stabilumu ir palaikymo, o tiesiog paprastu reikalavimo funkcionalumo įgyvendinimui. Atlikus implementaciją, sistemos dalis yra paliekama ir keliaujama prie kitų reikalavimų implementavimo. Pasiekus tam tikra sistemos ar jos dalies reikalavimų pilnas realizavimas, grįžtama prie implementuotų dalių ir įvertinama ar priimtas sprendimas yra tinkamas, ar jį reikia keisti. Jei matoma, jog dabartinė realizacija yra nelanksti arba nebuvo numatytas tam tikras architektūrinis sprendimas, yra grįžtama prie pradinių reikalavimų. Atlikus papildomą paiešką susijusią su reikalavimų problematika, ieškoma jau atliktų panašių implementacijų \glsdisp{open-source}{atviros prieigos} projektuose, jei įmanoma jų rasti. Galiausiai, reikalavimai yra pataisomi, atsižvelgiant į naujas iškilusias prieš tai nenumatytas problemas ir yra toliau tęsiamas darbas. Toks kūrimo modelis reikalauja didelio kiekio kodo rašymo, implementacijos turi būti įgyvendinamos kuo greičiau, jog būtų patikrinta ar projekto reikalavimai įgyvendinta išsikeltus problemų sprendimus, jei taip, implementacija yra perrašoma, jog būtų patikima ir lengviau plečiama bei palaikoma. Šiuo metu jau yra parašytos 4 veikiančios projekto versijos, kiekviena iš jų pakankamai drastiškai skiriasi, bet iš kiekvienos versijos yra daug kodo, kuris buvo transformuojamas ir pritaikomas naujai, labiau išgrynintai projekto vizijai ir reikalavimams.
 
-\newpage
+
 
 \subsubsection{Projektavimo technologija}
 
@@ -293,7 +293,7 @@ Projektas užtikrina darbą su komerciniais \textit{Cadence} EDA įrankiais \len
 	\end{tabularx}
 \end{table}
 
-\newpage
+
 
 \subsection{Sistemos projektas}
 \noterequirement{Sistemos projektas – tai jūsų sistemos veikimo aprašymas. Tai dažniausiai nagrinėjama dokumento vieta (be išvadų) darbo peržiūros ir gynimo metu.}
