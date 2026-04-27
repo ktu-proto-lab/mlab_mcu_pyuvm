@@ -9,6 +9,8 @@
 \noterequirement{Šiame skyrelyje nurodykite projekto užsakovą, projekto vykdytojus, aprašykite produkto naudotojus, detalizuokite projekto realizacijos laiko ir kainos apribojimus. Čia taip pat galima nurodyti verslo procesus ar logiką (pvz., UML veiklos diagramomis), jei šie yra netipiniai ar reikalaujantys papildomo paaiškinimo. 
 Pvz.: „Maisto perdavimu protokolas yra užsakytas Jungtinių Tautų, jį kuria 10 IT specialistų. Pagrindiniai maisto perdavimo protokolo naudotojai – Afrikos vaikai ir jų tėvai, tačiau sistema aktyviai naudosis ir paprasti namų naudotojai visame pasaulyje“.}
 
+\newpage
+
 \subsubsection{Sistemos funkcijos}
 
 \noterequirement{Čia būtų išvardinamos visos sistemos funkcijos (aprašomi funkciniai reikalavimai), pavaizduotos UML panaudojimo atvejų (PA) diagrama. Po kiekvienos iliustracijos turi būti papildomi kiekvienos funkcijos detalūs žodiniai aprašymai. Esminius PA vertėtų specifikuoti veiklos diagramomis arba PA specifikacijos lentele: atvejo pavadinimas, tikslas, aprašymas, prieš sąlyga, po sąlyga, susiję panaudojimo atvejai (include, extend), aktorius ir kt.}
@@ -102,6 +104,13 @@ $ help
 	conditionafter = {Pateikta sutrumpinta CLI atmintinė ASCII simboliais terminale.}
 }
 
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_use_case_mlab_mcu_uvm.svg}
+	\caption{Verifikavimo karkaso valdymo panaudojimo atvejų diagrama}
+	\label{fig:uml_use_case_mlab_mcu_uvm}
+\end{figure}
+
+\newpage
 \subsubsection{Vartotojo sąsajos specifikacija}
 \noterequirement{Naudotojo sąsajos specifikacijoje turi būti nurodomi reikalavimai naudotojo sąsajos vaizdai. Čia nereikia ir negalima dėti jau egzistuojančios programos screenshot‘ų! Šiame etape tik nusakoma, kokia turi būti naudotojo sąsaja (rekomenduojame Balsamiq, Axure RP, Figma ir panašius įrankius), tačiau galutinis sąsajos vaizdas nurodomas tik vėlesniuose skyriuose. Jei pradinėje kūrimo fazėje buvo naudojami naudotojo sąsajos eskizai ar prototipai, juos reikia dėti būtent į šį skyrelį}
 
@@ -127,7 +136,7 @@ $ help
 Pvz.: „Maisto perdavimo protokolui realizuoti būtinas interneto ryšys, 1 kilolitro maisto ir gėrimų perdavimo linija, specializuotas šaldytuvas, namų kompiuteris“. }
 
 % --- CONTENT
-
+\newpage
 
 \subsection{Projektavimo metodai}
 
@@ -135,9 +144,15 @@ Pvz.: „Maisto perdavimo protokolui realizuoti būtinas interneto ryšys, 1 kil
 
 \noterequirement{Šiame punkte nurodykite, kokį programinės įrangos kūrimo modelį (ar modelius) naudojote kurdami savo sistemą. Tai gali būti krioklio, iteracinis, SCRUM ar kitas modelis. Galite nurodyti kaip suskirstėte darbus ir kokiu eiliškumu juos atlikote.}
 
-Buvo taikomas iteracinis programinės įrangos kūrimo modelis. Mažiau populiari projekto specifika ir problematika bei asmeninės patirties stoka vertė rinktis iteracine filosofija pagrįstu projekto kūrimo valdymo. Naujos implementacijos iš pat pradžių yra demonstracinės, kur nesirūpinama pačios sistemos stabilumu ir palaikymo, o tiesiog paprastu reikalavimo funkcionalumo įgyvendinimui. Atlikus implementaciją, sistemos dalis yra paliekama ir keliaujama prie kitų reikalavimų implementavimo. Galiausiai, kai pasiekiama tam tikra sistemos ar jos dalies reikalavimų pilnas realizavimas, grįžtama prie implementuotų dalių ir įvertinama ar priimtas sprendimas yra tinkamas, ar jį reikia keisti. Jei matoma, jog dabartinė realizacija yra nelanksti arba nebuvo numatytas tam tikras architektūrinis sprendimas, yra grįžtama prie pradinių reikalavimų. Atlikus papildomą paiešką susijusią su reikalavimų problematika, ieškoma jau atliktų panašių implementacijų \glsdisp{open-source}{atviros prieigos} projektuose, jei įmanoma jų rasti. Galiausiai, reikalavimai yra pataisomi, atsižvelgiant į naujas iškilusias prieš tai nenumatytas problemas ir yra toliau tęsiamas darbas. Toks kūrimo modelis reikalauja didelio kiekio kodo rašymo, implementacijos turi būti įgyvendinamos kuo greičiau, jog būtų patikrinta ar projekto reikalavimai įgyvendinta išsikeltus problemų sprendimus, jei taip, implementacija yra perrašoma, jog būtų patikima ir lengviau plečiama bei palaikoma. Šiuo metu jau yra parašytos 4 veikiančios projekto versijos, kiekviena iš jų pakankamai drastiškai skiriasi, bet iš kiekvienos versijos yra daug kodo, kuris buvo transformuojamas ir pritaikomas naujai, labiau išgrynintai projekto vizijai ir reikalavimams.
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_state_project_workflow.svg}
+	\caption{Projekto valdymo ir eigos UML būsenų diagrama}
+	\label{fig:uml_state_project_workflow}
+\end{figure}
 
-% TODO (diagram)
+Buvo taikomas iteracinis programinės įrangos kūrimo modelis \lent{\ref{fig:uml_state_project_workflow}}. Mažiau populiari projekto specifika ir problematika bei asmeninės patirties stoka vertė rinktis iteracine filosofija pagrįstu projekto kūrimo valdymo. Naujos implementacijos iš pat pradžių yra demonstracinės, kur nesirūpinama pačios sistemos stabilumu ir palaikymo, o tiesiog paprastu reikalavimo funkcionalumo įgyvendinimui. Atlikus implementaciją, sistemos dalis yra paliekama ir keliaujama prie kitų reikalavimų implementavimo. Pasiekus tam tikra sistemos ar jos dalies reikalavimų pilnas realizavimas, grįžtama prie implementuotų dalių ir įvertinama ar priimtas sprendimas yra tinkamas, ar jį reikia keisti. Jei matoma, jog dabartinė realizacija yra nelanksti arba nebuvo numatytas tam tikras architektūrinis sprendimas, yra grįžtama prie pradinių reikalavimų. Atlikus papildomą paiešką susijusią su reikalavimų problematika, ieškoma jau atliktų panašių implementacijų \glsdisp{open-source}{atviros prieigos} projektuose, jei įmanoma jų rasti. Galiausiai, reikalavimai yra pataisomi, atsižvelgiant į naujas iškilusias prieš tai nenumatytas problemas ir yra toliau tęsiamas darbas. Toks kūrimo modelis reikalauja didelio kiekio kodo rašymo, implementacijos turi būti įgyvendinamos kuo greičiau, jog būtų patikrinta ar projekto reikalavimai įgyvendinta išsikeltus problemų sprendimus, jei taip, implementacija yra perrašoma, jog būtų patikima ir lengviau plečiama bei palaikoma. Šiuo metu jau yra parašytos 4 veikiančios projekto versijos, kiekviena iš jų pakankamai drastiškai skiriasi, bet iš kiekvienos versijos yra daug kodo, kuris buvo transformuojamas ir pritaikomas naujai, labiau išgrynintai projekto vizijai ir reikalavimams.
+
+\newpage
 
 \subsubsection{Projektavimo technologija}
 
@@ -162,7 +177,7 @@ Buvo taikomas iteracinis programinės įrangos kūrimo modelis. Mažiau populiar
 	\end{tabularx}
 \end{table}
 
-Prie projekte naudotų kalbų \lent{\ref{tab:programming-languages}} buvo naudojama \textit{Markdown} ir \textit{LaTeX} projekto dokumentavimui\footnote[1]{Projekto kodo eilučių skaičiavime, dokumentavimo kalbomis aprašyti failai nėra įtraukiami.}.
+Prie projekte naudotų kalbų \lent{\ref{tab:programming-languages}} buvo naudojama \textit{Markdown} ir \textit{LaTeX} projekto dokumentavimui\footnote{Projekto kodo eilučių skaičiavime, dokumentavimo kalbomis aprašyti failai nėra įtraukiami.}.
 
 \begin{table}[H]
 	\caption{Projekto palaikomos \glsdisp{host-operating-system}{pagrindinės operacinės sistemos}}
@@ -170,17 +185,17 @@ Prie projekte naudotų kalbų \lent{\ref{tab:programming-languages}} buvo naudoj
 	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
 		\hline
 		\thead[l]{Operacinė sistema} & \thead{Pastabos} \\ \hline
-		GNU Linux\footnotemark[2] & Atviros prieigos Unix pagrindo operacinė sistema. \\ \hline
+		GNU Linux\footnotemark[1] & Atviros prieigos Unix pagrindo operacinė sistema. \\ \hline
 		Kubuntu v25.04 & Ubuntu/Debian paremta Linux distribucija. \\ \hline
 		Debian 13 & Linux distribucija. \\ \hline
-		\label{rockylinux}Rocky Linux 8.1\footnotemark[3] & Red Hat Linux paremta distribucija. \\ \hline
+		\label{rockylinux}Rocky Linux 8.1\footnotemark[2] & Red Hat Linux paremta distribucija. \\ \hline
 		MacOS & Apple kompanijos palaikoma Unix pagrindo operacinė sistema. \\ \hline
 		Windows 10/11 & Microsoft kompanijos palaikoma operacinė sistema. \\ \hline
 		Windows Subsystem for Linux & Microsoft Windows Linux posistemė (rekomenduotina), palaikoma ant Windows 10/11. \\ \hline
 	\end{tabularx}
 \end{table}
-\footnotetext[2]{Kadangi šios OS distribucijų yra labai daug, negarantuotas veikimas ant jų visų.}
-\footnotetext[3]{Projektas užtikrina darbą ir su įdiegtais \textit{Cadence} \gls{eda} įrankiais Rocky Linux operacinėje sistemoje.}
+\footnotetext[1]{Kadangi šios OS distribucijų yra labai daug, negarantuotas veikimas ant jų visų.}
+\footnotetext[2]{Projektas užtikrina darbą ir su įdiegtais \textit{Cadence} \gls{eda} įrankiais Rocky Linux operacinėje sistemoje.}
 
 Teoriškai, projektas su atviros prieigos įrankiais turėtų veikti bet kokioje operacinėje sistemoje ir architektūroje tol, kol pagrindinėje OS yra įdiegti \textit{GNU Make} ir \textit{Docker} \lent{\ref{tab:project-software-host}} įrankiai.
 
@@ -274,6 +289,8 @@ Projektas užtikrina darbą su komerciniais \textit{Cadence} EDA įrankiais \len
 		Microsoft Power Point & Pristatymų skaidrėms ir diagramų braižymui. \\ \hline
 	\end{tabularx}
 \end{table}
+
+\newpage
 
 \subsection{Sistemos projektas}
 \noterequirement{Sistemos projektas – tai jūsų sistemos veikimo aprašymas. Tai dažniausiai nagrinėjama dokumento vieta (be išvadų) darbo peržiūros ir gynimo metu.}
