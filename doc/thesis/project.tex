@@ -19,20 +19,87 @@ Pvz.: „Maisto perdavimu protokolas yra užsakytas Jungtinių Tautų, jį kuria
 	\label{fig:uml_use_case_cli}
 \end{figure}
 
+\newsavebox{\cligreetcodebox}
+\begin{lrbox}{\cligreetcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+-------------------------------
+| mlab mcu cli v0.4.1         |
+| use 'help' to display usage |
+-------------------------------
+$
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo CLI „greet“ specifikacija},
+	label = {tab:usecase:cli:greet},
+	name = {\texttt{greet}},
+	goal = {Pateikti trumpą informaciją apie CLI},
+	description = {
+		Prisijungus prie CLI terminalo, pateikiamas tekstas, kuris veikia kaip pradinio sistemos veikimo patvirtinimas. Nurodoma kokia CLI versija yra įrašyta į testuojamą MCU ir pateikiama, jog galima naudoti \texttt{help} komandą \lent{\ref{tab:usecase:cli:help}}.\newline
+		Pavyzdys: \newline
+		\usebox{\cligreetcodebox}
+	},
+	conditionbefore = {Terminalinė aplinka yra tuščia},
+	actors = {tester},
+	conditionafter = {Yra pateiktas trumpas informacinis tekstas apie MCU CLI programinę įrangą.}
+}
+
+\newsavebox{\clicmdechocodebox}
+\begin{lrbox}{\clicmdechocodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ echo "testing string ? oo ' 728--"
+testing string ? oo ' 728--
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
 \usecase{
 	caption = {Panaudojimo atvejo „echo“ CLI komandos specifikacija},
 	label = {tab:usecase:cli:echo},
-	name = {CLI \texttt{echo} komanda},
+	name = {\texttt{echo}},
 	goal = {Grąžinti atgal pateiktą teksto eilutę},
 	description = {
 	Per CLI terminalą yra įrašoma komanda formatu \texttt{echo "<string>"}. Gautas tekstas tarp \texttt{""} kabučių yra grąžinamas atgal. Turi būti spausdinami visi ASCII simboliai tarp kabučių išskyrus pačias pradedančias ir užbaigiančias tekstą \texttt{"} kabutes. Pabaigoje teksto eilutės turi būti pridedamas \texttt{\textbackslash n} naujos eilutės ASCII simbolis, žymėdamas atkartojamos teksto eilutės pabaigą.\newline
 	Pavyzdys: \newline
-	\texttt{echo "testing string ? oo ' 728--"}\newline
-	\texttt{testing string ? oo ' 728--}
+	\usebox{\clicmdechocodebox}
 	},
 	conditionbefore = {Nėra išspausdinto teksto terminale.},
 	actors = {tester},
 	conditionafter = {Yra atkartotas atspausdintas komandos tekstas terminalo naujoje eilutėje.}
+}
+
+\newsavebox{\clicmdhelpcodebox}
+\begin{lrbox}{\clicmdhelpcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ help
+--------------------------------------
+| CLI v0.6.7.                        |
+--------------------------------------
+| mem <cksum | dump | read | write>  |
+| gpio <get | set | toggle> <pin>    |
+--------------------------------------
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „help“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:help},
+	name = {\texttt{help}},
+	goal = {Pateikti suglaustą CLI naudojimosi instrukciją},
+	description = {
+		Per CLI terminalą yra įrašoma komanda \texttt{help}. Grąžinamas ASCII simboliais aprašyta ir suformatuota glausta CLI komandų lentelė. Pabaigoje teksto eilutės turi būti pridedamas naujos eilutės \texttt{\textbackslash n} ASCII simbolis, žymėdamas .\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdhelpcodebox}
+	},
+	conditionbefore = {Nėra pateiktos sutrumpintos atmintinės terminale.},
+	actors = {tester},
+	conditionafter = {Pateikta sutrumpinta CLI atmintinė ASCII simboliais terminale.}
 }
 
 \subsubsection{Vartotojo sąsajos specifikacija}
