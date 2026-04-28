@@ -104,6 +104,166 @@ $ help
 	conditionafter = {Pateikta sutrumpinta CLI atmintinė ASCII simboliais terminale.}
 }
 
+\newsavebox{\clicmdmemcodebox}
+\begin{lrbox}{\clicmdmemcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ mem <read | write | dump | cksum | size>
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „mem“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:mem},
+	name = {\texttt{mem}},
+	goal = {Iškviesti atminties \glsdisp{subcommand}{pokomandę}, susijusią su atminties manipuliavimo veiksmais.},
+	description = { Komanda yra naudojama iškviesti atminties manipuliavimo pokomandes, kurių pagalba galima vykdyti su komandas, skirtas atminties manipuliavimui, valdymui ir duomenų gavimui. Pokomandžių skaitiniai argumentai ir grąžinamos reikšmės pateikiami šešioliktainiu formatu, su šešioliktainiu priešdėliu, mažųjų raidžių, ASCII simboliais. Grąžinamos pokomandžių klaidos turi unikalų klaidos numerį. Įvykdytos pokomandės atsakymo pabaiga žymima naujos eilutės \texttt{\textbackslash n} ASCII simboliu.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdmemcodebox}
+	},
+	extend = {\hyperref[tab:usecase:cli:mem:read]{\texttt{read}}, \texttt{write}, \texttt{dump}, \texttt{cksum}, \texttt{size}},
+	conditionbefore = {Negalima iškviesi su atminties komandų.},
+	actors = {user},
+	conditionafter = {Galima iškviesti atminties pokomandę.}
+}
+
+\newsavebox{\clicmdmemreadcodebox}
+\begin{lrbox}{\clicmdmemreadcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ mem read 0x90006780
+0x98a20c11
+$ mem read 0x07000ccf
+[  ERROR]: 119
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „mem-read“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:mem:read},
+	name = {\texttt{mem read <addr>}},
+	goal = {Grąžinti 32 bitų reikšmę, saugomame nurodytame 32 bitų adrese.},
+	description = {
+		Grąžinti 32 bitų reikšmę, saugomame nurodytame 32 bitų adrese, nurodytame \texttt{addr} argumente. Pateikus adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes, turi būti grąžinamas klaidos pranešimas, su unikaliu klaidos numeriu.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdmemreadcodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:mem]{\texttt{mem}} komanda.},
+	actors = {user},
+	conditionafter = {Grąžintas nurodytame atminties adrese laikoma reikšmė.}
+}
+
+\newsavebox{\clicmdmemwritecodebox}
+\begin{lrbox}{\clicmdmemwritecodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ mem write 0x9000ccf1 0xffff0000
+$ 0x96780000
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „mem-write“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:mem:write},
+	name = {\texttt{mem write <addr> <val>}},
+	goal = {Įrašyti į nurodytą atminties adresą pateiktą reikšmę ir gauti prieš tai buvusią reikšmę.},
+	description = {
+		Įrašyti pateiktą 32 bitų reikšmę į 32 bitų adresą ir grąžinti prieš tai buvusią įrašytą reikšmę. Komanda turi du argumentus. Argumentas \texttt{<addr>} nurodo adresą, į kurį įrašoma pateikta reikšmė. Argumentas \texttt{<val>} nurodo reikšmę, kuri turi būti įrašyta į prieš tai nurodytą adresą. Grąžinama reikšmė yra prieš įrašomą reikšmę į nurodytą adresą buvusi įrašyta reikšmė.. Pateikus adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes, turi būti grąžinamas klaidos pranešimas, su unikaliu klaidos numeriu.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdmemwritecodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:mem]{\texttt{mem}} komanda.},
+	actors = {user},
+	conditionafter = {Įrašyta nurodytą reikšmė į pateiktą adresą ir gauta prieš tai laikmenoje buvusi reikšmė.}
+}
+
+\newsavebox{\clicmdmemdumpcodebox}
+\begin{lrbox}{\clicmdmemdumpcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ mem dump 0x8000110c 0x4
+0x0 0x9873eedd 0x0 0x123 
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „mem-dump“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:mem:dump},
+	name = {\texttt{mem dump <addr> <wcnt>}},
+	goal = {Nuskaityti reikšmes nuo nurodyto adreso nurodytų žodžių kiekiu.},
+	description = {
+		Atspausdinamas nurodytas kiekis 32 bitų \glsdisp{word}{žodžių}, pradedant nuo nurodyto pradžios adreso. Komanda priima du argumentus. Pirmasis argumentas \texttt{<addr>} nurodo pradinį 32 bitų atminties adresą. Antrasis argumentas \texttt{<wcnt>} nurodo norimų nuskaityti 32 bitų atminties \glsdisp{word}{žodžių} reikšmių kiekį. Pateikus pradinio adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes arba žodžių kiekis nuo pradinio adreso perkopia adresų aibę, turi būti grąžinamas klaidos pranešimai, su unikaliais klaidos numeriais.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdmemdumpcodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:mem]{\texttt{mem}} komanda.},
+	actors = {user},
+	conditionafter = {Terminale atspausdintas ir tarpais atskirtas nurodytas kiekis atminties reikšmių, nuskaitant nuo nurodyto pradinio adreso.}
+}
+
+\newsavebox{\clicmdmemcksumcodebox}
+\begin{lrbox}{\clicmdmemcksumcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ mem cksum 0x8000110c 0x4
+0x9873effe
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „mem-cksum“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:mem:cksum},
+	name = {\texttt{mem cksum <addr> <wcnt>}},
+	goal = {Apskaičiuoti ir grąžinti nurodyto atminties bloko \glsdisp{checksum}{kontrolinę sumą}.},
+	description = {
+		Apskaičiuojama ir grąžinama nurodyto atminties bloko kontrolinė suma, gauta atliekant loginę \texttt{XOR} operaciją tarp visų bloke esančių 32 bitų \glsdisp{word}{žodžių}. Komanda priima du argumentus. Pirmasis argumentas \texttt{<addr>} nurodo pradinį 32 bitų atminties adresą. Antrasis argumentas \texttt{<wcnt>} nurodo 32 bitų atminties \glsdisp{word}{žodžių} kiekį, kuriam bus atliekamas skaičiavimas. Pateikus pradinio adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes arba žodžių kiekis nuo pradinio adreso perkopia adresų aibę, turi būti grąžinami klaidos pranešimai, su unikaliais klaidos numeriais.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdmemcksumcodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:mem]{\texttt{mem}} komanda.},
+	actors = {user},
+	conditionafter = {Terminale atspausdinta apskaičiuota atminties bloko kontrolinės sumos reikšmė šešioliktainiu formatu.}
+}
+
+\newsavebox{\clicmdmemsizecodebox}
+\begin{lrbox}{\clicmdmemsizecodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ mem size imem
+8192
+$ mem size ssd
+[  ERROR]: 120
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „mem-size“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:mem:size},
+	name = {\texttt{mem size <region>}},
+	goal = {Grąžinti nurodyto atminties regiono ar sekcijos dydį baitais.},
+	description = {
+		Komanda skirta gauti įvairių sistemos atminties regionų (pavyzdžiui, \texttt{imem}, \texttt{dmem}) ar sukompiliuotos programos sekcijų (\texttt{text}, \texttt{data}, \texttt{bss}, \texttt{stack} ir kt.) dydžius baitais. Priimamas vienas tekstinis argumentas \texttt{<region>}, nurodantis dominantį atminties regioną. Išvedamas rezultatas nurodo nuskaitomo regiono dydį baitais. Skirtingai nei kitose \texttt{mem} komandose, grąžinama dydžio reikšmė pateikiama dešimtainiu (angl. \textit{unsigned integer}) skaičiaus formatu. Pateikus nežinomą regiono pavadinimą, turi būti grąžinamas klaidos pranešimas, su unikaliu klaidos numeriu.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdmemsizecodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:mem]{\texttt{mem}} komanda.},
+	actors = {user},
+	conditionafter = {Terminale atspausdintas nurodyto atminties regiono dydis baitais.}
+}
+
+
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_use_case_mlab_mcu_uvm.svg}
 	\caption{Verifikavimo karkaso valdymo panaudojimo atvejų diagrama}
