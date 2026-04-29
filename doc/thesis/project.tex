@@ -392,6 +392,65 @@ $ make patch reverse
 	conditionafter = {Projekto failai yra atnaujinti pritaikant suderinamumo pataisas arba sėkmingai grąžinti į pradinę būseną.}
 }
 
+\newsavebox{\scriptbuildsoftwarecodebox}
+\begin{lrbox}{\scriptbuildsoftwarecodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make build SW_SOURCE_DIR=test/mcu_base_test
+[   INFO]: building software
+...
+[SUCCESS]: 'mcu_base_test' built
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „build software“ scenarijaus specifikacija},
+	label = {tab:usecase:script:buildsoftware},
+	name = {\texttt{make build <dir\_path>=<path\_str>}},
+	goal = {Sukompiliuoti mikrovaldiklio programinę įrangą iš nurodyto kodo šaltinio katalogo.},
+	description = {Sukompiliujamas ir surenkamas C kalbos programinis kodas. Būtina perduoti programinės įrangos šaltinio katalogo kelią, pasirenkant vieną iš dviejų argumentų: \texttt{SW\_SOURCE\_DIR} (santykinis kelias projekto atžvilgiu) arba \texttt{SW\_SOURCE\_FULL\_PATH} (absoliutus kelias). Prieš pradedant kompiliavimą, procesas automatiškai išvalo senesnius, anksčiau sukompiliuotus failus ir į surenkamą projektą įtraukia bendruosius mikrovaldiklio sistemos failus, kaip aparatinės įrangos abstrakcijos lygmens, įvesties ir išvesties valdymo bei kitas bazines bibliotekas. Nenurodžius kelio argumento arba pateikus neegzistuojantį katalogą, operacija nutraukiama ir terminale išvedamas klaidos pranešimas.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\scriptbuildsoftwarecodebox}
+	},
+	conditionbefore = {Sistemoje pasiekiami reikiami baziniai sistemos C kalbos failai, kompiliatorius, nurodytas šaltinio kodo katalogas egzistuoja.},
+	actors = {user},
+	conditionafter = {Nurodytame šaltinio kataloge sėkmingai sugeneruojami sukompiliuotos programinės įrangos (dvejetainiai) failai.}
+}
+
+\newsavebox{\scriptmanagesourcescodebox}
+\begin{lrbox}{\scriptmanagesourcescodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# user test makefile
+PROGRAM = test
+C_SOURCES = test.c
+include $(PROJECT_ROOT)/uvm/sw/comm/makefile
+
+// test.c includes
+#include "hal/gpio.h"
+#include "sys/int.h"
+// ...
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „manage sources“ scenarijaus specifikacija},
+	label = {tab:usecase:script:manage:sources},
+	name = {Vietinio failų rinkinio konfigūracija},
+	goal = {Supaprastinti testų ir programinės įrangos failų valdymą, automatiškai susiejant naudotojo failus su bazine mikrovaldiklio sistema.},
+	description = {Naujų testų ar programinės įrangos kodo šaltinių valdymas atliekamas supaprastintu būdu. Naudotojas sukuria vietinį \texttt{Makefile} failą, kuriame išvardijama tik naudotojo sukurti programiniai kodo failai. C kodo lygmenyje reikiamos bazinės posistemės pasiekiamos naudojant \texttt{\#include} direktyvas. Visi reikalingi bazinės mikrovaldiklio sistemos failai į projektą integruojami automatiškai.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\scriptmanagesourcescodebox}
+	},
+	conditionbefore = {Sistemoje egzistuoja bendrinis šakninis kompiliavimo failas ir parengtos bazinės mikrovaldiklio C bibliotekos.},
+	actors = {user},
+	conditionafter = {Paruoštas vietinis kodo katalogas, kurį galima sėkmingai sukompiliuoti naudojant \hyperref[tab:usecase:script:buildsoftware]{\texttt{make build}} scenarijų.}
+}
+
 
 
 \subsubsection{Vartotojo sąsajos specifikacija}
