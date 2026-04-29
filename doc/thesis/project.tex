@@ -263,13 +263,134 @@ $ mem size ssd
 	conditionafter = {Terminale atspausdintas nurodyto atminties regiono dydis baitais.}
 }
 
-
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_use_case_mlab_mcu_uvm.svg}
 	\caption{Verifikavimo karkaso valdymo panaudojimo atvejų diagrama}
 	\label{fig:uml_use_case_mlab_mcu_uvm}
 \end{figure}
 
+\newsavebox{\scriptmakeimagescodebox}
+\begin{lrbox}{\scriptmakeimagescodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make image verilator
+[   INFO]: building Verilator image
+...
+[SUCCESS]: Verilator image built
+$ make image xcelium purge
+[   INFO]: purging Cadence Xcelium image
+...
+[SUCCESS]: Cadence Xcelium image purged
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „make images“ scenarijaus specifikacija},
+	label = {tab:usecase:script:make:image},
+	name = {\texttt{make image <sim> [purge]}},
+	goal = {Sukurti arba pašalinti \glsdisp{docker-image}{konteinerio atvaizdą}, skirtą testavimo aplinkai},
+	description = {
+		Komanda skirta valdyti testavimo aplinkos konteinerių atvaizdus. Ji priima vieną privalomą argumentą \texttt{<sim>}, kuris nurodo norimą \glsdisp{simulator}{imituoklę}. Taip pat komanda priima neprivalomą argumentą \texttt{[purge]}, kurį nurodžius atvaizdas yra pašalinamas iš sistemos. Vykdymo metu tikrinama, ar vartotojas sistemoje turi įdiegtus reikiamus įrankius ir tinkamas reikalaujamas nuostatas. Nurodžius nepalaikomą imituoklę ar netinkamą papildomą argumentą, operacija nutraukiama ir terminale išvedamas klaidos pranešimas.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\scriptmakeimagescodebox}
+	},
+	conditionbefore = {Sistemoje įdiegti konteinerių valdymo įrankiai ir naudotojas turi teises juos valdyti.},
+	actors = {user},
+	conditionafter = {Sistemoje yra sėkmingai sukurtas imituoklės konteinerio atvaizdas, paruoštas naudojimui, arba (naudojant \texttt{purge} argumentą) atvaizdas yra sėkmingai pašalintas.}
+}
+
+\newsavebox{\scriptsetuppythonvenvcodebox}
+\begin{lrbox}{\scriptsetuppythonvenvcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make venv verilator
+[   INFO]: initializing the environment inside the Verilator container
+...
+[SUCCESS]: Verilator environment setup done
+$ make venv clean
+...
+[SUCCESS]: cleaned virtual environment
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „manage python venv“ scenarijaus specifikacija},
+	label = {tab:usecase:script:setup:python:venv},
+	name = {\texttt{make venv <sim | clean>}},
+	goal = {Surinkti Python virtualią aplinką ir įdiegti priklausomybes imituoklės konteineryje arba pašalinti esamą virtualią aplinką.},
+	description = {
+		Python virtualios aplinkos valdymas. Priimamas vienas privalomas argumentas. Nurodžius imituoklės pavadinimą, scenarijos laikinai paleidžia atitinkamą imituoklės konteinerį, kuriame sukuriama virtuali aplinka ir įdiegiami darbui reikalingi Python paketai. Sukurta aplinka išlieka pasiekiama projekto direktorijoje. Nurodžius argumentą \texttt{clean}, scenarijus ištrina virtualios aplinkos direktoriją ir jos failus iš projekto šakninio katalogo. Nurodžius nepalaikomą argumentą, išvedamas klaidos pranešimas.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\scriptsetuppythonvenvcodebox}
+	},
+	conditionbefore = {Sistemoje turi būti surinktas nurodytos imituoklės \glsdisp{docker-image}{konteinerio atvaizdas}, naudojant \hyperref[tab:usecase:script:make:image]{\texttt{make image}} scenarijų.},
+	actors = {user},
+	conditionafter = {Projekto direktorijoje sėkmingai sukurta ir paruošta darbui aplinka su įdiegtomis priklausomybėmis arba virtuali aplinka yra visiškai pašalinta iš failų sistemos.}
+}
+
+\newsavebox{\scriptruncontainerscodebox}
+\begin{lrbox}{\scriptruncontainerscodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make run verilator
+[   INFO]: entering Verilator container shell
+[SUCCESS]: you are inside Verilator container
+mcu@container:~/mcu/uvm/sim$ 
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „run containers“ scenarijaus specifikacija},
+	label = {tab:usecase:script:run},
+	name = {\texttt{make run <sim>}},
+	goal = {Paleisti pasirinktos imituoklės konteinerį interaktyviuoju režimu ir prisijungti prie paleisto konteinerio terminalo.},
+	description = {
+		Paleisti ir interaktyviai prisijungti prie testavimo aplinkos konteinerio. Priimamas vienas privalomas argumentas \texttt{<sim>}, nurodant imituoklę. Priklausomai nuo pasirinktos imituoklės, prieš paleidžiant konteinerį gali būti automatiškai konfigūruojama grafinės sąsajos prieiga (skirta signalų bangų peržiūros įrankiams) arba perduodami licencijos kintamieji. Prisijungus prie konteinerio, naudotojui suteikiama \texttt{bash} terminalo prieiga, atspausdinamas sėkmingo prisijungimo patvirtinimas, o prireikus -- automatiškai aktyvuojama sukonfigūruota Python virtuali aplinka. Nurodžius nepalaikomą imituoklę, operacija nutraukiama ir išvedamas klaidos pranešimas.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\scriptruncontainerscodebox}
+	},
+	conditionbefore = {Sistemoje turi būti surinktas pasirinktos imituoklės atvaizdas (naudojant \hyperref[tab:usecase:script:make:image]{\texttt{make image}} scenarijų) bei paruošta virtuali aplinka (naudojant \hyperref[tab:usecase:script:setup:python:venv]{\texttt{make venv}} scenarijų).},
+	actors = {user},
+	conditionafter = {Naudotojas sėkmingai prisijungia prie aktyvaus konteinerio terminalo aplinkos, skirtos testavimo scenarijų vykdymui.}
+}
+
+\newsavebox{\scriptmanagepatchescodebox}
+\begin{lrbox}{\scriptmanagepatchescodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make patch apply
+[   INFO]: applying compatibility patches
+...
+[SUCCESS]: patches applied
+$ make patch reverse
+[   INFO]: reversing compatibility patches
+...
+[SUCCESS]: patches reversed
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „manage patches“ scenarijaus specifikacija},
+	label = {tab:usecase:script:patch},
+	name = {\texttt{make patch <apply | reverse>}},
+	goal = {Pritaikyti arba atšaukti šakninio projekto suderinamumo pataisas.},
+	description = {
+		Valdyti šakninio projekto failų modifikacijas (pataisas), skirtas užtikrinti sklandų testavimo karkaso ar imituoklių veikimą su MCU projektu. Priimamas vienas privalomas argumentas. Nurodžius argumentą \texttt{apply}, automatiškai pritaikomi reikiami failų pakeitimai. Nurodžius argumentą \texttt{reverse}, anksčiau pritaikyti pakeitimai yra atšaukiami ir failai grąžinami į pradinę būseną. Nurodžius nepalaikomą argumentą, operacija nutraukiama ir terminale išvedamas klaidos pranešimas.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\scriptmanagepatchescodebox}
+	},
+	conditionbefore = {Sistemoje yra pasiekiami projekto failai ir nėra taikomi konfliktuojantys kodo pakeitimai.},
+	actors = {user},
+	conditionafter = {Projekto failai yra atnaujinti pritaikant suderinamumo pataisas arba sėkmingai grąžinti į pradinę būseną.}
+}
 
 \subsubsection{Vartotojo sąsajos specifikacija}
 \noterequirement{Naudotojo sąsajos specifikacijoje turi būti nurodomi reikalavimai naudotojo sąsajos vaizdai. Čia nereikia ir negalima dėti jau egzistuojančios programos screenshot‘ų! Šiame etape tik nusakoma, kokia turi būti naudotojo sąsaja (rekomenduojame Balsamiq, Axure RP, Figma ir panašius įrankius), tačiau galutinis sąsajos vaizdas nurodomas tik vėlesniuose skyriuose. Jei pradinėje kūrimo fazėje buvo naudojami naudotojo sąsajos eskizai ar prototipai, juos reikia dėti būtent į šį skyrelį}
