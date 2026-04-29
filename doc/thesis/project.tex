@@ -39,8 +39,7 @@ $
 	label = {tab:usecase:cli:greet},
 	name = {\texttt{greet}},
 	goal = {Pateikti trumpą informaciją apie CLI},
-	description = {
-		Prisijungus prie CLI terminalo, pateikiamas tekstas, kuris veikia kaip pradinio sistemos veikimo patvirtinimas. Nurodoma kokia CLI versija yra įrašyta į testuojamą MCU ir pateikiama, jog galima naudoti \texttt{help} komandą \lent{\ref{tab:usecase:cli:help}}.\newline
+	description = {Prisijungus prie CLI terminalo, pateikiamas tekstas, kuris veikia kaip pradinio sistemos veikimo patvirtinimas. Nurodoma kokia CLI versija yra įrašyta į testuojamą MCU ir pateikiama, jog galima naudoti \texttt{help} komandą \lent{\ref{tab:usecase:cli:help}}.\newline
 		Pavyzdys: \newline
 		\usebox{\cligreetcodebox}
 	},
@@ -64,8 +63,7 @@ testing string ? oo ' 728--
 	label = {tab:usecase:cli:echo},
 	name = {\texttt{echo}},
 	goal = {Grąžinti atgal pateiktą teksto eilutę},
-	description = {
-	Per CLI terminalą yra įrašoma komanda formatu \texttt{echo "<string>"}. Gautas tekstas tarp \texttt{""} kabučių yra grąžinamas atgal. Turi būti spausdinami visi ASCII simboliai tarp kabučių išskyrus pačias pradedančias ir užbaigiančias tekstą \texttt{"} kabutes. Pabaigoje teksto eilutės turi būti pridedamas \texttt{\textbackslash n} naujos eilutės ASCII simbolis, žymėdamas atkartojamos teksto eilutės pabaigą.\newline
+	description = {Per CLI terminalą yra įrašoma komanda formatu \texttt{echo "<string>"}. Gautas tekstas tarp \texttt{""} kabučių yra grąžinamas atgal. Turi būti spausdinami visi ASCII simboliai tarp kabučių išskyrus pačias pradedančias ir užbaigiančias tekstą \texttt{"} kabutes. Pabaigoje teksto eilutės turi būti pridedamas \texttt{\textbackslash n} naujos eilutės ASCII simbolis, žymėdamas atkartojamos teksto eilutės pabaigą.\newline
 	Pavyzdys: \newline
 	\usebox{\clicmdechocodebox}
 	},
@@ -94,8 +92,7 @@ $ help
 	label = {tab:usecase:cli:help},
 	name = {\texttt{help}},
 	goal = {Pateikti suglaustą CLI naudojimosi instrukciją},
-	description = {
-		Per CLI terminalą yra įrašoma komanda \texttt{help}. Grąžinamas ASCII simboliais aprašyta ir suformatuota glausta CLI komandų lentelė. Pabaigoje teksto eilutės turi būti pridedamas naujos eilutės \texttt{\textbackslash n} ASCII simbolis, žymėdamas .\newline
+	description = {Per CLI terminalą yra įrašoma komanda \texttt{help}. Grąžinamas ASCII simboliais aprašyta ir suformatuota glausta CLI komandų lentelė. Pabaigoje teksto eilutės turi būti pridedamas naujos eilutės \texttt{\textbackslash n} ASCII simbolis, žymėdamas .\newline
 		Pavyzdys: \newline
 		\usebox{\clicmdhelpcodebox}
 	},
@@ -118,7 +115,7 @@ $ mem <read | write | dump | cksum | size>
 	label = {tab:usecase:cli:mem},
 	name = {\texttt{mem}},
 	goal = {Iškviesti atminties \glsdisp{subcommand}{pokomandę}, susijusią su atminties manipuliavimo veiksmais.},
-	description = { Komanda yra naudojama iškviesti atminties manipuliavimo pokomandes, kurių pagalba galima vykdyti su komandas, skirtas atminties manipuliavimui, valdymui ir duomenų gavimui. Pokomandžių skaitiniai argumentai ir grąžinamos reikšmės pateikiami šešioliktainiu formatu, su šešioliktainiu priešdėliu, mažųjų raidžių, ASCII simboliais. Grąžinamos pokomandžių klaidos turi unikalų klaidos numerį. Įvykdytos pokomandės atsakymo pabaiga žymima naujos eilutės \texttt{\textbackslash n} ASCII simboliu.
+	description = {Komanda yra naudojama iškviesti atminties manipuliavimo pokomandes, kurių pagalba galima vykdyti su komandas, skirtas atminties manipuliavimui, valdymui ir duomenų gavimui. Pokomandžių skaitiniai argumentai ir grąžinamos reikšmės pateikiami šešioliktainiu formatu, su šešioliktainiu priešdėliu, mažųjų raidžių, ASCII simboliais. Grąžinamos pokomandžių klaidos turi unikalų klaidos numerį. Įvykdytos pokomandės atsakymo pabaiga žymima naujos eilutės \texttt{\textbackslash n} ASCII simboliu.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\clicmdmemcodebox}
@@ -146,8 +143,7 @@ $ mem read 0x07000ccf
 	label = {tab:usecase:cli:mem:read},
 	name = {\texttt{mem read <addr>}},
 	goal = {Grąžinti 32 bitų reikšmę, saugomame nurodytame 32 bitų adrese.},
-	description = {
-		Grąžinti 32 bitų reikšmę, saugomame nurodytame 32 bitų adrese, nurodytame \texttt{addr} argumente. Pateikus adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes, turi būti grąžinamas klaidos pranešimas, su unikaliu klaidos numeriu.
+	description = {Grąžinti 32 bitų reikšmę, saugomame nurodytame 32 bitų adrese, nurodytame \texttt{addr} argumente. Pateikus adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes, turi būti grąžinamas klaidos pranešimas, su unikaliu klaidos numeriu.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\clicmdmemreadcodebox}
@@ -172,8 +168,7 @@ $ 0x96780000
 	label = {tab:usecase:cli:mem:write},
 	name = {\texttt{mem write <addr> <val>}},
 	goal = {Įrašyti į nurodytą atminties adresą pateiktą reikšmę ir gauti prieš tai buvusią reikšmę.},
-	description = {
-		Įrašyti pateiktą 32 bitų reikšmę į 32 bitų adresą ir grąžinti prieš tai buvusią įrašytą reikšmę. Komanda turi du argumentus. Argumentas \texttt{<addr>} nurodo adresą, į kurį įrašoma pateikta reikšmė. Argumentas \texttt{<val>} nurodo reikšmę, kuri turi būti įrašyta į prieš tai nurodytą adresą. Grąžinama reikšmė yra prieš įrašomą reikšmę į nurodytą adresą buvusi įrašyta reikšmė.. Pateikus adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes, turi būti grąžinamas klaidos pranešimas, su unikaliu klaidos numeriu.
+	description = {Įrašyti pateiktą 32 bitų reikšmę į 32 bitų adresą ir grąžinti prieš tai buvusią įrašytą reikšmę. Komanda turi du argumentus. Argumentas \texttt{<addr>} nurodo adresą, į kurį įrašoma pateikta reikšmė. Argumentas \texttt{<val>} nurodo reikšmę, kuri turi būti įrašyta į prieš tai nurodytą adresą. Grąžinama reikšmė yra prieš įrašomą reikšmę į nurodytą adresą buvusi įrašyta reikšmė.. Pateikus adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes, turi būti grąžinamas klaidos pranešimas, su unikaliu klaidos numeriu.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\clicmdmemwritecodebox}
@@ -198,8 +193,7 @@ $ mem dump 0x8000110c 0x4
 	label = {tab:usecase:cli:mem:dump},
 	name = {\texttt{mem dump <addr> <wcnt>}},
 	goal = {Nuskaityti reikšmes nuo nurodyto adreso nurodytų žodžių kiekiu.},
-	description = {
-		Atspausdinamas nurodytas kiekis 32 bitų \glsdisp{word}{žodžių}, pradedant nuo nurodyto pradžios adreso. Komanda priima du argumentus. Pirmasis argumentas \texttt{<addr>} nurodo pradinį 32 bitų atminties adresą. Antrasis argumentas \texttt{<wcnt>} nurodo norimų nuskaityti 32 bitų atminties \glsdisp{word}{žodžių} reikšmių kiekį. Pateikus pradinio adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes arba žodžių kiekis nuo pradinio adreso perkopia adresų aibę, turi būti grąžinamas klaidos pranešimai, su unikaliais klaidos numeriais.
+	description = {Atspausdinamas nurodytas kiekis 32 bitų \glsdisp{word}{žodžių}, pradedant nuo nurodyto pradžios adreso. Komanda priima du argumentus. Pirmasis argumentas \texttt{<addr>} nurodo pradinį 32 bitų atminties adresą. Antrasis argumentas \texttt{<wcnt>} nurodo norimų nuskaityti 32 bitų atminties \glsdisp{word}{žodžių} reikšmių kiekį. Pateikus pradinio adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes arba žodžių kiekis nuo pradinio adreso perkopia adresų aibę, turi būti grąžinamas klaidos pranešimai, su unikaliais klaidos numeriais.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\clicmdmemdumpcodebox}
@@ -224,8 +218,7 @@ $ mem cksum 0x8000110c 0x4
 	label = {tab:usecase:cli:mem:cksum},
 	name = {\texttt{mem cksum <addr> <wcnt>}},
 	goal = {Apskaičiuoti ir grąžinti nurodyto atminties bloko \glsdisp{checksum}{kontrolinę sumą}.},
-	description = {
-		Apskaičiuojama ir grąžinama nurodyto atminties bloko kontrolinė suma, gauta atliekant loginę \texttt{XOR} operaciją tarp visų bloke esančių 32 bitų \glsdisp{word}{žodžių}. Komanda priima du argumentus. Pirmasis argumentas \texttt{<addr>} nurodo pradinį 32 bitų atminties adresą. Antrasis argumentas \texttt{<wcnt>} nurodo 32 bitų atminties \glsdisp{word}{žodžių} kiekį, kuriam bus atliekamas skaičiavimas. Pateikus pradinio adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes arba žodžių kiekis nuo pradinio adreso perkopia adresų aibę, turi būti grąžinami klaidos pranešimai, su unikaliais klaidos numeriais.
+	description = {Apskaičiuojama ir grąžinama nurodyto atminties bloko kontrolinė suma, gauta atliekant loginę \texttt{XOR} operaciją tarp visų bloke esančių 32 bitų \glsdisp{word}{žodžių}. Komanda priima du argumentus. Pirmasis argumentas \texttt{<addr>} nurodo pradinį 32 bitų atminties adresą. Antrasis argumentas \texttt{<wcnt>} nurodo 32 bitų atminties \glsdisp{word}{žodžių} kiekį, kuriam bus atliekamas skaičiavimas. Pateikus pradinio adreso reikšmę, kuri nepatenka į \gls{dmem} arba \gls{imem} atminčių adresų aibes arba žodžių kiekis nuo pradinio adreso perkopia adresų aibę, turi būti grąžinami klaidos pranešimai, su unikaliais klaidos numeriais.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\clicmdmemcksumcodebox}
@@ -252,8 +245,7 @@ $ mem size ssd
 	label = {tab:usecase:cli:mem:size},
 	name = {\texttt{mem size <region>}},
 	goal = {Grąžinti nurodyto atminties regiono ar sekcijos dydį baitais.},
-	description = {
-		Komanda skirta gauti įvairių sistemos atminties regionų (pavyzdžiui, \texttt{imem}, \texttt{dmem}) ar sukompiliuotos programos sekcijų (\texttt{text}, \texttt{data}, \texttt{bss}, \texttt{stack} ir kt.) dydžius baitais. Priimamas vienas tekstinis argumentas \texttt{<region>}, nurodantis dominantį atminties regioną. Išvedamas rezultatas nurodo nuskaitomo regiono dydį baitais. Skirtingai nei kitose \texttt{mem} komandose, grąžinama dydžio reikšmė pateikiama dešimtainiu (angl. \textit{unsigned integer}) skaičiaus formatu. Pateikus nežinomą regiono pavadinimą, turi būti grąžinamas klaidos pranešimas, su unikaliu klaidos numeriu.
+	description = {Komanda skirta gauti įvairių sistemos atminties regionų (pavyzdžiui, \texttt{imem}, \texttt{dmem}) ar sukompiliuotos programos sekcijų (\texttt{text}, \texttt{data}, \texttt{bss}, \texttt{stack} ir kt.) dydžius baitais. Priimamas vienas tekstinis argumentas \texttt{<region>}, nurodantis dominantį atminties regioną. Išvedamas rezultatas nurodo nuskaitomo regiono dydį baitais. Skirtingai nei kitose \texttt{mem} komandose, grąžinama dydžio reikšmė pateikiama dešimtainiu (angl. \textit{unsigned integer}) skaičiaus formatu. Pateikus nežinomą regiono pavadinimą, turi būti grąžinamas klaidos pranešimas, su unikaliu klaidos numeriu.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\clicmdmemsizecodebox}
@@ -290,8 +282,7 @@ $ make image xcelium purge
 	label = {tab:usecase:script:make:image},
 	name = {\texttt{make image <sim> [purge]}},
 	goal = {Sukurti arba pašalinti \glsdisp{docker-image}{konteinerio atvaizdą}, skirtą testavimo aplinkai},
-	description = {
-		Komanda skirta valdyti testavimo aplinkos konteinerių atvaizdus. Ji priima vieną privalomą argumentą \texttt{<sim>}, kuris nurodo norimą \glsdisp{simulator}{imituoklę}. Taip pat komanda priima neprivalomą argumentą \texttt{[purge]}, kurį nurodžius atvaizdas yra pašalinamas iš sistemos. Vykdymo metu tikrinama, ar vartotojas sistemoje turi įdiegtus reikiamus įrankius ir tinkamas reikalaujamas nuostatas. Nurodžius nepalaikomą imituoklę ar netinkamą papildomą argumentą, operacija nutraukiama ir terminale išvedamas klaidos pranešimas.
+	description = {Komanda skirta valdyti testavimo aplinkos konteinerių atvaizdus. Ji priima vieną privalomą argumentą \texttt{<sim>}, kuris nurodo norimą \glsdisp{simulator}{imituoklę}. Taip pat komanda priima neprivalomą argumentą \texttt{[purge]}, kurį nurodžius atvaizdas yra pašalinamas iš sistemos. Vykdymo metu tikrinama, ar vartotojas sistemoje turi įdiegtus reikiamus įrankius ir tinkamas reikalaujamas nuostatas. Nurodžius nepalaikomą imituoklę ar netinkamą papildomą argumentą, operacija nutraukiama ir terminale išvedamas klaidos pranešimas.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\scriptmakeimagescodebox}
@@ -321,8 +312,7 @@ $ make venv clean
 	label = {tab:usecase:script:setup:python:venv},
 	name = {\texttt{make venv <sim | clean>}},
 	goal = {Surinkti Python virtualią aplinką ir įdiegti priklausomybes imituoklės konteineryje arba pašalinti esamą virtualią aplinką.},
-	description = {
-		Python virtualios aplinkos valdymas. Priimamas vienas privalomas argumentas. Nurodžius imituoklės pavadinimą, scenarijos laikinai paleidžia atitinkamą imituoklės konteinerį, kuriame sukuriama virtuali aplinka ir įdiegiami darbui reikalingi Python paketai. Sukurta aplinka išlieka pasiekiama projekto direktorijoje. Nurodžius argumentą \texttt{clean}, scenarijus ištrina virtualios aplinkos direktoriją ir jos failus iš projekto šakninio katalogo. Nurodžius nepalaikomą argumentą, išvedamas klaidos pranešimas.
+	description = {Python virtualios aplinkos valdymas. Priimamas vienas privalomas argumentas. Nurodžius imituoklės pavadinimą, scenarijos laikinai paleidžia atitinkamą imituoklės konteinerį, kuriame sukuriama virtuali aplinka ir įdiegiami darbui reikalingi Python paketai. Sukurta aplinka išlieka pasiekiama projekto direktorijoje. Nurodžius argumentą \texttt{clean}, scenarijus ištrina virtualios aplinkos direktoriją ir jos failus iš projekto šakninio katalogo. Nurodžius nepalaikomą argumentą, išvedamas klaidos pranešimas.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\scriptsetuppythonvenvcodebox}
@@ -349,8 +339,7 @@ mcu@container:~/mcu/uvm/sim$
 	label = {tab:usecase:script:run},
 	name = {\texttt{make run <sim>}},
 	goal = {Paleisti pasirinktos imituoklės konteinerį interaktyviuoju režimu ir prisijungti prie paleisto konteinerio terminalo.},
-	description = {
-		Paleisti ir interaktyviai prisijungti prie testavimo aplinkos konteinerio. Priimamas vienas privalomas argumentas \texttt{<sim>}, nurodant imituoklę. Priklausomai nuo pasirinktos imituoklės, prieš paleidžiant konteinerį gali būti automatiškai konfigūruojama grafinės sąsajos prieiga (skirta signalų bangų peržiūros įrankiams) arba perduodami licencijos kintamieji. Prisijungus prie konteinerio, naudotojui suteikiama \texttt{bash} terminalo prieiga, atspausdinamas sėkmingo prisijungimo patvirtinimas, o prireikus -- automatiškai aktyvuojama sukonfigūruota Python virtuali aplinka. Nurodžius nepalaikomą imituoklę, operacija nutraukiama ir išvedamas klaidos pranešimas.
+	description = {Paleisti ir interaktyviai prisijungti prie testavimo aplinkos konteinerio. Priimamas vienas privalomas argumentas \texttt{<sim>}, nurodant imituoklę. Priklausomai nuo pasirinktos imituoklės, prieš paleidžiant konteinerį gali būti automatiškai konfigūruojama grafinės sąsajos prieiga (skirta signalų bangų peržiūros įrankiams) arba perduodami licencijos kintamieji. Prisijungus prie konteinerio, naudotojui suteikiama \texttt{bash} terminalo prieiga, atspausdinamas sėkmingo prisijungimo patvirtinimas, o prireikus -- automatiškai aktyvuojama sukonfigūruota Python virtuali aplinka. Nurodžius nepalaikomą imituoklę, operacija nutraukiama ir išvedamas klaidos pranešimas.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\scriptruncontainerscodebox}
@@ -381,8 +370,7 @@ $ make patch reverse
 	label = {tab:usecase:script:patch},
 	name = {\texttt{make patch <apply | reverse>}},
 	goal = {Pritaikyti arba atšaukti šakninio projekto suderinamumo pataisas.},
-	description = {
-		Valdyti šakninio projekto failų modifikacijas (pataisas), skirtas užtikrinti sklandų testavimo karkaso ar imituoklių veikimą su MCU projektu. Priimamas vienas privalomas argumentas. Nurodžius argumentą \texttt{apply}, automatiškai pritaikomi reikiami failų pakeitimai. Nurodžius argumentą \texttt{reverse}, anksčiau pritaikyti pakeitimai yra atšaukiami ir failai grąžinami į pradinę būseną. Nurodžius nepalaikomą argumentą, operacija nutraukiama ir terminale išvedamas klaidos pranešimas.
+	description = {Valdyti šakninio projekto failų modifikacijas (pataisas), skirtas užtikrinti sklandų testavimo karkaso ar imituoklių veikimą su MCU projektu. Priimamas vienas privalomas argumentas. Nurodžius argumentą \texttt{apply}, automatiškai pritaikomi reikiami failų pakeitimai. Nurodžius argumentą \texttt{reverse}, anksčiau pritaikyti pakeitimai yra atšaukiami ir failai grąžinami į pradinę būseną. Nurodžius nepalaikomą argumentą, operacija nutraukiama ir terminale išvedamas klaidos pranešimas.
 		\newline
 		Pavyzdys: \newline
 		\usebox{\scriptmanagepatchescodebox}
@@ -439,7 +427,7 @@ include $(PROJECT_ROOT)/uvm/sw/comm/makefile
 \usecase{
 	caption = {Panaudojimo atvejo „manage sources“ scenarijaus specifikacija},
 	label = {tab:usecase:script:manage:sources},
-	name = {Vietinio failų rinkinio konfigūracija},
+	name = {\texttt{manage sources}},
 	goal = {Supaprastinti testų ir programinės įrangos failų valdymą, automatiškai susiejant naudotojo failus su bazine mikrovaldiklio sistema.},
 	description = {Naujų testų ar programinės įrangos kodo šaltinių valdymas atliekamas supaprastintu būdu. Naudotojas sukuria vietinį \texttt{Makefile} failą, kuriame išvardijama tik naudotojo sukurti programiniai kodo failai. C kodo lygmenyje reikiamos bazinės posistemės pasiekiamos naudojant \texttt{\#include} direktyvas. Visi reikalingi bazinės mikrovaldiklio sistemos failai į projektą integruojami automatiškai.
 		\newline
@@ -452,6 +440,227 @@ include $(PROJECT_ROOT)/uvm/sw/comm/makefile
 }
 
 
+\newsavebox{\simchoosesimulatorcodebox}
+\begin{lrbox}{\simchoosesimulatorcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make SIM=verilator ...
+$ make SIM=xcelium ...
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „choose simulator“ specifikacija},
+	label = {tab:usecase:sim:choosesimulator},
+	name = {\texttt{choose simulator}},
+	goal = {Pasirinkti norimą aparatinės įrangos imituoklę imitacijai atlikti.},
+	description = {Nurodoma imituoklė, kurioje bus vykdomas testavimo scenarijus. Konkretus įrankis pasirenkamas perduodant argumentą \texttt{SIM}. Šis pasirinkimas nulemia tolesnę testo imitacijos eigą.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\simchoosesimulatorcodebox}
+	},
+	conditionbefore = {Konteinerių aplinkoje yra paruošti atitinkamų imituoklių atvaizdai ir sutvarkyta Python virtuali aplinka.},
+	actors = {user},
+	conditionafter = {Aparatinės įrangos kompiliavimo ir testavimo procesas nukreipiamas į pasirinktą imituoklę.}
+}
+
+\newsavebox{\simruntestscodebox}
+\begin{lrbox}{\simruntestscodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make SIM=verilator TEST=simple_gpio_test
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „run tests“ specifikacija},
+	label = {tab:usecase:sim:runtests},
+	name = {\texttt{run tests}},
+	goal = {Paleisti pasirinktą aparatinės įrangos testavimo scenarijų.},
+	description = {Vykdomas konkretus testas su nurodyta imituokle. Nurodomas testo pavadinimas pasitelkiant \texttt{TEST} (skirta \textit{PyUVM} aprašytiems testams) arba \texttt{TB} (skirta \textit{Cocotb} aprašytiems testavimo stendams) argumentus. Sistema automatiškai patikrina, ar aktyvi virtuali Python aplinka, sukompiliuoja testui reikalingą programinę įrangą C kalba ir inicijuoja imitaciją. Nenurodžius testo pavadinimo, operacija nutraukiama ir grąžinama klaida.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\simruntestscodebox}
+	},
+	include = {\hyperref[tab:usecase:sim:choosesimulator]{choose simulator}},
+	conditionbefore = {Aktyvuota Python virtuali aplinka, testavimo direktorijoje egzistuoja testo C kodo šaltinio failai.},
+	actors = {user},
+	conditionafter = {Testo scenarijus sėkmingai įvykdytas, testo rezultatai išvesti į terminalą.}
+}
+
+\newsavebox{\simcapturewaveformscodebox}
+\begin{lrbox}{\simcapturewaveformscodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make SIM=verilator TB=uart_tb WAVES=1
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „capture waveforms“ specifikacija},
+	label = {tab:usecase:sim:capturewaveforms},
+	name = {\texttt{capture waveforms}},
+	goal = {Išsaugoti imitacijos \glsdisp{waveform}{laikinės diagramos} failus tolimesnei analizei.},
+	description = {Testo vykdymo metu imituoklė fiksuoja vidinių aparatinės įrangos signalų būsenų kitimą laike. Tai aktyvuojama parametru \texttt{WAVES=1}. Pagal nutylėjimą signalai nėra fiksuojami siekiant taupyti resursus, tačiau šiuo atveju sugeneruojami išvesties failai, kuriuos vėliau galima peržiūrėti.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\simcapturewaveformscodebox}
+	},
+	include = {\hyperref[tab:usecase:sim:runtests]{run tests}},
+	conditionbefore = {Imituoklė palaiko signalų fiksavimą nurodytu formatu.},
+	actors = {user},
+	conditionafter = {Sėkmingai baigus imitaciją, sugeneruojamas \glsdisp{waveform}{laikinės diagramos} failas.}
+}
+
+\newsavebox{\simopenguicodebox}
+\begin{lrbox}{\simopenguicodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make SIM=xcelium TB=uart_tb GUI=1
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „open gui“ specifikacija},
+	label = {tab:usecase:sim:opengui},
+	name = {\texttt{open gui}},
+	goal = {Atverti GUI signalų peržiūrai imitacijos metu.},
+	description = {Testavimo metu iškviečiamas imituoklės grafinis langas, perduodant parametrą \texttt{GUI=1}. Kadangi grafinei analizei atlikti būtini signalų duomenys, šis veiksmas automatiškai įgalina laikinių diagramų fiksavimą.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\simopenguicodebox}
+	},
+	include = {\hyperref[tab:usecase:sim:capturewaveforms]{capture waveforms}},
+	conditionbefore = {Konteineryje sukonfigūruota grafinės sąsajos išvestis (pvz., naudojant X11 peradresavimą) į naudotojo ekraną.},
+	actors = {user},
+	conditionafter = {Atveriamas grafinis imituoklės įrankis.}
+}
+
+\newsavebox{\simmanageloggingcodebox}
+\begin{lrbox}{\simmanageloggingcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ make SIM=verilator TEST=simple_test LOG=DEBUG
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „manage logging“ specifikacija},
+	label = {tab:usecase:sim:managelogging},
+	name = {\texttt{manage logging}},
+	goal = {Nustatyti testavimo karkaso pranešimų detalumo lygį.},
+	description = {Testo vykdymo metu nurodomas pageidaujamas pranešimų lygis, perduodant parametrą \texttt{LOG}. Nustatytos reikšmės nurodo sistemai atitinkamai filtruoti ir apriboti informaciją, kuri išvedama į terminalą \textit{Cocotb} ar \textit{PyUVM} testų metu. Pagal nutylėjimą naudojamas bazinis \texttt{INFO} lygis.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\simmanageloggingcodebox}
+	},
+	include = {\hyperref[tab:usecase:sim:runtests]{run tests}},
+	conditionbefore = {Nurodytas lygis yra palaikomas testavimo karkaso.},
+	actors = {user},
+	conditionafter = {Terminalo išvestis testo metu filtruojama pagal naudotojo nustatytą pranešimų lygį.}
+}
+
+\newsavebox{\scriptinstalldepscodebox}
+\begin{lrbox}{\scriptinstalldepscodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ ./install_deps.sh
+[sudo] password for user:
+...
+Setting up gcc-riscv64-unknown-elf ...
+Setting up python3-venv ...
+Cloning into 'verilator'...
+...
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „install dependencies on host“ specifikacija},
+	label = {tab:usecase:script:installdeps},
+	name = {\texttt{install dependencies on host}},
+	goal = {Automatiškai įdiegti ir sukonfigūruoti testavimo karkasui reikalingus įrankius pagrindinėje operacinėje sistemoje.},
+	description = {Skriptas skirtas automatizuotam, \textit{Debian/Ubuntu} pagrįstom pagrindinėms operacinėms sistemom, aplinkos paruošimui.\newline
+	Pavyzdys: \newline
+	\usebox{\scriptinstalldepscodebox}
+	},
+	conditionbefore = {Naudotojas turi administratoriaus teises pagrindinėje sistemoje ir aktyvų interneto ryšį.},
+	actors = {user},
+	conditionafter = {Pagrindinėje operacinėje sistemoje yra įdiegti visi reikalingi įrankiai ir priklausomybės, leidžiančios valdyti testavimo karkasą be konteinerių.}
+}
+
+\newsavebox{\scriptmultipanesessioncodebox}
+\begin{lrbox}{\scriptmultipanesessioncodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+----------------------------------------
+|                 sim                  |
+|                                      |
+|--------------------------------------|
+| terminal        | tracer             |
+| $               |                    |
+----------------------------------------
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „manage multi pane work flow terminal session“ specifikacija},
+	label = {tab:usecase:script:managemultipane},
+	name = {\texttt{manage multi pane work flow terminal session}},
+	goal = {Sukurti standartizuotą, kelių polangių terminalo darbo aplinką patogiam testavimui ir kodo rašymui.},
+	description = {Automatizuojamas terminalo darbo erdvės paruošimas. Skriptas sukuria naują (arba išvalo seną) izoliuotą sesiją ir padalina terminalo langą į kelis atskirtus polangius: imitacijų vykdymui (\textit{sim}), bendrinėms komandoms (\textit{terminal}) ir stebėjimui (\textit{tracer}). Aplinkoje automatiškai pritaikomi projekto specifiniai nustatymai, pelės palaikymas ir klavišų kombinacijos. Galiausiai naudotojas yra automatiškai prijungiamas prie šios paruoštos sesijos.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\scriptmultipanesessioncodebox}
+	},
+	conditionbefore = {Pagrindinėje sistemoje yra įdiegtas terminalo įrankis \textit{tmux}.},
+	actors = {user},
+	conditionafter = {Naudotojas prijungiamas prie sukonfigūruotos kelių polangių terminalo sesijos, paruoštos patogiam darbui su projektu.}
+}
+
+\newsavebox{\scriptprojectstatscodebox}
+\begin{lrbox}{\scriptprojectstatscodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ ./stats.sh
+uvm
+|-- conf
+|-- rtl
+|-- script
+...
+---------------------------------------------------
+Language         files     blank   comment     code
+---------------------------------------------------
+C                    5        45        12      240
+SystemVerilog        3        20        15      180
+Python               2        10         5       90
+...
+---------------------------------------------------
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „run project stats report“ specifikacija},
+	label = {tab:usecase:script:projectstats},
+	name = {\texttt{./stats.sh}},
+	goal = {Sugeneruoti ir išvesti projekto struktūros bei kodo apimties ataskaitą.},
+	description = {
+		Skriptas nuskaito šakninį projekto katalogą ir pateikia apibendrintą informaciją apie projekto būklę. Pirmiausia terminale atspausdinamas vizualus direktorijų ir failų hierarchijos medis. Po jo pateikiama kodo eilučių (angl. \textit{lines of code}) statistika, sugrupuota pagal programavimo kalbas ir failų tipus (C, SystemVerilog, Python ir kt.). Siekiant užtikrinti metrikų tikslumą, skriptas automatiškai ignoruoja sukompiliuotus failus, tarpinius simuliacijos rezultatus (pvz., \texttt{sim\_build}) bei virtualias Python aplinkas (\texttt{.venv}).
+		\newline
+		Pavyzdys: \newline
+		\usebox{\scriptprojectstatscodebox}
+	},
+	conditionbefore = {Sistemoje įdiegti direktorijų struktūros (pvz., \texttt{tree}) ir kodo analizės (pvz., \texttt{cloc}) įrankiai.},
+	actors = {user},
+	conditionafter = {Terminale atspausdinama švari projekto struktūros ir naudingo išeities kodo apimčių ataskaita.}
+}
 
 \subsubsection{Vartotojo sąsajos specifikacija}
 \noterequirement{Naudotojo sąsajos specifikacijoje turi būti nurodomi reikalavimai naudotojo sąsajos vaizdai. Čia nereikia ir negalima dėti jau egzistuojančios programos screenshot‘ų! Šiame etape tik nusakoma, kokia turi būti naudotojo sąsaja (rekomenduojame Balsamiq, Axure RP, Figma ir panašius įrankius), tačiau galutinis sąsajos vaizdas nurodomas tik vėlesniuose skyriuose. Jei pradinėje kūrimo fazėje buvo naudojami naudotojo sąsajos eskizai ar prototipai, juos reikia dėti būtent į šį skyrelį}
@@ -703,7 +912,7 @@ Aukščiau pateiktoje \gls{uml} diegimo diagramoje \pav{\ref{fig:uml_deplayement
 		\thead[l]{Paketai / Įrankiai}                     & \thead[l]{Paskirtis}                                                                                                                                                                                   \\
 		\hline
 		% TODO (source)
-		\textit{GCC kompiliatorius ir surinkimo įrankiai} & Būtini „Xcelium“ \glsdisp{simulator}{imituoklei} atliekant \gls{rtl} transliaciją, DPI-C (angl. \textit{Direct Programming Interface}) kodo kompiliavimą ir simuliacijos momentinių kopijų (angl. \textit{snapshots}) generavimą. \\
+		\textit{GCC kompiliatorius ir surinkimo įrankiai} & Būtini „Xcelium“ \glsdisp{simulator}{imituoklei} atliekant \gls{rtl} transliaciją, DPI-C (angl. \textit{Direct Programming Interface}) kodo kompiliavimą ir imitacijos momentinių kopijų (angl. \textit{snapshots}) generavimą. \\
 		\hline
 		\textit{X11 \gls{gui} bibliotekos}                      & Reikalingos „SimVision“ laikinių diagramų peržiūros programos, atvaizdavimui.                                                                                                                          \\
 		\hline
@@ -769,7 +978,7 @@ Projektas sudarytas iš šių esminių paketų:
 		      \item Testų \texttt{test} paketas kuriame yra keliami \gls{uvm} testai.
 	      \end{itemize}
 
-	\item Bendrosios aplinkos \texttt{env} paketas skirtas laikyti testuojamosios aplinkos specifikas, toks kaip programos dydis, pavadinimas, parametrai ir pan. Nustatomas simuliacijos \texttt{sim} paketo ir yra naudojamas \gls{uvm} testavimo stendo \texttt{tb} paketo.
+	\item Bendrosios aplinkos \texttt{env} paketas skirtas laikyti testuojamosios aplinkos specifikas, toks kaip programos dydis, pavadinimas, parametrai ir pan. Nustatomas imitacijos \texttt{sim} paketo ir yra naudojamas \gls{uvm} testavimo stendo \texttt{tb} paketo.
 
 	\item \gls{rtl} \texttt{rtl} paketas, kuriame yra aprašytas testuojamojo mikrovaldiklio \glsdisp{module}{modulis}, jis susideda iš jau aprašytų \glsdisp{module}{modulių}, esančių \texttt{mlab\_mcu} šakninio projekto \texttt{rtl} paketo.
 
