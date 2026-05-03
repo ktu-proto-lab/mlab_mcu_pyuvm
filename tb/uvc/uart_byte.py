@@ -16,10 +16,7 @@ class UartByte(uvm_sequence_item):
     def to_hex(self) -> str:
         return hex(self.val)
 
-    def to_ascii(self) -> str:
+    def to_ascii(self) -> chr:
         if self.val < 0 or self.val > 127:
             raise AsciiTestError(f"byte {self.to_hex()} can not be converted to ascii character")
-        string = chr(self.val)
-        if string == '\n':
-            string = '\\n'
-        return string
+        return chr(self.val)
