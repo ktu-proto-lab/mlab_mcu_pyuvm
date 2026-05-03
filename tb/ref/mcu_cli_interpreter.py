@@ -1,6 +1,6 @@
 import shlex
 from pyuvm import uvm_object
-from errors import NotImplementedTestError, ConfigTestError, McuCliWrongCmdStringTestError, McuCliCmdNotExacutableTestError
+from errors import *
 
 from ref.mcu_memory_mirror import McuMemoryMirror
 
@@ -55,25 +55,41 @@ class McuCliInterpreter(uvm_object):
 
     def mem_read(self, addr: str) -> str:
         addr: int = int(addr, base=16)
-        val = self.memory.read(addr)
+        try:
+            val = self.memory.read(addr)
+        except:
+            SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ADDR = 109
+            return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_READ_INVALID_ADDR)
         return hex(val)
 
     def mem_write(self, addr: str, val: str) -> str:
         addr: int = int(addr, base=16)
         val: int = int(val, base=16)
-        prev_val: int = self.memory.write(addr, val)
+        try:
+            prev_val: int = self.memory.write(addr, val)
+        except MemoryInvalidAddrTestError:
+            SYSTEM_ERROR_CLI_CMD_MEM_WRITE_INVALID_ADDR = 112
+            return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_WRITE_INVALID_ADDR)
         return hex(prev_val)
 
     def mem_cksum(self, addr: str, wcnt: str) -> str:
         addr: int = int(addr, base=16)
         wcnt: int = int(wcnt, base=16)
-        val: int = self.memory.cksum(addr, wcnt)
+        try:
+            val: int = self.memory.cksum(addr, wcnt)
+        except MemoryInvalidAddrTestError:
+            SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_ADDR = 122
+            return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_CHECKSUM_INVALID_ADDR)
         return hex(val)
 
     def mem_dump(self, addr: str, wcnt: str) -> str:
         addr: int = int(addr, base=16)
         wcnt: int = int(wcnt, base=16)
-        vals: list[int] = self.memory.dump(addr, wcnt)
+        try:
+            vals: list[int] = self.memory.dump(addr, wcnt)
+        except MemoryInvalidAddrTestError:
+             SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_ADDR = 116
+             return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_DUMP_INVALID_ADDR)
         string = ""
         for val in vals:
             string += f"{hex(val)} "
@@ -102,7 +118,7 @@ class McuCliInterpreter(uvm_object):
         SYSTEM_ERROR_CLI_CMD_MEM_SIZE_UNKNOWN_ARG = 127
 
         return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_SIZE_UNKNOWN_ARG)
-    
+
     def mem_test(self) -> str:
         SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT = 102
         return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT)
