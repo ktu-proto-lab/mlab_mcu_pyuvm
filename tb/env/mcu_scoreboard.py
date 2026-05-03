@@ -31,7 +31,7 @@ class McuScoreboard(uvm_component):
                 f"provided configuration is not expected Config type, provided {type(self.cfg).__name__}"
             )
 
-        self.is_active = self.cfg.scoreboard_enable
+        self.is_active = self.cfg.active_scoreboard
 
         if not self.is_active:
             self.logger.info("scoreboard is disabled")

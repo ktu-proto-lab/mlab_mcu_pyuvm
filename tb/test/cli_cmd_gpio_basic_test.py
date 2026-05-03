@@ -9,9 +9,11 @@ class CliCmdGpioBasicTest(McuTest):
         
     def build_phase(self):
         super().build_phase()
-        self.cfg.state_observer_active = False
-        self.cfg.gpio_cfg.log_monitor_apply_uart_mask = True
-        self.cfg.uart_cfg.log_monitor_bytes_in_ascii = True
+        self.cfg.active_state_observer = False
+        self.cfg.active_scoreboard = False
+        self.cfg.uart_cfg.active = False
+        self.cfg.gpio_cfg.log_debug_monitor_apply_uart_mask = True
+        self.cfg.uart_cfg.log_debug_monitor_bytes_in_ascii = True
     
     
     async def run_phase(self):

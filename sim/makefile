@@ -44,9 +44,9 @@ Test:
   SW=dir_name       : override software directory
 
 Options:
-  WAVES=1                   : capture waves in waveform 'dump.vcd' file
-  GUI=1                     : open SimVision GUI (only when SIM=xcelium)
-  LOG=DEBUG|INFO|ERROR...   : set logging level (default: INFO)
+  WAVES=1                       : capture waves in waveform 'dump.vcd' file
+  GUI=1                         : open SimVision GUI (only when SIM=xcelium)
+  LOG=debug|info|warning|error  : set logging level (default: info)
 
 Requirements:
   1. TEST or TB must be defined.
@@ -55,7 +55,7 @@ Requirements:
 Examples:
   make TEST=simple_gpio_test WAVES=1
   make SIM=xcelium TB=uart_tb GUI=1
-  make TEST=uart_simple_test LOG=WARNING
+  make TEST=uart_simple_test LOG=debug
 -------------------------------------------------------------------------------
 endef
 export HELP_USAGE

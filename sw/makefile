@@ -8,8 +8,8 @@ define HELP_USAGE
 Builds C MCU firmware from a given source directory.
 
 Usage:
-	make [build] SW_SOURCE_DIR=<relative_path>
-	make [build] SW_SOURCE_FULL_PATH=<absolute_path>
+	make build SW_SOURCE_DIR=<relative_path>
+	make build SW_SOURCE_FULL_PATH=<absolute_path>
 
 Targets:
     build   : cleans and compiles the firmware at the given source directory
@@ -24,8 +24,8 @@ Options:
                               but can also be used directly.
 
 Example:
-	make SW_SOURCE_DIR=test/mcu_base_test
-	make SW_SOURCE_FULL_PATH=/home/user/mlab_mcu/uvm/test/mcu_base_test
+	make build SW_SOURCE_DIR=test/mcu_base_test
+	make build SW_SOURCE_FULL_PATH=/home/user/mlab_mcu/uvm/test/mcu_base_test
 -------------------------------------------------------------------------------
 endef
 export HELP_USAGE

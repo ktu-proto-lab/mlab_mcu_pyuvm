@@ -17,8 +17,8 @@ class Config(uvm_object):
         self.tracer_log_enable: bool = True
         self.tracer_log_filepath: str = "sim_build/tracer.log"
         self.event_pool = McuEventPool.create("event_pool")
-        self.scoreboard_enable: bool = True
+        self.active_scoreboard: bool = True
         self.mem_path: str = None
         self.mem_cfg: McuMemoryConfig = McuMemoryConfig.create("mem_cfg")
         self.simulator: McuSimulatorEnum = None
-        self.state_observer_active: bool = True
+        self.active_state_observer: bool = True

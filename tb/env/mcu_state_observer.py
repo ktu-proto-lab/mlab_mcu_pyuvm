@@ -29,7 +29,7 @@ class McuStateObserver(uvm_subscriber):
         if not isinstance(self.cfg, Config):
             raise TypeError(f"wrong configuration provided for the state probe, expected Config, got {type(self.cfg).__name__}")
 
-        self.active = self.cfg.state_observer_active
+        self.active = self.cfg.active_state_observer
         
         self.event_pool = self.cfg.event_pool
 

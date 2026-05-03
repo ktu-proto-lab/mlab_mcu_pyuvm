@@ -60,7 +60,7 @@ class UartMonitor(uvm_monitor):
             await self.bit_time(factor=0.5)
 
             if not byte.is_idle_byte():
-                if self.cfg.uart_cfg.log_monitor_bytes_in_ascii:
+                if self.cfg.uart_cfg.log_debug_monitor_bytes_in_ascii:
                     self.logger.debug(f"rx: {byte.to_ascii()}")
                 else:
                     self.logger.debug(f"rx: {byte.to_hex()}")
@@ -86,7 +86,7 @@ class UartMonitor(uvm_monitor):
             await self.bit_time(factor=0.5)
 
             if not byte.is_idle_byte():
-                if self.cfg.uart_cfg.log_monitor_bytes_in_ascii:
+                if self.cfg.uart_cfg.log_debug_monitor_bytes_in_ascii:
                     self.logger.debug(f"rx: {byte.to_ascii()}")
                 else:
                     self.logger.debug(f"rx: {byte.to_hex()}")

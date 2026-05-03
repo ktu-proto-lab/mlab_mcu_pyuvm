@@ -80,7 +80,7 @@ class GpioNibbleMirrorTest(McuTest):
     def build_phase(self):
         super().build_phase()
         self.cfg.uart_cfg.active = False
-        self.cfg.scoreboard_enable = False
+        self.cfg.active_scoreboard = False
         self.checker = GpioNibbleMirrorChecker.create("checker", self)
 
     def connect_phase(self):

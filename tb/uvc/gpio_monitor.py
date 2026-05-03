@@ -51,7 +51,7 @@ class GpioMonitor(uvm_monitor):
                 txn: GpioPad = GpioPad.create("txn")
                 txn.state = curr_pin_state
                 
-                if self.cfg.gpio_cfg.log_monitor_apply_uart_mask and prev_pin_state is not None:
+                if self.cfg.gpio_cfg.log_debug_monitor_apply_uart_mask and prev_pin_state is not None:
                     log_curr_pin_state = curr_pin_state & ~self.cfg.gpio_cfg.uart_mask
                     log_prev_pin_state = prev_pin_state & ~self.cfg.gpio_cfg.uart_mask
                     if log_curr_pin_state != log_prev_pin_state:
