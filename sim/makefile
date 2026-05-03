@@ -29,10 +29,10 @@ LOG ?= INFO
 # test software running on dut
 SW ?=
 
-TRACER_LINE_COUNT ?= 20
+TRACER_LINE_COUNT ?= 30
 
 define HELP_USAGE
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 Usage:
   make [SIM=...] [TEST=... | TB=...] [WAVES=1] [GUI=1] [LOG=...]
 
@@ -54,11 +54,16 @@ Requirements:
   1. TEST or TB must be defined.
   2. Software directory must contain a 'main.c' file.
 
+Test transaction tracer:
+  make tracer [TRACER_LINE_COUNT=n]
+
 Examples:
   make TEST=simple_gpio_test WAVES=1
   make SIM=xcelium TB=uart_tb GUI=1
   make TEST=uart_simple_test LOG=debug
--------------------------------------------------------------------------------
+  make tracer
+  make tracer TRACER_LINE_COUNT=50
+------------------------------------------------------------------------------------------------------------------------
 endef
 export HELP_USAGE
 
