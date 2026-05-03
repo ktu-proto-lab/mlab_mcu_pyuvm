@@ -4,78 +4,64 @@ warnings.filterwarnings("ignore", category=DeprecationWarning, module="vsc")
 import vsc
 from enum import Enum
 from pyuvm import uvm_sequence_item
-from errors import CommandUnknownTestError
+from errors import *
 from cfg.config import Config
-
-class CliCmdEnum(Enum):
-    read = 1
-    write = 2
-    cksum = 3
-    dump = 4
-    test = 5
 
 @vsc.randobj
 class CliCmdItem(uvm_sequence_item):
-    def __init__(self, name="CliCmd"):
+    def __init__(self, name="CliCmdItem"):
         super().__init__(name)
         self.cfg: Config = None
-        self.cmd = vsc.rand_enum_t(CliCmdEnum)
-        self.addr = vsc.rand_uint32_t()
-        self.value = vsc.rand_uint32_t()
-        self.word_count = vsc.rand_uint32_t()
+        self.cmd: str = None
 
+    def pre_randomize(self):
+        if self.cfg is None:
+            raise ConfigTestError("configuration must be assigned to the sequence item before randomization")
 
-    @vsc.constraint
-    def c_mem_addr_space(self):
-        # NOTE: not using dmem space because of the potential of overwriting the stack and causing the test to crash
-        imem_base_addr = 0x80000000
-        imem_size_bytes = 8192
-        vsc.dist(self.addr, [
-            vsc.weight(vsc.rng(imem_base_addr, imem_base_addr + imem_size_bytes), 50)
-        ])
-
-    @vsc.constraint
-    def c_cmd_write_value_dist(self):
-        # check min and max values, and 0
-        with vsc.if_then(self.cmd == CliCmdEnum.write):
-            int32_t_min_value = -(2**31)
-            int32_t_max_value = (2**31) - 1
-            vsc.dist(self.value, [
-                vsc.weight(0, 5),
-                vsc.weight(int32_t_min_value, 5),
-                vsc.weight(int32_t_max_value, 5),
-                vsc.weight(vsc.rng(1, int32_t_max_value), 30),
-                vsc.weight(vsc.rng(int32_t_min_value, -1), 30)
-            ])
-
-    @vsc.constraint
-    def c_word_count_range(self):
-        with vsc.if_then((self.cmd == CliCmdEnum.cksum) | (self.cmd == CliCmdEnum.dump)):
-            self.word_count in vsc.rangelist(vsc.rng(1, 16))
-
-    @vsc.constraint
-    def c_cmd_equal_dist(self):
-        vsc.dist(self.cmd,[
-            vsc.weight(CliCmdEnum.read, 30),
-            vsc.weight(CliCmdEnum.write, 20),
-            vsc.weight(CliCmdEnum.cksum, 20),
-            vsc.weight(CliCmdEnum.dump, 20),
-            vsc.weight(CliCmdEnum.test, 10)
-        ])
-
-    def to_string(self) -> str:
-        if self.cmd == CliCmdEnum.read:
-            return f"mem read {hex(self.addr)}"
-        if self.cmd == CliCmdEnum.write:
-            return f"mem write {hex(self.addr)} {hex(self.value)}"
-        if self.cmd == CliCmdEnum.cksum:
-            return f"mem cksum {hex(self.addr)} {hex(self.word_count)}"
-        if self.cmd == CliCmdEnum.dump:
-            return f"mem dump {hex(self.addr)} {hex(self.word_count)}"
-        if self.cmd == CliCmdEnum.test:
-            return "mem test"
-        raise CommandUnknownTestError(f"unhandled command {self.cmd}")
-
+    def to_string(self):
+        raise NotImplementedTestError("method must be implemented by the subclass")
 
     def __str__(self):
         return self.to_string()
+
+@vsc.randobj
+class CliCmdMemItem(CliCmdItem):
+    def __init__(self, name='CliCmdMemItem'):
+        super().__init__(name)
+        self.cmd = "mem"
+        self.subcmd: str = None
+
+@vsc.randobj
+class CliCmdMemWriteItem(CliCmdMemItem):
+    def __init__(self, name="CliCmdMemWriteItem"):
+        super().__init__(name)
+        self.subcmd = "write"
+
+        self.addr = vsc.rand_uint32_t()
+        self.val = vsc.rand_int32_t()
+
+        self.min_addr = vsc.uint32_t()
+        self.max_addr = vsc.uint32_t()
+
+        self.min_val = -(2**31)
+        self.max_val = (2**31) - 1
+
+    def pre_randomize(self):
+        super().pre_randomize()
+        self.min_addr = self.cfg.mem_cfg.imem_base_addr + self.cfg.mem_cfg.instr_size_bytes
+        self.max_addr = self.cfg.mem_cfg.imem_base_addr + self.cfg.mem_cfg.imem_size_bytes - self.cfg.mem_cfg.word_size_bytes
+
+    @vsc.constraint
+    def c_addr_space(self):
+        self.addr >= self.min_addr
+        self.addr <= self.max_addr
+
+    @vsc.constraint
+    def c_val_dist(self):
+        vsc.dist(self.val,[
+            vsc.weight(vsc.rng(self.min_val, -1), 10),
+            vsc.weight(vsc.rng(0, self.max_val), 90)
+        ])
+
+    def to_string(self):
+        return f"{self.cmd} {self.subcmd} {hex(self.addr)} {hex(self.val & 0xFFFFFFFF)}"
