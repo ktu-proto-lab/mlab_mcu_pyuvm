@@ -16,7 +16,8 @@ C_SOURCES += \
     $(PROJECT_ROOT)/uvm/sw/lib/string.c \
     $(PROJECT_ROOT)/uvm/sw/sys/err.c \
     $(PROJECT_ROOT)/uvm/sw/sys/glob.c \
-    $(PROJECT_ROOT)/uvm/sw/sys/time.c
+    $(PROJECT_ROOT)/uvm/sw/sys/time.c \
+    $(PROJECT_ROOT)/uvm/sw/sys/state.c
 
 # used by the common.mk, do not touch, legacy compatibility
 COMMON_DIR = $(PROJECT_ROOT)/sw/ibex/common

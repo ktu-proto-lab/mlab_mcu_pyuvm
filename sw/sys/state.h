@@ -12,8 +12,6 @@ typedef enum {
     SYSTEM_STATE_MASK   = 0b11100000,
 } system_state_t;
 
-inline void system_state_set(gpio_handle_t *gpio, system_state_t state) {
-    gpio->regs->out = (gpio->regs->out & ~SYSTEM_STATE_MASK) | state;
-}
+void system_state_set(system_state_t state);
 
 #endif
