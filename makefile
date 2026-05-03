@@ -49,7 +49,7 @@ XCELIUM_IMAGE := mlab-mcu-uvm-xcelium-$(USER):latest
 # used in docker-compose.yml
 export CADENCE_ROOT := /eda/cadence/2024-25/RHELx86/XCELIUM_24.03.004
 
-ACTIONS := image venv run purge patch
+ACTIONS := image venv run purge patch view
 ACTION := $(firstword $(MAKECMDGOALS))
 ifneq ($(filter $(ACTION),$(ACTIONS)),)
     ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -169,5 +169,36 @@ else ifeq ($(VENV_ACTION_OPTION),clean)
 else
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger ERROR "option '$(VENV_ACTION_OPTION)' not valid, use 'make help' to display usage"; \
+	exit 1
+endif
+
+# make view <verilator|xcelium> <waves|coverage>
+VIEW_TARGET := $(word 2, $(ARGS))
+.PHONY: view
+view:
+ifeq ($(SIMULATOR),verilator)
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	if [ "$(VIEW_TARGET)" = "coverage" ]; then \
+		COVERAGE_DATA_FILE="sim/coverage.dat"; \
+		COVERAGE_DATA_PATH="$(PROJECT_ROOT)/uvm/$$COVERAGE_DATA_FILE"; \
+		if [ -f "$$COVERAGE_DATA_PATH" ]; then \
+			logger INFO "coverage report from $(VERILATOR_NAME)"; \
+			docker compose --progress quiet run --rm verilator /bin/bash -c "verilator_coverage --rank $$COVERAGE_DATA_FILE"; \
+		else \
+			logger ERROR "coverage data file not found at '$$COVERAGE_DATA_PATH'"; \
+			exit 1; \
+		fi; \
+	fi; \
+	if [ "$(VIEW_TARGET)" = "waves" ]; then \
+		logger INFO "todo: implement waveform viewing in gtkwave"; \
+	fi; \
+	exit 0
+else ifeq ($(SIMULATOR),xcelium)
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	logger INFO "viewing $(XCELIUM_NAME) results"; \
+	exit 0
+else
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	logger ERROR "specify valid simulator to view results of: verilator or xcelium, use 'make help' to display usage"; \
 	exit 1
 endif
