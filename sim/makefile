@@ -29,6 +29,9 @@ LOG ?= INFO
 # test software running on dut
 SW ?=
 
+# test coverage reporting from simulator
+COVERAGE ?= 0
+
 TRACER_LINE_COUNT ?= 30
 
 define HELP_USAGE
@@ -235,20 +238,28 @@ ifeq ($(SIM), verilator)
 		# Generate 'dump.vcd' waveform file
 		EXTRA_ARGS += --trace --trace-structs
 	endif
+
+	ifeq ($(COVERAGE),1)
+		EXTRA_ARGS += --coverage
+	endif
 endif
 
 ifeq ($(SIM), xcelium)
 	EXTRA_ARGS += -access +rwc
 
 	ifeq ($(GUI),1)
-		# SimVision reads wavefiles to show on GUI
+		# simvision reads wavefiles to show on gui
 		WAVES := 1
 		EXTRA_ARGS += +gui
 	endif
 
 	ifeq ($(WAVES),1)
-		# Dump waves in xcelium's native shm format and run
+		# dump waves in xcelium's native shm format and run
 		EXTRA_ARGS += -input $(PROJECT_ROOT)/uvm/sim/xcelium/waves.tcl
+	endif
+
+	ifeq ($(COVERAGE),1)
+		EXTRA_ARGS += -coverage all
 	endif
 endif
 
