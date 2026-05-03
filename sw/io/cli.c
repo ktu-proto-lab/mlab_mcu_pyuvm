@@ -172,7 +172,7 @@ static system_error_t cli_mem_handler(int argc, char **argv) {
 }
 
 static system_error_t cli_gpio_get_handler(int argc, char **argv) {
-    if (argc != CLI_CMD_GPIO_GET_ARG_COUNT || argc != CLI_CMD_GPIO_GET_PIN_ARG_COUNT) {
+    if (argc != CLI_CMD_GPIO_GET_ARG_COUNT && argc != CLI_CMD_GPIO_GET_PIN_ARG_COUNT) {
         return SYSTEM_ERROR_CLI_CMD_GPIO_GET_INVALID_ARG_COUNT;
     }
     if (argc == CLI_CMD_GPIO_GET_ARG_COUNT) {
