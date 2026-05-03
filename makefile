@@ -172,13 +172,13 @@ else
 	exit 1
 endif
 
-# make view <verilator|xcelium> <waves|coverage>
+# make view <verilator|xcelium> <waves|cov>
 VIEW_TARGET := $(word 2, $(ARGS))
 .PHONY: view
 view:
 ifeq ($(SIMULATOR),verilator)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
-	if [ "$(VIEW_TARGET)" = "coverage" ]; then \
+	if [ "$(VIEW_TARGET)" = "cov" ]; then \
 		COVERAGE_DATA_FILE="sim/coverage.dat"; \
 		COVERAGE_DATA_PATH="$(PROJECT_ROOT)/uvm/$$COVERAGE_DATA_FILE"; \
 		if [ -f "$$COVERAGE_DATA_PATH" ]; then \
@@ -195,7 +195,7 @@ ifeq ($(SIMULATOR),verilator)
 	exit 0
 else ifeq ($(SIMULATOR),xcelium)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
-	if [ "$(VIEW_TARGET)" = "coverage" ]; then \
+	if [ "$(VIEW_TARGET)" = "cov" ]; then \
 		COVERAGE_DATA_DIR="sim/cov_work/scope/test/"; \
 		COVERAGE_DATA_PATH="$(PROJECT_ROOT)/uvm/$$COVERAGE_DATA_DIR"; \
 		if [ -d "$$COVERAGE_DATA_PATH" ]; then \
@@ -214,7 +214,8 @@ else ifeq ($(SIMULATOR),xcelium)
 		WAVEFORM_DATA_PATH="$(PROJECT_ROOT)/uvm/$$WAVEFORM_DATA_DIR"; \
 		if [ -d "$$WAVEFORM_DATA_PATH" ]; then \
 			cd sim/; \
-			simvision "$$WAVEFORM_DATA_PATH" >/dev/null 2>&1 & \
+			SIMVISION_TCL_SCRIPT_PATH="$(PROJECT_ROOT)/uvm/sim/xcelium/restore.tcl.svcf"; \
+			simvision "$$WAVEFORM_DATA_PATH" -input "$$SIMVISION_TCL_SCRIPT_PATH" >/dev/null 2>&1 & \
 			logger SUCCESS "waveform data from $(XCELIUM_NAME) opened on Candence SimVision"; \
 			cd ..; \
 			exit 0; \

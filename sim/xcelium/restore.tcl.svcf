@@ -1,10 +1,11 @@
-# SimVision Command Script (Fri Feb 27 04:14:52 PM EET 2026)
+# SimVision Command Script (Sun May 03 10:05:41 PM EEST 2026)
 #
-# Version 24.03.s004
+# Version 25.03.s006
 #
 # You can restore this configuration with:
 #
-#      xrun -timescale 1ns/1ps -vhdl_time_precision 1ps +gui -access +rw -f /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../sim/rtl/files.f -define FUNCTIONAL -define RANDOM_NUMBER=90 -define MEM_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/verilog_hex.v" -define IMEM1_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/instr_hex_1.mem" -define IMEM2_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/instr_hex_2.mem" -define DMEM_HEX_FILE="/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/data_hex.mem" -notimingchecks -licqueue -64 -xmlibdirpath sim_build -plinowarn -top mcu -loadvpi /home/la_52/MLAB_MCU_edu/uvm/.venv/lib/python3.6/site-packages/cocotb/libs/libcocotbvpi_ius.so:vlog_startup_routines_bootstrap -access +rwc -createdebugdb /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/rtl/mcu.sv -s -input restore.tcl
+#     simvision -input /home/la_52/mlab_mcu_edu/uvm/sim/xcelium/restore.tcl.svcf
+#  or simvision -input /home/la_52/mlab_mcu_edu/uvm/sim/xcelium/restore.tcl.svcf database1 database2 ...
 #
 
 
@@ -13,15 +14,24 @@
 #
 preferences set plugin-enable-svdatabrowser-new 1
 preferences set cursorctl-dont-show-sync-warning 1
+preferences set toolbar-Standard-WaveWindow {
+  usual
+  position -pos 1
+}
 preferences set plugin-enable-groupscope 0
 preferences set plugin-enable-interleaveandcompare 0
 preferences set plugin-enable-waveformfrequencyplot 0
 
 #
-# Simulator
+# Databases
 #
-database require simulator -hints {
-	simulator "xrun -timescale 1ns/1ps -vhdl_time_precision 1ps +gui -access +rw -f /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../sim/rtl/files.f -define FUNCTIONAL -define RANDOM_NUMBER=90 -define MEM_HEX_FILE=\"/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/verilog_hex.v\" -define IMEM1_HEX_FILE=\"/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/instr_hex_1.mem\" -define IMEM2_HEX_FILE=\"/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/instr_hex_2.mem\" -define DMEM_HEX_FILE=\"/home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/sw/test/gpio/mirror/build/data_hex.mem\" -notimingchecks -licqueue -64 -xmlibdirpath sim_build -plinowarn -gui -top mcu -loadvpi /home/la_52/MLAB_MCU_edu/uvm/.venv/lib/python3.6/site-packages/cocotb/libs/libcocotbvpi_ius.so:vlog_startup_routines_bootstrap -access +rwc -createdebugdb /home/la_52/MLAB_MCU_edu/uvm/sim/xcelium/../../../uvm/rtl/mcu.sv -s -input restore.tcl"
+array set dbNames ""
+set dbNames(realName1) [ database require waves -hints {
+	file ./waves.shm/waves.trn
+	file /home/la_52/mlab_mcu_edu/uvm/sim/waves.shm/waves.trn
+}]
+if {$dbNames(realName1) == ""} {
+    set dbNames(realName1) waves
 }
 #
 # Groups
@@ -36,17 +46,13 @@ group set -overlay 0
 group set -comment {}
 group clear 0 end
 
-group insert \
-    [subst  {simulator::[format {mcu.gpio_i[9:0]}]} ] \
-    [subst  {simulator::[format {mcu.gpio_o[9:0]}]} ] \
-    [subst  {simulator::[format {mcu.gpio_oe[9:0]}]} ]
+
 group using dmem
 group set -overlay 0
 group set -comment {}
 group clear 0 end
 
-group insert \
-    [subst  {simulator::[format {mcu.dut.dmem.sram.i_SRAM_1P_behavioral_bm_bist.memory[0:1023]}]} ]
+
 group using imem
 group set -overlay 0
 group set -comment {}
@@ -60,15 +66,13 @@ group set -overlay 0
 group set -comment {}
 group clear 0 end
 
-group insert \
-    [subst  {simulator::[format {mcu.dut.imem.sram2.i_SRAM_1P_behavioral_bm_bist.memory[0:1023]}]} ]
+
 group using sram2
 group set -overlay 0
 group set -comment {}
 group clear 0 end
 
-group insert \
-    [subst  {simulator::[format {mcu.dut.imem.sram1.i_SRAM_1P_behavioral_bm_bist.memory[0:1023]}]} ]
+
 
 #
 # Mnemonic Maps
@@ -88,10 +92,8 @@ if {[catch {window new WatchList -name "Design Browser 1" -geometry 730x500+261+
 }
 window target "Design Browser 1" on
 browser using {Design Browser 1}
-browser set -scope [subst  {simulator::[format {mcu.dut.u_wb_ibex_top.inst_ibex_top}]} ]
 browser set \
     -signalsort name
-browser yview see [subst  {simulator::[format {mcu.dut.u_wb_ibex_top.inst_ibex_top}]} ]
 browser timecontrol set -lock 0
 
 #
@@ -111,35 +113,6 @@ waveform set \
     -valuewidth 75
 waveform baseline set -time 1000ps
 
-set id [waveform add -signals [subst  {
-	{simulator::[format {mcu.rst}]}
-	} ]]
-set id [waveform add -signals [subst  {
-	{simulator::[format {mcu.clk}]}
-	} ]]
-set id [waveform add -signals [subst  {
-	{simulator::[format {mcu.ext_pad_io[9:0]}]}
-	} ]]
-
-set groupId0 [waveform add -groups gpio]
-
-
-set groupId0 [waveform add -groups imem]
-
-set groupId1 [waveform find -name sram1]
-
-
-set groupId1 [waveform find -name sram2]
-
-waveform hierarchy collapse $groupId0
-
-
-set groupId0 [waveform add -groups dmem]
-waveform hierarchy collapse $groupId0
-
-set id [waveform add -signals [subst  {
-	{simulator::[format {mcu.dut.u_wb_ibex_top.inst_ibex_top.instr_addr_o[31:0]}]}
-	} ]]
 
 waveform xview limits 51433234ps 55090001ps
 
@@ -162,13 +135,6 @@ memviewer set \
 -addressradix default \
 -addressorder MSBtoLSB
 
-memviewer add [subst  {simulator::[format {mcu.dut.imem.sram1.i_SRAM_1P_behavioral_bm_bist.memory[0:1023]}]} ]
-
-# Load memory viewer instances
-memviewer add -instanceonly  \
-	[subst  {simulator::[format {mcu.dut.imem.sram2.i_SRAM_1P_behavioral_bm_bist.memory[0:1023]}]} ] \
-	[subst  {simulator::[format {mcu.dut.dmem.sram.i_SRAM_1P_behavioral_bm_bist.memory[0:1023]}]} ]
-
 memviewer sidebar visibility partial
 
 #
@@ -176,8 +142,4 @@ memviewer sidebar visibility partial
 #
 console set -windowname Console
 window geometry Console 730x250+261+564
-
-#
-# Layout selection
-#
 
