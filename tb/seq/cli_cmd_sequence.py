@@ -13,7 +13,8 @@ class CliCmdSequence(McuVirtualSequence):
              CliCmdMemReadItem,
              CliCmdMemDumpItem,
              CliCmdMemCksumItem,
-             CliCmdMemTestItem
+             CliCmdMemTestItem,
+             CliCmdGpioGetItem,
          ]
 
     async def body(self):

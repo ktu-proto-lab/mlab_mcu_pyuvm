@@ -9,3 +9,4 @@ class GpioConfig(uvm_object):
         self.vif: McuVirtualInterface = None
         self.log_debug_monitor_apply_uart_mask: bool = False
         self.uart_mask: int = 0b00000011
+        self.pin_count: int = 10

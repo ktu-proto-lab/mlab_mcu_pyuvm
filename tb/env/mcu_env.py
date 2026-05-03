@@ -76,6 +76,9 @@ class McuEnv(uvm_env):
 
             self.gpio.monitor.ap.connect(self.state_observer.analysis_export)
             self.logger.debug("connected gpio pad to the state observer")
+            
+            self.gpio.monitor.ap.connect(self.ref_model.cli.gpio_state.analysis_export)
+            self.logger.debug("connected gpio pad to the reference model cli gpio state")
 
         if self.cfg.uart_cfg.active:
             self.virtual_sequencer.uart = self.uart.sequencer

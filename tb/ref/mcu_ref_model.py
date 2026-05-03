@@ -5,6 +5,7 @@ from cfg.config import Config
 from ref.mcu_memory_mirror import McuMemoryMirror
 from ref.mcu_cli_interpreter import McuCliInterpreter
 from ref.mcu_transaction import McuTransaction
+from ref.mcu_gpio_pad_state import McuGpioPadState
 
 # Maybe this needs to be a component too.
 class McuRefModel(uvm_component):
@@ -39,6 +40,9 @@ class McuRefModel(uvm_component):
         self.cli = McuCliInterpreter.create("cli")
         self.cli.memory = self.memory
         self.logger.debug("created cli and assigned memory mirror")
+        # connected in env connect phase (needs gpio monitor ap)
+        self.cli.gpio_state = McuGpioPadState.create("gpio_state")
+        self.cli.gpio_state.cfg = self.cfg
 
         self.request_fifo = uvm_tlm_analysis_fifo.create("req_fifo", self)
         self.ap = uvm_analysis_port.create("ap", self)

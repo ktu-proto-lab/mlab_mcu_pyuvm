@@ -208,3 +208,38 @@ class CliCmdMemTestItem(CliCmdMemItem):
 
     def to_string(self):
         return f"{self.cmd} {self.subcmd}"
+
+@vsc.randobj
+class CliCmdGpioItem(CliCmdItem):
+    def __init__(self, name="CliCmdGpioItem"):
+        super().__init__(name)
+        self.cmd = "gpio"
+        self.subcmd: str = None
+
+@vsc.randobj
+class CliCmdGpioGetItem(CliCmdGpioItem):
+    def __init__(self, name="CliCmdGpioGetItem"):
+        super().__init__(name)
+        self.subcmd = "get"
+
+        self.has_pin_arg = vsc.rand_bit_t(1)
+        self.pin_count = vsc.uint32_t()
+        self.big_pin = vsc.uint32_t()
+        self.little_pin = vsc.uint32_t()
+        self.pin = vsc.rand_uint32_t()
+
+    def pre_randomize(self):
+        super().pre_randomize()
+        self.pin_count = self.cfg.gpio_cfg.pin_count
+        self.big_pin = self.pin_count - 1
+        self.little_pin = 0
+
+    @vsc.constraint
+    def c_pin_range(self):
+        self.pin >= self.little_pin
+        self.pin <= self.big_pin
+
+    def to_string(self):
+        if self.has_pin_arg:
+            return f"{self.cmd} {self.subcmd} {hex(self.pin)}"
+        return f"{self.cmd} {self.subcmd}"

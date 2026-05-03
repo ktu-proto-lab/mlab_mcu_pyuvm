@@ -1,13 +1,14 @@
 import shlex
 from pyuvm import uvm_object
 from errors import *
-
 from ref.mcu_memory_mirror import McuMemoryMirror
+from ref.mcu_gpio_pad_state import McuGpioPadState
 
 class McuCliInterpreter(uvm_object):
     def __init__(self, name="McuCli") -> None:
         super().__init__(name)
         self.memory: McuMemoryMirror = None
+        self.gpio_state: McuGpioPadState = None
         self.commands = {
             "echo": self.echo,
             "mem read": self.mem_read,
@@ -16,6 +17,7 @@ class McuCliInterpreter(uvm_object):
             "mem dump": self.mem_dump,
             "mem size": self.mem_size,
             "mem test": self.mem_test,
+            "gpio get": self.gpio_get,
         }
 
     def execute(self, req: str) -> str:
@@ -42,6 +44,10 @@ class McuCliInterpreter(uvm_object):
         elif tokens[0] == "echo" and len(tokens) == 2:
             cmd = f"{tokens[0]}"
             args = f"{tokens[1]}"
+            
+        elif tokens[0] == "gpio" and len(tokens) > 1:
+            cmd = f"{tokens[0]} {tokens[1]}"
+            args = tokens[2:]
 
         if cmd in self.commands:
             return self.commands[cmd](*args)
@@ -122,6 +128,18 @@ class McuCliInterpreter(uvm_object):
     def mem_test(self) -> str:
         SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT = 102
         return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT)
+    
+    def gpio_get(self, *args) -> str:
+        gpio_curr_pad_state = self.gpio_state.state & ~(self.gpio_state.cfg.gpio_cfg.uart_mask)
+        
+        if len(args) == 0:
+            return f"{hex(gpio_curr_pad_state)}"
+        
+        pin_num = int(args[0], 16)
+        
+        gpio_curr_pin_state = (gpio_curr_pad_state >> pin_num) & 0x1
+        return f"{gpio_curr_pin_state}"
+        
 
     def system_error_print(self, error: int) -> str:
         return f"[  ERROR]: {error}"

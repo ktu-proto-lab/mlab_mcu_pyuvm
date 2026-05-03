@@ -167,7 +167,7 @@ static system_error_t cli_mem_handler(int argc, char **argv) {
     } else if (string_compare(subcmd, "size") == 0) {
         return cli_mem_size_handler(argc, argv);
     } else {
-        return SYSTEM_ERROR_CLI_CMD_GPIO_SUBCMD_NOT_FOUND;
+        return SYSTEM_ERROR_CLI_CMD_MEM_SUBCMD_NOT_FOUND;
     }
 }
 
@@ -176,7 +176,8 @@ static system_error_t cli_gpio_get_handler(int argc, char **argv) {
         return SYSTEM_ERROR_CLI_CMD_GPIO_GET_INVALID_ARG_COUNT;
     }
     if (argc == CLI_CMD_GPIO_GET_ARG_COUNT) {
-        uint32_t value = g_gpio.regs->in;
+        // FIX: short fix for now, it should have a flag to indicate to apply uart mask or not
+        uint32_t value = g_gpio.regs->in & ~(UART_GPIO_RX_PIN | UART_GPIO_TX_PIN);
         printf("%x\n", value);
         return SYSTEM_ERROR_NONE;
     }
