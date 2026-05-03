@@ -1,6 +1,6 @@
 #include "uart.h"
 
-void uart_init(uart_handle_t *uart) {
+void uart_init(volatile uart_handle_t *uart) {
     uart->regs = (volatile uart_regs_t *)UART_BASE_ADDR;
 
     if (uart->tx_state == UART_STATE_RESET) {
@@ -17,39 +17,39 @@ void uart_init(uart_handle_t *uart) {
     }
 }
 
-void uart_tx_enable(uart_handle_t *uart) {
+void uart_tx_enable(volatile uart_handle_t *uart) {
     if (uart->tx_state == UART_STATE_READY) {
         uart->regs->control |= UART_CTRL_TX_EN;
     }
 }
 
-void uart_tx_disable(uart_handle_t *uart) {
+void uart_tx_disable(volatile uart_handle_t *uart) {
     if (uart->tx_state == UART_STATE_READY) {
         uart->regs->control &= ~UART_CTRL_TX_EN;
     }
 }
 
-void uart_tx_reset(uart_handle_t *uart) {
+void uart_tx_reset(volatile uart_handle_t *uart) {
     uart->regs->control |= UART_CTRL_TX_RST;
 }
 
-void uart_rx_enable(uart_handle_t *uart) {
+void uart_rx_enable(volatile uart_handle_t *uart) {
     if (uart->rx_state == UART_STATE_READY) {
         uart->regs->control |= UART_CTRL_RX_EN;
     }
 }
 
-void uart_rx_disable(uart_handle_t *uart) {
+void uart_rx_disable(volatile uart_handle_t *uart) {
     if (uart->rx_state == UART_STATE_READY) {
         uart->regs->control &= ~UART_CTRL_RX_EN;
     }
 }
 
-void uart_rx_reset(uart_handle_t *uart) {
+void uart_rx_reset(volatile uart_handle_t *uart) {
     uart->regs->control |= UART_CTRL_RX_RST;
 }
 
-void uart_transmit(uart_handle_t *uart, uint8_t *data, uint16_t size) {
+void uart_transmit(volatile uart_handle_t *uart, uint8_t *data, uint16_t size) {
     if (uart->tx_state != UART_STATE_READY || data == NULL || size == 0) {
         return;
     }
@@ -64,7 +64,7 @@ void uart_transmit(uart_handle_t *uart, uint8_t *data, uint16_t size) {
     while (uart->regs->tx_data & UART_TX_BUSY);
 }
 
-void uart_receive(uart_handle_t *uart, uint8_t *data, uint16_t size) {
+void uart_receive(volatile uart_handle_t *uart, uint8_t *data, uint16_t size) {
     while (size > 0) {
         uint32_t rx_data = uart->regs->rx_data;
         if (rx_data & UART_RX_EMPTY) {
@@ -74,7 +74,7 @@ void uart_receive(uart_handle_t *uart, uint8_t *data, uint16_t size) {
     }
 }
 
-void uart_transmit_it(uart_handle_t *uart, uint8_t *data, uint16_t size) {
+void uart_transmit_it(volatile uart_handle_t *uart, uint8_t *data, uint16_t size) {
     if (uart->tx_state != UART_STATE_READY || data == NULL || size == 0) {
         return;
     }
@@ -87,7 +87,7 @@ void uart_transmit_it(uart_handle_t *uart, uint8_t *data, uint16_t size) {
     uart->regs->control |= UART_CTRL_TX_INT_EN;
 }
 
-void uart_receive_it(uart_handle_t *uart, uint8_t *data, uint16_t size) {
+void uart_receive_it(volatile uart_handle_t *uart, uint8_t *data, uint16_t size) {
     if (uart->rx_state != UART_STATE_READY || data == NULL || size == 0) {
         return;
     }
@@ -100,7 +100,7 @@ void uart_receive_it(uart_handle_t *uart, uint8_t *data, uint16_t size) {
     uart->regs->control |= UART_CTRL_RX_INT_EN;
 }
 
-void uart_rx_not_empty_irq_handler(uart_handle_t *uart) {
+void uart_rx_not_empty_irq_handler(volatile uart_handle_t *uart) {
     if (uart->rx_state == UART_STATE_BUSY_RX) {
         *(uart->rx_buf) = (uint8_t)(uart->regs->rx_data & 0xFF);
         uart->rx_buf++;
@@ -116,7 +116,7 @@ void uart_rx_not_empty_irq_handler(uart_handle_t *uart) {
     }
 }
 
-void uart_tx_not_full_irq_handler(uart_handle_t *uart) {
+void uart_tx_not_full_irq_handler(volatile uart_handle_t *uart) {
     if (uart->tx_state == UART_STATE_BUSY_TX) {
         if (uart->tx_count == 0) {
             uart->regs->control &= ~UART_CTRL_TX_INT_EN;

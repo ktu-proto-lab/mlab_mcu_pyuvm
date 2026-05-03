@@ -16,6 +16,7 @@ class McuStateObserver(uvm_subscriber):
         self.event_pool: McuEventPool = None
         self._no_pool_warned = False
         self.prev_state = None
+        self.active: bool = True
 
     def build_phase(self):
         super().build_phase()
@@ -28,9 +29,14 @@ class McuStateObserver(uvm_subscriber):
         if not isinstance(self.cfg, Config):
             raise TypeError(f"wrong configuration provided for the state probe, expected Config, got {type(self.cfg).__name__}")
 
+        self.active = self.cfg.state_observer_active
+        
         self.event_pool = self.cfg.event_pool
 
     def write(self, gpio_pad: GpioPad):
+        if not self.active:
+            return
+
         if self.event_pool is None and not self._no_pool_warned:
             self.logger.warning("state observer is active, yet no event pool provided")
             self._no_pool_warned = True

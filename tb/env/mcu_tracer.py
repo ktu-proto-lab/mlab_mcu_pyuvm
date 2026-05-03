@@ -60,7 +60,7 @@ class McuTracer(uvm_component):
             try:
                 char = byte.to_ascii()
             except AsciiTestError:
-                self.logger.error(f"received non ascii byte {byte.hex_value()}")
+                self.logger.error(f"received non ascii byte {byte.to_hex()}")
                 continue
 
             if char == '\n' or char == '\0':

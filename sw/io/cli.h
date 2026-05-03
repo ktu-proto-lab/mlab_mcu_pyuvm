@@ -24,6 +24,15 @@
 // echo "string"
 #define CLI_CMD_ECHO_ARG_COUNT 2UL
 
+// gpio get [pin]
+#define CLI_CMD_GPIO_GET_ARG_COUNT 2UL
+#define CLI_CMD_GPIO_GET_PIN_ARG_COUNT 3UL
+// gpio set [pin] <val>
+#define CLI_CMD_GPIO_SET_ARG_COUNT 3UL
+# define CLI_CMD_GPIO_SET_PIN_ARG_COUNT 4UL
+// gpio toggle <pins>
+#define CLI_CMD_GPIO_TOGGLE_ARG_COUNT 3UL
+
 system_error_t cli_exec(char *input_buffer);
 
 #endif

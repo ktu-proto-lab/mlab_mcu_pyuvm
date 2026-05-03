@@ -21,3 +21,4 @@ class Config(uvm_object):
         self.mem_path: str = None
         self.mem_cfg: McuMemoryConfig = McuMemoryConfig.create("mem_cfg")
         self.simulator: McuSimulatorEnum = None
+        self.state_observer_active: bool = True

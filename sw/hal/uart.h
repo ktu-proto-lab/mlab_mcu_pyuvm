@@ -43,23 +43,23 @@ typedef struct {
     volatile uart_state_t rx_state;
 } uart_handle_t;
 
-void uart_init(uart_handle_t *uart);
-void uart_tx_enable(uart_handle_t *uart);
-void uart_tx_disable(uart_handle_t *uart);
-void uart_tx_reset(uart_handle_t *uart);
-void uart_rx_enable(uart_handle_t *uart);
-void uart_rx_disable(uart_handle_t *uart);
-void uart_rx_reset(uart_handle_t *uart);
+void uart_init(volatile uart_handle_t *uart);
+void uart_tx_enable(volatile uart_handle_t *uart);
+void uart_tx_disable(volatile uart_handle_t *uart);
+void uart_tx_reset(volatile uart_handle_t *uart);
+void uart_rx_enable(volatile uart_handle_t *uart);
+void uart_rx_disable(volatile uart_handle_t *uart);
+void uart_rx_reset(volatile uart_handle_t *uart);
 
-void uart_transmit(uart_handle_t *uart, uint8_t *data, uint16_t size);
-void uart_receive(uart_handle_t *uart, uint8_t *data, uint16_t size);
-void uart_transmit_it(uart_handle_t *uart, uint8_t *data, uint16_t size);
-void uart_receive_it(uart_handle_t *uart, uint8_t *data, uint16_t size);
+void uart_transmit(volatile uart_handle_t *uart, uint8_t *data, uint16_t size);
+void uart_receive(volatile uart_handle_t *uart, uint8_t *data, uint16_t size);
+void uart_transmit_it(volatile uart_handle_t *uart, uint8_t *data, uint16_t size);
+void uart_receive_it(volatile uart_handle_t *uart, uint8_t *data, uint16_t size);
 
-void uart_rx_not_empty_irq_handler(uart_handle_t *uart);
-void uart_tx_not_full_irq_handler(uart_handle_t *uart);
+void uart_rx_not_empty_irq_handler(volatile uart_handle_t *uart);
+void uart_tx_not_full_irq_handler(volatile uart_handle_t *uart);
 
-void __attribute__((weak)) uart_rx_cplt_callback(uart_handle_t *uart);
-void __attribute__((weak)) uart_tx_cplt_callback(uart_handle_t *uart);
+void __attribute__((weak)) uart_rx_cplt_callback(volatile uart_handle_t *uart);
+void __attribute__((weak)) uart_tx_cplt_callback(volatile uart_handle_t *uart);
 
 #endif

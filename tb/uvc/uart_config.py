@@ -9,3 +9,4 @@ class UartConfig(uvm_object):
         # TODO: monitoring-only option
         # self.is_passive: bool = False
         self.vif: McuVirtualInterface = None
+        self.log_monitor_bytes_in_ascii: bool = False

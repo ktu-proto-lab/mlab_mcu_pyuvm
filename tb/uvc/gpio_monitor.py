@@ -1,7 +1,7 @@
 from cocotb.triggers import RisingEdge, ReadOnly
 from pyuvm import uvm_monitor, uvm_analysis_port, ConfigDB
 from errors import ConfigTestError
-
+from cfg.config import Config
 from env.mcu_simulator import McuSimulatorEnum
 from uvc.gpio_config import GpioConfig
 from uvc.gpio_pad import GpioPad
@@ -18,14 +18,14 @@ class GpioMonitor(uvm_monitor):
         if not ConfigDB().exists(self, "", "cfg"):
             raise ConfigTestError("no provided configuration for gpio monitor")
 
-        self.cfg = ConfigDB().get(self, "", "cfg")
+        self.cfg: Config = ConfigDB().get(self, "", "cfg")
         
-        if not isinstance(self.cfg, GpioConfig):
+        if not isinstance(self.cfg, Config):
             raise ConfigTestError(
-                f"invalid configuration type for gpio monitor, expected GpioConfig, got {type(self.cfg).__name__}"
+                f"invalid configuration type for gpio monitor, expected Config, got {type(self.cfg).__name__}"
             )
-
-        self.vif = self.cfg.vif
+        
+        self.vif = self.cfg.gpio_cfg.vif
 
         self.ap = uvm_analysis_port.create("ap", self)
 
@@ -50,6 +50,14 @@ class GpioMonitor(uvm_monitor):
             if curr_pin_state != prev_pin_state:
                 txn: GpioPad = GpioPad.create("txn")
                 txn.state = curr_pin_state
-                self.logger.debug(f"{txn}")
+                
+                if self.cfg.gpio_cfg.log_monitor_apply_uart_mask and prev_pin_state is not None:
+                    log_curr_pin_state = curr_pin_state & ~self.cfg.gpio_cfg.uart_mask
+                    log_prev_pin_state = prev_pin_state & ~self.cfg.gpio_cfg.uart_mask
+                    if log_curr_pin_state != log_prev_pin_state:
+                        self.logger.debug(f"{txn}")
+                else:
+                    self.logger.debug(f"{txn}")
+
                 self.ap.write(txn)
                 prev_pin_state = curr_pin_state

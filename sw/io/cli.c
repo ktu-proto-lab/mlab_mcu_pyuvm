@@ -5,6 +5,7 @@
 #include "lib/string.h"
 #include "sys/mem.h"
 #include "sys/err.h"
+#include "hal/gpio.h"
 
 static system_error_t cli_echo_handler(int argc, char **argv) {
     if (argc != CLI_CMD_ECHO_ARG_COUNT) {
@@ -166,6 +167,83 @@ static system_error_t cli_mem_handler(int argc, char **argv) {
     } else if (string_compare(subcmd, "size") == 0) {
         return cli_mem_size_handler(argc, argv);
     } else {
+        return SYSTEM_ERROR_CLI_CMD_GPIO_SUBCMD_NOT_FOUND;
+    }
+}
+
+static system_error_t cli_gpio_get_handler(int argc, char **argv) {
+    if (argc != CLI_CMD_GPIO_GET_ARG_COUNT || argc != CLI_CMD_GPIO_GET_PIN_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_GPIO_GET_INVALID_ARG_COUNT;
+    }
+    if (argc == CLI_CMD_GPIO_GET_ARG_COUNT) {
+        uint32_t value = g_gpio.regs->in;
+        printf("%x\n", value);
+        return SYSTEM_ERROR_NONE;
+    }
+    uint32_t pin;
+    if (!string_hex_to_uint(argv[2], &pin)) {
+        return SYSTEM_ERROR_CLI_CMD_GPIO_GET_INVALID_PIN_HEX_FORMAT;
+    }
+    uint32_t value = g_gpio.regs->in & (1 << pin) ? 1 : 0;
+    printf("%u\n", value);
+    return SYSTEM_ERROR_NONE;
+}
+
+static system_error_t cli_gpio_set_handler(int argc, char **argv) {
+    if (argc != CLI_CMD_GPIO_SET_ARG_COUNT || argc != CLI_CMD_GPIO_SET_PIN_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_GPIO_SET_INVALID_ARG_COUNT;
+    }
+    if (argc == CLI_CMD_GPIO_SET_ARG_COUNT) {
+        uint32_t value;
+        if (!string_hex_to_uint(argv[2], &value)) {
+            return SYSTEM_ERROR_CLI_CMD_GPIO_SET_INVALID_VALUE_HEX_FORMAT;
+        }
+        uint32_t prev_value = g_gpio.regs->out;
+        g_gpio.regs->out = value;
+        printf("%x\n", prev_value);
+        return SYSTEM_ERROR_NONE;
+    }
+    uint32_t pin;
+    if (!string_hex_to_uint(argv[2], &pin)) {
+        return SYSTEM_ERROR_CLI_CMD_GPIO_SET_INVALID_PIN_HEX_FORMAT;
+    }
+    uint32_t value;
+    if (!string_hex_to_uint(argv[3], &value)) {
+        return SYSTEM_ERROR_CLI_CMD_GPIO_SET_INVALID_VALUE_HEX_FORMAT;
+    }
+    uint32_t prev_value = g_gpio.regs->out & (1 << pin);
+    if (value) {
+        g_gpio.regs->out |= (1 << pin);
+    } else {
+        g_gpio.regs->out &= ~(1 << pin);
+    }
+    printf("%x\n", prev_value);
+    return SYSTEM_ERROR_NONE;
+}
+
+static system_error_t cli_gpio_toggle_handler(int argc, char **argv) {
+    if (argc != CLI_CMD_GPIO_TOGGLE_ARG_COUNT) {
+        return SYSTEM_ERROR_CLI_CMD_GPIO_TOGGLE_INVALID_ARG_COUNT;
+    }
+    uint32_t pins;
+    if (!string_hex_to_uint(argv[2], &pins)) {
+        return SYSTEM_ERROR_CLI_CMD_GPIO_TOGGLE_INVALID_VALUE_HEX_FORMAT;
+    }
+    uint32_t prev_value = g_gpio.regs->out & pins;
+    g_gpio.regs->out ^= pins;
+    printf("%x\n", prev_value);
+    return SYSTEM_ERROR_NONE;
+}
+
+static system_error_t cli_gpio_handler(int argc, char **argv) {
+    const char *subcmd = argv[1];
+    if (string_compare(subcmd, "get") == 0) {
+        return cli_gpio_get_handler(argc, argv);
+    } else if (string_compare(subcmd, "set") == 0) {
+        return cli_gpio_set_handler(argc, argv);
+    } else if (string_compare(subcmd, "toggle") == 0) {
+        return cli_gpio_toggle_handler(argc, argv);
+    } else {
         return SYSTEM_ERROR_CLI_CMD_MEM_SUBCMD_NOT_FOUND;
     }
 }
@@ -179,7 +257,8 @@ typedef struct {
 
 static const cli_cmd_t cli_cmd_table[] = {
     {"echo", cli_echo_handler},
-    {"mem", cli_mem_handler}
+    {"mem", cli_mem_handler},
+    {"gpio", cli_gpio_handler},
 };
 
 static const uint32_t cli_cmd_count = sizeof(cli_cmd_table) / sizeof(cli_cmd_table[0]);

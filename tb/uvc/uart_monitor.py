@@ -6,12 +6,12 @@ from errors import ConfigTestError, VirtualInterfaceTestError
 
 from vif.mcu_virtual_interface import McuVirtualInterface
 from uvc.uart_byte import UartByte
-from uvc.uart_config import UartConfig
+from cfg.config import Config
 
 class UartMonitor(uvm_monitor):
     def __init__(self, name="UartMonitor", parent=None):
         super().__init__(name, parent)
-        self.cfg: UartConfig = None
+        self.cfg: Config = None
         self.vif: McuVirtualInterface = None
         self.tx_ap: uvm_analysis_port = None
         self.rx_ap: uvm_analysis_port = None
@@ -60,7 +60,10 @@ class UartMonitor(uvm_monitor):
             await self.bit_time(factor=0.5)
 
             if not byte.is_idle_byte():
-                self.logger.debug(f"tx: {byte}")
+                if self.cfg.uart_cfg.log_monitor_bytes_in_ascii:
+                    self.logger.debug(f"rx: {byte.to_ascii()}")
+                else:
+                    self.logger.debug(f"rx: {byte.to_hex()}")
                 self.tx_ap.write(byte)
 
     async def monitor_rx(self):
@@ -83,7 +86,10 @@ class UartMonitor(uvm_monitor):
             await self.bit_time(factor=0.5)
 
             if not byte.is_idle_byte():
-                self.logger.debug(f"rx: {byte}")
+                if self.cfg.uart_cfg.log_monitor_bytes_in_ascii:
+                    self.logger.debug(f"rx: {byte.to_ascii()}")
+                else:
+                    self.logger.debug(f"rx: {byte.to_hex()}")
                 self.rx_ap.write(byte)
 
     async def run_phase(self):

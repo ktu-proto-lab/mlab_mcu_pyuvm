@@ -15,6 +15,7 @@ class McuCliInterpreter(uvm_object):
             "mem cksum": self.mem_cksum,
             "mem dump": self.mem_dump,
             "mem size": self.mem_size,
+            "mem test": self.mem_test,
         }
 
     def execute(self, req: str) -> str:
@@ -101,6 +102,10 @@ class McuCliInterpreter(uvm_object):
         SYSTEM_ERROR_CLI_CMD_MEM_SIZE_UNKNOWN_ARG = 127
 
         return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_SIZE_UNKNOWN_ARG)
+    
+    def mem_test(self) -> str:
+        SYSTEM_ERROR_CLI_CMD_MEM_UNKNOWN_SUB_COMMAND = 103
+        return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_UNKNOWN_SUB_COMMAND)
 
     def system_error_print(self, error: int) -> str:
         return f"[  ERROR]: {error}"
