@@ -29,6 +29,8 @@ LOG ?= INFO
 # test software running on dut
 SW ?=
 
+TRACER_LINE_COUNT ?= 20
+
 define HELP_USAGE
 -------------------------------------------------------------------------------
 Usage:
@@ -244,6 +246,16 @@ ifeq ($(SIM), xcelium)
 		EXTRA_ARGS += -input $(PROJECT_ROOT)/uvm/sim/xcelium/waves.tcl
 	endif
 endif
+
+.PHONY: tracer
+tracer:
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	TRACER_LOG_FILE="$(PROJECT_ROOT)/uvm/sim/sim_build/tracer.log"; \
+	if [ ! -f "$$TRACER_LOG_FILE" ]; then \
+		logger ERROR "tracer log file '$$TRACER_LOG_FILE' not found, make sure the tracer is enabled in the test"; \
+		exit 1; \
+	fi; \
+	watch -n 0.1 "tail -n $(TRACER_LINE_COUNT) $$TRACER_LOG_FILE"
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Top
