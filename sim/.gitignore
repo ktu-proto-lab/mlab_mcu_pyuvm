@@ -13,3 +13,5 @@ xrun.history
 xrun.log
 *.diag
 cov_work/
+imc.log
+mdv.log
