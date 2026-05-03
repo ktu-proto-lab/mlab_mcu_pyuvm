@@ -12,3 +12,4 @@ waves.shm/
 xrun.history
 xrun.log
 *.diag
+cov_work/
