@@ -104,8 +104,8 @@ class McuCliInterpreter(uvm_object):
         return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_SIZE_UNKNOWN_ARG)
     
     def mem_test(self) -> str:
-        SYSTEM_ERROR_CLI_CMD_MEM_UNKNOWN_SUB_COMMAND = 103
-        return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_UNKNOWN_SUB_COMMAND)
+        SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT = 102
+        return self.system_error_print(SYSTEM_ERROR_CLI_CMD_MEM_INVALID_ARG_COUNT)
 
     def system_error_print(self, error: int) -> str:
         return f"[  ERROR]: {error}"
