@@ -6,7 +6,7 @@ from enum import Enum
 from pyuvm import uvm_sequence_item
 from errors import CommandUnknownTestError
 
-class CommandEnum(Enum):
+class CliCmdEnum(Enum):
     read = 1
     write = 2
     cksum = 3
@@ -14,10 +14,10 @@ class CommandEnum(Enum):
     test = 5
 
 @vsc.randobj
-class Command(uvm_sequence_item):
-    def __init__(self, name="Command"):
+class CliCmdItem(uvm_sequence_item):
+    def __init__(self, name="CliCmd"):
         super().__init__(name)
-        self.cmd = vsc.rand_enum_t(CommandEnum)
+        self.cmd = vsc.rand_enum_t(CliCmdEnum)
         self.addr = vsc.rand_uint32_t()
         self.value = vsc.rand_uint32_t()
         self.word_count = vsc.rand_uint32_t()
@@ -37,7 +37,7 @@ class Command(uvm_sequence_item):
     @vsc.constraint
     def c_cmd_write_value_dist(self):
         # check min and max values, and 0
-        with vsc.if_then(self.cmd == CommandEnum.write):
+        with vsc.if_then(self.cmd == CliCmdEnum.write):
             int32_t_min_value = -(2**31)
             int32_t_max_value = (2**31) - 1
             vsc.dist(self.value, [
@@ -50,29 +50,29 @@ class Command(uvm_sequence_item):
 
     @vsc.constraint
     def c_word_count_range(self):
-        with vsc.if_then((self.cmd == CommandEnum.cksum) | (self.cmd == CommandEnum.dump)):
+        with vsc.if_then((self.cmd == CliCmdEnum.cksum) | (self.cmd == CliCmdEnum.dump)):
             self.word_count in vsc.rangelist(vsc.rng(1, 16))
 
     @vsc.constraint
     def c_cmd_equal_dist(self):
         vsc.dist(self.cmd,[
-            vsc.weight(CommandEnum.read, 30),
-            vsc.weight(CommandEnum.write, 20),
-            vsc.weight(CommandEnum.cksum, 20),
-            vsc.weight(CommandEnum.dump, 20),
-            vsc.weight(CommandEnum.test, 10)
+            vsc.weight(CliCmdEnum.read, 30),
+            vsc.weight(CliCmdEnum.write, 20),
+            vsc.weight(CliCmdEnum.cksum, 20),
+            vsc.weight(CliCmdEnum.dump, 20),
+            vsc.weight(CliCmdEnum.test, 10)
         ])
 
     def to_string(self) -> str:
-        if self.cmd == CommandEnum.read:
+        if self.cmd == CliCmdEnum.read:
             return f"mem read {hex(self.addr)}"
-        if self.cmd == CommandEnum.write:
+        if self.cmd == CliCmdEnum.write:
             return f"mem write {hex(self.addr)} {hex(self.value)}"
-        if self.cmd == CommandEnum.cksum:
+        if self.cmd == CliCmdEnum.cksum:
             return f"mem cksum {hex(self.addr)} {hex(self.word_count)}"
-        if self.cmd == CommandEnum.dump:
+        if self.cmd == CliCmdEnum.dump:
             return f"mem dump {hex(self.addr)} {hex(self.word_count)}"
-        if self.cmd == CommandEnum.test:
+        if self.cmd == CliCmdEnum.test:
             return "mem test"
         raise CommandUnknownTestError(f"unhandled command {self.cmd}")
 

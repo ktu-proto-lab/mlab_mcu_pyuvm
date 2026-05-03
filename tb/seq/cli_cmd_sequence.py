@@ -1,10 +1,10 @@
 from seq.mcu_virtual_sequence import McuVirtualSequence
-from seq.command import Command
+from seq.cli_cmd_item import CliCmdItem
 from seq.uart_string_sequence import UartStringSequence
 from uvc.uart_byte import UartByte
 
-class CommandSequence(McuVirtualSequence):
-    def __init__(self, name="CommandSequence"):
+class CliCmdSequence(McuVirtualSequence):
+    def __init__(self, name="CliCmdSequence"):
         super().__init__(name)
 
     async def body(self):
@@ -16,7 +16,7 @@ class CommandSequence(McuVirtualSequence):
             # TODO: clear events at a certain stage to avoid clearing before others are waiting for it
             self.sequencer.event_pool.mcu_ready.clear()
             self.sequencer.logger.debug("awaited mcu ready state event")
-            cmd: Command = Command.create("req")
+            cmd: CliCmdItem = CliCmdItem.create("req")
             cmd.randomize()
             uart_string_sequence: UartStringSequence = UartStringSequence.create("uart_string_sequence")
             uart_string_sequence.string = f"{cmd}\n"
