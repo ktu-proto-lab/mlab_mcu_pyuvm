@@ -44,6 +44,7 @@ class McuEnv(uvm_env):
 
         self.virtual_sequencer = McuVirtualSequencer.create("virtual_sequencer", self)
         self.virtual_sequencer.event_pool = self.cfg.event_pool
+        self.virtual_sequencer.cfg = self.cfg
 
         if self.cfg.tracer_log_enable:
             # TODO: just disable piping to the file, tracer will be used by other components

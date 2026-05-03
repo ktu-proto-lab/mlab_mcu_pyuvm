@@ -17,6 +17,7 @@ class CliCmdSequence(McuVirtualSequence):
             self.sequencer.event_pool.mcu_ready.clear()
             self.sequencer.logger.debug("awaited mcu ready state event")
             cmd: CliCmdItem = CliCmdItem.create("req")
+            cmd.cfg = self.cfg
             cmd.randomize()
             uart_string_sequence: UartStringSequence = UartStringSequence.create("uart_string_sequence")
             uart_string_sequence.string = f"{cmd}\n"

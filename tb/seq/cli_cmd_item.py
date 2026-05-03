@@ -5,6 +5,7 @@ import vsc
 from enum import Enum
 from pyuvm import uvm_sequence_item
 from errors import CommandUnknownTestError
+from cfg.config import Config
 
 class CliCmdEnum(Enum):
     read = 1
@@ -17,6 +18,7 @@ class CliCmdEnum(Enum):
 class CliCmdItem(uvm_sequence_item):
     def __init__(self, name="CliCmd"):
         super().__init__(name)
+        self.cfg: Config = None
         self.cmd = vsc.rand_enum_t(CliCmdEnum)
         self.addr = vsc.rand_uint32_t()
         self.value = vsc.rand_uint32_t()
@@ -25,12 +27,10 @@ class CliCmdItem(uvm_sequence_item):
 
     @vsc.constraint
     def c_mem_addr_space(self):
+        # NOTE: not using dmem space because of the potential of overwriting the stack and causing the test to crash
         imem_base_addr = 0x80000000
         imem_size_bytes = 8192
-        dmem_base_addr = 0x90000000
-        dmem_size_bytes = 4096
         vsc.dist(self.addr, [
-            vsc.weight(vsc.rng(dmem_base_addr, dmem_base_addr + dmem_size_bytes), 50),
             vsc.weight(vsc.rng(imem_base_addr, imem_base_addr + imem_size_bytes), 50)
         ])
 
