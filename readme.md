@@ -1,4 +1,4 @@
-# IBEX RISC-V Microcontroller UVM Testing Framework
+# IBEX RISC-V Microcontroller PyUVM Testing Framework
 
 ## Cloning the Project
 
@@ -7,7 +7,7 @@
 #### Version v0.3
 ```bash
 # Clone the root project
-git clone --recurse-submodules https://github.com/dovydasliutkus/MLAB_MCU_edu.git
+git clone --recurse-submodules https://github.com/ktu-proto-lab/MLAB_MCU_edu.git
 # Enter 'uvm' project
 cd MLAB_MCU_edu/uvm
 # The submodule can be in the unatached HEAD state, checkout to v0.1
