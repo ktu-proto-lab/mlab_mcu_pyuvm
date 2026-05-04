@@ -18,3 +18,6 @@ sw/test_old/
 # custom config files in root directory, editor, interpreter configs etc.
 /pyrightconfig.json
 /env/
+
+# ignore all log files
+*.log
