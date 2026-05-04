@@ -1,4 +1,5 @@
 import shlex
+import re
 from pyuvm import uvm_object
 from errors import *
 from ref.mcu_memory_mirror import McuMemoryMirror
@@ -42,8 +43,10 @@ class McuCliInterpreter(uvm_object):
             args = tokens[2:]
 
         elif tokens[0] == "echo" and len(tokens) == 2:
-            cmd = f"{tokens[0]}"
-            args = f"{tokens[1]}"
+            cmd = "echo"
+            match = re.search(r'echo\s+"(.*?)"', req, re.DOTALL)
+            string = match.group(1)
+            return self.echo(string)
             
         elif tokens[0] == "gpio" and len(tokens) > 1:
             cmd = f"{tokens[0]} {tokens[1]}"
@@ -57,6 +60,10 @@ class McuCliInterpreter(uvm_object):
         )
 
     def echo(self, string: str) -> str:
+        if len(string) == 0:
+            SYSTEM_ERROR_CLI_CMD_ECHO_INVALID_ARG_COUNT = 101
+            return self.system_error_print(SYSTEM_ERROR_CLI_CMD_ECHO_INVALID_ARG_COUNT)
+        
         return string
 
     def mem_read(self, addr: str) -> str:

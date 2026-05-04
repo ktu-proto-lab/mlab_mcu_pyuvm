@@ -243,3 +243,63 @@ class CliCmdGpioGetItem(CliCmdGpioItem):
         if self.has_pin_arg:
             return f"{self.cmd} {self.subcmd} {hex(self.pin)}"
         return f"{self.cmd} {self.subcmd}"
+
+@vsc.randobj
+class CliCmdMemSizeItem(CliCmdMemItem):
+    class MemArea(Enum):
+        imem = "imem"
+        dmem = "dmem"
+        instr = "instr"
+        ram = "ram"
+        bin = "bin"
+        text = "text"
+        data = "data"
+        bss = "bss"
+        stack = "stack"
+
+    def __init__(self, name='CliCmdMemSizeItem'):
+        super().__init__(name)
+        self.subcmd = "size"
+        
+        self.area = vsc.rand_enum_t(self.MemArea)
+
+    def to_string(self):
+        return f"{self.cmd} {self.subcmd} {self.area.value}"
+    
+@vsc.randobj
+class CliCmdEchoItem(CliCmdItem):
+    def __init__(self, name="CliCmdEchoItem"):
+        super().__init__(name)
+        self.cmd = "echo"
+
+        self.max_string_length = 32
+        self.excluded_chars = [ord('\n'), ord('\r'), ord('\0'), ord('\"'), ord('\\')]
+        self.min_char_value = 0
+        self.max_char_value = 127
+        
+        self.string_length = vsc.rand_uint8_t()
+        self.string_chars = vsc.randsz_list_t(vsc.uint8_t())
+        self.string = ""
+        
+    @vsc.constraint
+    def c_string_length(self):
+        self.string_length <= self.max_string_length
+        self.string_chars.size == self.string_length
+        
+    @vsc.constraint
+    def c_ascii_chars(self):
+        with vsc.foreach(self.string_chars) as c:
+            c >= self.min_char_value
+            c <= self.max_char_value
+        
+    @vsc.constraint
+    def c_exclude_chars(self):
+        with vsc.foreach(self.string_chars) as c:
+            for excluded_char in self.excluded_chars:
+                c != excluded_char
+    
+    def post_randomize(self):
+        self.string = "".join(chr(c) for c in self.string_chars)
+
+    def to_string(self):
+        return f"{self.cmd} \"{self.string}\""

@@ -9,12 +9,14 @@ class CliCmdSequence(McuVirtualSequence):
         super().__init__(name)
 
         self.cmds =[
-             CliCmdMemWriteItem,
-             CliCmdMemReadItem,
-             CliCmdMemDumpItem,
-             CliCmdMemCksumItem,
-             CliCmdMemTestItem,
-             CliCmdGpioGetItem,
+            # CliCmdEchoItem,
+            CliCmdMemWriteItem,
+            CliCmdMemReadItem,
+            CliCmdMemDumpItem,
+            CliCmdMemCksumItem,
+            CliCmdMemTestItem,
+            CliCmdMemSizeItem,
+            CliCmdGpioGetItem,
          ]
 
     async def body(self):
