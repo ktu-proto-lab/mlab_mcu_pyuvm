@@ -35,8 +35,8 @@ services:
             - CDS_LIC_FILE=${CDS_LIC_FILE:-}
             - PATH=${CADENCE_ROOT}/tools/bin/64bit:${CADENCE_ROOT}/tools/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         volumes:
-            - ..:/home/mcu:z
+            - ${PROJECT_ROOT}:${PROJECT_ROOT}:z
             - /eda:/eda:ro
         network_mode: none
         user: "0:0"
-        working_dir: /home/mcu/uvm
+        working_dir: "${PROJECT_ROOT}/uvm"

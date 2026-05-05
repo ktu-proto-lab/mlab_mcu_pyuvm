@@ -12,6 +12,7 @@ Actions:
                options: [purge] to delete the image
 
   venv       : initialize venv and install requirements inside the container
+               options: [clean] to delete .venv directory
 
   run        : enter the simulator container shell
 
@@ -24,6 +25,7 @@ Examples:
   make run xcelium
   make patch apply
   make patch reverse
+  make venv clean
 -------------------------------------------------------------------------------
 endef
 export HELP_USAGE
@@ -139,7 +141,7 @@ else ifeq ($(SIMULATOR),xcelium)
 	export CADENCE_PATH=$(CADENCE_PATH); \
 	export CDS_LIC_FILE=$(CDS_LIC_FILE); \
 	podman compose run --rm xcelium \
-		/bin/bash -c "source /home/mcu/uvm/script/logger.sh && logger SUCCESS 'you are inside $(XCELIUM_NAME) container'; exec bash"
+		/bin/bash -c "source '$(PROJECT_ROOT)/uvm/script/logger.sh' && logger SUCCESS 'you are inside $(XCELIUM_NAME) container'; exec bash"
 else
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger ERROR "specify valid simulator to build image of: verilator or xcelium, use 'make help' to display usage"; \
