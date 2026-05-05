@@ -192,7 +192,13 @@ ifeq ($(SIMULATOR),verilator)
 		fi; \
 	fi; \
 	if [ "$(VIEW_TARGET)" = "waves" ]; then \
-		logger INFO "todo: implement waveform viewing in gtkwave"; \
+		WAVEFORM_DATA_PATH="$(PROJECT_ROOT)/uvm/sim/dump.vcd"; \
+		if [ -f "$$WAVEFORM_DATA_PATH" ]; then \
+		    docker compose --progress quiet run --rm verilator /bin/bash -c "gtkwave '$$WAVEFORM_DATA_PATH'"; \
+		else \
+		    logger ERROR "waveform file '$$WAVEFORM_DATA_PATH' not found"; \
+			exit 1; \
+		fi; \
 	fi; \
 	exit 0
 else ifeq ($(SIMULATOR),xcelium)
