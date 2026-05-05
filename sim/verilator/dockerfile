@@ -49,10 +49,6 @@ RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
-RUN mkdir -p /home/mcu/uvm && chown -R $USERNAME:$USERNAME /home/mcu
-
 USER $USERNAME
-
-WORKDIR /home/mcu/uvm
 
 CMD ["/bin/bash"]

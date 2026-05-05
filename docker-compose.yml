@@ -16,10 +16,11 @@ services:
             - DISPLAY=${DISPLAY}
             - NO_AT_BRIDGE=1
         volumes:
-            - ..:/home/mcu
+            - ${PROJECT_ROOT}:${PROJECT_ROOT}
             - /tmp/.X11-unix:/tmp/.X11-unix:rw
             - ~/.Xauthority:/home/user/.Xauthority:ro
         network_mode: host
+        working_dir: "${PROJECT_ROOT}/uvm"
 
     xcelium:
         build:

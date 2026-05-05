@@ -134,7 +134,7 @@ ifeq ($(SIMULATOR),verilator)
 	logger INFO "$$XHOST_INFO used for GTKWave"; \
 	logger INFO "entering $(VERILATOR_NAME) container shell"; \
 	docker compose run --rm verilator \
-		/bin/bash -c "source /home/mcu/uvm/script/logger.sh && logger SUCCESS 'you are inside $(VERILATOR_NAME) container' && source /home/mcu/uvm/.venv/bin/activate && cd /home/mcu/uvm/sim && exec bash"
+		/bin/bash -c "source $(PROJECT_ROOT)/uvm/script/logger.sh && logger SUCCESS 'you are inside $(VERILATOR_NAME) container' && source $(PROJECT_ROOT)/uvm/.venv/bin/activate && cd $(PROJECT_ROOT)/uvm/sim && exec bash"
 else ifeq ($(SIMULATOR),xcelium)
 	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
 	logger INFO "entering $(XCELIUM_NAME) container shell"; \
