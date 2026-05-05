@@ -30,7 +30,7 @@ LOG ?= INFO
 SW ?=
 
 # test coverage reporting from simulator
-COVERAGE ?= 0
+COV ?= 0
 
 TRACER_LINE_COUNT ?= 30
 
@@ -239,7 +239,7 @@ ifeq ($(SIM), verilator)
 		EXTRA_ARGS += --trace --trace-structs
 	endif
 
-	ifeq ($(COVERAGE),1)
+	ifeq ($(COV),1)
 		EXTRA_ARGS += --coverage
 	endif
 endif
@@ -258,7 +258,7 @@ ifeq ($(SIM), xcelium)
 		EXTRA_ARGS += -input $(PROJECT_ROOT)/uvm/sim/xcelium/waves.tcl
 	endif
 
-	ifeq ($(COVERAGE),1)
+	ifeq ($(COV),1)
 		EXTRA_ARGS += -coverage all
 	endif
 endif

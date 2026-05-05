@@ -2,8 +2,8 @@ sim_build/
 results.xml
 
 # Verilator
-dump.vcd
-dump.fst
+*.vcd
+*.fst
 coverage.dat
 
 # Xcelium

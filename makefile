@@ -194,7 +194,7 @@ ifeq ($(SIMULATOR),verilator)
 	if [ "$(VIEW_TARGET)" = "waves" ]; then \
 		WAVEFORM_DATA_PATH="$(PROJECT_ROOT)/uvm/sim/dump.vcd"; \
 		if [ -f "$$WAVEFORM_DATA_PATH" ]; then \
-		    docker compose --progress quiet run --rm verilator /bin/bash -c "gtkwave '$$WAVEFORM_DATA_PATH'"; \
+		    docker compose --progress quiet run --rm verilator /bin/bash -c "gtkwave '$$WAVEFORM_DATA_PATH' -o"; \
 		else \
 		    logger ERROR "waveform file '$$WAVEFORM_DATA_PATH' not found"; \
 			exit 1; \
