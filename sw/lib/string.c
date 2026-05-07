@@ -1,13 +1,15 @@
 #include "lib/string.h"
+#include "sys/state.h"
+#include "io/printf.h"
 
 bool string_receive(char *buffer, uint32_t lenght) {
     bool string_terminated = false;
     uint32_t count = 0;
-
     while(count < lenght - 1) {
         uart_receive(&g_uart, (uint8_t *)&buffer[count], sizeof(uint8_t));
-        if (buffer[count] == '\n' || buffer[count] == '\0') {
+        if (buffer[count] == '\n' || buffer[count] == '\0' || buffer[count] == '\r') {
             buffer[count] = '\0';
+            system_state_set(SYSTEM_STATE_DEBUG);
             string_terminated = true;
             break;
         }

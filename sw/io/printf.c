@@ -96,6 +96,7 @@ void printf(const char *format, ...) {
             put_char(*format);
         }
     }
+    put_char('\r');
 
     // clean up the stack (required by C standard)
     va_end(args);

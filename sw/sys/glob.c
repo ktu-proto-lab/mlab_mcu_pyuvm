@@ -17,11 +17,10 @@ void g_init(void) {
     uart_init(&g_uart);
     g_gpio.regs->aux  |= UART_GPIO_TX_PIN;
     g_gpio.regs->oe   |= UART_GPIO_TX_PIN;
-    g_gpio.regs->oe   |= GPIO_PIN_ALL;
     uart_tx_enable(&g_uart);
     // BUG: trying to enable rx like this stalls the test
     // uart_rx_enable(&uart);
 
     // BUG: smaller than 3 chars wide stalls the test, removing does too
-    uart_transmit(&g_uart, (uint8_t *)"ack\n", 4);
+    uart_transmit(&g_uart, (uint8_t *)"init\n\r", 6);
 }
