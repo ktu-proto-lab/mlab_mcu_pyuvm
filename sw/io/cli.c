@@ -12,7 +12,7 @@ static system_error_t cli_echo_handler(int argc, char **argv) {
         return SYSTEM_ERROR_CLI_CMD_ECHO_INVALID_ARG_COUNT;
     }
     for (int i = 1; i < argc; ++i) {
-        printf("%s", argv[i]);
+        printf("%s\n", argv[i]);
     }
     return SYSTEM_ERROR_NONE;
 }
