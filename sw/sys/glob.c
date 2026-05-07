@@ -17,6 +17,7 @@ void g_init(void) {
     uart_init(&g_uart);
     g_gpio.regs->aux  |= UART_GPIO_TX_PIN;
     g_gpio.regs->oe   |= UART_GPIO_TX_PIN;
+    g_gpio.regs->oe   |= SYSTEM_STATE_MASK;
     uart_tx_enable(&g_uart);
     // BUG: trying to enable rx like this stalls the test
     // uart_rx_enable(&uart);
