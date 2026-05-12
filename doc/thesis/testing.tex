@@ -186,6 +186,8 @@ Karkaso testavimas buvo atliekamas skirtingose aplinkose:
 	\item \textit{MacOS 15.6.1​} su \textit{ARM} architektūros \textit{M4} procesoriumi \pav{\ref{fig:test_os_macos}}. Naudota atviros prieigos konteinerio atvaizdas imitacijoms leisti.
 \end{enumerate}
 
+Šiose aplinkose ranka buvo tikrinami svarbiausi naudotojo sąsajos testavimo atvejai \lent{\ref{tab:test_gui_usecase}}.
+
 \begin{figure}[H]
 	\includegraphics[width=11.22cm]{images/test_os_windows11}
 	\caption{Naudotojo sąsajos testavimas \textit{Windows 11} pagrindinėje operacinėje sistemoje}
@@ -215,3 +217,45 @@ Karkaso testavimas buvo atliekamas skirtingose aplinkose:
 	\caption{Naudotojo sąsajos testavimas \textit{MacOS} pagrindinėje operacinėje sistemoje}
 	\label{fig:test_os_macos}
 \end{figure}
+
+\begin{table}[H]
+	\centering
+	\caption{Naudotojo grafinės sąsajos terminale testavimo atvejai}
+	\label{tab:test_gui_usecase}
+	\renewcommand{\arraystretch}{1.2} % Šiek tiek padidina tarpus tarp eilučių, kad tekstas nesiglaustų prie linijų
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+		\hline
+		\thead[l]{Testavimo atvejis} & \thead{Scenarijaus failas} & \thead[l]{Užklausa (testuota komanda)} \\
+		\hline
+		Konteinerio atvaizdo surinkimas ir pašalinimas & \texttt{makefile} & \texttt{make image <sim> [purge]} \\
+		\hline
+		Pataisų taikymas pagrindiniam projektui & \texttt{makefile}, \texttt{script/patcher.sh} & \texttt{make patch apply} \\
+		\hline
+		Pataisų atstatymas pagrindiniam projektui & \texttt{makefile}, \texttt{script/patcher.sh} & \texttt{make patch reverse} \\
+		\hline
+		\textit{Python} virtualios aplinkos surinkimas & \texttt{makefile} & \texttt{make venv <sim>} \\
+		\hline
+		\textit{Python} virtualios aplinkos sunaikinimas & \texttt{makefile} & \texttt{make venv clean} \\
+		\hline
+		Imituoklės pasirinkimas testo imitacijai & \texttt{sim/makefile} & \texttt{make SIM=<sim> TEST=<test>} \\
+		\hline
+		Vykdomos imitacijos signalų būsenų išsaugojimas & \texttt{sim/makefile} & \texttt{make SIM=<sim> TEST=<test> WAVES=1} \\
+		\hline
+		Vykdomos imitacijos testuojamo dizaino padengiamumo metrikų fiksavimas & \texttt{sim/makefile} & \texttt{make SIM=<sim> TEST=<test> COV=1} \\
+		\hline
+		Vykdomos imitacijos leidžiamo testo pasirinkimas & \texttt{sim/makefile} & \texttt{make TEST=<test>} arba \texttt{make TB=<tb>} \\
+		\hline
+		Imituojamo testo žurnaliavimo \angl{logging} lygio pasirinkimas & \texttt{sim/makefile} & \texttt{make TEST=<test> LOG=<level>} \\
+		\hline
+		Nepriklausomas mikrovaldiklio programinės įrangos surinkimas & \texttt{sw/makefile} & \texttt{make build SW\_SOURCE\_DIR=<dir>} \\
+		\hline
+		\textit{Tmux} tinkintos \angl{customized} terminalinės sesijos valdymas & \texttt{script/tmux\_env.sh} & \texttt{./script/tmux\_env.sh} \\
+		\hline
+		Imituoto testo rezultatų padengiamumo metrikų peržiūra & \texttt{makefile} & \texttt{make view <sim> cov} \\
+		\hline
+		Imituoto testo rezultatų signalų laikinių diagramų peržiūra & \texttt{makefile} & \texttt{make view <sim> waves} \\
+		\hline
+		Scenarijaus naudojimosi instrukcijų peržiūra & \texttt{makefile}, \texttt{sim/makefile}, \texttt{sw/makefile} & \texttt{make help} \\
+		\hline
+	\end{tabularx}
+\end{table}
