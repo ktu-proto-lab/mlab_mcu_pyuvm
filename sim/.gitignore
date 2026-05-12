@@ -15,3 +15,5 @@ xrun.log
 cov_work/
 imc.log
 mdv.log
+.symbolnamelist
+.symbolportinfomap

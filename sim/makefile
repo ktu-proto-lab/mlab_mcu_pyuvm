@@ -32,6 +32,8 @@ SW ?=
 # test coverage reporting from simulator
 COV ?= 0
 
+CLEAN_RUN ?= 0
+
 TRACER_LINE_COUNT ?= 30
 
 define HELP_USAGE
@@ -244,6 +246,13 @@ ifeq ($(SIM), verilator)
 	endif
 endif
 
+.PHONY: clean_xcelium_sim_files
+clean_xcelium_sim_files:
+	@source $(PROJECT_ROOT)/uvm/script/logger.sh; \
+	rm -rf $(PROJECT_ROOT)/uvm/sim/sim_build; \
+	rm -rf $(PROJECT_ROOT)/uvm/sim/cov_work; \
+	logger SUCCESS "removed 'sim_build' and 'cov_work' directories"
+
 ifeq ($(SIM), xcelium)
 	EXTRA_ARGS += -access +rwc
 
@@ -260,6 +269,10 @@ ifeq ($(SIM), xcelium)
 
 	ifeq ($(COV),1)
 		EXTRA_ARGS += -coverage all
+	endif
+
+	ifeq ($(CLEAN_RUN),1)
+		run: clean_xcelium_sim_files
 	endif
 endif
 
