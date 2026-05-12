@@ -259,3 +259,19 @@ Karkaso testavimas buvo atliekamas skirtingose aplinkose:
 		\hline
 	\end{tabularx}
 \end{table}
+
+Taip pat \gls{cli} programinė įranga buvo ištestuota naudojant \textit{Basys3} \gls{fpga} \pav{\ref{fig:test_fpga_basys3}} su \textit{PuTTY} terminalo emuliatoriaus programine įranga \pav{\ref{fig:test_fpga_putty}}.
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_fpga_basys3}
+	\caption{FPGA CLI testavimui naudojamas \textit{Basys3}}
+	\label{fig:test_fpga_basys3}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_fpga_putty}
+	\caption{FPGA CLI testavimo \textit{PuTTY} terminalo emuliatoriaus sesija su FPGA per USB jungtį}
+	\label{fig:test_fpga_putty}
+\end{figure}
+
+Būtent šitoje sesijoje \pav{\ref{fig:test_fpga_putty}}, buvo padarytas paprastas rankinis testas, kuriame buvo pirma nuskaitoma reikšmė iš \texttt{0x900000ff} duomenų atminties segmento adreso reikšmė, tada patikrinama kontrolinė suma tame regione ir vėliau įrašoma nauja reikšmė \texttt{0xff} į tą patį adresą ir vėl skaitoma reikšmė bei apskaičiuojama kontrolinė suma, ir žiūrima ar matomi pakeitimai. Šis testas buvo sėkmingas ir verifikuoja fizinį \gls{cli} programinės įrangos veikimą.
