@@ -149,7 +149,7 @@ Realizuojant \gls{uvm} architektūrą \textit{Python} kalba, daugiausiai remtasi
 
 Šio prototipo baziniai pavyzdžiai leido greičiau perprasti \gls{uvm} standarto pritaikymą \textit{Python} aplinkoje. Tačiau kuriamas \glsdisp{framework}{karkasas} gerokai išplečia šiuos pavyzdžius -- jis adaptuotas sudėtingam realiame pasaulyje naudojamam \gls{soc} dizainui apimant \textit{Cocotb} virtualių sąsajų integraciją, \glsdisp{container}{konteinerizuotą} testavimo eigos automatizavimą bei išplėstinį protokolų (kaip \gls{uart}, \gls{gpio}, \gls{cli}) palaikymą. Taip pat projekto eigoje buvo aktyviai remiamasi oficialiomis \textit{Cocotb}, \textit{Verilator} bei \textit{Docker} įrankių dokumentacijomis.
 
-\subsubsection{Ištekliai, reikalingi sistemai sukurti}
+\subsubsection{Ištekliai, reikalingi sistemai sukurti}\label{section:istekliai-reikalingi-sistemai-sukurti}
 
 \noterequirement{
 Skyrelyje nurodykite techninių ir žmogiškųjų išteklių poreikį, kad sistema būtų sukurta. \\
@@ -166,13 +166,48 @@ Visam kūrimo procesui sujungti papildomai reikalinga išvystyta programinė inf
 
 Projekto failų valdymui ir versijavimui pasirinkta naudoti \textit{Git} programinę įrangą, o projekto kodo saugykla ir viešinimas -- \textit{GitHub}.
 
-\subsection{Galimybių analizė}
+\subsection{Galimybių analizė}\label{section:galimybiu-analize}
 
 \noterequirement{
 Šiame skyrelyje analizuojamos galimos priemonės sistemai sukurti – labai panašiai kaip egzistuojančių sprendimų analizėje, tačiau aprašomi ne sprendimai, o kūrimo priemonės (karkasai, technologijos, protokolai ir kt.). Anglų kalboje ši analizė vadinama feasibility study. \\
 Jei tai įmanoma, skyriuje taip pat naudinga pateikti lyginamosios analizės santrauką lentelės pavidalu. Palyginimui reikia pasirinkti tokius kriterijus, kurie yra svarbūs sistemos kūrimui (bent 5 kriterijai). Net jei būna tokių situacijų, kuomet karkasą, technologiją, protokolą ar kt. tiksliai nusako įmonė / užsakovas, būtina paaiškinti kodėl pasirinktas toks sprendimas. \\
 Priklausomai nuo situacijos, verta paanalizuoti ir galimas problemas, susijusias su kuriamu sprendimu. Kartais sukurti galutinį produktą nepakanka finansų, žmogiškųjų resursų ar kitų išteklių. Kliūtys gali kilti tiek įmonės viduje (pvz., per smulki įmonė tokiam projektui realizuoti), tiek globalios (pvz., rinkoje per mažai paplitusi technika, kurią būtų galima naudoti su kuriama programine įranga ar naudotojai dar nėra pasiruošę priimti produkto). Tokiu atveju reiktų detaliai aprašyti visas kliūtis, dėl kurių neįmanoma iki galo realizuoti pradinės idėjos.  
 }
+
+Kuriant skaitmeninio dizaino testavimo aplinką, problema kyla pasirenkant testų rašymo kalbą ir metodologijos realizaciją. Rinkoje labiausiai paplitęs sprendimas yra naudoti pramonės standartą -- \textit{SystemVerilog} (\gls{v/sv}) kalbą kartu su IEEE 1800.2 \gls{uvm} standartu. Tačiau vis labiau populiarėja alternatyvūs atviros prieigos sprendimai, pagrįsti \textit{Python} programavimo kalba, naudojant \textit{Cocotb} ir \textit{PyUVM} bibliotekas.
+
+Norint objektyviai įvertinti šių dviejų požiūrių galimybes, buvo atlikta lyginamoji analizė pagal svarbiausius sistemos kūrimo kriterijus \lent{\ref{tab:tech_galimybes_palyginimas}}.
+
+\begin{table}[H]
+	\centering
+	\caption{Tradicinio SystemVerilog UVM ir kuriamo Python PyUVM karkasų technologijų palyginimas}
+	\label{tab:tech_galimybes_palyginimas}
+	\begin{tabularx}{\linewidth}{|>{\hsize=0.3\hsize\raggedright\arraybackslash}X|>{\hsize=0.35\hsize\raggedright\arraybackslash}X|>{\hsize=0.35\hsize\raggedright\arraybackslash}X|}
+		\hline
+		\thead[l]{Kriterijus} & \thead[l]{Tradicinis \gls{v/sv} \gls{uvm}} & \thead[l]{Cocotb + PyUVM} \\ \hline
+		\textbf{Programavimo kalba} & \textit{SystemVerilog} & \textit{Python} \\ \hline
+		\textbf{Mokymosi kreivė} & Aukšta, reikalauja specifinių \gls{hdl} žinių & Vidutinė, lengvai perprantama programinės įrangos inžinieriams \\ \hline
+		\textbf{Ekosistema ir paketai} & Uždara, skirta tik \gls{eda} įrankiams, paketų pasirinkimas ribotas. & Atvira ir plati, galimybė naudoti tūkstančius išorinių \textit{Python} bibliotekų (pvz., analizės, ataskaitų generavimo). \\ \hline
+		\textbf{\glsdisp{simulator}{Imituoklių} palaikymas} & Komercinės licencijuotos \glsdisp{simulator}{imituoklės} (\textit{Xcelium}, \textit{Questa}, \textit{Synopsis}). & Universalus (\glsdisp{open-source}{atviros prieigos} \textit{Verilator} bei komercinės \glsdisp{simulator}{imituoklės}). \\ \hline
+		\textbf{\gls{uvm} standarto palaikymas} & Pilnas IEEE 1800.2 standartas. & Dalinis, trūksta integruoto \gls{ral} palaikymo ir kai kurių makrokomandų ir \gls{uvm} komponentų. \\ \hline
+		\textbf{Veikimo našumas} & Labai aukštas kodas kompiliuojamas tiesiogiai su \gls{dut}. & Vidutinis, komunikacija su \gls{dut} vyksta per \gls{vpi} sąsają, kas prideda papildomų laiko sąnaudų. \\ \hline
+	\end{tabularx}
+\end{table}
+
+Atsižvelgiant į \lent{\ref{tab:tech_galimybes_palyginimas}} pateiktus duomenis, kuriamam \glsdisp{framework}{karkasui} buvo pasirinktas modernus \textit{Python} ir \textit{PyUVM} technologijų stekas. Nors \textit{SystemVerilog} užtikrina geriausią imitacijos našumą, jo uždarumas bei priklausomybė nuo brangių komercinių \gls{eda} įrankių smarkiai riboja projekto plėtrą ir prieinamumą akademinei ar \glsdisp{open-source}{atviros prieigos} bendruomenei. Pasirinktas sprendimas su \textit{Python} leidžia naudoti modernaus programavimo ypatybes, integruoti testavimo sistemą su \glsdisp{open-source}{atviros prieigos} \textit{Verilator} \glsdisp{simulator}{imituokle} naudojant \glsdisp{container}{konteinerius} bei žymiai palengvina naujų komandos narių (ypač turinčių programinės įrangos kūrimo, o ne aparatinės įrangos patirties) įtraukimą į projektą.
+
+Nepaisant pasirinkto sprendimo privalumų, egzistuoja keletas kliūčių, dėl kurių realizuoti absoliučiai visas pradinės \gls{uvm} idėjos savybes gali būti sudėtinga:
+\begin{enumerate}
+	\item Našumo trūkumas didelėse imitacijose. Kadangi \textit{Python} aplinka (\textit{Cocotb}) su \gls{dut} bendrauja per procedūrinę \gls{vpi} sąsają, kiekvienas signalo nuskaitymas ar įrašymas sukuria papildomas skaičiavimo sąnaudas. Itin didelio masto (šimtų milijonų ciklų) \glsdisp{regression-testing}{regresiniuose testuose} tai gali lemti pastebimai ilgesnį testų vykdymo laiką lyginant su grynu \textit{SystemVerilog}.
+	\item Nepilnas \gls{uvm} standartas. \textit{PyUVM} paketas beveik pilnai atitinka IEEE 1800.2 standartą, tačiau jis neturi integruotos registrų abstrakcijos lygmens (\gls{ral}) sistemos. Dėl šios priežasties atminties ir registrų manipuliavimo \glsdisp{verification}{verifikacijos} komponentai (\textit{McuMemoryMirror}) turi būti rašomi pasitelkiant standartines \textit{Python} objektinio programavimo funkcijas, užuot naudojus paruoštus UVM modulius.
+	\item Nepilnas palaikymas komerciniuose įrankiuose. Kadangi \textit{Python} verifikavimo bibliotekos yra sąlyginai naujos, jų palaikymas gali būti ribotas, ypač naudojant senesnių versijų komercinius \gls{eda} įrankius. Taipogi prioritetas yra skiriamas \textit{SystemVerilog} \gls{uvm} palaikymui, nes tai yra ilgalaikis mikroelektronikos rinkos standartas. Galima susidurti su problema, kur naudojant komercinius \gls{ip} modulius, suteikti verifikavimo komponentai yra parašyti tik \textit{SystemVerilog} ir neturi jokio surišimo su \textit{Python}.
+\end{enumerate}
+
+Be programavimo kalbos ir verifikavimo metodologijos, itin svarbus technologinis sprendimas buvo automatizavimo bei aplinkos izoliavimo įrankių parinkimas. Karkaso veikimo aplinkai valdyti buvo pasirinktas \textit{Docker} (arba \textit{Podman}) konteinerizavimo variklis. Skaitmeninės aparatinės įrangos \glsdisp{verification}{verifikavimo} projektai dažnai reikalauja specifinių įrankių versijų (pavyzdžiui, \textit{Verilator}, \textit{GTKWave}, GCC \gls{risc} kompiliatorių bei konkrečių \textit{Python} bibliotekų), kurių tiesioginis diegimas skirtingose operacinėse sistemose dažnai sukelia versijų konfliktus ir suderinamumo problemas. \textit{Docker} leidžia sukurti izoliuotą, visiškai atkuriamą \glsdisp{container}{konteinerizuotą} testavimo aplinką. Tai užtikrina, kad projektas veiks identiškai bet kurio komandos nario kompiuteryje, nepriklausomai nuo \glsdisp{host-operating-system}{pagrindinės operacinės sistemos}, bei atveria galimybes sistemą lengvai įtraukti į \gls{ci} procesus.
+
+Visam \glsdisp{container}{konteinerių} ir testų vykdymo procesui valdyti ir orkestruoti pasirinkta \textit{GNU Make} programinė įranga. Nors egzistuoja įvairių modernesnių automatizavimo sistemų, \textit{Make} išlieka ilgalaikiu pramonės standartu, ypač C/C++ programavimo ir \gls{eda} įrankių ekosistemose. \textit{Make} scenarijų rašymas leidžia abstrakčiai apibrėžti sudėtingas komandų sekas -- nuo \glsdisp{docker-image}{konteinerių atvaizdų} surinkimo ir \textit{Python} virtualios aplinkos sukonfigūravimo iki programinės įrangos kompiliavimo bei pačių testų paleidimo. Vartotojui šis sudėtingas procesas paslepiamas po keliomis intuityviomis komandomis (pavyzdžiui, \texttt{make image verilator} ar \texttt{make run verilator}), kas drastiškai sumažina naujų vartotojų klaidų tikimybę ir pagreitina darbo eigą.
+
+Įvertinus galimybes, galima teigti, jog projekto realizacija yra įmanoma, nors galima susidurti su tam tikromis kliūtimis, bet jas atsveria įrankių lankstumas.
 
 \subsubsection{Techninės galimybės}
 
@@ -184,10 +219,19 @@ Pvz.: „Maisto perdavimo protokolui sukurti reikalingi 3 metai. Tiek laiko reik
 tačiau projektui plečiantis turės didėti ir personalas“.
 }
 
-\subsubsection{Vartotojų pasiruošimo analizė}
+Kuriamo karkaso techninės galimybės vertinamos kaip labai aukštos (fizinių ir žmogiškųjų išteklių poreikis detalizuotas \textbf{\ref{section:istekliai-reikalingi-sistemai-sukurti}} poskyryje). Nors atviros prieigos įrankiai (\textit{Cocotb}, \textit{PyUVM}, \textit{Verilator}) \glsdisp{verification}{verifikacijos} srityje yra sąlyginai naujesni nei komerciniai analogai, jie jau pasiekė brandos lygį, leidžiantį juos naudoti realiems smulkesnės apimties \gls{soc} projektams. Aplink šiuos įrankius pastatyta ekosistema yra aktyviai palaikoma atviro kodo bendruomenės, todėl iškilusios techninės problemos yra aktyviai sprendžiamos, o įrankių atnaujinimai leidžiami reguliariai.
+
+Sistemos diegimo ir palaikymo požiūriu, \textit{Docker} \glsdisp{container}{konteinerių} naudojimas visiškai išsprendžia operacinių sistemų suderinamumo problemas. Kadangi pramoniniai \gls{eda} įrankiai įprastai palaikomi tik specifinėse \textit{Linux} distribucijose (\textit{Red Hat}, \textit{CentOS}, \textit{Rocky Linux}), \glsdisp{container}{konteinerizuotas} atviro kodo sprendimas atveria galimybę inžinieriams dirbti bet kokioje platformoje (\textit{Windows} per \gls{wsl}, \textit{macOS} ar įvairiose \textit{Linux} sistemose). Be to, tokia architektūra leidžia lengvai perkelti testavimo procesą į debesijos serverius ir pritaikyti nuolatinės integracijos (\gls{ci}) eigoje. Todėl techninių resursų ir infrastruktūros atžvilgiu jokių neįveikiamų kliūčių sistemai sukurti ir sėkmingai eksploatuoti nėra.
+
+\subsubsection{Naudotojų pasiruošimo analizė}
 \noterequirement{
 Jei tai produktas, kuris bus naudojamas įmonėje, tai įmonės vartotojų analizė. Jei ne – bent jau abstrakti tikslinės auditorijos (programos ar produkto vartotojų
 segmento) analizė. Šiame punkte reiktų aprašyti ar žmonės sugebės naudotis ta įranga, kokio išsilavinimo reikia norint ja naudotis. \\
 Pvz.: „Maisto perdavimo protokolas bus toks paprastas, kad juo galės naudotis tiek penkerių metų vaikas, tiek jo močiutė“.
 }
 
+Tikslinė šio \glsdisp{framework}{karkaso} auditorija yra skaitmeninės aparatinės įrangos inžinieriai, \glsdisp{verification}{verifikavimo} specialistai bei studentai, studijuojantys mikroelektroniką ar kompiuterių inžineriją. Įprastai, norint dirbti su \textit{SystemVerilog} ir \gls{uvm}, reikalaujamas specifinis inžinerinis išsilavinimas bei sudėtingos \gls{hdl} kalbos žinios. Tai dažnai tampa dideliu barjeru naujiems komandos nariams ar pradedantiesiems, norintiems prisidėti prie \gls{soc} projektų.
+
+Sukurtas \textit{Python} kalba pagrįstas karkasas žymiai sumažina šį barjerą. Kadangi \textit{Python} yra viena populiariausių ir lengviausiai išmokstamų programavimo kalbų pasaulyje \cite{language-ratings-2026}, dauguma inžinierių ir programinės įrangos kūrėjų jau turi jos pagrindus. Tai atveria galimybę prie \glsdisp{verification}{verifikacijos} proceso prisijungti specialistams, neturintiems gilios patirties su aparatinės įrangos aprašymo kalbomis. Programinės įrangos testuotojams pereiti prie šio įrankio yra ypač paprasta, nes naudojamos jiems įprastos objektinio programavimo (\gls{oop}) koncepcijos bei bibliotekos.
+
+Taip pat, pritaikytas \textit{GNU Make} automatizavimo sprendimas paslepia \glsdisp{simulator}{imituoklių} konfigūravimo ir konteinerizuotų aplinkų valdymo sudėtingumą. Naudotojui nebereikia išmanyti sudėtingų \gls{eda} įrankių komandinių eilučių argumentų ar gilintis į operacinės sistemos aplinkos kintamųjų nustatymus -- pakanka bazinių terminalo naudojimo įgūdžių. Atsižvelgiant į tai, naudotojų pasiruošimo lygis šiam įrankiui valdyti yra vertinamas kaip labai palankus, o naujo naudotojo adaptacijos laikas komandoje bus gerokai trumpesnis nei taikant tradicinius \glsdisp{verification}{verifikacijos} metodus.
