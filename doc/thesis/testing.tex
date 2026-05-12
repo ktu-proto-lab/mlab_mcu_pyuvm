@@ -1,19 +1,103 @@
 \section{Testavimas}
-
 \noterequirement{Aprašoma su sukurtos įrangos testavimu susijusi informacija (8 – 12 lapų). Skyriaus struktūra ir pavadinimas priklauso nuo baigiamojo darbo specializacijos ir pačios temos specifikos. \\
-Nurodomas įrangos testavimo planas, testavimo duomenų rinkiniai ir gauti rezultatai. Nurodoma sistemos specifikacija ir sąlygos, prie kurių buvo atliekamas testavimas. }
+Nurodomas įrangos testavimo planas, testavimo duomenų rinkiniai ir gauti rezultatai. Nurodoma sistemos specifikacija ir sąlygos, prie kurių buvo atliekamas testavimas.}
+
+Kadangi kuriamas projektas pats savaime yra \glsdisp{microprocessor}{mikrovaldiklio} \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasas}, šio skyriaus testavimo objektas yra dvejopas: pirma, testuojama paties karkaso (konteinerių, automatizacijos skriptų, \textit{PyUVM} komponentų) veikimo kokybė ir suderinamumas; antra, demonstruojamas karkaso praktinis funkcionalumas, matuojant \gls{dut} skaitmeninio \gls{soc} dizaino \glsdisp{functional-coverage}{funkcinį padengiamumą} bei elgsenos teisingumą.
+
+Sistemos testavimas buvo atliekamas skirtingose aplinkose:
+\begin{enumerate}
+	\item \textit{Windows 11} pagrindinė operacinė su įdiegta \gls{wsl} (\textit{Ubuntu 22.04 LTS}) posisteme ir \textit{Docker} varikliu. Naudotas atviros prieigos konteinerio atvaizdas imitacijoms leisti.
+	\item \textit{Kubuntu 26.04 LTS} pagrindinė operacinė sistema. Naudota atviros prieigos konteinerio atvaizdas imitacijoms leisti.
+	\item \textit{GNU Linux Debian 13.4​} virtualios mašinos pagrindinė operacinė sistema. Naudotas atviros prieigos konteinerio atvaizdas imitacijoms leisti.
+	\item \textit{Rocky Linux 8.1} licencijuotas serveris su \textit{Podman} konteinerizavimo varikliu ir \textit{Cadence} komerciniais \gls{eda} įrankiais. Naudotas komercinio \textit{Cadence} konteinerio atvaizdas imitacijoms leisti.
+	\item \textit{MacOS 15.6.1​} su \textit{ARM} architektūros \textit{M4} procesoriumi. Naudota atviros prieigos konteinerio atvaizdas imitacijoms leisti.
+\end{enumerate}
 
 \subsection{Testavimo planas}
 \noterequirement{Testavimo planas – tai jūsų pasirinkta testų atlikimo tvarka. Galimas testavimo planas: komponentų testavimas, po kurio seka integracinis testavimas, o vėliau būna sąsajos testavimas. }
 
+Testavimo plano strategija:
+\begin{enumerate}
+	\item Vienetų (komponentų) testavimas: Karkaso automatizacijos skriptų (\textit{Makefile}, aplinkos konfigūravimo) ir individualių \textit{PyUVM} \gls{uvc} agentų izoliuotas testavimas, įsitikinant suderinamumu skirtingose \glsdisp{host-operating-system}{pagrindinėse operacinėse sistemose}.
+	\item Integracinis testavimas: Visos \gls{uvm} testavimo aplinkos (\texttt{McuEnv}) sujungimas su realiu \textit{SystemVerilog} \gls{dut} per \textit{Cocotb} virtualią sąsają. Šiame etape buvo matuojamas ir vertinamas \gls{soc} dizaino \glsdisp{functional-coverage}{funkcinis padengiamumas}.
+	\item Naudotojo sąsajos testavimas: \glsdisp{cli}{Komandinės eilutės} ir terminalinės \textit{Tmux} aplinkos, skirtos \glsdisp{framework}{karkaso} valdymui, testavimas rankiniu būdu.
+	\item Testuojamojo objekto testavimas: karkaso pagrindinis uždavinys yra verifikuoti testuojamą skaitmeninio \gls{soc} dizaino aparatinę ir programines įrangas, naudojant komercinį \textit{Cadence} \gls{eda} įrankį testuojama parašytų \gls{uvm} testų kokybė.
+\end{enumerate}
+
 \subsection{Testavimo kriterijai}
 \noterequirement{Šiame punkte aprašykite kriterijus, kurie jums buvo svarbūs testavimo metu. Tai gali būti ne tik informacijos ar skaičiavimų korektiškumas, bet ir kodo pertekliškumo analizė, informacijos perdavimo laikas, sistemos atitikimas funkciniams ir nefunkciniams reikalavimams.}
+
+Siekiant užtikrinti karkaso stabilumą ir \glsdisp{verification}{verifikacijos} patikimumą, buvo iškelti šie testavimo kriterijai:
+\begin{itemize}
+	\item Suderinamumas ir atkuriamumas. Karkaso diegimo (\texttt{make image}) ir vykdymo (\texttt{make run}) komandos privalo sėkmingai pasileisti visose išvardintose \glsdisp{host-operating-system}{pagrindinėse operacinėse sistemose} bei procesorių architektūrose (\textit{x86\_64} ir \textit{ARM64}), negrąžinant jokių sisteminių klaidų.
+	\item Tikrintojo (angl. \textit{Scoreboard}) tikslumas: \texttt{McuScoreboard} komponentas privalo teisingai identifikuoti neatitikimus tarp \glsdisp{golden-reference}{etaloninio modelio} (\texttt{McuRefModel}) ir realaus \gls{dut} išvesties signalų.
+	\item Statinis testuojamo dizaino padengiamumas. Imitacijos metu generuojamos atsitiktinės \gls{crv} \gls{uvm} transakcijų sekos turi kuo daugiau padengti \gls{dut} aparatinės įrangos \gls{hdl} kodo eilučių kiekį.
+	\item Funkcinis testuojamo dizaino padengiamumas. Pagrindinės imitacijos metu \gls{uvm} testų rinkinys privalo pasiekti aukštą komandų bei parametrų įvedimo funkcinį padengiamumą, taip įrodant karkaso gebėjimą generuoti \gls{crv} stimulus ir patikrinti \gls{soc} dizaino kokybę.
+	\item Testuojamų \gls{uvc} modulių ir viso \gls{dut} skaitmeninio dizaino bendrasis padengiamumas turi siekti bent 50\%.
+\end{itemize}
+
 
 \subsection{Vienetų testavimas}
 \noterequirement{Šiame punkte reiktų aprašyti kokiais metodais testavote smulkias programos dalis. Vienetų testavimas privalo būti atliekamas naudojant automatines testavimo priemones.}
 
-\subsection{Integracinis testavimas}
-\noterequirement{Jei kurdami sistemą atlikote integracinį testavimą, jį aprašykite šiame skyrelyje. Integracinis testavimas privalo būti atliekamas naudojant automatines testavimo priemones.}
+Vienetų testavimas buvo atliekamas \gls{dut} \gls{cli} komandoms \pav{\ref{fig:uml_use_case_cli}}. Būtent čia pasirodo visas realizuoto \gls{uvm} \gls{crv} atsitiktinių testų panaudojimas.
+
+Vieno iš pagrindinio visų kol kas realizuotų \gls{cli} komandų tikrintojo žurnalo atkarpa yra pateikta žemiau \pav{\ref{fig:test_cli}}.
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_cli_uvm_scb_log.png}
+	\caption{CLI komandų testavimas}
+	\label{fig:test_cli}
+\end{figure}
+
+Pastebėjimas, jog kai kurių vienetinių testų rezultatai yra \texttt{[  ERROR]: number} formatu, bet jie skaitomi vis tiek kaip praėję, tai yra būtent dėl to, nes vienetiniai atsitiktiniai \gls{cli} komandų testai taip pat tikrina ir klaidų pranešimus, taip užtikrindami apibrėžtą \gls{cli} protokolą.
+
+Šio vienetų testų apimamos \gls{cli} komandos yra pateiktos lentelėje žemiau \lent{\ref{tab:test_cli_cmds}}.
+
+\begin{table}[H]
+	\centering
+	\caption{Testuotų CLI komandų sąrašas}
+	\label{tab:test_cli_cmds}
+	\begin{tabularx}{\linewidth}{|X|>{\centering\arraybackslash}X|}
+		\hline
+		\thead[l]{Komanda} & \thead{Struktūra} \\
+		\hline
+		\texttt{echo} & \texttt{echo "randomized string"} \\
+		\hline
+		\texttt{mem read} & \texttt{mem read <radom\_address>} \\
+		\hline
+		\texttt{mem write} & \texttt{mem write <random\_address> <random\_value>} \\
+		\hline
+		\texttt{mem dump} & \texttt{mem dump <random\_start\_address> <random\_word\_count>} \\
+		\hline
+		\texttt{mem cksum} & \texttt{mem cksum <random\_start\_address> <random\_word\_count>} \\
+		\hline
+		\texttt{mem test} & \texttt{mem test} \\
+		\hline
+		\texttt{mem size} & \texttt{mem size <random\_memory\_region>} \\
+		\hline
+		\texttt{gpio get} & \texttt{gpio get <random\_gpio\_pin} \\
+		\hline
+		\texttt{gpio set} & \texttt{gpio set <random\_pad\_value} \\
+		\hline
+		\texttt{gpio toggle} & \texttt{gpio toggle <random\_toggle\_pins>} \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+Šiame teste atlikta 50 vienetinių testų, galutinis tikrintojo raportas yra patektas paveikslėlyje žemiau \pav{}.
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_cli_uvm_scb_report.png}
+	\caption{CLI komandų testavimo tikrintojo raportas}
+	\label{fig:test_cli_scb_report}
+\end{figure}
+
+Vienas iš vienetinių testų nepraėjo \texttt{gpio get 0x1}, buvo tikimasi \texttt{0} reikšmės, bet gauta \texttt{1}, tai yra būtent dėl to, nes dvi \gls{gpio} \texttt{0} ir \texttt{1} išvestys yra naudojamos \gls{uart}, kai siunčiama žinutė, užfiksuotas \texttt{1} reikšmė \gls{uart} \texttt{RX} linijoje.
+
+Bendras vienetinių automatizuotų \gls{cli} testų padengiamumas yra \texttt{9} iš \texttt{16} komandų, t. y. apie \texttt{56\%}.
+
+\subsection{Testuojamo skaitmeninio dizaino testavimas}
 
 \subsection{Naudotojo sąsajos testavimas}
 \noterequirement{Šiame punkte reiktų aprašyti kokiais metodais testavote naudotojo sąsają. Dažniausiai pasitaikantis metodas – „rankinis“, t.y. kai sąsaja testuojama naudotojui (testuotojui) bandant atsitiktinai ar pagal scenarijų spaudyti mygtukus, įvedinėti tekstą į laukus ir kt. Kur kas geresnis variantas tuomet, kai testuojama automatiškai – pavyzdžiui, sukuriama programa ar testavimo tvarkyklė, kuris spaudymo ar įvedimo veiksmus atlieka be naudotojo įsikišimo. Panaudotas automatinis testavimas, dažniausiai, papildomai (teigiamai) įvertinamas baigiamojo darbo gynimo metu. Pasinaudokite automatizavimo priemonėmis, tokiomis kaip Selenium IDE.}
