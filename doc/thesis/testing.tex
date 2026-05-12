@@ -4,15 +4,6 @@ Nurodomas įrangos testavimo planas, testavimo duomenų rinkiniai ir gauti rezul
 
 Kadangi kuriamas projektas pats savaime yra \glsdisp{microprocessor}{mikrovaldiklio} \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasas}, šio skyriaus testavimo objektas yra dvejopas: pirma, testuojama paties karkaso (konteinerių, automatizacijos skriptų, \textit{PyUVM} komponentų) veikimo kokybė ir suderinamumas; antra, demonstruojamas karkaso praktinis funkcionalumas, matuojant \gls{dut} skaitmeninio \gls{soc} dizaino \glsdisp{functional-coverage}{funkcinį padengiamumą} bei elgsenos teisingumą.
 
-Sistemos testavimas buvo atliekamas skirtingose aplinkose:
-\begin{enumerate}
-	\item \textit{Windows 11} pagrindinė operacinė su įdiegta \gls{wsl} (\textit{Ubuntu 22.04 LTS}) posisteme ir \textit{Docker} varikliu. Naudotas atviros prieigos konteinerio atvaizdas imitacijoms leisti.
-	\item \textit{Kubuntu 26.04 LTS} pagrindinė operacinė sistema. Naudota atviros prieigos konteinerio atvaizdas imitacijoms leisti.
-	\item \textit{GNU Linux Debian 13.4​} virtualios mašinos pagrindinė operacinė sistema. Naudotas atviros prieigos konteinerio atvaizdas imitacijoms leisti.
-	\item \textit{Rocky Linux 8.1} licencijuotas serveris su \textit{Podman} konteinerizavimo varikliu ir \textit{Cadence} komerciniais \gls{eda} įrankiais. Naudotas komercinio \textit{Cadence} konteinerio atvaizdas imitacijoms leisti.
-	\item \textit{MacOS 15.6.1​} su \textit{ARM} architektūros \textit{M4} procesoriumi. Naudota atviros prieigos konteinerio atvaizdas imitacijoms leisti.
-\end{enumerate}
-
 \subsection{Testavimo planas}
 \noterequirement{Testavimo planas – tai jūsų pasirinkta testų atlikimo tvarka. Galimas testavimo planas: komponentų testavimas, po kurio seka integracinis testavimas, o vėliau būna sąsajos testavimas. }
 
@@ -20,8 +11,9 @@ Testavimo plano strategija:
 \begin{enumerate}
 	\item Vienetų (komponentų) testavimas: Karkaso automatizacijos skriptų (\textit{Makefile}, aplinkos konfigūravimo) ir individualių \textit{PyUVM} \gls{uvc} agentų izoliuotas testavimas, įsitikinant suderinamumu skirtingose \glsdisp{host-operating-system}{pagrindinėse operacinėse sistemose}.
 	\item Integracinis testavimas: Visos \gls{uvm} testavimo aplinkos (\texttt{McuEnv}) sujungimas su realiu \textit{SystemVerilog} \gls{dut} per \textit{Cocotb} virtualią sąsają. Šiame etape buvo matuojamas ir vertinamas \gls{soc} dizaino \glsdisp{functional-coverage}{funkcinis padengiamumas}.
-	\item Naudotojo sąsajos testavimas: \glsdisp{cli}{Komandinės eilutės} ir terminalinės \textit{Tmux} aplinkos, skirtos \glsdisp{framework}{karkaso} valdymui, testavimas rankiniu būdu.
+	\item Naudotojo sąsajos testavimas: \glsdisp{cli}{komandinės eilutės} ir terminalinės \textit{Tmux} aplinkos, skirtos \glsdisp{framework}{karkaso} valdymui, testavimas rankiniu būdu.
 	\item Testuojamojo objekto testavimas: karkaso pagrindinis uždavinys yra verifikuoti testuojamą skaitmeninio \gls{soc} dizaino aparatinę ir programines įrangas, naudojant komercinį \textit{Cadence} \gls{eda} įrankį testuojama parašytų \gls{uvm} testų kokybė.
+	\item Karkaso veikimas tikrinamas skirtingose operacinėse sistemose ir architektūrose.
 \end{enumerate}
 
 \subsection{Testavimo kriterijai}
@@ -85,7 +77,7 @@ Pastebėjimas, jog kai kurių vienetinių testų rezultatai yra \texttt{[  ERROR
 	\end{tabularx}
 \end{table}
 
-Šiame teste atlikta 50 vienetinių testų, galutinis tikrintojo raportas yra patektas paveikslėlyje žemiau \pav{}.
+Šiame teste atlikta 50 vienetinių testų, galutinis tikrintojo raportas yra patektas paveikslėlyje žemiau \pav{\ref{fig:test_cli_scb_report}}.
 
 \begin{figure}[H]
 	\includegraphics[width=11.22cm]{images/test_cli_uvm_scb_report.png}
@@ -99,5 +91,127 @@ Bendras vienetinių automatizuotų \gls{cli} testų padengiamumas yra \texttt{9}
 
 \subsection{Testuojamo skaitmeninio dizaino testavimas}
 
+Leidžiant \gls{uvm} \gls{crv} testus ne vien verifikuojama skaitmeninio dizaino programinė įranga (kaip realizuotas \gls{cli}), bet ir \textit{SystemVerilog} \gls{hdl} kalba aprašyta imituojama aparatinė įrangą. Naudojantis testavimo metrikų peržiūros \textit{Cadence IMC} įrankiu, praleisti aprašyti \gls{uvm} testai pasiekė daugiau nei \texttt{50\%} bendrojo aparatinės įrangos padengiamumo \pav{\ref{fig:test_cov_top}}.
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_top_imc_cov.png}
+	\caption{Skaitmeninio dizaino testų padengiamumo įverčiai}
+	\label{fig:test_cov_top}
+\end{figure}
+
+\textit{Cadence IMC} įrankis suteikė \gls{dut} (žr. paryškintą \texttt{top} modulį \textbf{pav. \ref{fig:test_cov_top}}) 52.94\% bendrąjį \angl{overall} įvertinimą. Buvo praeita 90.3\% skaitmeninio dizaino aprašytų teiginių \angl{asserts}, visi jie yra iš mikrovaldiklio branduolio \texttt{u\_wb\_ibex\_top} modulio.
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_cov_ibex_top.png}
+	\caption{Testuojamo skaitmeninio dizaino branduolio modulių bendrasis padengiamumas}
+	\label{fig:test_cov_ibex_core}
+\end{figure}
+
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_cov_peripherals.png}
+	\caption{Testuojamo skaitmeninio dizaino periferijų modulių bendrasis padengiamumas}
+	\label{fig:test_cov_peripherals}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_cov_bootloader_fsm.png}
+	\caption{Testuojamo skaitmeninio dizaino paleidėjo modulio būsenų automato padengiamumas}
+	\label{fig:test_cov_bootloader_fsm}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_cov_ibex_ls_fst.png}
+	\caption{Testuojamo skaitmeninio dizaino branduolio įkėlimo/išsaugojimo bloko būsenų automato padengiamumas}
+	\label{fig:test_cov_ibex_ls_fst}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_cov_ibex_ctrl_fsm.png}
+	\caption{Testuojamo skaitmeninio dizaino branduolio kontrolinio bloko būsenų automato padengiamumas}
+	\label{fig:test_cov_ibex_ctrl_fsm}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_cov_ibex_md_fsm.png}
+	\caption{Testuojamo skaitmeninio dizaino branduolio greitos daugybos/dalybos būsenų automato padengiamumas}
+	\label{fig:test_cov_ibex_md_fsm}
+\end{figure}
+
+Bendri padengiamumo įverčiai pateikti žemiau \lent{\ref{tab:test_cov_imc}}.
+
+\begin{table}[H]
+	\centering
+	\caption{Testuojamo skaitmeninio dizaino UVM testų rezultatų metrikos}
+	\label{tab:test_cov_imc}
+	\begin{tabularx}{\linewidth}{|X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}
+		\hline
+		\thead[l]{Modulis} & \thead{Modulio pavadinimas} & \thead{Bendrasis padengiamumas} \\
+		\hline
+		Asinchroninio atkūrimo \angl{asynchronous reset} & \texttt{u\_areset\_sync} & 57.14\% \\
+		\hline
+		Paleidėjas \angl{Bootloader} & \texttt{u\_bootloader} & 24.61\%  \\
+		\hline
+		Branduolys \pav{\ref{fig:test_cov_ibex_core}} & \texttt{u\_wb\_ibex\_top} & 65.07\% \\
+		\hline
+		Instrukcijų atmintis & \texttt{imem} & 98.06\% \\
+		\hline
+		Duomenų atmintis & \texttt{dmem} & 100\%\\
+		\hline
+		GPIO periferija \pav{\ref{fig:test_cov_peripherals}} & \texttt{u\_wb\_gpio} & 72.85\% \\
+		\hline
+		UART periferija \pav{\ref{fig:test_cov_peripherals}} &\texttt{u\_wb\_uart} & 69.07\% \\
+		\hline
+		Magistralė & \texttt{u\_wb\_interconnect} & 95.51\% \\
+		\hline
+		Išorinė atmintis & \texttt{eeprom} & 21.53\% \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+Iš lentelės matoma \lent{\ref{tab:test_cov_imc}}, jog aprašyti \gls{uvm} \gls{uvc} GPIO ir UART komponentų testuojamos periferijos turi ganėtinai aukštus bendrus padengiamumo įverčius, o tuo tarpu periferijų moduliai, tokie kaip \gls{i2c} ir programuojamas laikmatis \pav{\ref{fig:test_cov_top}} turi ženkliai žemesnius įverčius, tai parodo aprašytų \gls{uvc} bendrąją naudą ne vien testams leisti, bet ir verifikuoti jiems prijungtus modulius. Taip pat matomas paleidimo praleidimo imitacijoje padarinys, kur paleidėjo modulio būsenų automatas yra visiškai nepatikrinamas \pav{\ref{fig:test_cov_bootloader_fsm}}. Tai buvo sąmoningas pasirinkimas, nes paleidimo trukmė imitacijos metu trukdavo apie 15 minučių, tad buvo apeita ši dalis ir sukompiliuotas programinės įrangos kodas yra iš karto keliamas į imituojamo mikrovaldiklio atmintį. Branduolio būsenų automatų padengiamumas yra pakankamai solidus: pasiektas 50\% duomenų įkėlimo/iškėlimo \pav{\ref{fig:test_cov_ibex_ls_fst}}, 50\% kontrolinio \pav{\ref{fig:test_cov_ibex_ctrl_fsm}} ir 100\% greitos daugybos/dalybos \pav{\ref{fig:test_cov_ibex_md_fsm}} blokų būsenų automatų padengiamumas.
+
 \subsection{Naudotojo sąsajos testavimas}
 \noterequirement{Šiame punkte reiktų aprašyti kokiais metodais testavote naudotojo sąsają. Dažniausiai pasitaikantis metodas – „rankinis“, t.y. kai sąsaja testuojama naudotojui (testuotojui) bandant atsitiktinai ar pagal scenarijų spaudyti mygtukus, įvedinėti tekstą į laukus ir kt. Kur kas geresnis variantas tuomet, kai testuojama automatiškai – pavyzdžiui, sukuriama programa ar testavimo tvarkyklė, kuris spaudymo ar įvedimo veiksmus atlieka be naudotojo įsikišimo. Panaudotas automatinis testavimas, dažniausiai, papildomai (teigiamai) įvertinamas baigiamojo darbo gynimo metu. Pasinaudokite automatizavimo priemonėmis, tokiomis kaip Selenium IDE.}
+
+Naudotojo sąsajos testavimas buvo atliekamas rankiniu būdu.
+
+Karkaso testavimas buvo atliekamas skirtingose aplinkose:
+
+\begin{enumerate}
+	\item \textit{Windows 11} pagrindinė operacinė su įdiegta \gls{wsl} (\textit{Ubuntu 22.04 LTS}) posisteme ir \textit{Docker} varikliu \pav{\ref{fig:test_os_windows11}}. Naudotas atviros prieigos konteinerio atvaizdas imitacijoms leisti.
+	\item \textit{Kubuntu 26.04 LTS} pagrindinė operacinė sistema \pav{\ref{fig:test_os_kubuntu}}. Naudota atviros prieigos konteinerio atvaizdas imitacijoms leisti.
+	\item \textit{GNU Linux Debian 13.4​} virtualios mašinos pagrindinė operacinė sistema \pav{\ref{fig:test_os_debian}}. Naudotas atviros prieigos konteinerio atvaizdas imitacijoms leisti.
+	\item \textit{Rocky Linux 8.1} licencijuotas serveris su \textit{Podman} konteinerizavimo varikliu ir \textit{Cadence} komerciniais \gls{eda} įrankiais \pav{\ref{fig:test_os_rockylinux}}. Naudotas komercinio \textit{Cadence} konteinerio atvaizdas imitacijoms leisti.
+	\item \textit{MacOS 15.6.1​} su \textit{ARM} architektūros \textit{M4} procesoriumi \pav{\ref{fig:test_os_macos}}. Naudota atviros prieigos konteinerio atvaizdas imitacijoms leisti.
+\end{enumerate}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_os_windows11}
+	\caption{Naudotojo sąsajos testavimas \textit{Windows 11} pagrindinėje operacinėje sistemoje}
+	\label{fig:test_os_windows11}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_os_kubuntu}
+	\caption{Naudotojo sąsajos testavimas \textit{GNU Linux Kubuntu LTS} pagrindinėje operacinėje sistemoje}
+	\label{fig:test_os_kubuntu}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_os_debian}
+	\caption{Naudotojo sąsajos testavimas \textit{GNU Linux Debian} pagrindinėje operacinėje sistemoje}
+	\label{fig:test_os_debian}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_os_rockylinux}
+	\caption{Naudotojo sąsajos testavimas \textit{GNU Rocky Linux} pagrindinėje operacinėje sistemoje}
+	\label{fig:test_os_rockylinux}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=11.22cm]{images/test_os_macos}
+	\caption{Naudotojo sąsajos testavimas \textit{MacOS} pagrindinėje operacinėje sistemoje}
+	\label{fig:test_os_macos}
+\end{figure}
