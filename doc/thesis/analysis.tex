@@ -158,6 +158,14 @@ Pvz.: „Maisto perdavimo protokolui sukurti reikalingi 3 metai. Tiek laiko reik
 tačiau projektui plečiantis turės didėti ir personalas“.
 }
 
+Pradinės sistemos architektūros sukūrimui ir realizacijai pakanka vieno asmens -- skaitmeninės logikos \glsdisp{verification}{verifikavimo} inžinieriaus arba IT specialisto, dirbančio kartu su projekto vadovu ar konsultantu. Karkaso projektavimas, \glsdisp{container}{konteinerizuotos} aplinkos konfigūravimas abiem \glsdisp{simulator}{imituoklėm} bei bazinių \gls{uvc} komponentų ir automatizacijos skriptų parašymas užtrunka apie 4--6 mėnesius (1--2 akademinius semestrus). Ateityje, sistemai plečiantis ir atsirandant poreikiui \glsdisp{verification}{verifikuoti} naujus \glsdisp{microprocessor}{mikrovaldiklio} protokolus (pavyzdžiui, \gls{spi} ar \gls{i2c}), karkasą galės sklandžiai palaikyti ir plėsti 1--2 inžinierių komanda, nes bazinė infrastruktūra jau yra sukurta.
+
+Techniniai ištekliai sistemai sukurti priklauso nuo naudojamos testavimo aplinkos tikslų. Karkaso vystymui ir testavimui su \glsdisp{open-source}{atviros prieigos} \textit{Verilator} \glsdisp{simulator}{imituokle} reikalingas standartinis asmeninis kompiuteris, turintis bent 8 GB operatyviosios atminties, kelių branduolių procesorių bei palaikantis \textit{Docker} konteinerizacijos variklį. Tuo tarpu komercinių \gls{eda} įrankių integracijos kūrimui ir priežiūrai būtina nuotolinė prieiga prie licencijuoto \textit{Rocky Linux} ar panašaus \textit{Red Hat} distribucijos pagrindu veikiančio serverio, turinčio bent 32 GB operatyviosios atminties ir įdiegtą \textit{Cadence Xcelium}, \textit{Cadence IMC} bei \textit{Cadence SimVision} programinę įrangą. 
+
+Visam kūrimo procesui sujungti papildomai reikalinga išvystyta programinė infrastruktūra -- \textit{Python 3} interpretatorius su testavimo bibliotekomis (\textit{Cocotb}, \textit{PyUVM}), automatinio surinkimo įrankis \textit{GNU Make} bei \gls{risc}-V architektūrai skirtas C kodo kompiliatorius (\textit{GCC RISC-V Toolchain}).
+
+Projekto failų valdymui ir versijavimui pasirinkta naudoti \textit{Git} programinę įrangą, o projekto kodo saugykla ir viešinimas -- \textit{GitHub}.
+
 \subsection{Galimybių analizė}
 
 \noterequirement{
