@@ -17,3 +17,39 @@
 
 • Išvados
 }
+
+Projektuojant, kuriant ir rašant šį baigiamojo darbo projektą bei šią ataskaitą buvo naudojami generatyvinio dirbtinio intelekto (GDI) įrankiai. Visi naudoti GDI įrankiai yra aprašyti žemiau pateiktoje lentelėje \lent{\ref{tab:llms}}.
+
+\begin{table}[H]
+	\caption{Naudoti GDI modeliai baigiamajame darbe.}
+	\label{tab:llms}
+	\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{4cm}|X|}
+		\hline
+		\thead[l]{GDI modelis} & \thead{Naudojimas projekte} \\ \hline
+		\textit{Google Gemini 3.1 Pro} & Ataskaitos struktūros ir kalbos tikrinimui, projektavimui, kodo klaidų taisymui. \\ \hline
+		\textit{Google Gemini 3.1 Flash Lite} & Greitoms užklausoms, kaip lentelių formatavimui, šaltinių korektiškam aprašymui. \\ \hline
+		\textit{OpenAI GPT-5.5 Instant} & Idėjų generavimui, greitoms užklausoms rašomo programinio kodo klausimams. \\ \hline
+		\textit{Claude Sonnet 4.6} & Rašomo projekto kodo klausimams. \\ \hline
+	\end{tabularx}
+\end{table}
+
+Verta paminėti, jog net ir tradicinės paieškos \textit{Google} įrankis suteikia paieškos viršuje GDI sugeneruotą užklausos atsakymus su nuorodomis į šaltinius. Tai labai stipriai pagelbėjo greitai ieškoti informacijos internete ir rašyti paieškos užklausos natūralia kalba, vietoje to, jog rašyti „How to implement Scoreboard class in PyUVM“, buvo rašoma „Does PyUVM have RAL module that can be used in Scoreboard UVM component“.
+
+Analizės fazėje GDI buvo naudojamas, ypač ieškant šaltinių, kuriais būtų galima remtis. Taip pat buvo išgryninti projekto pagrindiniai tikslai, nusakant GDI modeliams kokia yra projekto idėjos specifika.
+
+Projektavimo ir specifikavimo fazėje buvo GDI buvo naudojamas struktūros peržiūrai, klaidų ieškojimui ir loginiams neatitikimams, taip pat braižant UML diagramas buvo pasitelktas GDI kaip pradinės idėjos generavimui, jog būtų galima braižant diagramas atsispirti nuo kokio nors pagrindo.
+
+Programavimo fazėje GDI buvo daug naudojamas, kadangi kai kur buvo susidurta su problemomis, kurių internete nepavykdavo rasti, vieninteliai sprendimai buvo atlikti naudojantis GDI sugeneruotu sprendimu. Tai kartu palengvino ir pasunkino darbą, nes nežinant sprendimo specifikos, susidūrus antrą kartą su klaidomis, ir problemomis iš sugeneruoto sprendimo kodo srities buvo žymiai sunkiau atsekti problemų priežastis. Naudojant iteracinį projektavimo kūrimo modelį, buvo greitai GDI sugeneruojami kodo segmentai, kurie ištestuodavo vizijos galimybes ir pasiteisinus, tada būdavo gilinamasi į kodo specifiką ir sugeneruoti segmentai buvo perrašomi ranka.
+
+Testavimo fazėje buvo naudojamas GDI aiškinantis gautų testavimo metrikų prasmes, šioje dalyje GDI buvo naudojamas mažiausiai.
+
+Dokumentacijos fazėje GDI buvo naudojamas aprašant naudojimosi instrukcijas. Būtent šioje srityje, kaip dokumentacijose ir ataskaitose autoriaus nuomone GDI yra pats geriausias įrankis ir mažiausiai kenkia bendram produktyvumui.
+
+Pastebėjimai:
+\begin{itemize}
+	\item Rašant baigiamąjį darbą, ypač programavimo fazėje pastebėtas staigus produktyvumo kritimas. Kai problemos sudėtingėja ir susijusių komponentų kiekis tampa vis didesnis, GDI naudojimas kaip tik pradėjo kenkti kodo rašymui ir taisymui, tad buvo pakeistas naudojimas, kur užklausos, susijusios su programavimo problematika, buvo mažinamos ir gryninamos iki primityvių komponentų. Vėliau programavimo dalyje GDI tapo visiškai netinkamas ir buvo naudojamas tik paprastiems sintaksių klausimams.
+	\item Nors GDI padidina produktyvumą tam tikrose srityse, neįsigilinus į sprendimo problematiką lengvai galima prieiti neefektyvius ir akivaizdžiai neteisingus sprendimus, tad šiame projekte dirbtinio intelekto sprendimai buvo naudojami be galo atsargiai ir skeptiškai, dažniausiai atliekant papildomą paiešką internete.
+	\item GDI modelių nauda yra neginčijama, užtat buvo pastebėtos iškilusios psichinės ir psichologinės problemos naudojant šiuos įrankius. Autoriaus psichinis nuovargis stipriai iškilo bei atsirado daugiau problemų prisiminti sprendimus į jau prieš tai išspręstas problemas. Žinoma, tai gali būti dėl to, nes projekto apimtis yra tikrai nemaža, bet tai yra dalinai susiję su GDI naudojimu.
+\end{itemize}
+
+Apibendrinant, GDI buvo naudojamas visose baigiamojo projekto fazėse, taip pat iškilo produktyvumas, bet GDI turi aiškias galimybes ir vis tiek reikalauja inžinieriaus gilių žinių problematikos srityje.
