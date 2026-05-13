@@ -1554,81 +1554,87 @@ UVM testas prijungia prie testavimo aplinkos konfigūracijos virtualią mikroval
 
 \noterequirement{Dinaminiame sistemos vaizde parodoma kaip sistema veikia naudojama. Rekomenduojame aprašyti ne visus, tačiau tik esminius sistemos veikimo scenarijus. Šiame punkte pagal poreikį galima pavaizduoti sistemos veiksmus UML veiklos, sekų ir/arba būsenų diagramomis. Galite pasirinkti vieną iš jų, galite naudoti ir kelias (priklausomai nuo sistemos specifikos). Visgi jei naudojate veiklos diagramas, jos turėtų būti žemesnio abstrakcijos lygmens nei tas, kurias galimai naudojote aprašydami sistemos reikalavimus.}
 
+Dinaminis sistemos vaizdas iliustruoja, kaip sistemos komponentai sąveikauja laiko perspektyvoje vykdant specifines užduotis. Mikrovaldiklio CLI programinės įrangos vidinė komandų apdorojimo logika ir sprendimų priėmimo procesas atvaizduojamas UML veiklos diagramoje \pav{\ref{fig:uml_activity_cli}}.
+
+Likę sistemos eigos procesai, susiję su testavimo karkaso automatizacija ir valdymu, yra modeliuojami UML sekų diagramomis. Šakninio \textit{GNU Make} skripto scenarijaus bendroji vykdymo seka, kuri paskirsto užduotis \pav{\ref{fig:uml_seq_root_make}}. Konteinerių atvaizdų kūrimo dinamika pradedama bazine „make image“ seka \pav{\ref{fig:uml_seq_make_image}}, kuri, priklausomai nuo perduotų parametrų, inicijuoja \textit{Verilator} \pav{\ref{fig:uml_seq_make_image_verilator}} arba \textit{Xcelium} \pav{\ref{fig:uml_seq_make_image_xcelium}} imituoklei pritaikyto atvaizdo surinkimą. Paruoštos testavimo aplinkos paleidimo interaktyviam darbui eiga \pav{\ref{fig:uml_seq_make_run}}, o šakninio projekto kodo pataisų taikymo bei atšaukimo procesas \pav{\ref{fig:uml_seq_make_patch}}.
+
+Python virtualios aplinkos paruošimo seka („make venv“) \pav{\ref{fig:uml_seq_venv}}, su išsišakojimais specifinėms imituoklių aplinkoms: \textit{Verilator} \pav{\ref{fig:uml_seq_venv_verilator}} ir \textit{Xcelium} \pav{\ref{fig:uml_seq_venv_xcelium}}. Programinės įrangos kompiliavimo ir susiejimo procesai programinės įrangos „make“ \pav{\ref{fig:uml_seq_sw_make}} bei bendrosios programinės įrangos „make“ \pav{\ref{fig:uml_seq_sw_comm_make}}. Imitavimo konfigūracijos įkėlimas, parametrų paruošimas ir testų vykdymo paleidimas \pav{\ref{fig:uml_seq_sim_make}}.
+
 \begin{figure}[H]
 	\includesvg[width=11.22cm,height=22cm]{images/uml_activity_cli.svg}
 	\caption{Mikrovaldiklio CLI programinės įrangos UML veiklos diagrama}
-	\label{fig:uml_seq_root_make}
+	\label{fig:uml_activity_cli}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_root_make.svg}
-	\caption{Pagrindinio \angl{root} „make“ sekų diagrama}%TODO: map to use case
+	\caption{Pagrindinio \angl{root} „make“ sekų diagrama}
 	\label{fig:uml_seq_root_make}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_make_image.svg}
-	\caption{„make image“ sekų diagrama}%TODO: map to use case
+	\caption{„make image“ sekų diagrama}
 	\label{fig:uml_seq_make_image}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_make_image_verilator.svg}
-	\caption{„make image verilator“ sekų diagrama}%TODO: map to use case
+	\caption{„make image verilator“ sekų diagrama}
 	\label{fig:uml_seq_make_image_verilator}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_make_image_xcelium.svg}
-	\caption{„make image xcelium“ sekų diagrama}%TODO: map to use case
+	\caption{„make image xcelium“ sekų diagrama}
 	\label{fig:uml_seq_make_image_xcelium}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_make_run.svg}
-	\caption{„make run“ sekų diagrama}%TODO: map to use case
+	\caption{„make run“ sekų diagrama}
 	\label{fig:uml_seq_make_run}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_make_patch.svg}
-	\caption{„make patch“ sekų diagrama}%TODO: map to use case
+	\caption{„make patch“ sekų diagrama}
 	\label{fig:uml_seq_make_patch}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_make_venv.svg}
-	\caption{„make venv“ sekų diagrama}%TODO: map to use case
+	\caption{„make venv“ sekų diagrama}
 	\label{fig:uml_seq_venv}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_make_venv_verilator.svg}
-	\caption{„make venv verilator“ sekų diagrama}%TODO: map to use case
+	\caption{„make venv verilator“ sekų diagrama}
 	\label{fig:uml_seq_venv_verilator}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_make_venv_xcelium.svg}
-	\caption{„make venv xcelium“ sekų diagrama}%TODO: map to use case
+	\caption{„make venv xcelium“ sekų diagrama}
 	\label{fig:uml_seq_venv_xcelium}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_sw_make.svg}
-	\caption{Programinės įrangos „make“ sekų diagrama}%TODO: map to use case
+	\caption{Programinės įrangos „make“ sekų diagrama}
 	\label{fig:uml_seq_sw_make}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_sw_comm_make.svg}
-	\caption{Bendros \angl{common} programinės įrangos „make“ sekų diagrama}%TODO: map to use case
+	\caption{Bendros \angl{common} programinės įrangos „make“ sekų diagrama}
 	\label{fig:uml_seq_sw_comm_make}
 \end{figure}
 
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_seq_sim_make.svg}
-	\caption{Imitavimo konfigūracijos ir valdymo „make“ sekų diagrama}%TODO: map to use case
+	\caption{Imitavimo konfigūracijos ir valdymo „make“ sekų diagrama}
 	\label{fig:uml_seq_sim_make}
 \end{figure}
 
