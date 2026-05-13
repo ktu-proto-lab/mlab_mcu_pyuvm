@@ -21,7 +21,7 @@ Laiko ir kainos apribojimai \\
 	\item Kaina ir biudžetas. Projektas kuriamas be atskiro finansavimo, todėl vienas iš pagrindinių reikalavimų yra atviros prieigos (angl. \textit{open-source}) ir nemokamų įrankių (\textit{Verilator}, \textit{Docker}, \textit{Python}) panaudojimas pagrindiniam funkcionalumui užtikrinti. Komercinio \gls{eda} (\textit{Cadence Xcelium}) palaikymo integracijai papildomi finansai nėra skiriami -- naudojama jau egzistuojanti universiteto laboratorijos turima licencijuota serverių infrastruktūra. 
 \end{itemize}
 
-\subsubsection{Sistemos funkcijos}
+\subsubsection{Sistemos funkcijos}\label{section:sistemos-funkcijos}
 
 \noterequirement{Čia būtų išvardinamos visos sistemos funkcijos (aprašomi funkciniai reikalavimai), pavaizduotos UML panaudojimo atvejų (PA) diagrama. Po kiekvienos iliustracijos turi būti papildomi kiekvienos funkcijos detalūs žodiniai aprašymai. Esminius PA vertėtų specifikuoti veiklos diagramomis arba PA specifikacijos lentele: atvejo pavadinimas, tikslas, aprašymas, prieš sąlyga, po sąlyga, susiję panaudojimo atvejai (include, extend), aktorius ir kt.}
 
@@ -1035,8 +1035,43 @@ Python               2        10         5       90
 	conditionafter = {Terminale atspausdinama švari projekto struktūros ir naudingo išeities kodo apimčių ataskaita.}
 }
 
-\subsubsection{Vartotojo sąsajos specifikacija}
+\subsubsection{Naudotojo sąsajos specifikacija}
 \noterequirement{Naudotojo sąsajos specifikacijoje turi būti nurodomi reikalavimai naudotojo sąsajos vaizdai. Čia nereikia ir negalima dėti jau egzistuojančios programos screenshot‘ų! Šiame etape tik nusakoma, kokia turi būti naudotojo sąsaja (rekomenduojame Balsamiq, Axure RP, Figma ir panašius įrankius), tačiau galutinis sąsajos vaizdas nurodomas tik vėlesniuose skyriuose. Jei pradinėje kūrimo fazėje buvo naudojami naudotojo sąsajos eskizai ar prototipai, juos reikia dėti būtent į šį skyrelį}
+
+Projektuojama sistema yra specializuotas verifikavimo karkasas, skirtas aparatinės ir programinės įrangos inžinieriams, todėl tradicinė grafinė naudotojo sąsaja (GUI) sistemoje nėra realizuojama. Pagrindinis naudotojo sąveikos modelis yra paremtas komandine eilute (\gls{cli}) bei tekstine naudotojo sąsaja (\gls{tui}). Nors detalios komandų sintaksės ir parametrų struktūros yra apibrėžtos funkcinių reikalavimų skyriuje (žiūrėti \hyperref[section:sistemos-funkcijos]{\textbf{sistemos funkcijos}}).
+
+Kadangi verifikacijos procesas generuoja didelius kiekius tekstinės informacijos (simuliatoriaus žurnalus, transakcijų sekas), naudotojo sąsaja privalo užtikrinti greitą ir intuityvų informacijos apdorojimą. Sąsajos specifikacijai keliami šie reikalavimai:
+\begin{itemize}
+	\item Standartizuotas ženklinimas. Visi karkaso skriptų pranešimai privalo turėti aiškius, laužtiniuose skliaustuose pateikiamus prefiksus (pvz., \texttt{[   INFO]}, \texttt{[SUCCESS]}, \texttt{[  ERROR]}).
+	\item Spalvinis kodavimas. Siekiant pagerinti skaitomumą, kritiniai pranešimai terminale turi būti skiriami vizualiai: klaidos žymimos raudona spalva, sėkmingos operacijos -- žalia, o informaciniai pranešimai -- neutralia spalva.
+	\item Intuityvi pagalba. Naudotojui pamiršus komandos sintaksę, sąsaja privalo reaguoti į standartines užklausas (pvz., \texttt{make help}) ir terminale atspausdinti suformatuotą naudojimosi meniu.
+\end{itemize}
+
+Siekiant išspręsti problemą, kuomet viename terminalo lange susimaišo naudotojo įvedamos komandos, fone veikiančios imituoklės pranešimai ir transakcijų stebėjimo žurnalai, projektavimo fazėje buvo numatytas kelių langų terminalo darbo erdvės padalijimas. 
+
+Vietoj tradicinių grafinių prototipų, pradinėje kūrimo fazėje buvo suprojektuotas \gls{tui} maketas, realizuojamas per terminalo sesijų valdiklį (pvz., \textit{Tmux}). Koncepcinis sąsajos išdėstymo eskizas, atskiriantis vykdymo, stebėjimo ir valdymo srautus, pateiktas žemiau \pav{\ref{fig:tui_mockup}}.
+
+\begin{figure}[H]
+	\begin{verbatim}
++-----------------------------------------------------------------------+
+| [sim]                                                                 |
+| Simulator (Verilator / Xcelium) UVM test log output                   |
+| ...                                                                   |
+| [   INFO]: GPIO agent activated                                       |
+| [  ERROR]: UART tx: '0xfc'                                            |
++-----------------------------------+-----------------------------------+
+| [terminal]                        | [tracer]                          |
+| mcu@container:~/mcu/uvm/sim$ _    | Transaction tracer                |
+|                                   | ...                               |
+|                                   | sent "hello" to mcu               |
+|                                   | received "hi" from mcu            |
++-----------------------------------+-----------------------------------+
+	\end{verbatim}
+	\caption{Terminalo darbo erdvės TUI maketas}
+	\label{fig:tui_mockup}
+\end{figure}
+
+Šis maketas apibrėžia reikalavimą, kad fizinis inžinieriaus ekranas būtų padalintas į tris logines sekcijas: viršutinė skirta bendram simuliacijos stebėjimui, kairė apatinė -- aktyviam komandų rašymui, o dešinė apatinė -- realaus laiko (GPIO, I2C, UART) transakcijų analizei.
 
 \subsubsection{Realizacijai keliami reikalavimai}
 
@@ -1132,6 +1167,20 @@ Buvo taikomas iteracinis programinės įrangos kūrimo modelis \lent{\ref{fig:um
 \subsubsection{Projektavimo technologija}
 
 \noterequirement{Šiame punkte nurodykite, kokią naudojote projektavimo technologiją, standartus ir programinius įrankius projekto kūrimui. Aprašykite kokia ar kokiomis notacijomis (formaliais tekstiniais ir grafiniais žymėjimo / aprašymo standartais) naudojotės kurdami sistemos projektą.}
+
+istemos projektavimo fazėje buvo remiamasi objektinio projektavimo principais bei Universalios verifikavimo metodologijos (UVM) architektūrine paradigma. Pagrindinis projektavimo tikslas buvo atskirti aparatinės įrangos tikrinimo logiką nuo pačios imituoklės bei testavimo aplinkos, taip užtikrinant komponentų pernaudojamumą. 
+
+Planuojant verifikacijos komponentų struktūrą, buvo remiamasi oficialiu \glsdisp{ieee}{IEEE 1800.2 UVM standartu}. Nors šiame projekte karkasas realizuojamas naudojant \textit{Python} kalbą, projektavimo metu buvo siekiama išlaikyti standartinės UVM architektūros (agentų, monitorių, tvarkyklių ir sekų valdytojų) išdėstymą.
+
+Sistemos architektūros, duomenų srautų ir logikos modeliavimui buvo pasirinktas formalus UML standartas. Norint visapusiškai aprašyti tiek statinę, tiek dinaminę sistemos elgseną, buvo suprojektuotos šios UML diagramos:
+\begin{itemize}
+	\item Panaudojimo atvejų diagramos -- sistemos funkcinių reikalavimų ir naudotojo sąveikos su komandine eilute (CLI) apibrėžimui.
+	\item Komponentų ir diegimo diagramos -- konteinerių, skriptų ir išorinių \textit{EDA} įrankių priklausomybėms ir fiziniam išdėstymui atvaizduoti.
+	\item Klasių diagramos -- statinei objektinio \textit{Python} kodo (\textit{PyUVM} bei \textit{Cocotb} objektų) hierarchijai, atributams ir metodams specifikuoti.
+	\item Veiklos ir sekų diagramos -- dinaminiam algoritmų ir „Make“ skriptų vykdymo modeliui atvaizduoti laiko atžvilgiu.
+\end{itemize}
+
+Visiems formaliems UML modeliams ir architektūros schemoms projektuoti buvo naudojama specializuota modeliavimo programinė įranga \textit{CATIA | Magic Systems of Systems Architect 2024}. Pagalbiniai vizualiniai elementai ir eskizai buvo rengiami pasitelkiant \textit{Microsoft PowerPoint} įrankį.
 
 \subsubsection{Programavimo kalbos, derinimo, automatizavimo priemonės, operacinės sistemos}
 \noterequirement{Šiame punkte, tiesiog, aprašykite, kokią programinę įrangą (nurodant versijas) naudojote kurdami savo baigiamąjį darbą. Tiesa, rašyti kokią programinę įrangą naudojote šiai ataskaitai sukurti – nebūtina. }
