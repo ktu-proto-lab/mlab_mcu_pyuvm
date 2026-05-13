@@ -1036,15 +1036,63 @@ Python               2        10         5       90
 
 \noterequirement{Realizacijai gali būti keliami tokie nefunkciniai reikalavimai: reikalavimai sistemos išvaizdai, reikalavimai panaudojamumui, reikalavimai vykdymo charakteristikoms, reikalavimai veikimo sąlygoms, reikalavimai sistemos priežiūrai, reikalavimai saugumui, kultūriniai-politiniai reikalavimai, teisiniai reikalavimai. Jie išvardinami ir aprašomi šiame skyrelyje. Pavyzdžiui: 
 	
-	Maisto perdavimo protokolas privalo būti saugus (neautentifikuoti kaimynai negali sužinoti kokį maistą siunčiasi naudotojas) 
-	
-	Maistas, suskaidytas paketais, turi pasiekti naudotoją nepagedęs 
-	
-	Maisto perdavimo protokolas turėtų palaikyti lietuviškos virtuvės produktus 
-	
-	Šiame punkte gali būti išvardinti (jeigu nustatyti) tokio tipo apribojimai: apribojimai sprendimui, diegimo aplinka, bendradarbiaujančios sistemos, komerciniai specializuoti programų paketai, numatoma darbo vietos aplinka, sistemos kūrimo terminai, sistemos kūrimo biudžetas. Jei reikalinga specifinė duomenų kontrolė (kokia informacija turi būti tikrinama įvedimo ar sistemos veikimo metu), ji taip pat aprašoma šiame skyrelyje. 
-	
-	Galbūt kai kuriems iš jūsų pravers ir nefunkcinių reikalavimų hierarchija.}
+Maisto perdavimo protokolas privalo būti saugus (neautentifikuoti kaimynai negali sužinoti kokį maistą siunčiasi naudotojas) 
+
+Maistas, suskaidytas paketais, turi pasiekti naudotoją nepagedęs 
+
+Maisto perdavimo protokolas turėtų palaikyti lietuviškos virtuvės produktus 
+
+Šiame punkte gali būti išvardinti (jeigu nustatyti) tokio tipo apribojimai: apribojimai sprendimui, diegimo aplinka, bendradarbiaujančios sistemos, komerciniai specializuoti programų paketai, numatoma darbo vietos aplinka, sistemos kūrimo terminai, sistemos kūrimo biudžetas. Jei reikalinga specifinė duomenų kontrolė (kokia informacija turi būti tikrinama įvedimo ar sistemos veikimo metu), ji taip pat aprašoma šiame skyrelyje. 
+
+Galbūt kai kuriems iš jūsų pravers ir nefunkcinių reikalavimų hierarchija.}
+
+
+Kuriamam \glsdisp{microprocessor}{mikrovaldiklio} \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasui} keliami griežti nefunkciniai reikalavimai, užtikrinantys sistemos našumą bei patogų bendradarbiavimą tarp skirtingų technologinių posistemių. Šių posistemių -- programinės įrangos surinkimo, aparatinės įrangos \glsdisp{simulation}{imitacijos} bei testavimo aplinkos -- sąveika ir sugeneruojami artefaktai pavaizduoti UML komponentų diagramoje \pav{\ref{fig:uml_realization_architecture}}.
+
+\begin{figure}[H]
+	\includesvg[width=11.22cm]{images/uml_component_system_model.svg} 
+	\caption{Karkaso bendradarbiaujančių sistemų ir generuojamų artefaktų UML komponentų diagrama}
+	\label{fig:uml_realization_architecture}
+\end{figure}
+
+Sistemos realizacijai keliami šie nefunkciniai ir aplinkos apribojimų reikalavimai:
+
+Veikimo sąlygų ir diegimo aplinkos reikalavimai:
+\begin{itemize}
+	\item Sistema privalo būti nepriklausoma nuo \glsdisp{host-operating-system}{pagrindinės operacinės sistemos}. Ji turi sklandžiai veikti \textit{Windows} (naudojant \gls{wsl}), \textit{macOS} (įskaitant ARM arhitektūrą) bei \textit{Linux} aplinkose.
+	\item Visi testavimo įrankiai, išskyrus komercinius serverio komponentus, privalo būti paleidžiami izoliuotoje aplinkoje naudojant \textit{Docker} arba \textit{Podman} \glsdisp{container}{konteinerius}, taip išvengiant priklausomybių konfliktų.
+	\item Karkasas turi palaikyti dvi atskiras \glsdisp{simulation}{imitacijos} šakas: atviros prieigos (\textit{Verilator}) bei komercinę (\textit{Cadence Xcelium}).
+\end{itemize}
+
+Panaudojamumo reikalavimai:
+\begin{itemize}
+	\item Sudėtingas \glsdisp{container}{konteinerių} ir \glsdisp{simulator}{imituoklių} valdymas privalo būti abstrahuotas. Naudotojas sistemą turi valdyti per paprastas, intuityvias \textit{GNU Make} komandas (pvz., \texttt{make run}, \texttt{make build}).
+	\item Testų rezultatų bei \glsdisp{waveform}{laikinių diagramų} peržiūra (\textit{GTKWave}, \textit{SimVision}) turi būti pasiekiama be papildomų rankinių konfigūracijų, komandomis iškeliant grafinę sąsają iš \glsdisp{container}{konteinerio}.
+\end{itemize}
+
+Vykdymo charakteristikų reikalavimai:
+\begin{itemize}
+	\item \gls{dut} \gls{rtl} dizaino sintezė ir C programinės įrangos kompiliavimas neturi užtrukti ilgiau nei keletą sekundžių, siekiant užtikrinti greitą iteracinį kūrimo ciklą.
+	\item Nors komunikacija tarp \textit{Python} testavimo aplinkos ir \glsdisp{simulator}{imituoklės} vyksta per \gls{vpi} sąsają, architektūra turi būti optimizuota taip, kad signalų stebėjimas \gls{uvc} komponentuose vyktų tik aktyviais taktinio dažnio (\glsdisp{clock}{sinchronizacijos signalo}) frontais, vengiant perteklinio resursų naudojimo.
+\end{itemize}
+
+Sistemos priežiūros ir išplėtimo reikalavimai:
+\begin{itemize}
+	\item \glsdisp{verification}{Verifikavimo} aplinka privalo griežtai laikytis \gls{uvm} architektūros principų, realizuotų per \textit{PyUVM} paketą.
+	\item Sistemos archidtektūra turi būti modulinė: naujų \glsdisp{microprocessor}{mikrovaldiklio} periferinių įrenginių (pvz., \gls{spi}, \gls{i2c}) testavimui turi pakakti sukurti naują nepriklausomą \gls{uvc} (agentą, tvarkyklę, monitorių), nekeičiant branduolio kodo.
+	\item Testuojamo mikrovaldiklio realizacija turi būti nepriklausoma nuo testų, turi būti aprašyti \textit{SystemVerilog} apvalkalai su kuriais komunikuoja aprašyti UVM testai.
+\end{itemize}
+
+Saugumo ir licencijavimo reikalavimai:
+\begin{itemize}
+	\item Testuojant su komercine \textit{Cadence Xcelium} \glsdisp{simulator}{imituokle}, licencijų raktai ir serverio adresai (\texttt{CDS\_LIC\_FILE}) privalo būti perduodami į \glsdisp{container}{konteinerį} dinamiškai. Jie negali būti įtraukti į patį \glsdisp{docker-image}{konteinerio atvaizdą} ar repozitorijos failus, siekiant užkirsti kelią komercinių paslapčių nutekėjimui.
+	\item Karkasas turi naudoti tik tuos atvirojo kodo komponentus, kurių licencijos leidžia laisvą naudojimą akademiniuose ir moksliniuose projektuose.
+\end{itemize}
+
+Generuojamų artefaktų reikalavimai:
+\begin{itemize}
+	\item Karkasas privalo automatiškai sugeneruoti ir išsaugoti aiškius išvesties failus \pav{\ref{fig:uml_realization_architecture}}: programinės įrangos \textit{HEX/BIN} \glsdisp{program-build}{darinius}, testų logus, \glsdisp{waveform}{laikinių diagramų} failus (\textit{VCD} arba \textit{SHM} formatais) bei \glsdisp{functional-coverage}{funkcinio padengiamumo} metrikas.
+\end{itemize}
 
 \subsubsection{Techninė specifikacija}
 
