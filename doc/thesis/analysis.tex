@@ -4,25 +4,11 @@
 
 \subsubsection{Sistemos apibrėžimas}
 
-% --- REQUIREMENT
-\noterequirement{
-Nurodykite ką sistema darys. Jeigu kuriamos tik atskiros dalys, papildomai nurodykite, kurios dalys kuriamos. Galima labai neišsiplėsti, nes detaliau sistema bus aprašoma sekančiuose skyreliuose. \\
-Pvz.: „Maisto perdavimo protokolas (Food Transfer Protocol) – tai sistema, kuri leis žmonėms neišeinant iš namų ne tik užsisakyti, bet ir tiesiogiai parsisiųsti maisto.“
-}
-
-% --- CONTENT
 \gls{risc} architektūros \glsdisp{microprocessor}{mikrovaldiklio} \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasas} -- tai testavimo aplinkos, jos valdymo ir automatizavimo, kuriamos ir testuojamos architektūros automatizuotas \glsdisp{verification}{verifikavimas}. Naujų testų rašymo bei jų \glsdisp{simulation}{imitavimo} aplinka.\gls{risc}architektūros \glsdisp{microprocessor}{mikrovaldiklio} projekto \glsdisp{plugin}{įskiepis}, nepriklausomas nuo \glsdisp{host-operating-system}{pagrindinės operacinės sistemos}. \Glsdisp{framework}{Karkasas} atveria galimybę dirbti su skirtingais \glsdisp{simulator}{imitatoriais}: su \textit{Veripool Verilator} \glsdisp{simulator}{imituokle}, kurią galima naudoti nepriklausomai nuo \glsdisp{host-operating-system}{pagrindinės operacinės sistemos}, ir su \textit{Cadence Xcelium} \glsdisp{simulator}{imituokle}, su kuria dirbama licencijuotame serveryje. Suteikiama pilna \glsdisp{container}{konteinerizuota} aplinka, kurioje yra visi projekto \glsdisp{verification}{verifikavimui} reikalingi programiniai įrankiai. Automatizuoti \textit{GNU Make} ir \textit{Bash} skriptų scenarijai pasirūpina visu reikalingu projekto ir \glsdisp{verification}{verifikavimo} \glsdisp{plugin}{įskiepio} konfigūravimu ir valdymu. Aprašyti \textit{Python} \gls{uvm} ir \gls{uvc} komponentai naudojami \gls{soc} dizaino testavimui. Kartu, minėti paketai ir jų aprašyti komponentai gali būti pernaudojami rašant naujus \gls{soc} dizaino testus, kurie naudoja modernius \textit{Python} programavimo kalbos funkcionalumus, paketus, ir \glsdisp{open-source}{atviros prieigos} įrankius. \Glsdisp{framework}{Karkasas} yra \glsdisp{open-source}{atviros prieigos} alternatyva \textit{SystemVerilog} \gls{uvm} \glsdisp{verification}{verifikavimo} testų rašymui ir komercinių \gls{eda} įrankių naudojimui \glsdisp{verification}{verifikacijos} eigos procese.
 
 
 \subsubsection{Bendras veiklos tikslas}
 
-% --- REQUIREMENT
-\noterequirement{
-Tai gali būti globalus įmonės ar abstraktus tikslas (gali būti ne vienas), kuris bus pasiektas sukūrus ir įdiegus sistemą. Iš esmės tai išplėstas darbo tikslas, kurį paminėjote dar įvade. Aprašant nebūtina pagrįsti tikslo – nereikia aprašinėti detalių kaip tikslo ar tikslų bus siekiama. Šiame punkte taip pat aprašykite kokia nauda (tiek komercinė, tiek nekomercinė) bus gaunama įvykdžius projektą. Nauda gali būti konkretus pelnas (pvz., uždirbsite kalną pinigų), nekomercinio projekto atveju – asmeninis populiarumas (pvz., išgarsėsite savo produktu ir panaudosite tai savo ateities produktų reklamai), nauda visuomenei. Galite paminėti ir apie produkto atsipirkimą (jei tai investicinis projektas, kurio finansinė nauda planuojama tik už kelerių metų). \\
-Pvz.: „Maisto perdavimo protokolas leis žmonėms patenkinti maistinius poreikius jiems neišeinant iš namų“. 
-}
-
-% --- CONTENT
 Pagrindiniai veiklos tikslai:
 \begin{enumerate}
 	\item Išsiaiškinti ar \glsdisp{open-source}{atviros prieigos} įrankius galima ir kaip integruoti į sudėtingesnio \gls{soc} dizaino \glsdisp{verification}{verifikavimo} eigos procesą, naudojant \textit{Python} \gls{uvm} implementaciją vietoje \textit{SystemVerilog} bei suteikti galimybę testų vykdymui naudoti skirtingas \glsdisp{simulator}{imituokles}.
@@ -34,13 +20,6 @@ Pagrindiniai veiklos tikslai:
 
 \subsubsection{Sistemos pagrįstumas}
 
-% --- REQUIREMENT
-\noterequirement{
-Aprašoma pagrindinė problema, kodėl reikia kurti sistemą (kitaip tariant, iš kur kilo toks poreikis) bei sistemos aktualumas (kodėl svarbu sukurti sistemą). \\
-Pvz.: „Egzistuoja daug naudotojų, kurie negali arba tiesiog nenori eiti į parduotuvę ar kavinę norėdami pavalgyti. Esamos sistemos (detali analizė pateikiama sekančiame skyrelyje) nesuteikia galimybės greitai ir pigiai patenkinti maistinius poreikius, todėl šios sistemos sukūrimas iš esmės išsprendžia greito ir saugaus maisto perdavimo problemas“. 
-}
-
-% --- CONTENT
 Didėjant \gls{soc} dizaino projekto apimčiai \lent{\ref{fig:mlab_mcu_architecture}} ėmė sudėtingėti funkcionalumą \glsdisp{verification}{verifikuojančių} testų rašymas bei atsirado poreikis automatizuotam testų leidimui ir valdymui. Paprastam \gls{rtl} dizainui užtenka ir \glsdisp{signal-level-testbench}{signalų lygio testavimo stendų} aprašymų SystemVerilog kalba. Didėjant \gls{soc} dizaino architektūros apimčiai atsirado poreikis testuoti ne vien aparatinės įrangos funkcionalumą signalų, bet ir programiniame lygyje palaikomų protokolų. Pavyzdžiui: teksto eilučių siuntimas į ir iš \gls{dut}, komandų apdorojimo \gls{cli}, \gls{dut} būsenos testavimo.
 
 \begin{figure}[H]
@@ -71,17 +50,6 @@ Komercinių \gls{eda} įrankių naudojimas \lent{\ref{fig:modern-soc-design-veri
 
 
 \subsubsection{Konkurencija rinkoje}
-
-% --- REQUIREMENT
-\noterequirement{
-Panašių egzistuojančių ar šiuo metu dar tik kuriamų sistemų, produktų ar algoritmų apžvalga. Šios analizės tikslas – išanalizuoti kokiomis panašiomis savybėmis pasižymi analogai, kaip jūsų kuriamas sprendimas atrodo bendrame kontekste. \\
-Rekomenduojama analizei rasti bent 3 panašius sprendimus, juos išsamiau aprašyti, pateikti ekrano vaizdų (jei tai įmanoma), nuorodas į interneto puslapius, kuriuose galima rasti daugiau informacijos apie sprendimus (nuorodas įtraukti į literatūros sąrašą). \\
-Skyriuje taip pat naudinga pateikti lyginamosios analizės santrauką lentelės pavidalu (pavyzdys – 1 lentelė). Palyginimui svarbu pasirinkti kriterijus, pagal kuriuos įmanoma objektyviai palyginti jūsų kuriamą sprendimą su egzistuojančiais sprendimais. Taip rekomenduojama, kad (pagal poreikį) kriterijai būtų įvairūs – būtų palyginamos ne tik funkcionalumas, bet ir naudotojų kiekis, kaina, operacinė sistema ar kitos ypatybės (bent 6-8 kriterijai). \\
-Po lentele labai reikomenduojama aprašyti palyginimo kriterijus – ką jie reiškia, kodėl jie svarbūs, kodėl buvo pasirinkti. Tarp kriterijų turėtų būti bent vienas, pagal kurį jūsų sprendimas bent kažkuo išsiskiria tarp kitų rinkos žaidėjų. \\
-Tiesa, jei kuriamas darbas yra tiriamojo pobūdžio, šiame skyriuje vertėtų aprašyti detalią mokslinės literatūros apžvalgą. Apie tai plačiau galės papasakoti jūsų vadovas.  
-}
-
-% --- CONTEINT
 
 \textbf{\textit{Cadence}}
 
@@ -138,11 +106,6 @@ Kadangi tikslios komercinių \gls{eda} įrankių kainos yra griežtai saugomos k
 
 \subsubsection{Prototipai ir pagalbinė informacija}
 
-\noterequirement{
-Programą ar sistemą galima kurti ir turint tam tikrą pagrindą, t.y. modifikuojant ar ištobulinant jau esamą produktą. Jei kuriate produktą nesinaudodami kitu produktu kaip pagrindu, taip ir parašykite. Jei naudojatės prototipais, detaliai aprašykite kuo jūsų sprendimas yra geresnis už prototipą. Čia taip pat galite abstrakčiai parašyti kokie informaciniai šaltiniai jums labiausiai padėjo kuriant produktą (pvz., naudojotės prototipų dokumentacija ar tiesiog pasikliovėte eksperto žiniomis, klausinėjote forumuose). \\
-„Šiuo metu labiausiai paplitęs yra failų perdavimo protokolas (FTP). Vienas labiausiai išvystytų protokolų yra Bittorent, tačiau egzistuoja ir daug kur kas mažiau paplitusių protokolų. Tai patikimi, rinkoje įsitvirtinę protokolai. Jų didžiausias trūkumas yra tas, kad jie gali perduoti tinklu tik duomenis, tačiau perduoti objektus (ypač maistą) yra neįmanoma. Savo darbe daugiausiai remsiuosi FTP protokolu, nes kuriamas produktas skiriamas parduotuvei, kuri persiunčia nupirktą maistą klientams, t.y. veikia kaip serveris kliento-serverio architektūroje. Bittorent labiau tiktų maisto dalybai socialiniuose tinkluose“. 
-}
-
 Kuriamas verifikavimo \glsdisp{framework}{karkasas} nėra visiškai savarankiškas ir nuo nulio kuriamas produktas -- jis formuojamas kaip \glsdisp{plugin}{įskiepis} jau egzistuojančiam ir vystomam \gls{risc} architektūros \glsdisp{microprocessor}{mikrovaldiklio} projektui. Iki šiol šio \gls{mcu} funkcionalumo tikrinimas buvo atliekamas naudojant tradicinius \glsdisp{signal-level-testbench}{signalų lygio testavimo stendus}, aprašytus \textit{SystemVerilog} kalba. Kuriamas sprendimas yra kur kas pranašesnis už pradinį, nes senoji architektūra, projektui augant, tapo sunkiai palaikoma, dubliavo kodą ir reikalavo specifinių \gls{hdl} kalbos bei komercinių \gls{eda} įrankių žinių. Naujasis karkasas visiškai pakeičia senus \textit{SystemVerilog} testavimo stendus, įvesdamas struktūrizuotą, objektiniu programavimu (\gls{oop}) pagrįstą \gls{uvm} metodologiją naudojant \textit{Python} kalbą. Tai leidžia atskirti testų logiką nuo aparatinės įrangos aprašymo ir užtikrina kodo pernaudojamumą bei universalumą palaikant atviros prieigos \glsdisp{simulator}{imituokles}.
 
 Realizuojant \gls{uvm} architektūrą \textit{Python} kalba, daugiausiai remtasi oficialia atvirojo kodo mokomąja medžiaga. Ypatingai didelę reikšmę projekto architektūriniams sprendimams turėjo \glsdisp{open-source}{atviros prieigos} „Universal Verification Methodology“ bendruomenės prižiūrima „learn\_uvm\_pyuvm“ projekto saugykla, kurios autorius yra Li Yongfu \cite{learn_uvm_pyuvm}. Šis projektas pasitarnavo kaip esminis mokomasis prototipas ir gidas, leidęs suprasti \textit{PyUVM} komponentų (agentų, monitorių, tvarkyklių, sekų ir kt.) sąveiką ir realizacijos specifiką praktikoje. 
@@ -150,13 +113,6 @@ Realizuojant \gls{uvm} architektūrą \textit{Python} kalba, daugiausiai remtasi
 Šio prototipo baziniai pavyzdžiai leido greičiau perprasti \gls{uvm} standarto pritaikymą \textit{Python} aplinkoje. Tačiau kuriamas \glsdisp{framework}{karkasas} gerokai išplečia šiuos pavyzdžius -- jis adaptuotas sudėtingam realiame pasaulyje naudojamam \gls{soc} dizainui apimant \textit{Cocotb} virtualių sąsajų integraciją, \glsdisp{container}{konteinerizuotą} testavimo eigos automatizavimą bei išplėstinį protokolų (kaip \gls{uart}, \gls{gpio}, \gls{cli}) palaikymą. Taip pat projekto eigoje buvo aktyviai remiamasi oficialiomis \textit{Cocotb}, \textit{Verilator} bei \textit{Docker} įrankių dokumentacijomis.
 
 \subsubsection{Ištekliai, reikalingi sistemai sukurti}\label{section:istekliai-reikalingi-sistemai-sukurti}
-
-\noterequirement{
-Skyrelyje nurodykite techninių ir žmogiškųjų išteklių poreikį, kad sistema būtų sukurta. \\
-Pvz.: „Maisto perdavimo protokolui sukurti reikalingi 3 metai. Tiek laiko reikės aprašyti sistemos standartui ir realizuoti prototipams. Papildomai reikėtų
-10 metų, norint išpopuliarinti ir išvystyti pasaulinę protokolo infrastruktūrą. Pradinėse projekto fazėse reikės bent 10 žmonių (IT specialistų) komandos,
-tačiau projektui plečiantis turės didėti ir personalas“.
-}
 
 Pradinės sistemos architektūros sukūrimui ir realizacijai pakanka vieno asmens -- skaitmeninės logikos \glsdisp{verification}{verifikavimo} inžinieriaus arba IT specialisto, dirbančio kartu su projekto vadovu ar konsultantu. Karkaso projektavimas, \glsdisp{container}{konteinerizuotos} aplinkos konfigūravimas abiem \glsdisp{simulator}{imituoklėm} bei bazinių \gls{uvc} komponentų ir automatizacijos skriptų parašymas užtrunka apie 4--6 mėnesius (1--2 akademinius semestrus). Ateityje, sistemai plečiantis ir atsirandant poreikiui \glsdisp{verification}{verifikuoti} naujus \glsdisp{microprocessor}{mikrovaldiklio} protokolus (pavyzdžiui, \gls{spi} ar \gls{i2c}), karkasą galės sklandžiai palaikyti ir plėsti 1--2 inžinierių komanda, nes bazinė infrastruktūra jau yra sukurta.
 
@@ -167,12 +123,6 @@ Visam kūrimo procesui sujungti papildomai reikalinga išvystyta programinė inf
 Projekto failų valdymui ir versijavimui pasirinkta naudoti \textit{Git} programinę įrangą, o projekto kodo saugykla ir viešinimas -- \textit{GitHub}.
 
 \subsection{Galimybių analizė}\label{section:galimybiu-analize}
-
-\noterequirement{
-Šiame skyrelyje analizuojamos galimos priemonės sistemai sukurti – labai panašiai kaip egzistuojančių sprendimų analizėje, tačiau aprašomi ne sprendimai, o kūrimo priemonės (karkasai, technologijos, protokolai ir kt.). Anglų kalboje ši analizė vadinama feasibility study. \\
-Jei tai įmanoma, skyriuje taip pat naudinga pateikti lyginamosios analizės santrauką lentelės pavidalu. Palyginimui reikia pasirinkti tokius kriterijus, kurie yra svarbūs sistemos kūrimui (bent 5 kriterijai). Net jei būna tokių situacijų, kuomet karkasą, technologiją, protokolą ar kt. tiksliai nusako įmonė / užsakovas, būtina paaiškinti kodėl pasirinktas toks sprendimas. \\
-Priklausomai nuo situacijos, verta paanalizuoti ir galimas problemas, susijusias su kuriamu sprendimu. Kartais sukurti galutinį produktą nepakanka finansų, žmogiškųjų resursų ar kitų išteklių. Kliūtys gali kilti tiek įmonės viduje (pvz., per smulki įmonė tokiam projektui realizuoti), tiek globalios (pvz., rinkoje per mažai paplitusi technika, kurią būtų galima naudoti su kuriama programine įranga ar naudotojai dar nėra pasiruošę priimti produkto). Tokiu atveju reiktų detaliai aprašyti visas kliūtis, dėl kurių neįmanoma iki galo realizuoti pradinės idėjos.  
-}
 
 Kuriant skaitmeninio dizaino testavimo aplinką, problema kyla pasirenkant testų rašymo kalbą ir metodologijos realizaciją. Rinkoje labiausiai paplitęs sprendimas yra naudoti pramonės standartą -- \textit{SystemVerilog} (\gls{v/sv}) kalbą kartu su IEEE 1800.2 \gls{uvm} standartu. Tačiau vis labiau populiarėja alternatyvūs atviros prieigos sprendimai, pagrįsti \textit{Python} programavimo kalba, naudojant \textit{Cocotb} ir \textit{PyUVM} bibliotekas.
 
@@ -211,24 +161,11 @@ Visam \glsdisp{container}{konteinerių} ir testų vykdymo procesui valdyti ir or
 
 \subsubsection{Techninės galimybės}
 
-\noterequirement{
-Skyrelyje nurodykite techninių ir žmogiškųjų išteklių poreikį, kad sistema būtų sukurta.
-
-Pvz.: „Maisto perdavimo protokolui sukurti reikalingi 3 metai. Tiek laiko reikės aprašyti sistemos standartui ir realizuoti prototipams. Papildomai reikėtų
-10 metų, norint išpopuliarinti ir išvystyti pasaulinę protokolo infrastruktūrą. Pradinėse projekto fazėse reikės bent 10 žmonių (IT specialistų) komandos,
-tačiau projektui plečiantis turės didėti ir personalas“.
-}
-
 Kuriamo karkaso techninės galimybės vertinamos kaip labai aukštos (fizinių ir žmogiškųjų išteklių poreikis detalizuotas \textbf{\ref{section:istekliai-reikalingi-sistemai-sukurti}} poskyryje). Nors atviros prieigos įrankiai (\textit{Cocotb}, \textit{PyUVM}, \textit{Verilator}) \glsdisp{verification}{verifikacijos} srityje yra sąlyginai naujesni nei komerciniai analogai, jie jau pasiekė brandos lygį, leidžiantį juos naudoti realiems smulkesnės apimties \gls{soc} projektams. Aplink šiuos įrankius pastatyta ekosistema yra aktyviai palaikoma atviro kodo bendruomenės, todėl iškilusios techninės problemos yra aktyviai sprendžiamos, o įrankių atnaujinimai leidžiami reguliariai.
 
 Sistemos diegimo ir palaikymo požiūriu, \textit{Docker} \glsdisp{container}{konteinerių} naudojimas visiškai išsprendžia operacinių sistemų suderinamumo problemas. Kadangi pramoniniai \gls{eda} įrankiai įprastai palaikomi tik specifinėse \textit{Linux} distribucijose (\textit{Red Hat}, \textit{CentOS}, \textit{Rocky Linux}), \glsdisp{container}{konteinerizuotas} atviro kodo sprendimas atveria galimybę inžinieriams dirbti bet kokioje platformoje (\textit{Windows} per \gls{wsl}, \textit{macOS} ar įvairiose \textit{Linux} sistemose). Be to, tokia architektūra leidžia lengvai perkelti testavimo procesą į debesijos serverius ir pritaikyti nuolatinės integracijos (\gls{ci}) eigoje. Todėl techninių resursų ir infrastruktūros atžvilgiu jokių neįveikiamų kliūčių sistemai sukurti ir sėkmingai eksploatuoti nėra.
 
 \subsubsection{Naudotojų pasiruošimo analizė}
-\noterequirement{
-Jei tai produktas, kuris bus naudojamas įmonėje, tai įmonės vartotojų analizė. Jei ne – bent jau abstrakti tikslinės auditorijos (programos ar produkto vartotojų
-segmento) analizė. Šiame punkte reiktų aprašyti ar žmonės sugebės naudotis ta įranga, kokio išsilavinimo reikia norint ja naudotis. \\
-Pvz.: „Maisto perdavimo protokolas bus toks paprastas, kad juo galės naudotis tiek penkerių metų vaikas, tiek jo močiutė“.
-}
 
 Tikslinė šio \glsdisp{framework}{karkaso} auditorija yra skaitmeninės aparatinės įrangos inžinieriai, \glsdisp{verification}{verifikavimo} specialistai bei studentai, studijuojantys mikroelektroniką ar kompiuterių inžineriją. Įprastai, norint dirbti su \textit{SystemVerilog} ir \gls{uvm}, reikalaujamas specifinis inžinerinis išsilavinimas bei sudėtingos \gls{hdl} kalbos žinios. Tai dažnai tampa dideliu barjeru naujiems komandos nariams ar pradedantiesiems, norintiems prisidėti prie \gls{soc} projektų.
 

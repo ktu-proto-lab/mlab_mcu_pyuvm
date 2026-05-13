@@ -1,11 +1,8 @@
 \section{Testavimas}\label{section:testing}
-\noterequirement{Aprašoma su sukurtos įrangos testavimu susijusi informacija (8 – 12 lapų). Skyriaus struktūra ir pavadinimas priklauso nuo baigiamojo darbo specializacijos ir pačios temos specifikos. \\
-Nurodomas įrangos testavimo planas, testavimo duomenų rinkiniai ir gauti rezultatai. Nurodoma sistemos specifikacija ir sąlygos, prie kurių buvo atliekamas testavimas.}
 
 Kadangi kuriamas projektas pats savaime yra \glsdisp{microprocessor}{mikrovaldiklio} \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasas}, šio skyriaus testavimo objektas yra dvejopas: pirma, testuojama paties karkaso (konteinerių, automatizacijos skriptų, \textit{PyUVM} komponentų) veikimo kokybė ir suderinamumas; antra, demonstruojamas karkaso praktinis funkcionalumas, matuojant \gls{dut} skaitmeninio \gls{soc} dizaino \glsdisp{functional-coverage}{funkcinį padengiamumą} bei elgsenos teisingumą.
 
 \subsection{Testavimo planas}
-\noterequirement{Testavimo planas – tai jūsų pasirinkta testų atlikimo tvarka. Galimas testavimo planas: komponentų testavimas, po kurio seka integracinis testavimas, o vėliau būna sąsajos testavimas. }
 
 Testavimo plano strategija:
 \begin{enumerate}
@@ -17,7 +14,6 @@ Testavimo plano strategija:
 \end{enumerate}
 
 \subsection{Testavimo kriterijai}
-\noterequirement{Šiame punkte aprašykite kriterijus, kurie jums buvo svarbūs testavimo metu. Tai gali būti ne tik informacijos ar skaičiavimų korektiškumas, bet ir kodo pertekliškumo analizė, informacijos perdavimo laikas, sistemos atitikimas funkciniams ir nefunkciniams reikalavimams.}
 
 Siekiant užtikrinti karkaso stabilumą ir \glsdisp{verification}{verifikacijos} patikimumą, buvo iškelti šie testavimo kriterijai:
 \begin{itemize}
@@ -30,7 +26,6 @@ Siekiant užtikrinti karkaso stabilumą ir \glsdisp{verification}{verifikacijos}
 
 
 \subsection{Vienetų testavimas}
-\noterequirement{Šiame punkte reiktų aprašyti kokiais metodais testavote smulkias programos dalis. Vienetų testavimas privalo būti atliekamas naudojant automatines testavimo priemones.}
 
 Vienetų testavimas buvo atliekamas \gls{dut} \gls{cli} komandoms \pav{\ref{fig:uml_use_case_cli}}. Būtent čia pasirodo visas realizuoto \gls{uvm} \gls{crv} atsitiktinių testų panaudojimas.
 
@@ -172,7 +167,6 @@ Bendri padengiamumo įverčiai pateikti žemiau \lent{\ref{tab:test_cov_imc}}.
 Iš lentelės matoma \lent{\ref{tab:test_cov_imc}}, jog aprašyti \gls{uvm} \gls{uvc} GPIO ir UART komponentų testuojamos periferijos turi ganėtinai aukštus bendrus padengiamumo įverčius, o tuo tarpu periferijų moduliai, tokie kaip \gls{i2c} ir programuojamas laikmatis \pav{\ref{fig:test_cov_top}} turi ženkliai žemesnius įverčius, tai parodo aprašytų \gls{uvc} bendrąją naudą ne vien testams leisti, bet ir verifikuoti jiems prijungtus modulius. Taip pat matomas paleidimo praleidimo imitacijoje padarinys, kur paleidėjo modulio būsenų automatas yra visiškai nepatikrinamas \pav{\ref{fig:test_cov_bootloader_fsm}}. Tai buvo sąmoningas pasirinkimas, nes paleidimo trukmė imitacijos metu trukdavo apie 15 minučių, tad buvo apeita ši dalis ir sukompiliuotas programinės įrangos kodas yra iš karto keliamas į imituojamo mikrovaldiklio atmintį. Branduolio būsenų automatų padengiamumas yra pakankamai solidus: pasiektas 50\% duomenų įkėlimo/iškėlimo \pav{\ref{fig:test_cov_ibex_ls_fst}}, 50\% kontrolinio \pav{\ref{fig:test_cov_ibex_ctrl_fsm}} ir 100\% greitos daugybos/dalybos \pav{\ref{fig:test_cov_ibex_md_fsm}} blokų būsenų automatų padengiamumas.
 
 \subsection{Naudotojo sąsajos testavimas}
-\noterequirement{Šiame punkte reiktų aprašyti kokiais metodais testavote naudotojo sąsają. Dažniausiai pasitaikantis metodas – „rankinis“, t.y. kai sąsaja testuojama naudotojui (testuotojui) bandant atsitiktinai ar pagal scenarijų spaudyti mygtukus, įvedinėti tekstą į laukus ir kt. Kur kas geresnis variantas tuomet, kai testuojama automatiškai – pavyzdžiui, sukuriama programa ar testavimo tvarkyklė, kuris spaudymo ar įvedimo veiksmus atlieka be naudotojo įsikišimo. Panaudotas automatinis testavimas, dažniausiai, papildomai (teigiamai) įvertinamas baigiamojo darbo gynimo metu. Pasinaudokite automatizavimo priemonėmis, tokiomis kaip Selenium IDE.}
 
 Naudotojo sąsajos testavimas buvo atliekamas rankiniu būdu.
 

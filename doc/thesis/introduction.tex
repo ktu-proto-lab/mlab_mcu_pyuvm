@@ -1,19 +1,12 @@
 \centersection{Įvadas}
-\noterequirement{Supažindinama su darbo specifika, aktualumu, išdėstomi tikslai bei uždaviniai, aptariama dokumento struktūra. Šiame skyriuje apie darbą kalbama abstrakčiai, nederėtų pateikti nuorodų į kitus šaltinius (1 – 2 lapai).}
 
 \textit{Darbo problematika ir aktualumas}
-\noterequirement{Apibrėžiama darbo problematika ir aptariamas aktualumas. Šiame poskyryje taip pat nurodoma su darbu susijusi sritis, praktinė darbo reikšmė.}
 
 Šiuolaikinis skaitmeninių sistemų luste (\gls{soc}) ir \glsdisp{microprocessor}{mikrovaldiklių} projektavimas tampa vis sudėtingesnis, todėl \glsdisp{verification}{verifikacijos} procesas užima didžiausią laiko dalį viso produkto kūrimo cikle. Tradiciškai rinkoje dominuoja \textit{SystemVerilog} aparatinės įrangos aprašymo kalba ir \glsdisp{ieee}{IEEE 1800.2 \gls{uvm} standartas}, naudojami kartu su brangiais komerciniais \gls{eda} įrankiais. Nors šis standartas užtikrina aukštą našumą, jis sukuria didelį barjerą pradedantiesiems inžinieriams, reikalauja specifinių žinių bei pririša projektus prie konkrečių įrankių tiekėjų\footnote{UVM iš esmės yra nepriklausomas nuo konkrečių įrankių – pats standartas yra nepriklausomas nuo gamintojų. Tačiau praktikoje perkeliant projektą iš vienos EDA priemonės į kitą beveik neabejotinai teks redaguoti dalį kodo, pavyzdžiui atsitiktinių sekų generavimo įrankiai, nors neįtraukiami į UVM standartą, bet beveik visada yra naudojami, o jų realizacija ir elgsena skiriasi skirtinguose EDA įrankiuose \cite{cadence} \cite{synopsis}.}. 
 
 Pastaraisiais metais atviros prieigos bendruomenėse sparčiai populiarėja \textit{Python} programavimo kalba pagrįsti \glsdisp{verification}{verifikavimo} sprendimai (\textit{Cocotb}, \textit{PyUVM}), kurie leidžia naudoti modernaus objektinio programavimo koncepcijas. Tačiau susiduriama su problema su esamu testuojamo skaitmeninio mikrovaldiklio dizaino -- trūksta vieningo, lengvai perkeliamo karkaso, kuris leistų sklandžiai sujungti atviros prieigos \glsdisp{simulator}{imituokles} (pvz., \textit{Verilator}) ir komercinius \gls{eda} įrankius (pvz., \textit{Cadence Xcelium}) į vieną standartizuotą testavimo eigą, išvengiant operacinių sistemų priklausomybių konfliktų. Todėl tokio universalaus, automatizuoto ir \glsdisp{container}{konteinerizuoto} \glsdisp{verification}{verifikavimo} karkaso sukūrimas yra itin aktualus tiek šio universiteto akademinei, tiek šios srities atviro kodo, bendruomenėms.
 
 \textit{Darbo tikslas ir uždaviniai}
-\noterequirement{Suformuluojamas pagrindinis darbo tikslas, kuris išskaidomas į kelis uždavinius (3 – 7 uždaviniai). Darbo tikslas turėtų nusakyti kodėl yra kuriama sistema (kokią problemą norima išspręsti), o uždaviniai – kaip to tikslo bus pasiekta (dažniausiai tai sutampa su baigiamojo darbo struktūra – reikės išanalizuoti konkurentus, suformuluoti reikalavimus, ištestuoti sistemą ir t.t.).  Rašant išvadas rekomenduojama atsižvelgti į darbo pradžioje suformuluotus uždavinius. \\
-1. Pirmasis uždavinys \\
-2. Antrasis uždavinys \\
-3. Trečiasis uždavinys \\
-}
 
 Pagrindinis šio baigiamojo darbo tikslas -- suprojektuoti ir realizuoti \gls{risc} architektūra pagrįsto \glsdisp{microprocessor}{mikrovaldiklio} automatizuotą, \glsdisp{container}{konteinerizuotą} \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasą}, kuris naudoja \textit{Python} \gls{uvm} implementaciją ir užtikrina sklandų testų vykdymą tiek su atviros prieigos, tiek su komercinėmis \glsdisp{simulator}{imituoklėmis} skirtingose operacinėse sistemose.
 
@@ -28,20 +21,10 @@ Pagrindinis šio baigiamojo darbo tikslas -- suprojektuoti ir realizuoti \gls{ri
 \end{enumerate}
 
 \textit{Darbo struktūra}
-\noterequirement{Aptariama dokumento struktūra. Nurodoma kiek ir kokių skyrių dokumente yra ir kokia informacija juose pateikiama. Labai svarbu, kad šiame skyriuje nerašytumėte bendrinių dalykų, kurie tinkami kone bet kuriam darbui – pvz. „analizės dalyje apžvelgiami egzistuojantys sprendimai, testavimo skyriuje aprašomas testavimas“. Šis apibendrinimas turi atspindėti būtent jūsų darbo struktūrą, vadinasi – „apžvelgiami egzistuojantys buhalterinės apskaitos paketai bei karkasai, skirti darbui su dideliais duomenimis“ ar pan.}
 
 Dokumentą sudaro keturi pagrindiniai skyriai. \hyperref[section:analysis]{Analizės} skyriuje apžvelgiama darbo problematika, esami komerciniai sprendimai bei pagrindžiamas technologijų pasirinkimas. \hyperref[section:project]{Projekto} skyriuje detalizuojami funkciniai ir nefunkciniai reikalavimai, aprašoma karkaso UML architektūra, \glsdisp{container}{konteinerių} diegimo schemos bei \gls{uvm} komponentų statinės ir dinaminės struktūros. \hyperref[section:testing]{Testavimo} skyriuje aprašomi karkaso suderinamumo testai skirtingose platformose bei gauti \gls{dut} statinio ir \glsdisp{functional-coverage}{funkcinio padengiamumo} rezultatai. \hyperref[section:documentation]{Dokumentacija naudotojui} skyriuje pateikiamos diegimo, naudojimosi bei administravimo instrukcijos.
 
-
 \textit{Sistemos apimtis}
-\noterequirement{Nors tai nėra tiesiogiai įvadinis sistemos aprašas, būtent čia būtina nurodyti jau realizuotos sistemos apimtį. Matai gali būti įvairūs (pasirinkti tinkamus): \\
-• Kodo eilučių skaičius (galima išskaidyti pagal į vidinę (angl. backend) ir išorinę (angl. frontend) puses, pagal programavimo kalbas ir kt.) \\
-• Testų eilučių skaičius \\
-• Darbo valandos \\
-• Komponentų, klasių, modulių kiekis \\
-• Teikiamų paslaugų skaičius \\
-• Sukurtų 3D modelių kiekis ar kita su projektu siejama metrika \\
-}
 
 Sukurtas \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasas} pasižymi šiais apimties ir integracijos rodikliais:
 \begin{enumerate}
