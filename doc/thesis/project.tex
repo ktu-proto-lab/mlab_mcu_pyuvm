@@ -255,6 +255,363 @@ $ mem size ssd
 	conditionafter = {Terminale atspausdintas nurodyto atminties regiono dydis baitais.}
 }
 
+\newsavebox{\clicmdgpiocodebox}
+\begin{lrbox}{\clicmdgpiocodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ gpio <get | set | toggle>
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „gpio“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:gpio},
+	name = {\texttt{gpio}},
+	goal = {Iškviesti \gls{gpio} \glsdisp{peripheral}{periferijos} manipuliavimo \glsdisp{subcommand}{pokomandę}.},
+	description = {Komanda yra naudojama iškviesti bazinę \gls{gpio} valdymo komandą, leidžiančią nuskaityti, nustatyti arba invertuoti nurodyto mikrokontrolerio išvado (angl. \textit{pin}) būseną.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdgpiocodebox}
+	},
+	extend = {\hyperref[tab:usecase:cli:gpio:get]{\texttt{get}}, \hyperref[tab:usecase:cli:gpio:set]{\texttt{set}}, \hyperref[tab:usecase:cli:gpio:toggle]{\texttt{toggle}}},
+	conditionbefore = {Terminalinė aplinka veikia, laukiama įvesties.},
+	actors = {user},
+	conditionafter = {Galima iškviesti GPIO pokomandę.}
+}
+
+\newsavebox{\clicmdgpiogetcodebox}
+\begin{lrbox}{\clicmdgpiogetcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ gpio get 5
+1
+$ gpio get
+0xcf
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „gpio-get“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:gpio:get},
+	name = {\texttt{gpio get [pin]}},
+	goal = {Nuskaityti nurodyto \gls{gpio} išvado loginę būseną.},
+	description = {Komanda priima vieną neprivalomą argumentą \texttt{[pin]}, nurodantį išvado numerį. Terminale grąžinama dabartinė to išvado loginė būsena (0 arba 1). Jei nurodytas išvadas neegzistuoja, grąžinamas klaidos pranešimas. Kitu atveju, jei nėra nurodytas išvado numeris, yra grąžinamas visų GPIO išvadų išvesties reikšmė šešioliktainiu formatu.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdgpiogetcodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:gpio]{\texttt{gpio}} komanda.},
+	actors = {user},
+	conditionafter = {Terminale atspausdinta išvado loginė būsena.}
+}
+
+\newsavebox{\clicmdgpiosetcodebox}
+\begin{lrbox}{\clicmdgpiosetcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ gpio set 5 1
+0
+$ gpio set 0xff
+0x0c
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „gpio-set“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:gpio:set},
+	name = {\texttt{gpio set [pin] <value>}},
+	goal = {Nustatyti nurodyto \gls{gpio} išvado loginę reikšmę.},
+	description = {Komanda priima du argumentus: neprivalomą \texttt{[pin]} -- išvado numerį, ir \texttt{<value>} -- pageidaujamą loginę reikšmę (0 arba 1). Įvykdžius komandą, atitinkamas \gls{dut} kontaktas įgauna nurodytą būseną ir grąžinama prieš tai buvusi išvado reikšmė. Jei nenurodomas išvado argumentas \texttt{[pin]}, tada šešioliktainiu formatu turi būti nurodyta visų GPIO išvadų sudėtinė reikšmė. Jei nurodytas išvadas neegzistuoja arba reikšmė suteikta blogu formatu arba yra per didelė, grąžinamas klaidos pranešimas.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdgpiosetcodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:gpio]{\texttt{gpio}} komanda.},
+	actors = {user},
+	conditionafter = {\gls{gpio} išvado būsena pakeista ir terminale atspausdintas patvirtinimas.}
+}
+
+\newsavebox{\clicmdgpiotogglecodebox}
+\begin{lrbox}{\clicmdgpiotogglecodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ gpio toggle 5
+1
+$ gpio toggle 0xcc
+0x01
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „gpio toggle“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:gpio:toggle},
+	name = {\texttt{gpio toggle <pin>}},
+	goal = {Invertuoti nurodyto \gls{gpio} išvado loginę reikšmę.},
+	description = {Komanda priima išvado numerio argumentą \texttt{[pin]}, jei pateikiama dešimtainiu formatu, o jei šešioliktainiu, invertuojami visi nurodyti GPIO išvadai. Atlikus komandą, esama \gls{gpio} išvado loginė būsena pakeičiama į priešingą (iš 0 į 1, arba atvirkščiai). Sėkmingai įvykdžius komandą grąžinamas prieš inversiją buvusi išvado arba išvadų (priklausomai nuo pateikto argumento formato) reikšmė, kitu atveju grąžinamas atitinkamas klaidos pranešimas.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdgpiotogglecodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:gpio]{\texttt{gpio}} komanda.},
+	actors = {user},
+	conditionafter = {\gls{gpio} išvado būsena invertuota.}
+}
+
+\newsavebox{\clicmdsyscodebox}
+\begin{lrbox}{\clicmdsyscodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+			$ sys <info | pause | reset>
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „sys“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:sys},
+	name = {\texttt{sys}},
+	goal = {Iškviesti sistemos valdymo \glsdisp{subcommand}{pokomandę}.},
+	description = {Bazinė komanda, skirta aukšto lygio mikrovaldiklio sistemos operacijoms vykdyti, tokioms kaip informacijos gavimas, sistemos pristabdymas ar perkrovimas.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdsyscodebox}
+	},
+	extend = {\hyperref[tab:usecase:cli:sys:info]{\texttt{info}}, \hyperref[tab:usecase:cli:sys:pause]{\texttt{pause}}, \hyperref[tab:usecase:cli:sys:reset]{\texttt{reset}}},
+	conditionbefore = {Terminalinė aplinka veikia, laukiama įvesties.},
+	actors = {user},
+	conditionafter = {Galima iškviesti sistemos valdymo pokomandę.}
+}
+
+\newsavebox{\clicmdsysinfocodebox}
+\begin{lrbox}{\clicmdsysinfocodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ sys info
+Clock: 50MHz, Arch: RISC-V
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „sys-info“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:sys:info},
+	name = {\texttt{sys info}},
+	goal = {Pateikti bendrą informaciją apie sistemą.},
+	description = {Grąžina tekstinę mikrovaldiklio sistemos informaciją (pavyzdžiui, taktinį dažnį, palaikomą architektūrą, programinės įrangos versiją ir kt.).
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdsysinfocodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:sys]{\texttt{sys}} komanda.},
+	actors = {user},
+	conditionafter = {Terminale atspausdinti sistemos parametrai.}
+}
+
+\newsavebox{\clicmdsyspausecodebox}
+\begin{lrbox}{\clicmdsyspausecodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ sys pause
+paused
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „sys-pause“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:sys:pause},
+	name = {\texttt{sys pause}},
+	goal = {Laikinai sustabdyti (pristabdyti) sistemos vykdymą.},
+	description = {Sustabdo tam tikrus mikrovaldiklio procesus, laukiančius užduočių ar laikmačių (angl. \textit{halt} arba \textit{pause} būsena).
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdsyspausecodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:sys]{\texttt{sys}} komanda.},
+	actors = {user},
+	conditionafter = {Sistemos procesai pristabdyti.}
+}
+
+\newsavebox{\clicmdsysresetcodebox}
+\begin{lrbox}{\clicmdsysresetcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ sys reset
+reboot...
+ready
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „sys reset“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:sys:reset},
+	name = {\texttt{sys reset}},
+	goal = {Atlikti programinį sistemos perkrovimą.},
+	description = {Inicijuoja mikrovaldiklio programinį perkrovimą (angl. \textit{soft reset}). \gls{dut} būsena grąžinama į pradinius parametrus ir registrai išvalomi.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdsysresetcodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:sys]{\texttt{sys}} komanda.},
+	actors = {user},
+	conditionafter = {Sistemos programinė įranga inicijuojama iš naujo.}
+}
+
+\newsavebox{\clicmdtimecodebox}
+\begin{lrbox}{\clicmdtimecodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ time <set>
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „time“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:time},
+	name = {\texttt{time}},
+	goal = {Iškviesti laikmačių valdymo \glsdisp{subcommand}{pokomandę}.},
+	description = {Bazinė komanda, skirta manipuliuoti mikrovaldiklio vidiniu programuojamu laikmačiu \gls{pit}.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdtimecodebox}
+	},
+	extend = {\hyperref[tab:usecase:cli:time:set]{\texttt{set}}},
+	conditionbefore = {Terminalinė aplinka veikia, laukiama įvesties.},
+	actors = {user},
+	conditionafter = {Galima iškviesti laiko konfigūravimo pokomandę.}
+}
+
+\newsavebox{\clicmdtimesetcodebox}
+\begin{lrbox}{\clicmdtimesetcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ time set 100 --ms
+time: 100ms
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „time-set“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:time:set},
+	name = {\texttt{time set <count> <--sec | --ms | --us>}},
+	goal = {Nustatyti laikmačio skaičiavimo limitą nurodytais laiko vienetais.},
+	description = {Komanda priima skaitinį argumentą \texttt{<count>} ir vieną iš laiko vieneto vėliavėlių (\texttt{--sec} sekundėms, \texttt{--ms} milisekundėms, \texttt{--us} mikrosekundėms). Komanda perkonfigūruoja PIT laikmatį atitinkamam laiko intervalui. Sėkmingai nustačius laikmatį, jis yra paleidžiamas ir praėjus nurodytam laiko intervalui grąžinama žinutė, kitu atvejų grąžinama klaida.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdtimesetcodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:time]{\texttt{time}} komanda.},
+	actors = {user},
+	conditionafter = {Laikmatis sėkmingai sukonfigūruotas nurodytam laiko tarpui ir paleistas skaičiuoti.}
+}
+
+\newsavebox{\clicmdisqrccodebox}
+\begin{lrbox}{\clicmdisqrccodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ i2c <scan>
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „i2c“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:i2c},
+	name = {\texttt{i2c}},
+	goal = {Iškviesti \gls{i2c} protokolo manipuliavimo \glsdisp{subcommand}{pokomandę}.},
+	description = {Bazinė komanda darbui su \gls{i2c} periferijos įrenginiais.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdisqrccodebox}
+	},
+	extend = {\hyperref[tab:usecase:cli:i2c:scan]{\texttt{scan}}},
+	conditionbefore = {Terminalinė aplinka veikia, laukiama įvesties.},
+	actors = {user},
+	conditionafter = {Galima iškviesti I2C pokomandę.}
+}
+
+\newsavebox{\clicmdisqrcscancodebox}
+\begin{lrbox}{\clicmdisqrcscancodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ i2c scan
+0x3C 0x68
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „i2c scan“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:i2c:scan},
+	name = {\texttt{i2c scan}},
+	goal = {Nuskenuoti \gls{i2c} magistralę ir rasti prijungtus įrenginius.},
+	description = {Iškvietus komandą, mikrovaldiklis iteruoja per visus galimus \gls{i2c} adresus ir grąžina sėkmingai atsakiusių įrenginių adresus šešioliktainiu formatu.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmdisqrcscancodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:i2c]{\texttt{i2c}} komanda.},
+	actors = {user},
+	conditionafter = {Terminale išspausdinamas prijungtų \gls{i2c} įrenginių sąrašas.}
+}
+
+\newsavebox{\clicmduartcodebox}
+\begin{lrbox}{\clicmduartcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ uart <cfg>
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „uart“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:uart},
+	name = {\texttt{uart}},
+	goal = {Iškviesti \gls{uart} protokolo manipuliavimo \glsdisp{subcommand}{pokomandę}.},
+	description = {Bazinė komanda, skirta konfigūruoti ir valdyti \gls{uart} komunikacijos interfeisą.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmduartcodebox}
+	},
+	extend = {\hyperref[tab:usecase:cli:uart:cfg]{\texttt{cfg}}},
+	conditionbefore = {Terminalinė aplinka veikia, laukiama įvesties.},
+	actors = {user},
+	conditionafter = {Galima iškviesti UART pokomandę.}
+}
+
+\newsavebox{\clicmduartcfgcodebox}
+\begin{lrbox}{\clicmduartcfgcodebox}
+	\begin{minipage}{7.3cm}
+		\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+$ uart cfg 115200
+115301
+		\end{lstlisting}
+	\end{minipage}
+\end{lrbox}
+
+\usecase{
+	caption = {Panaudojimo atvejo „uart-cfg“ CLI komandos specifikacija},
+	label = {tab:usecase:cli:uart:cfg},
+	name = {\texttt{uart cfg <baud-rate>}},
+	goal = {Nustatyti \gls{uart} komunikacijos spartą (angl. \textit{baud rate}).},
+	description = {Priima vieną skaitinį argumentą \texttt{<baud-rate>}. Įvykdžius komandą, UART duomenų perdavimo ir priėmimo greitis yra atnaujinamas atitinkama sparta (pvz., 9600, 115200). Sėkmingai konfigūravus, grąžinamas prieš tai nustatyta \gls{uart} periferijos perdavimo spartos reikšmė.
+		\newline
+		Pavyzdys: \newline
+		\usebox{\clicmduartcfgcodebox}
+	},
+	conditionbefore = {Iškviesta pagrindinė \hyperref[tab:usecase:cli:uart]{\texttt{uart}} komanda.},
+	actors = {user},
+	conditionafter = {\gls{uart} aparatūros modulis sukonfigūruotas naudoti naują duomenų perdavimo spartą.}
+}
+
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_use_case_mlab_mcu_uvm.svg}
 	\caption{Verifikavimo karkaso valdymo panaudojimo atvejų diagrama}
