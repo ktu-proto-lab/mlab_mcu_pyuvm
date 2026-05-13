@@ -3,33 +3,37 @@ Lamsargis, Manfredas. RISC-V architektūra pagrįstos sistemos verifikavimo kark
 
 Studijų kryptis ir sritis (studijų krypčių grupė): Informatikos mokslai, Programų sistemos.
 
-Reikšminiai žodžiai: .........(įrašykite).
+Reikšminiai žodžiai: RISC-V, skaitmeninio dizaino verifikacija, UVM, Python, PyUVM, Cocotb, konteinerizacija, mikrovaldiklis, Verilator, Xcelium.
 
-Kaunas, \the\year. \pageref{LastPage} p.p.
+Kaunas, \the\year. \pageref{LastPage} p.
 
 \begin{center}
 	\textbf{Santrauka}
 \end{center}
 
-Lorem ipsum dolor sit amet, eam ex decore persequeris, sit at illud lobortis atomorum. Sed dolorem quaerendum ne, prompta instructior ne pri. Et mel partiendo suscipiantur, docendi abhorreant ea sit. Recteque imperdiet eum te.
+Šiuolaikinių skaitmeninių sistemų luste (SoC) ir mikrovaldiklių projektavimas darosi vis sudėtingesnis. Tradiciniai aparatūrinės įrangos verifikacijos metodai, paremti \textit{SystemVerilog} kalba ir brangiais komerciniais elektronikos projektavimo automatizavimo (EDA) įrankiais, sukuria aukštą įėjimo barjerą pradedantiesiems inžinieriams bei apriboja atvirojo kodo bendruomenių plėtrą. Šio bakalauro baigiamojo projekto tikslas -- suprojektuoti ir realizuoti RISC-V architektūra pagrįsto mikrovaldiklio automatizuotą, konteinerizuotą verifikavimo karkasą, naudojant modernią \textit{Python} programavimo kalbą.
 
-Eu eum decore inimicus consetetur, cu usu habeo corpora intellegam. Ut antiopam efficiendi deterruisset sit. Mel sint eirmod id, qui quot virtute id, dolor nemore forensibus usu id. Fugit dolore voluptatum cu vim. An vix veniam graecis insolens, sit posse iusto id. Ut vim ceteros percipit, id quo ubique recusabo, eum sint lucilius ea. In sumo inani numquam has.
+Darbo metu sukurta izoliuota testavimo architektūra, paremta \textit{Docker} bei \textit{Podman} konteineriais ir \textit{GNU Make} automatizacija, užtikrinanti sklandų karkaso veikimą su atviros prieigos (\textit{Verilator}) ir komercinėmis (\textit{Cadence Xcelium}) imituoklėmis. Panaudojant \textit{Cocotb} ir \textit{PyUVM} bibliotekas, realizuoti universalios verifikavimo metodologijos (UVM) komponentai (agentai, monitoriai, tvarkyklės, sekų valdytojai ir etaloninis modelis), skirti mikrovaldiklio periferijos (UART, GPIO) testavimui, apribotos atsitiktinės verifikacijos (CRV) stimulų generavimui ir funkcinio padengiamumo matavimui.
+
+Sukurtas karkasas buvo sėkmingai ištestuotas skirtingose operacinėse sistemose (\textit{Windows}, \textit{Linux}, \textit{macOS}). Integracinių testų rezultatai parodė, kad sukurta sistema leidžia patikimai verifikuoti skaitmeninį dizainą: pasiektas virš 50~\% bendrasis aparatinės įrangos funkcinis padengiamumas. Galutinis sprendimas yra modulinis, universalus ir ženkliai sumažinantis mokymosi kreivę, todėl palengvina naujų komandos narių įsitraukimą į SoC projektavimo ir verifikavimo procesus bei gali būti naudojamas edukaciniams tikslams.
 
 \clearpage
 
 \thispagestyle{empty}
-Studentaitė, Studentė. Title of the Final Degree Project. Bachelor's  Final Degree Project / supervisor lect. Vadovas Vadovauskas; Informatics Faculty, Kaunas University of Technology.
+Lamsargis, Manfredas. Verification framework for a RISC-V architecture-based system. Bachelor's Final Degree Project / supervisor dr. Šarūnas Packevičius; Faculty of Informatics, Kaunas University of Technology.
 
 Study field and area (study field group): Computer Sciences, Software Systems.
 
-Keywords: .........(type here).
+Keywords: RISC-V, digital design verification, UVM, Python, PyUVM, Cocotb, containerization, microcontroller, Verilator, Xcelium.
 
-Kaunas, \the\year. \pageref{LastPage} p.p.
+Kaunas, \the\year. \pageref{LastPage} p.
 
 \begin{center}
 	\textbf{Summary}
 \end{center}
 
-Lorem ipsum dolor sit amet, eam ex decore persequeris, sit at illud lobortis atomorum. Sed dolorem quaerendum ne, prompta instructior ne pri. Et mel partiendo suscipiantur, docendi abhorreant ea sit. Recteque imperdiet eum te.
+The design of modern System on Chip (SoC) and microcontrollers is becoming increasingly complex. Traditional hardware verification methods, based on the \textit{SystemVerilog} language and expensive commercial Electronic Design Automation (EDA) tools, create a high barrier to entry for beginner engineers and restrict the growth of open-source communities. The aim of this Bachelor's thesis is to design and implement an automated, containerized verification framework for a RISC-V architecture-based microcontroller using the modern \textit{Python} programming language.
 
-Eu eum decore inimicus consetetur, cu usu habeo corpora intellegam. Ut antiopam efficiendi deterruisset sit. Mel sint eirmod id, qui quot virtute id, dolor nemore forensibus usu id. Fugit dolore voluptatum cu vim. An vix veniam graecis insolens, sit posse iusto id. Ut vim ceteros percipit, id quo ubique recusabo, eum sint lucilius ea. In sumo inani numquam has.
+During the project, an isolated testing architecture was developed, based on \textit{Docker} and \textit{Podman} containers along with \textit{GNU Make} automation, ensuring seamless framework operation with both open-source (\textit{Verilator}) and commercial (\textit{Cadence Xcelium}) simulators. Utilizing \textit{Cocotb} and \textit{PyUVM} libraries, Universal Verification Methodology (UVM) components (agents, monitors, drivers, sequencers, and a reference model) were implemented. These components are designed for testing microcontroller peripherals (UART, GPIO), generating Constrained Random Verification (CRV) stimuli, and measuring functional coverage.
+
+The developed framework was successfully tested across various operating systems (\textit{Windows}, \textit{Linux}, \textit{macOS}). Integration test results demonstrated that the system allows for reliable digital design verification: an overall hardware functional coverage of over 50~\% was achieved. The final solution is modular, versatile, and significantly reduces the learning curve, thereby facilitating the integration of new team members into SoC design and verification processes, while also being suitable for educational purposes.
