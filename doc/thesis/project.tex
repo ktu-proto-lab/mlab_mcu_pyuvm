@@ -9,7 +9,17 @@
 \noterequirement{Šiame skyrelyje nurodykite projekto užsakovą, projekto vykdytojus, aprašykite produkto naudotojus, detalizuokite projekto realizacijos laiko ir kainos apribojimus. Čia taip pat galima nurodyti verslo procesus ar logiką (pvz., UML veiklos diagramomis), jei šie yra netipiniai ar reikalaujantys papildomo paaiškinimo. 
 Pvz.: „Maisto perdavimu protokolas yra užsakytas Jungtinių Tautų, jį kuria 10 IT specialistų. Pagrindiniai maisto perdavimo protokolo naudotojai – Afrikos vaikai ir jų tėvai, tačiau sistema aktyviai naudosis ir paprasti namų naudotojai visame pasaulyje“.}
 
+Šis \gls{risc} architektūros \glsdisp{microprocessor}{mikrovaldiklio} \glsdisp{verification}{verifikavimo} \glsdisp{framework}{karkasas} kuriamas kaip bakalauro studijų baigiamasis projektas, siejant jį su atviro kodo aparatinės įrangos ekosistema bei Kauno technologijos universiteto „KTU Proto Lab“ iniciatyvomis.
 
+Formalaus komercinio užsakovo šis projektas neturi -- jis vystomas kaip mokslinis-inžinerinis tiriamasis darbas, orientuotas į atviros prieigos akademinius ir \gls{soc} projektavimo atvirojo kodo bendruomenės poreikius. Projektą, kaip pagrindinis vykdytojas, nuo architektūros suprojektavimo iki galutinio realizavimo bei testavimo, kuria vienas programų sistemų inžinierius (autorius), konsultuodamasis su darbo vadovu bei atviro kodo (\textit{PyUVM}, \textit{Cocotb}) bendruomenėmis.
+
+Pagrindiniai šio karkaso naudotojai yra skaitmeninės aparatinės įrangos inžinieriai, \glsdisp{verification}{verifikacijos} specialistai, taip pat akademinė bendruomenė -- studentai bei tyrėjai, dirbantys su \gls{soc} dizainu ir \gls{risc} procesorių architektūromis. Dėl naudojamos \textit{Python} kalbos, karkasas taip pat patrauklus programinės įrangos testuotojams, norintiems pereiti į aparatinės įrangos verifikavimo sritį. Taip pat projektas yra naudojamas tikram mikrovaldiklio, kurio pirmoji versija jau yra perduota į gamybą, verifikavimui. Toliau projektas bus vystomas ir po baigiamojo darbo, bus prijungiamos papildomos \gls{uvc} periferijos ir rašomi nauji testai aparatinei ir programiniai įrangai signalų ir transakcijų lygiuose.
+
+Laiko ir kainos apribojimai \\
+\begin{itemize}
+	\item Laikas. Projekto realizacijos trukmė yra griežtai apribota akademinio semestro ir bakalauro baigiamojo projekto grafikų (apytiksliai 4--6 mėnesiai). Per šį laiką privaloma realizuoti pilną veikiantį \glsdisp{plugin}{įskiepį}, atlikti integracinius testus su esamu \gls{mcu} bei parengti dokumentaciją.
+	\item Kaina ir biudžetas. Projektas kuriamas be atskiro finansavimo, todėl vienas iš pagrindinių reikalavimų yra atviros prieigos (angl. \textit{open-source}) ir nemokamų įrankių (\textit{Verilator}, \textit{Docker}, \textit{Python}) panaudojimas pagrindiniam funkcionalumui užtikrinti. Komercinio \gls{eda} (\textit{Cadence Xcelium}) palaikymo integracijai papildomi finansai nėra skiriami -- naudojama jau egzistuojanti universiteto laboratorijos turima licencijuota serverių infrastruktūra. 
+\end{itemize}
 
 \subsubsection{Sistemos funkcijos}
 
