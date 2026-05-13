@@ -25,6 +25,12 @@ Laiko ir kainos apribojimai \\
 
 \noterequirement{Čia būtų išvardinamos visos sistemos funkcijos (aprašomi funkciniai reikalavimai), pavaizduotos UML panaudojimo atvejų (PA) diagrama. Po kiekvienos iliustracijos turi būti papildomi kiekvienos funkcijos detalūs žodiniai aprašymai. Esminius PA vertėtų specifikuoti veiklos diagramomis arba PA specifikacijos lentele: atvejo pavadinimas, tikslas, aprašymas, prieš sąlyga, po sąlyga, susiję panaudojimo atvejai (include, extend), aktorius ir kt.}
 
+Sistemos funkciniai reikalavimai yra vizualizuojami UML panaudojimo atvejų diagramomis. Mikrovaldiklio komandinės eilutės (CLI) funkcionalumas \pav{\ref{fig:uml_use_case_cli}} ir pačio verifikavimo karkaso valdymo galimybės \pav{\ref{fig:uml_use_case_mlab_mcu_uvm}}.
+
+Kiekvienas diagramose pavaizduotas panaudojimo atvejis yra detaliai specifikuojamas lentelėse. Mikrovaldiklio CLI komandos apima bazinio veikimo patikrinimą: „greet“ \lent{\ref{tab:usecase:cli:greet}}, „echo“ \lent{\ref{tab:usecase:cli:echo}} ir pagalbos meniu iškvietimą \lent{\ref{tab:usecase:cli:help}}. Atminties valdymo funkcijos bendrai aprašytos \lent{\ref{tab:usecase:cli:mem}} lentelėje, o jos išplėtimai apima skaitymo \lent{\ref{tab:usecase:cli:mem:read}}, rašymo \lent{\ref{tab:usecase:cli:mem:write}}, blokinio nuskaitymo \lent{\ref{tab:usecase:cli:mem:dump}}, kontrolinės sumos tikrinimo \lent{\ref{tab:usecase:cli:mem:cksum}} ir regiono dydžio nustatymo \lent{\ref{tab:usecase:cli:mem:size}} operacijas. Panašiai struktūrizuotas ir GPIO periferijos valdymas \lent{\ref{tab:usecase:cli:gpio}}, leidžiantis nuskaityti \lent{\ref{tab:usecase:cli:gpio:get}}, nustatyti \lent{\ref{tab:usecase:cli:gpio:set}} ar invertuoti išvadų būsenas \lent{\ref{tab:usecase:cli:gpio:toggle}}. Aukštesnio lygio sistemos valdymo komandos \lent{\ref{tab:usecase:cli:sys}}, kaip informacijos gavimas \lent{\ref{tab:usecase:cli:sys:info}}, pristabdymas \lent{\ref{tab:usecase:cli:sys:pause}} ar perkrovimas \lent{\ref{tab:usecase:cli:sys:reset}}. Taip pat periferinių įrenginių komandos. Laikmačių operacijos \lent{\ref{tab:usecase:cli:time}} ir jų konfigūravimas \lent{\ref{tab:usecase:cli:time:set}}, I2C \lent{\ref{tab:usecase:cli:i2c}} prijungtų įrenginių skenavimas \lent{\ref{tab:usecase:cli:i2c:scan}} bei UART \lent{\ref{tab:usecase:cli:uart}} komunikacijos protokolų valdymas \lent{\ref{tab:usecase:cli:uart:cfg}}.
+
+Verifikavimo karkaso valdymo automatizacija, pasitelkiant \textit{GNU Make} skriptus, taip pat detalizuota specifikacijose. Konteinerių atvaizdų kūrimas, trynimas \lent{\ref{tab:usecase:script:make:image}} ir \textit{Python} virtualios aplinkos konfigūravimas \lent{\ref{tab:usecase:script:setup:python:venv}}. Interaktyvus konteinerių paleidimas \lent{\ref{tab:usecase:script:run}} ir suderinamumo \glsdisp{patch}{pataisų} valdymas \lent{\ref{tab:usecase:script:patch}}. Programinės įrangos kompiliavimas \lent{\ref{tab:usecase:script:buildsoftware}} bei kodo šaltinių valdymas \lent{\ref{tab:usecase:script:manage:sources}}. Imituoklės pasirinkimo \lent{\ref{tab:usecase:sim:choosesimulator}}, testų paleidimo \lent{\ref{tab:usecase:sim:runtests}}, laikinių diagramų fiksavimo \lent{\ref{tab:usecase:sim:capturewaveforms}}, grafinės sąsajos atvėrimo \lent{\ref{tab:usecase:sim:opengui}} ir žurnaliavimo lygio nustatymo \lent{\ref{tab:usecase:sim:managelogging}} scenarijai leidžia patogiai kontroliuoti verifikacijos procesą. Galiausiai, priklausomybių diegimas pagrindinėje sistemoje \lent{\ref{tab:usecase:script:installdeps}}, kelių polangių terminalo sesijos valdymas \lent{\ref{tab:usecase:script:managemultipane}} bei projekto apimties statistikos generavimas \lent{\ref{tab:usecase:script:projectstats}} užtikrina visapusį ir sklandų sistemos administravimą.
+
 \begin{figure}[H]
 	\includesvg[width=11.22cm]{images/uml_use_case_cli.svg}
 	\caption{MCU CLI UML panaudojimo atvejų diagrama}
@@ -1281,8 +1287,6 @@ Projektas užtikrina darbą su komerciniais \textit{Cadence} EDA įrankiais \len
 	Ne visas sistemas galima lengvai aprašyti UML notacija (pvz. esant funkcinėms kalboms vietoj klasių diagramų rekomenduojame naudoti komponentų ar paketų diagramas). Esant dar sudėtingesniems atvejams galima pasirinkti ir kitą notaciją ar diagramas, tačiau dėl to pasitarkite su vadovu.
 }
 
-% TODO (question)
-% Paklausti ar su italic pavadinimus ar su kabutėmis.
 Pasirinkta dirbti su dvejom skirtingom \glsdisp{simulator}{imituoklėm}: atviros prieigos \textit{Veripool Verilator} ir komercine \gls{eda} „Cadence Xcelium“. Dėl esminių įrankių skirtumų privaloma palaikyti dvi atskiras sistemas, kurios leidžia dirbti su viena iš anksčiau išvardytų \glsdisp{simulator}{imituoklių} ir sukonfigūruoja projekto naudojamus įrankius. „Veripool Verilator“ \glsdisp{simulator}{imituoklės} darbo aplinka yra universali, nes kartu su ja yra naudojami kiti atviros prieigos įrankiai \pav{\ref{fig:uml_deplayement_verilator}}. „Cadence Xcelium“ \glsdisp{simulator}{imituoklės} darbo aplinka yra pririšta prie „Rocky Linux“ operacinės sistemos \pav{\ref{fig:uml_deplayement_xcelium}}, nes šie \gls{eda} įrankiai yra komerciniai ir jų veikimui yra reikalinga licenzija bei užtikrina pilną palaikymą visiems \gls{eda} įrankiams tik ant „Red Hat Enterprise Linux“ operacinės sistemos \cite{cadence_supported_platforms} ir ja pagrįstų skirstinių, tokie kaip „Rocky Linux“ \cite{cadence_support_roadmap}. Būtent dėl šių priežasčių karkasas turi dvi atskiras darbo aplinkas, kurių valdymas yra per šakninį „GNU Make“ surinkimo sistemos (angl. \textit{build system}) skripto failą.
 
 \begin{figure}[H]
@@ -1326,12 +1330,10 @@ Aukščiau pateiktoje \gls{uml} diegimo diagramoje \pav{\ref{fig:uml_deplayement
 		\hline
 		\thead[l]{Paketai / Įrankiai}                     & \thead[l]{Paskirtis}                                                                                                                                                                                   \\
 		\hline
-		% TODO (source)
 		\textit{GCC kompiliatorius ir surinkimo įrankiai} & Būtini „Xcelium“ \glsdisp{simulator}{imituoklei} atliekant \gls{rtl} transliaciją, DPI-C (angl. \textit{Direct Programming Interface}) kodo kompiliavimą ir imitacijos momentinių kopijų (angl. \textit{snapshots}) generavimą. \\
 		\hline
 		\textit{X11 \gls{gui} bibliotekos}                      & Reikalingos „SimVision“ laikinių diagramų peržiūros programos, atvaizdavimui.                                                                                                                          \\
 		\hline
-		% TODO (source)
 		\textit{Suderinamumo bibliotekos}                 & C bibliotekos, užtikrinančios 32-bitų architektūros palaikymą 64-bitų sistemoje. Būtinos komercinių \gls{eda} įrankių licencijų valdymo posistemėms..                                                        \\
 		\hline
 	\end{tabularx}
