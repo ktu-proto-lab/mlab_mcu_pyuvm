@@ -59,7 +59,7 @@ Komercinių \gls{eda} įrankių naudojimas \lent{\ref{fig:modern-soc-design-veri
 
 \textit{Cadence Verisium Manager} automatizuoja sudėtingų \glsdisp{verification}{verifikacijos} projektų valdymą nuo planavimo iki jo baigimo. \textit{Verisium Manager} glaudžiai integruojasi su \textit{Cadence} dirbtinio intelekto valdomu \glsdisp{verification}{verifikacijos} platforma, pasinaudodamas dideliais duomenimis ir dirbtiniu intelektu, pagreitinamas dizaino \glsdisp{verification}{verifikavimas}, atliekamas automatinis klaidų taisymas \cite{cadence}.
 
-\textbf{\textit{Synopsis}}
+\textbf{\textit{Synopsys}}
 
 \textit{Synopsys} padeda pereiti prie apriboto atsitiktinumo verifikacijos (angl. constrained-random verification) bei funkcinio padengiamumo (angl. functional coverage). Naudojant \gls{uvm} standartą, užtikrinamas geresnis įrankių suderinamumas ir verifikacijos komponentų pernaudojamumas kas leidžia atlikti daugiau testavimų parašant mažiau kodo. \textit{Synopsys} naudoja savo \gls{vcs} įrankį su \textit{Native Testbench (NTB)} technologija, kuri turi integruotą palaikymą pilniems SystemVerilog testavimo stendams. Suteikiama galimybė integruoti iš anksto paruoštus SystemVerilog \gls{vip} blokus iš \textit{Synopsys} bibliotekos. Tai drastiškai pagreitina \glsdisp{verification}{verifikacijos} aplinkos kūrimą. Kartu \textit{Synopsys} specialistai siūlo tiesioginę pagalbą inžinierių komandoms \glsdisp{verification}{verifikacijos} klausimais \cite{synopsis}.
 
@@ -77,7 +77,7 @@ Komercinių \gls{eda} įrankių naudojimas \lent{\ref{fig:modern-soc-design-veri
 	\label{tab:konkurentu_palyginimas}
 	\begin{tabularx}{\linewidth}{|X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}
 		\hline
-			\thead[l]{Kriterijai} & \thead{Cadence} & \thead{Synopsis} & \thead{Siemens} & \thead{Aldec} & \thead{Karkasas}\\
+			\thead[l]{Kriterijai} & \thead{Cadence} & \thead{Synopsys} & \thead{Siemens} & \thead{Aldec} & \thead{Karkasas}\\
 			\hline
 			\textbf{Komerciniai licencijuoti įrankiai} & Taip & Taip & Taip & Taip & Palaikomi abu \\ \hline
 			\textbf{Pagrindinės testų rašymo kalbos} & \gls{v/sv} & \gls{v/sv} & \gls{v/sv} & VHDL, \gls{v/sv} & Python \\ \hline
@@ -138,7 +138,7 @@ Norint objektyviai įvertinti šių dviejų požiūrių galimybes, buvo atlikta 
 		\textbf{Programavimo kalba} & \textit{SystemVerilog} & \textit{Python} \\ \hline
 		\textbf{Mokymosi kreivė} & Aukšta, reikalauja specifinių \gls{hdl} žinių & Vidutinė, lengvai perprantama programinės įrangos inžinieriams \\ \hline
 		\textbf{Ekosistema ir paketai} & Uždara, skirta tik \gls{eda} įrankiams, paketų pasirinkimas ribotas. & Atvira ir plati, galimybė naudoti tūkstančius išorinių \textit{Python} bibliotekų (pvz., analizės, ataskaitų generavimo). \\ \hline
-		\textbf{\glsdisp{simulator}{Imituoklių} palaikymas} & Komercinės licencijuotos \glsdisp{simulator}{imituoklės} (\textit{Xcelium}, \textit{Questa}, \textit{Synopsis}). & Universalus (\glsdisp{open-source}{atviros prieigos} \textit{Verilator} bei komercinės \glsdisp{simulator}{imituoklės}). \\ \hline
+		\textbf{\glsdisp{simulator}{Imituoklių} palaikymas} & Komercinės licencijuotos \glsdisp{simulator}{imituoklės} (\textit{Xcelium}, \textit{Questa}, \textit{Synopsys}). & Universalus (\glsdisp{open-source}{atviros prieigos} \textit{Verilator} bei komercinės \glsdisp{simulator}{imituoklės}). \\ \hline
 		\textbf{\gls{uvm} standarto palaikymas} & Pilnas IEEE 1800.2 standartas. & Dalinis, trūksta integruoto \gls{ral} palaikymo ir kai kurių makrokomandų ir \gls{uvm} komponentų. \\ \hline
 		\textbf{Veikimo našumas} & Labai aukštas kodas kompiliuojamas tiesiogiai su \gls{dut}. & Vidutinis, komunikacija su \gls{dut} vyksta per \gls{vpi} sąsają, kas prideda papildomų laiko sąnaudų. \\ \hline
 	\end{tabularx}
