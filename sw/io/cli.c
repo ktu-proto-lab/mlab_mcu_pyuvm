@@ -6,6 +6,7 @@
 #include "sys/mem.h"
 #include "sys/err.h"
 #include "hal/gpio.h"
+#include "sys/time.h"
 
 static system_error_t cli_echo_handler(int argc, char **argv) {
     if (argc != CLI_CMD_ECHO_ARG_COUNT) {
@@ -236,6 +237,16 @@ static system_error_t cli_gpio_toggle_handler(int argc, char **argv) {
     return SYSTEM_ERROR_NONE;
 }
 
+static system_error_t cli_gpio_animation_handler(int argc, char **argv) {
+    for (uint32_t i = GPIO_PIN_5; i <= GPIO_PIN_8; i = (i << 1)) {
+        g_gpio.regs->out = i;
+        printf("gpio pin %x up\n", i);
+        time_delay_microseconds(5000000, g_cpu_freq_mhz);
+    }
+    printf("gpio animation done\n");
+    return SYSTEM_ERROR_NONE;
+}
+
 static system_error_t cli_gpio_handler(int argc, char **argv) {
     const char *subcmd = argv[1];
     if (string_compare(subcmd, "get") == 0) {
@@ -244,6 +255,8 @@ static system_error_t cli_gpio_handler(int argc, char **argv) {
         return cli_gpio_set_handler(argc, argv);
     } else if (string_compare(subcmd, "toggle") == 0) {
         return cli_gpio_toggle_handler(argc, argv);
+    } else if (string_compare(subcmd, "-a") == 0) {
+        return cli_gpio_animation_handler(argc, argv);
     } else {
         return SYSTEM_ERROR_CLI_CMD_MEM_SUBCMD_NOT_FOUND;
     }
